@@ -1,0 +1,4 @@
+The plugins/qualcomm/src/main/java/com/google/gerrit directory is a place to share code among
+plugins with the belief that the functionality within should someday be implemented in Gerrit core.
+Because we are going to try an upstream most of the generic plugins, it might not be worth putting
+much code in here, and it is worth considering duplication instead.
