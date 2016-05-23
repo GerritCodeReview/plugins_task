@@ -175,6 +175,7 @@ The expected output for the above task config looks like:
             },
             {
                "name" : "Root READY (subtask PASS)",
+               "readyHint" : "You must now run the ready task",
                "status" : "READY",
                "subTasks" : [
                   {
