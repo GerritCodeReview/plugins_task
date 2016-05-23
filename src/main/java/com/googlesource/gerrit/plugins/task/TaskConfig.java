@@ -28,6 +28,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String KEY_FAIL = "fail";
   protected static final String KEY_NAME = "name";
   protected static final String KEY_PASS = "pass";
+  protected static final String KEY_READY_HINT = "ready-hint";
   protected static final String KEY_SUBTASK = "subtask";
 
   public TaskConfig(Branch.NameKey branch, String fileName) {
@@ -57,6 +58,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     task.fail = getString(s, KEY_FAIL, null);
     task.name = getString(s, KEY_NAME, s.subSection);
     task.pass = getString(s, KEY_PASS, null);
+    task.readyHint = getString(s, KEY_READY_HINT, null);
     task.subTasks = getStringList(s, KEY_SUBTASK);
     return task;
   }

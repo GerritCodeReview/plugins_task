@@ -97,6 +97,17 @@ Example:
     pass = label:verified+1
 ```
 
+`ready-hint`
+
+: This key defines a hint when a task is `READY` describing what
+accomplishing the tasks entails. This is meant to be a hint for humans
+and may be used as a tool-tip.
+
+Example:
+```
+    ready-hint = Needs to be verified by Jenkins
+```
+
 `subtask`
 
 : This key lists the name of a subtask of the current task. This key may be
