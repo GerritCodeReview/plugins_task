@@ -44,6 +44,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   public static class TaskAttribute {
     public String name;
+    public String readyHint;
     public Status status;
     public List<TaskAttribute> subTasks;
 
@@ -135,6 +136,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         TaskAttribute task = new TaskAttribute(def.name);
         task.subTasks = getSubTasks(c, path, def);
         task.status = getStatus(c, def, task);
+        if (task.status == Status.READY) {
+          task.readyHint = def.readyHint;
+        }
         tasks.add(task);
       }
     } catch (QueryParseException e) {
