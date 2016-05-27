@@ -24,6 +24,7 @@ public class TaskDefinition {
 
   public String applicable;
   public String fail;
+  public String inProgress;
   public String name;
   public String readyHint;
   public String pass;
@@ -47,6 +48,7 @@ public class TaskDefinition {
         && Objects.equals(fileName, t.fileName)
         && Objects.equals(applicable, t.applicable)
         && Objects.equals(fail, t.fail)
+        && Objects.equals(inProgress, t.inProgress)
         && Objects.equals(name, t.name)
         && Objects.equals(readyHint, t.readyHint)
         && Objects.equals(pass, t.pass)
@@ -55,6 +57,7 @@ public class TaskDefinition {
 
   @Override
   public int hashCode() {
-    return Objects.hash(branch, fileName, applicable, fail, name, pass, readyHint, subTasks);
+    return Objects.hash(
+        branch, fileName, applicable, fail, inProgress, name, pass, readyHint, subTasks);
   }
 }
