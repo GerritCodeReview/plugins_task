@@ -86,6 +86,17 @@ Example:
     fail = label:verified-1
 ```
 
+`in-progress`
+
+: This key defines a query that is used to determine whether a task is
+currently in-progress or not. A CI system may use this to ensure that it
+only runs one verification instance for a specific change.
+
+Example:
+```
+    in-progress = label:patchset-lock,user=jenkins
+```
+
 `pass`
 
 : This key defines a query that is used to determine whether a task has
@@ -178,6 +189,7 @@ which will include applicable tasks for the change added to their output.
     name: task
     roots:
       name: Jenkins Build and Test
+      inProgress: false
       status: READY
       subTasks:
         name: code review
