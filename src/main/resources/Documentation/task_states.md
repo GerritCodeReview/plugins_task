@@ -231,10 +231,12 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "inProgress" : true,
                "name" : "Root IN PROGRESS",
                "status" : "READY"
             },
             {
+               "inProgress" : false,
                "name" : "Root NOT IN PROGRESS",
                "status" : "READY"
             }

@@ -43,6 +43,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   }
 
   public static class TaskAttribute {
+    public Boolean inProgress;
     public String name;
     public String readyHint;
     public Status status;
@@ -134,6 +135,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     try {
       if (match(c, def.applicable)) {
         TaskAttribute task = new TaskAttribute(def.name);
+        if (def.inProgress != null) {
+          task.inProgress = match(c, def.inProgress);
+        }
         task.subTasks = getSubTasks(c, path, def);
         task.status = getStatus(c, def, task);
         if (task.status == Status.READY) {
