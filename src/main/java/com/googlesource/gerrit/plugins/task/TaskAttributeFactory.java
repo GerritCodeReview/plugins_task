@@ -139,10 +139,12 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         }
         task.subTasks = getSubTasks(c, path, def);
         task.status = getStatus(c, def, task);
-        if (task.status == Status.READY) {
-          task.readyHint = def.readyHint;
+        if (task.status != null) { // task still applies
+          if (task.status == Status.READY) {
+            task.readyHint = def.readyHint;
+          }
+          tasks.add(task);
         }
-        tasks.add(task);
       }
     } catch (QueryParseException e) {
       tasks.add(invalid()); // bad applicability query
@@ -248,9 +250,21 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected Status getStatusWithExceptions(ChangeData c, Task task, TaskAttribute a)
       throws OrmException, QueryParseException {
     if (task.pass == null && a.subTasks == null) {
-      // A leaf without a PASS criteria is likely a missconfiguration.
+      // A leaf task has no defined subtasks.
+      boolean hasDefinedSubtasks =
+          !(task.subTasks.isEmpty()
+              && task.subTasksFiles.isEmpty()
+              && task.subTasksExternals.isEmpty());
+      if (hasDefinedSubtasks) {
+        // Remove 'Grouping" tasks (tasks with subtasks but no PASS
+        // criteria) from the output if none of their subtasks are
+        // applicable.  i.e. grouping tasks only really apply if at
+        // least one of their subtasks apply.
+        return null;
+      }
+      // A leaf configuration without a PASS criteria is a missconfiguration.
       // Either someone forgot to add subtasks, or they forgot to add
-      // the pass criteria.
+      // the PASS criteria.
       return Status.INVALID;
     }
 
