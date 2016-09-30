@@ -108,7 +108,9 @@ Example:
 
 : This key defines a query that is used to determine whether a task has
 already executed and passed for each change. This key is mandatory for
-leaf tasks.
+leaf tasks. Tasks with no defined pass criteria and with defined subtasks
+are valid, but they are only applicable when at least one subtask is
+applicable.
 
 Example:
 ```

@@ -31,6 +31,10 @@ states are affected by their own criteria and their subtasks' states.
   applicable = is:open
   subtask = Subtask FAIL
 
+[root "Root grouping NA (subtask NA)"]
+  applicable = is:open
+  subtask = Subtask NA
+
 [root "Root READY (subtask PASS)"]
   applicable = is:open
   pass = -is:open
@@ -102,6 +106,9 @@ states are affected by their own criteria and their subtasks' states.
 [task "Subtask PASS"]
   applicable = is:open
   pass = is:open
+
+[task "Subtask NA"]
+  applicable = NOT is:open
 
 [external "user special"]
   user = current-user
