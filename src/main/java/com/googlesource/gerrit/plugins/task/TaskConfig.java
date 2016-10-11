@@ -34,6 +34,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public class Task extends Section {
     public String applicable;
     public String fail;
+    public String failHint;
     public String inProgress;
     public String name;
     public String pass;
@@ -45,6 +46,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public Task(SubSection s) {
       applicable = getString(s, KEY_APPLICABLE, null);
       fail = getString(s, KEY_FAIL, null);
+      failHint = getString(s, KEY_FAIL_HINT, null);
       inProgress = getString(s, KEY_IN_PROGRESS, null);
       name = getString(s, KEY_NAME, s.subSection);
       pass = getString(s, KEY_PASS, null);
@@ -72,6 +74,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String SECTION_TASK = "task";
   protected static final String KEY_APPLICABLE = "applicable";
   protected static final String KEY_FAIL = "fail";
+  protected static final String KEY_FAIL_HINT = "fail-hint";
   protected static final String KEY_FILE = "file";
   protected static final String KEY_IN_PROGRESS = "in-progress";
   protected static final String KEY_NAME = "name";
