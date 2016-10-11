@@ -139,6 +139,17 @@ Example:
     ready-hint = Needs to be verified by Jenkins
 ```
 
+`fail-hint`
+
+: This key defines a hint when a task is in the `FAIL` state describing why
+the tasks is failing. This is meant to be a hint for humans and may be used
+as a tool-tip.
+
+Example:
+```
+    fail-hint = Blocked by a negative review score
+```
+
 `subtask`
 
 : This key lists the name of a subtask of the current task. This key may be
