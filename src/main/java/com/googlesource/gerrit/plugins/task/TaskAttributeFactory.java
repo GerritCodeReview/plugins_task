@@ -52,9 +52,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   }
 
   public static class TaskAttribute {
+    public String hint;
     public Boolean inProgress;
     public String name;
-    public String readyHint;
     public Status status;
     public List<TaskAttribute> subTasks;
 
@@ -140,9 +140,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         task.subTasks = getSubTasks(c, path, def);
         task.status = getStatus(c, def, task);
         if (task.status != null) { // task still applies
-          if (task.status == Status.READY) {
-            task.readyHint = def.readyHint;
-          }
+          task.hint = getHint(task.status, def);
           tasks.add(task);
         }
       }
@@ -311,6 +309,15 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     }
 
     return Status.PASS;
+  }
+
+  protected String getHint(Status status, Task task) {
+    if (status == Status.READY) {
+      return task.readyHint;
+    } else if (status == Status.FAIL) {
+      return task.failHint;
+    }
+    return null;
   }
 
   protected static boolean isAll(Iterable<TaskAttribute> tasks, Status state) {
