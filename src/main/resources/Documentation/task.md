@@ -96,7 +96,9 @@ Example:
 
 : This key defines a query that is used to determine whether a task is
 currently in-progress or not. A CI system may use this to ensure that it
-only runs one verification instance for a specific change.
+only runs one verification instance for a specific change. Either a pass
+or fail key is mandatory for leaf tasks. A task with a fail criteria,
+but no pass criteria, will pass if it otherwise would be ready.
 
 Example:
 ```
@@ -106,14 +108,19 @@ Example:
 `pass`
 
 : This key defines a query that is used to determine whether a task has
-already executed and passed for each change. This key is mandatory for
-leaf tasks. Tasks with no defined pass criteria and with defined subtasks
-are valid, but they are only applicable when at least one subtask is
-applicable.
+already executed and passed for each change. Either a pass or fail
+key is mandatory for leaf tasks. Tasks with no defined pass criteria and
+with defined subtasks are valid, but they are only applicable when at least
+one subtask is applicable.
 
 Example:
 ```
     pass = label:verified+1
+```
+
+Example:
+```
+    in-progress = label:patchset-lock,user=jenkins
 ```
 
 `ready-hint`
