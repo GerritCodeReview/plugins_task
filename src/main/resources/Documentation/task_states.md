@@ -16,6 +16,14 @@ states are affected by their own criteria and their subtasks' states.
   fail = is:open
   pass = is:open
 
+[root "Root PASS-fail"]
+  applicable = is:open
+  fail = NOT is:open
+
+[root "Root pass-FAIL"]
+  applicable = is:open
+  fail = is:open
+
 [root "Root grouping PASS (subtask PASS)"]
   applicable = is:open
   subtask = Subtask PASS
@@ -195,6 +203,14 @@ The expected output for the above task config looks like:
             },
             {
                "name" : "Root straight FAIL",
+               "status" : "FAIL"
+            },
+            {
+               "name" : "Root PASS-fail",
+               "status" : "PASS"
+            },
+            {
+               "name" : "Root pass-FAIL",
                "status" : "FAIL"
             },
             {

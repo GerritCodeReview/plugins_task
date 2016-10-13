@@ -249,7 +249,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   protected Status getStatusWithExceptions(ChangeData c, Task task, TaskAttribute a)
       throws OrmException, QueryParseException {
-    if (task.pass == null && a.subTasks == null) {
+    if (isAllNull(task.pass, task.fail, a.subTasks)) {
       // A leaf task has no defined subtasks.
       boolean hasDefinedSubtasks =
           !(task.subTasks.isEmpty()
@@ -257,36 +257,43 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
               && task.subTasksExternals.isEmpty());
       if (hasDefinedSubtasks) {
         // Remove 'Grouping" tasks (tasks with subtasks but no PASS
-        // criteria) from the output if none of their subtasks are
-        // applicable.  i.e. grouping tasks only really apply if at
+        // or FAIL criteria) from the output if none of their subtasks
+        // are applicable.  i.e. grouping tasks only really apply if at
         // least one of their subtasks apply.
         return null;
       }
-      // A leaf configuration without a PASS criteria is a missconfiguration.
-      // Either someone forgot to add subtasks, or they forgot to add
-      // the PASS criteria.
+      // A leaf configuration without a PASS or FAIL criteria is a
+      // missconfiguration.  Either someone forgot to add subtasks, or
+      // they forgot to add a PASS or FAIL criteria.
       return Status.INVALID;
     }
 
-    if (task.fail != null && match(c, task.fail)) {
-      // A FAIL definition is meant to be a hard blocking criteria
-      // (like a CodeReview -2).  Thus, if hard blocked, it is
-      // irrelevant what the subtask states, or the pass criteria are.
-      //
-      // It is also important that FAIL be useable to indicate that
-      // the task has actually executed.  Thus subtask status,
-      // including a subtask FAIL should not appear as a FAIL on the
-      // parent task.  This means that this is should be the only path
-      // to make a task have a FAIL status.
-      return Status.FAIL;
+    if (task.fail != null) {
+      if (match(c, task.fail)) {
+        // A FAIL definition is meant to be a hard blocking criteria
+        // (like a CodeReview -2).  Thus, if hard blocked, it is
+        // irrelevant what the subtask states, or the PASS criteria are.
+        //
+        // It is also important that FAIL be useable to indicate that
+        // the task has actually executed.  Thus subtask status,
+        // including a subtask FAIL should not appear as a FAIL on the
+        // parent task.  This means that this is should be the only path
+        // to make a task have a FAIL status.
+        return Status.FAIL;
+      }
+      if (task.pass == null) {
+        // A task with a FAIL but no PASS criteria is a PASS-FAIL task
+        // (they are never "READY").  It didn't fail, so pass.
+        return Status.PASS;
+      }
     }
 
     if (a.subTasks != null && !isAll(a.subTasks, Status.PASS)) {
       // It is possible for a subtask's PASS criteria to change while
       // a parent task is executing, or even after the parent task
       // completes.  This can result in the parent PASS criteria being
-      // met while one or more of its subtasks no longer meets its pass
-      // criteria (the subtask may now even meet a fail criteria).  We
+      // met while one or more of its subtasks no longer meets its PASS
+      // criteria (the subtask may now even meet a FAIL criteria).  We
       // never want the parent task to reflect a PASS criteria in these
       // cases, thus we can safely return here without ever evaluating
       // the task's PASS criteria.
@@ -320,5 +327,14 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       return true;
     }
     return ((Matchable) cqb.parse(query)).match(c);
+  }
+
+  protected static boolean isAllNull(Object... vals) {
+    for (Object val : vals) {
+      if (val != null) {
+        return false;
+      }
+    }
+    return true;
   }
 }
