@@ -64,6 +64,21 @@
                      "applicable" : true,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : false,
+                     "name" : "NA Bad PASS query",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : false,
+                     "name" : "NA Bad FAIL query",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : false,
+                     "name" : "NA Bad INPROGRESS query",
+                     "status" : "FAIL"
                   }
                ]
             },
@@ -169,6 +184,21 @@
                      "applicable" : true,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : false,
+                     "name" : "NA Bad PASS query",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : false,
+                     "name" : "NA Bad FAIL query",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : false,
+                     "name" : "NA Bad INPROGRESS query",
+                     "status" : "FAIL"
                   }
                ]
             }
