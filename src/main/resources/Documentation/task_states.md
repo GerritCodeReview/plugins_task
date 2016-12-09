@@ -188,9 +188,21 @@ states are affected by their own criteria and their subtasks' states.
 [task "Subtask INVALID"]
   applicable = is:open
 
-[external "external missing"]
-  user = mfick
-  file = missing
+[task "NA Bad PASS query"]
+  applicable = -is:open
+  fail = True
+  pass = has:bad
+
+[task "NA Bad FAIL query"]
+  applicable = -is:open
+  pass = True
+  fail = has:bad
+
+[task "NA Bad INPROGRESS query"]
+  applicable = -is:open
+  fail = True
+  in-progress = has:bad
+
 ```
 
 `task/special.config` file in project `All-Users` on ref `refs/users/self`.

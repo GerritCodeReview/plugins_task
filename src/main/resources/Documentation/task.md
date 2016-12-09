@@ -294,9 +294,12 @@ with them. More than one change may be previewed together.
 
 This switch is meant as a debug switch to help find mis-configured tasks,
 it causes only invalid tasks and the tasks in the tree hierarchy above them
-to be output. If all tasks are properly configured, this switch should not
-output anything. This switch is particularly useful in combination with
-the **\-\-@PLUGIN@\-\-preview** switch.
+to be output. To verify task validity, this change runs all queries defined
+for a task, no matter what the tasks state is; this makes it possible to
+detect some additional configuration problems which may not be detected when
+running normally. If all tasks are properly configured, this switch should
+not output anything. This switch is particularly useful in combination
+with the **\-\-@PLUGIN@\-\-preview** switch.
 
 When tasks are appended to changes, they will have a "task" section under
 the plugins section like below:
