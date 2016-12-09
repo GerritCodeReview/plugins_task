@@ -152,6 +152,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         TaskAttribute task = new TaskAttribute(def.name);
         task.subTasks = getSubTasks(c, path, def);
         task.status = getStatus(c, def, task);
+        if (options.onlyInvalid && !isValidQueries(c, def)) {
+          task.status = Status.INVALID;
+        }
         boolean groupApplicable = task.status != null;
 
         if (groupApplicable || !options.onlyApplicable) {
@@ -160,7 +163,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
               task.applicable = applicable;
             }
             if (def.inProgress != null) {
-              task.inProgress = match(c, def.inProgress);
+              task.inProgress = matchOrNull(c, def.inProgress);
             }
             task.hint = getHint(task.status, def);
             tasks.add(task);
@@ -268,6 +271,17 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
   }
 
+  protected boolean isValidQueries(ChangeData c, Task task) {
+    try {
+      match(c, task.inProgress);
+      match(c, task.fail);
+      match(c, task.pass);
+      return true;
+    } catch (OrmException | QueryParseException e) {
+      return false;
+    }
+  }
+
   protected Status getStatus(ChangeData c, Task task, TaskAttribute a) throws OrmException {
     try {
       return getStatusWithExceptions(c, task, a);
@@ -365,6 +379,19 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       return true;
     }
     return ((Matchable) cqb.parse(query)).match(c);
+  }
+
+  protected Boolean matchOrNull(ChangeData c, String query) {
+    if (query != null) {
+      try {
+        if (query.equalsIgnoreCase("true")) {
+          return true;
+        }
+        return ((Matchable) cqb.parse(query)).match(c);
+      } catch (OrmException | QueryParseException e) {
+      }
+    }
+    return null;
   }
 
   protected static boolean isAllNull(Object... vals) {
