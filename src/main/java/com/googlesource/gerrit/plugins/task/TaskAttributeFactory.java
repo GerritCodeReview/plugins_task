@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.extensions.common.PluginDefinedInfo;
 import com.google.gerrit.index.query.Matchable;
+import com.google.gerrit.index.query.Predicate;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.Branch;
@@ -35,8 +36,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -77,6 +80,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected final AllUsersNameProvider allUsers;
   protected final TaskConfigFactory taskFactory;
   protected final ChangeQueryBuilder cqb;
+
+  protected final Map<String, Predicate<ChangeData>> predicatesByQuery = new HashMap<>();
 
   protected Modules.MyOptions options;
 
@@ -380,7 +385,12 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     if (query == null || query.equalsIgnoreCase("true")) {
       return true;
     }
-    return ((Matchable) cqb.parse(query)).match(c);
+    Predicate<ChangeData> pred = predicatesByQuery.get(query);
+    if (pred == null) {
+      pred = cqb.parse(query);
+      predicatesByQuery.put(query, pred);
+    }
+    return ((Matchable) pred).match(c);
   }
 
   protected Boolean matchOrNull(ChangeData c, String query) {
