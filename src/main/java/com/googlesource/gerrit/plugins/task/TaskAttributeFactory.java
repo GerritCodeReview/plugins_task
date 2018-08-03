@@ -55,6 +55,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   public static class TaskAttribute {
     public Boolean applicable;
+    public Boolean hasPass;
     public String hint;
     public Boolean inProgress;
     public String name;
@@ -150,6 +151,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
       if (applicable || !options.onlyApplicable) {
         TaskAttribute task = new TaskAttribute(def.name);
+        task.hasPass = def.pass != null || def.fail != null;
         task.subTasks = getSubTasks(c, path, def);
         task.status = getStatus(c, def, task);
         if (options.onlyInvalid && !isValidQueries(c, def)) {
@@ -271,7 +273,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
   }
 
-  private boolean isValidQueries(ChangeData c, Task task) {
+  protected boolean isValidQueries(ChangeData c, Task task) {
     try {
       match(c, task.inProgress);
       match(c, task.fail);
@@ -381,7 +383,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return ((Matchable) cqb.parse(query)).match(c);
   }
 
-  private Boolean matchOrNull(ChangeData c, String query) {
+  protected Boolean matchOrNull(ChangeData c, String query) {
     if (query != null) {
       try {
         if (query.equalsIgnoreCase("true")) {
