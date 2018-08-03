@@ -4,11 +4,13 @@
          "roots" : [
             {
                "applicable" : true,
+               "hasPass" : false,
                "name" : "Root grouping NA (subtask NA)",
                "status" : "WAITING",
                "subTasks" : [
                   {
                      "applicable" : false,
+                     "hasPass" : false,
                      "name" : "Subtask NA",
                      "status" : "INVALID"
                   }
@@ -16,6 +18,7 @@
             },
             {
                "applicable" : true,
+               "hasPass" : false,
                "name" : "Subtasks External (Missing)",
                "status" : "WAITING",
                "subTasks" : [
@@ -27,6 +30,7 @@
             },
             {
                "applicable" : true,
+               "hasPass" : false,
                "name" : "Subtasks External (User Missing)",
                "status" : "WAITING",
                "subTasks" : [
@@ -38,21 +42,25 @@
             },
             {
                "applicable" : true,
+               "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
                "subTasks" : [
                   {
                      "applicable" : true,
+                     "hasPass" : false,
                      "name" : "No PASS criteria",
                      "status" : "INVALID"
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : true,
                      "name" : "WAITING (subtask INVALID)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
                         }
@@ -60,11 +68,13 @@
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : true,
                      "name" : "WAITING (subtask missing)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "hasPass" : false,
                            "name" : "MISSING",
                            "status" : "INVALID"
                         }
@@ -72,11 +82,13 @@
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : false,
                      "name" : "Grouping WAITING (subtask INVALID)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
                         }
@@ -84,11 +96,13 @@
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : false,
                      "name" : "Grouping WAITING (subtask missing)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "hasPass" : false,
                            "name" : "MISSING",
                            "status" : "INVALID"
                         }
@@ -96,21 +110,25 @@
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
                   },
                   {
                      "applicable" : false,
+                     "hasPass" : true,
                      "name" : "NA Bad PASS query",
                      "status" : "INVALID"
                   },
                   {
                      "applicable" : false,
+                     "hasPass" : true,
                      "name" : "NA Bad FAIL query",
                      "status" : "INVALID"
                   },
                   {
                      "applicable" : false,
+                     "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "INVALID"
                   }
@@ -118,21 +136,25 @@
             },
             {
                "applicable" : false,
+               "hasPass" : false,
                "name" : "NA INVALIDS",
                "status" : "WAITING",
                "subTasks" : [
                   {
                      "applicable" : true,
+                     "hasPass" : false,
                      "name" : "No PASS criteria",
                      "status" : "INVALID"
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : true,
                      "name" : "WAITING (subtask INVALID)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
                         }
@@ -140,11 +162,13 @@
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : true,
                      "name" : "WAITING (subtask missing)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "hasPass" : false,
                            "name" : "MISSING",
                            "status" : "INVALID"
                         }
@@ -152,11 +176,13 @@
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : false,
                      "name" : "Grouping WAITING (subtask INVALID)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
                         }
@@ -164,11 +190,13 @@
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : false,
                      "name" : "Grouping WAITING (subtask missing)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "hasPass" : false,
                            "name" : "MISSING",
                            "status" : "INVALID"
                         }
@@ -176,21 +204,25 @@
                   },
                   {
                      "applicable" : true,
+                     "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
                   },
                   {
                      "applicable" : false,
+                     "hasPass" : true,
                      "name" : "NA Bad PASS query",
                      "status" : "INVALID"
                   },
                   {
                      "applicable" : false,
+                     "hasPass" : true,
                      "name" : "NA Bad FAIL query",
                      "status" : "INVALID"
                   },
                   {
                      "applicable" : false,
+                     "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "INVALID"
                   }

@@ -55,6 +55,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   public static class TaskAttribute {
     public Boolean applicable;
+    public Boolean hasPass;
     public String hint;
     public Boolean inProgress;
     public String name;
@@ -150,6 +151,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
       if (applicable || !options.onlyApplicable) {
         TaskAttribute task = new TaskAttribute(def.name);
+        task.hasPass = def.pass != null || def.fail != null;
         task.subTasks = getSubTasks(c, path, def);
         task.status = getStatus(c, def, task);
         if (options.onlyInvalid && !isValidQueries(c, def)) {
