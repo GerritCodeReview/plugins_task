@@ -3,6 +3,7 @@
          "name" : "task",
          "roots" : [
             {
+               "hasPass" : false,
                "name" : "Subtasks External (Missing)",
                "status" : "WAITING",
                "subTasks" : [
@@ -13,6 +14,7 @@
                ]
             },
             {
+               "hasPass" : false,
                "name" : "Subtasks External (User Missing)",
                "status" : "WAITING",
                "subTasks" : [
@@ -23,54 +25,65 @@
                ]
             },
             {
+               "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "hasPass" : false,
                      "name" : "No PASS criteria",
                      "status" : "INVALID"
                   },
                   {
+                     "hasPass" : true,
                      "name" : "WAITING (subtask INVALID)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
                         }
                      ]
                   },
                   {
+                     "hasPass" : true,
                      "name" : "WAITING (subtask missing)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "hasPass" : false,
                            "name" : "MISSING",
                            "status" : "INVALID"
                         }
                      ]
                   },
                   {
+                     "hasPass" : false,
                      "name" : "Grouping WAITING (subtask INVALID)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
                         }
                      ]
                   },
                   {
+                     "hasPass" : false,
                      "name" : "Grouping WAITING (subtask missing)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "hasPass" : false,
                            "name" : "MISSING",
                            "status" : "INVALID"
                         }
                      ]
                   },
                   {
+                     "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
                   }
