@@ -219,7 +219,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       boolean hasDefinedSubtasks =
           !(def.subTasks.isEmpty()
               && def.subTasksFiles.isEmpty()
-              && def.subTasksExternals.isEmpty());
+              && def.subTasksExternals.isEmpty()
+              && def.subTasksFactories.isEmpty());
       if (hasDefinedSubtasks) {
         // Remove 'Grouping" tasks (tasks with subtasks but no PASS
         // or FAIL criteria) from the output if none of their subtasks

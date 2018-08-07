@@ -24,7 +24,9 @@ import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.TaskConfig.External;
+import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
+import com.googlesource.gerrit.plugins.task.TaskConfig.TasksFactory;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -131,6 +133,7 @@ public class TaskTree {
 
     protected void addSubDefinitions() throws OrmException {
       addSubDefinitions(getSubDefinitions());
+      addSubDefinitions(getTasksFactoryDefinitions());
       addSubFileDefinitions();
       addExternalDefinitions();
     }
@@ -142,7 +145,7 @@ public class TaskTree {
     protected void addSubFileDefinitions() {
       for (String file : definition.subTasksFiles) {
         try {
-          addSubDefinitions(getTasks(definition.config.getBranch(), file));
+          addSubDefinitions(getTaskDefinitions(definition.config.getBranch(), file));
         } catch (ConfigInvalidException | IOException e) {
           nodes.add(null);
         }
@@ -179,12 +182,30 @@ public class TaskTree {
       return defs;
     }
 
-    protected List<Task> getTaskDefinitions(External external)
-        throws ConfigInvalidException, IOException, OrmException {
-      return getTasks(resolveUserBranch(external.user), external.file);
+    protected List<Task> getTasksFactoryDefinitions() {
+      List<Task> taskList = new ArrayList<>();
+      for (String taskFactoryName : definition.subTasksFactories) {
+        TasksFactory tasksFactory = definition.config.getTasksFactory(taskFactoryName);
+        if (tasksFactory != null) {
+          NamesFactory namesFactory = definition.config.getNamesFactory(tasksFactory.namesFactory);
+          if (namesFactory != null && "static".equals(namesFactory.type)) {
+            for (String name : namesFactory.names) {
+              taskList.add(definition.config.createTask(tasksFactory, name));
+            }
+            continue;
+          }
+        }
+        taskList.add(null);
+      }
+      return taskList;
     }
 
-    protected List<Task> getTasks(Branch.NameKey branch, String file)
+    protected List<Task> getTaskDefinitions(External external)
+        throws ConfigInvalidException, IOException, OrmException {
+      return getTaskDefinitions(resolveUserBranch(external.user), external.file);
+    }
+
+    protected List<Task> getTaskDefinitions(Branch.NameKey branch, String file)
         throws ConfigInvalidException, IOException {
       return taskFactory
           .getTaskConfig(branch, resolveTaskFileName(file), definition.isTrusted)

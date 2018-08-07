@@ -181,6 +181,21 @@ Example:
     ...
 ```
 
+`subtasks-factory`
+
+: A subtasks-factory key specifies a task-factory, which generates zero or more
+tasks that are subtasks of the current task.  This key may be used several times
+in a task section to reference tasks-factory sections.
+
+Example:
+
+```
+    subtasks-factory = "static tasks factory"
+    ...
+    [tasks-factory "static tasks factory"]
+    ...
+```
+
 `subtasks-external`
 
 : This key defines a file containing subtasks of the current task. This
@@ -273,6 +288,69 @@ may be chained together as many times as needed.
     subtask = Optional Subtask {$_name} |
               Backup Optional Subtask {$_name} Backup |
               Default Subtask # Must exist if the above two don't!
+```
+Tasks-Factory
+-------------
+A tasks-factory section supports all the keys supported by task sections.  In
+addition, this section must have a names-factory key which refers to a
+names-factory section.  In conjunction with the names-factory, a tasks-factory
+section creates zero or more task definitions that look like regular tasks,
+each with a name provided by the names-factory, and all using the task definition
+set in the tasks-factory.
+
+A tasks-factory section is referenced by a subtasks-factory key in a "task"
+section.  A sample task.config which defines a tasks-factory section might look
+like this:
+
+```
+[task "static task list"]
+    subtasks-factory = static tasks factory
+    ...
+
+[tasks-factory "static tasks factory"]
+    names-factory = static names factory list
+    ...
+```
+
+Names-Factory
+-------------
+A names-factory section defines a collection of name keys which are used to
+generate the names for task definitions.  The section should contain a "type"
+key that specifies the type.
+
+A names-factory section is referenced by a names-factory key in a "tasks-factory"
+section.  A sample task.config which defines a names-factory section might look like
+this:
+
+```
+[names-factory "static names factory list"]
+    name = my a task
+    name = my b task
+    type = static
+```
+
+The following keys may be defined in any names-factory section:
+
+`name`
+
+: This key defines the name of the tasks.  This key may be used several times
+in order to define more than one task. The name key can only be used along with
+names-factory of type `static`.
+
+Example:
+```
+    name = my a task
+    name = 12345
+```
+
+`type`
+
+: This key defines the type of the names-factory section.  The only
+accepted value is `static`.
+
+Example:
+```
+    type = static
 ```
 
 External Entries
