@@ -135,6 +135,42 @@
                   {
                      "name" : "UNKNOWN",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             },
@@ -318,6 +354,42 @@
                   {
                      "name" : "UNKNOWN",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }
