@@ -171,6 +171,92 @@
                            "status" : "INVALID"
                         }
                      ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "duplicate",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes invalid)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "1",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "2",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        }
+                     ]
                   }
                ]
             },
@@ -388,6 +474,92 @@
                         {
                            "name" : "UNKNOWN",
                            "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "duplicate",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes invalid)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "1",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "2",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
                         }
                      ]
                   }
