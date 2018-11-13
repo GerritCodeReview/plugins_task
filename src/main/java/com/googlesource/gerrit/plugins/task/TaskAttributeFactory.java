@@ -23,6 +23,7 @@ import com.google.gerrit.server.query.change.ChangeQueryProcessor;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor.ChangeAttributeFactory;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -84,9 +85,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       throws OrmException, QueryParseException {
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
-      LinkedList<TaskDefinition> path = new LinkedList<>();
-      for (TaskDefinition def : getRootTaskDefinitions()) {
-        addApplicableTasks(a.roots, c, path, def);
+      LinkedList<Task> path = new LinkedList<>();
+      for (Task task : getRootTasks()) {
+        addApplicableTasks(a.roots, c, path, task);
       }
     } catch (ConfigInvalidException | IOException e) {
       a.roots.add(invalid());
@@ -98,27 +99,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return a;
   }
 
-  protected List<TaskAttribute> getSubTasks(
-      ChangeData c, LinkedList<TaskDefinition> path, TaskDefinition parent)
-      throws OrmException, QueryParseException {
-    List<TaskAttribute> subTasks = new ArrayList<TaskAttribute>();
-    for (String name : parent.subTasks) {
-      try {
-        TaskDefinition def = getTaskDefinition(parent, name);
-        addApplicableTasks(subTasks, c, path, def);
-      } catch (ConfigInvalidException | IOException e) {
-        subTasks.add(invalid());
-      }
-    }
-
-    if (subTasks.isEmpty()) {
-      return null;
-    }
-    return subTasks;
-  }
-
   protected void addApplicableTasks(
-      List<TaskAttribute> tasks, ChangeData c, LinkedList<TaskDefinition> path, TaskDefinition def)
+      List<TaskAttribute> tasks, ChangeData c, LinkedList<Task> path, Task def)
       throws OrmException, QueryParseException {
     if (path.contains(def)) { // looping definition
       tasks.add(invalid());
@@ -130,7 +112,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   }
 
   protected void addApplicableTasksNoLoopCheck(
-      List<TaskAttribute> tasks, ChangeData c, LinkedList<TaskDefinition> path, TaskDefinition def)
+      List<TaskAttribute> tasks, ChangeData c, LinkedList<Task> path, Task def)
       throws OrmException {
     try {
       if (match(c, def.applicable)) {
@@ -150,6 +132,19 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     }
   }
 
+  protected List<TaskAttribute> getSubTasks(ChangeData c, LinkedList<Task> path, Task parent)
+      throws OrmException, QueryParseException {
+    List<TaskAttribute> subTasks = new ArrayList<>();
+    for (Task task : getSubTasks(parent)) {
+      addApplicableTasks(subTasks, c, path, task);
+    }
+
+    if (subTasks.isEmpty()) {
+      return null;
+    }
+    return subTasks;
+  }
+
   protected static TaskAttribute invalid() {
     // For security reasons, do not expose the task name without knowing
     // the visibility which is derived from its applicability.
@@ -158,26 +153,28 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return a;
   }
 
-  protected List<TaskDefinition> getRootTaskDefinitions()
-      throws ConfigInvalidException, IOException {
-    return taskFactory.getRootConfig().getRootTaskDefinitions();
+  protected List<Task> getRootTasks() throws ConfigInvalidException, IOException {
+    return taskFactory.getRootConfig().getRootTasks();
   }
 
-  protected TaskDefinition getTaskDefinition(TaskDefinition parent, String name)
-      throws ConfigInvalidException, IOException {
-    return taskFactory.getTaskConfig(parent.branch, parent.fileName).getTaskDefinition(name);
+  protected List<Task> getSubTasks(Task parent) {
+    List<Task> tasks = new ArrayList<>();
+    for (String name : parent.subTasks) {
+      tasks.add(parent.config.getTask(name));
+    }
+    return tasks;
   }
 
-  protected Status getStatus(ChangeData c, TaskDefinition def, TaskAttribute a)
+  protected Status getStatus(ChangeData c, Task task, TaskAttribute a)
       throws OrmException, QueryParseException {
-    if (def.pass == null && a.subTasks == null) {
+    if (task.pass == null && a.subTasks == null) {
       // A leaf without a PASS criteria is likely a missconfiguration.
       // Either someone forgot to add subtasks, or they forgot to add
       // the pass criteria.
       return Status.INVALID;
     }
 
-    if (def.fail != null && match(c, def.fail)) {
+    if (task.fail != null && match(c, task.fail)) {
       // A FAIL definition is meant to be a hard blocking criteria
       // (like a CodeReview -2).  Thus, if hard blocked, it is
       // irrelevant what the subtask states, or the pass criteria are.
@@ -202,7 +199,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       return Status.WAITING;
     }
 
-    if (def.pass != null && !match(c, def.pass)) {
+    if (task.pass != null && !match(c, task.pass)) {
       // Non-leaf tasks with no PASS criteria are supported in order
       // to support "grouping tasks" (tasks with no function aside from
       // organizing tasks).  A task without a PASS criteria, cannot ever
