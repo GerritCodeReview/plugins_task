@@ -39,6 +39,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String pass;
     public String readyHint;
     public List<String> subTasks;
+    public List<String> subTasksExternals;
     public List<String> subTasksFiles;
 
     public Task(SubSection s) {
@@ -49,20 +50,37 @@ public class TaskConfig extends AbstractVersionedMetaData {
       pass = getString(s, KEY_PASS, null);
       readyHint = getString(s, KEY_READY_HINT, null);
       subTasks = getStringList(s, KEY_SUBTASK);
+      subTasksExternals = getStringList(s, KEY_SUBTASKS_EXTERNAL);
       subTasksFiles = getStringList(s, KEY_SUBTASKS_FILE);
     }
   }
 
+  public class External extends Section {
+    public String name;
+    public String file;
+    public String user;
+
+    public External(SubSection s) {
+      name = s.subSection;
+      file = getString(s, KEY_FILE, null);
+      user = getString(s, KEY_USER, null);
+    }
+  }
+
+  protected static final String SECTION_EXTERNAL = "external";
   protected static final String SECTION_ROOT = "root";
   protected static final String SECTION_TASK = "task";
   protected static final String KEY_APPLICABLE = "applicable";
   protected static final String KEY_FAIL = "fail";
+  protected static final String KEY_FILE = "file";
   protected static final String KEY_IN_PROGRESS = "in-progress";
   protected static final String KEY_NAME = "name";
   protected static final String KEY_PASS = "pass";
   protected static final String KEY_READY_HINT = "ready-hint";
   protected static final String KEY_SUBTASK = "subtask";
+  protected static final String KEY_SUBTASKS_EXTERNAL = "subtasks-external";
   protected static final String KEY_SUBTASKS_FILE = "subtasks-file";
+  protected static final String KEY_USER = "user";
 
   public TaskConfig(Branch.NameKey branch, String fileName) {
     super(branch, fileName);
@@ -85,8 +103,25 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return tasks;
   }
 
+  public List<External> getExternals() {
+    List<External> externals = new ArrayList<>();
+    // No need to get an external with no name (what would we call it?)
+    for (String external : cfg.getSubsections(SECTION_EXTERNAL)) {
+      externals.add(getExternal(external));
+    }
+    return externals;
+  }
+
   public Task getTask(String name) {
     return new Task(new SubSection(SECTION_TASK, name));
+  }
+
+  public External getExternal(String name) {
+    return getExternal(new SubSection(SECTION_EXTERNAL, name));
+  }
+
+  protected External getExternal(SubSection s) {
+    return new External(s);
   }
 
   protected String getString(SubSection s, String key, String def) {
