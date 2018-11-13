@@ -1,8 +1,10 @@
 @PLUGIN@ States
 ===============
 
-Below is an exampe config file which illustrates many examples of how task
+Below are sample config files which illustrate many examples of how task
 states are affected by their own criteria and their subtasks' states.
+
+`task.config` file in project `All-Project` on ref `refs/meta/config`.
 
 ```
 [root "Root straight PASS"]
@@ -73,6 +75,15 @@ states are affected by their own criteria and their subtasks' states.
    in-progress = -is:open
    pass = -is:open
 
+[root "Subtasks File"]
+  applicable = is:open
+  subtasks-file = common.config
+
+[root "Subtasks File (Missing)"]
+  applicable = is:open
+  subtasks-file = common.config
+  subtasks-file = missing
+
 [task "Subtask FAIL"]
   applicable = is:open
   fail = is:open
@@ -89,6 +100,19 @@ states are affected by their own criteria and their subtasks' states.
 
 [task "Subtask INVALID"]
   applicable = is:open
+```
+
+`task/common.config` file in project `All-Projects` on ref `refs/meta/config`.
+
+```
+[task "file task/common.config PASS"]
+  applicable = is:open
+  pass = is:open
+
+[task "file task/common.config FAIL"]
+  applicable = is:open
+  fail = is:open
+  pass = is:open
 ```
 
 The expected output for the above task config looks like:
@@ -236,6 +260,34 @@ The expected output for the above task config looks like:
                "inProgress" : false,
                "name" : "Root NOT IN PROGRESS",
                "status" : "READY"
+            },
+            {
+               "name" : "Subtasks File",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "file task/common.config PASS",
+                     "status" : "PASS"
+                  },
+                  {
+                     "name" : "file task/common.config FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "name" : "Subtasks File (Missing)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "file task/common.config PASS",
+                     "status" : "PASS"
+                  },
+                  {
+                     "name" : "file task/common.config FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
             }
          ]
       }

@@ -39,6 +39,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String pass;
     public String readyHint;
     public List<String> subTasks;
+    public List<String> subTasksFiles;
 
     public Task(SubSection s) {
       applicable = getString(s, KEY_APPLICABLE, null);
@@ -48,6 +49,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
       pass = getString(s, KEY_PASS, null);
       readyHint = getString(s, KEY_READY_HINT, null);
       subTasks = getStringList(s, KEY_SUBTASK);
+      subTasksFiles = getStringList(s, KEY_SUBTASKS_FILE);
     }
   }
 
@@ -60,6 +62,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String KEY_PASS = "pass";
   protected static final String KEY_READY_HINT = "ready-hint";
   protected static final String KEY_SUBTASK = "subtask";
+  protected static final String KEY_SUBTASKS_FILE = "subtasks-file";
 
   public TaskConfig(Branch.NameKey branch, String fileName) {
     super(branch, fileName);

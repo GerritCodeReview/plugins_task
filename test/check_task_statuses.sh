@@ -42,12 +42,14 @@ DOCS=$MYDIR/.././src/main/resources/Documentation
 OUT=$MYDIR/../target/tests
 
 ALL=$OUT/All-Projects
+ALL_TASKS=$ALL/task
 
 DOC_STATES=$DOCS/task_states.md
 EXPECTED=$OUT/expected
 STATUSES=$OUT/statuses
 
 ROOT_CFG=$ALL/task.config
+COMMON_CFG=$ALL_TASKS/common.config
 
 # --- Args ----
 SERVER=$1
@@ -62,11 +64,14 @@ REF_ALL=refs/meta/config
 mkdir -p "$OUT"
 setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 
+mkdir -p "$ALL_TASKS"
+
 example 1 > "$ROOT_CFG"
+example 2 > "$COMMON_CFG"
 
 update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 
-example 2 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
+example 3 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
 
 query_plugins "status:open limit:1" > "$STATUSES"
 diff "$EXPECTED" "$STATUSES"
