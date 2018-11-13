@@ -61,7 +61,8 @@ executed and was successful.
 
 A task with a `FAIL` status has executed and was unsuccessful.
 
-A task with a `INVALID` status has an invalid definition.
+A task with a `INVALID` status has an invalid/missing definition or an
+invalid query.
 
 Tasks
 -----
