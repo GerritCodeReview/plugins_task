@@ -18,26 +18,18 @@ import com.google.gerrit.extensions.common.PluginDefinedInfo;
 import com.google.gerrit.index.query.Matchable;
 import com.google.gerrit.index.query.Predicate;
 import com.google.gerrit.index.query.QueryParseException;
-import com.google.gerrit.reviewdb.client.Account;
-import com.google.gerrit.reviewdb.client.Branch;
-import com.google.gerrit.reviewdb.client.RefNames;
-import com.google.gerrit.server.account.AccountResolver;
-import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor.ChangeAttributeFactory;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.task.TaskConfig.External;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
+import com.googlesource.gerrit.plugins.task.TaskTree.Node;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.io.IOException;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -74,11 +66,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     public List<TaskAttribute> roots = new ArrayList<>();
   }
 
-  protected static final String TASK_DIR = "task";
-
-  protected final AccountResolver accountResolver;
-  protected final AllUsersNameProvider allUsers;
-  protected final TaskConfigFactory taskFactory;
+  protected final TaskTree definitions;
   protected final ChangeQueryBuilder cqb;
 
   protected final Map<String, Predicate<ChangeData>> predicatesByQuery = new HashMap<>();
@@ -86,14 +74,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected Modules.MyOptions options;
 
   @Inject
-  public TaskAttributeFactory(
-      AccountResolver accountResolver,
-      AllUsersNameProvider allUsers,
-      TaskConfigFactory taskFactory,
-      ChangeQueryBuilder cqb) {
-    this.accountResolver = accountResolver;
-    this.allUsers = allUsers;
-    this.taskFactory = taskFactory;
+  public TaskAttributeFactory(TaskTree definitions, ChangeQueryBuilder cqb) {
+    this.definitions = definitions;
     this.cqb = cqb;
   }
 
@@ -102,7 +84,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     options = (Modules.MyOptions) qp.getDynamicBean(plugin);
     if (options.all || options.onlyApplicable || options.onlyInvalid) {
       for (PatchSetArgument psa : options.patchSetArguments) {
-        taskFactory.masquerade(psa);
+        definitions.masquerade(psa);
       }
       try {
         return createWithExceptions(c);
@@ -116,9 +98,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected PluginDefinedInfo createWithExceptions(ChangeData c) throws OrmException {
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
-      LinkedList<Task> path = new LinkedList<>();
-      for (Task task : getRootTasks()) {
-        addApplicableTasks(a.roots, c, path, task);
+      for (Node node : definitions.getRootNodes()) {
+        addApplicableTasks(a.roots, c, node);
       }
     } catch (ConfigInvalidException | IOException e) {
       a.roots.add(invalid());
@@ -130,22 +111,10 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return a;
   }
 
-  protected void addApplicableTasks(
-      List<TaskAttribute> tasks, ChangeData c, LinkedList<Task> path, Task def)
-      throws OrmException {
-    if (path.contains(def)) { // looping definition
-      tasks.add(invalid());
-      return;
-    }
-    path.addLast(def);
-    addApplicableTasksNoLoopCheck(tasks, c, path, def);
-    path.removeLast();
-  }
-
-  protected void addApplicableTasksNoLoopCheck(
-      List<TaskAttribute> tasks, ChangeData c, LinkedList<Task> path, Task def)
+  protected void addApplicableTasks(List<TaskAttribute> tasks, ChangeData c, Node node)
       throws OrmException {
     try {
+      Task def = node.definition;
       boolean applicable = match(c, def.applicable);
       if (!def.isVisible) {
         if (!def.isTrusted || (!applicable && !options.onlyApplicable)) {
@@ -157,7 +126,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       if (applicable || !options.onlyApplicable) {
         TaskAttribute task = new TaskAttribute(def.name);
         task.hasPass = def.pass != null || def.fail != null;
-        task.subTasks = getSubTasks(c, path, def);
+        task.subTasks = getSubTasks(c, node);
         task.status = getStatus(c, def, task);
         if (options.onlyInvalid && !isValidQueries(c, def)) {
           task.status = Status.INVALID;
@@ -182,36 +151,15 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     }
   }
 
-  protected List<TaskAttribute> getSubTasks(ChangeData c, LinkedList<Task> path, Task parent)
-      throws OrmException {
-    List<Task> tasks = getSubTasks(parent);
-
+  protected List<TaskAttribute> getSubTasks(ChangeData c, Node node) throws OrmException {
     List<TaskAttribute> subTasks = new ArrayList<>();
-    for (String file : parent.subTasksFiles) {
-      try {
-        tasks.addAll(
-            getTasks(parent.config.getBranch(), resolveTaskFileName(file), parent.isTrusted));
-      } catch (ConfigInvalidException | IOException e) {
+    for (Node subNode : node.getSubNodes()) {
+      if (subNode == null) {
         subTasks.add(invalid());
+      } else {
+        addApplicableTasks(subTasks, c, subNode);
       }
     }
-    for (String external : parent.subTasksExternals) {
-      try {
-        External ext = parent.config.getExternal(external);
-        if (ext == null) {
-          subTasks.add(invalid());
-        } else {
-          tasks.addAll(getTasks(ext, parent.isTrusted));
-        }
-      } catch (ConfigInvalidException | IOException e) {
-        subTasks.add(invalid());
-      }
-    }
-
-    for (Task task : tasks) {
-      addApplicableTasks(subTasks, c, path, task);
-    }
-
     if (subTasks.isEmpty()) {
       return null;
     }
@@ -230,52 +178,6 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     TaskAttribute a = new TaskAttribute("UNKNOWN");
     a.status = Status.UNKNOWN;
     return a;
-  }
-
-  protected List<Task> getRootTasks() throws ConfigInvalidException, IOException {
-    return taskFactory.getRootConfig().getRootTasks();
-  }
-
-  protected List<Task> getSubTasks(Task parent) {
-    List<Task> tasks = new ArrayList<>();
-    for (String name : parent.subTasks) {
-      tasks.add(parent.config.getTask(name));
-    }
-    return tasks;
-  }
-
-  protected List<Task> getTasks(External external, boolean isTrusted)
-      throws ConfigInvalidException, IOException, OrmException {
-    return getTasks(
-        resolveUserBranch(external.user), resolveTaskFileName(external.file), isTrusted);
-  }
-
-  protected List<Task> getTasks(Branch.NameKey branch, String file, boolean isTrusted)
-      throws ConfigInvalidException, IOException {
-    return taskFactory.getTaskConfig(branch, file, isTrusted).getTasks();
-  }
-
-  protected String resolveTaskFileName(String file) throws ConfigInvalidException {
-    if (file == null) {
-      throw new ConfigInvalidException("External file not defined");
-    }
-    Path p = Paths.get(TASK_DIR, file);
-    if (!p.startsWith(TASK_DIR)) {
-      throw new ConfigInvalidException("task file not under " + TASK_DIR + " directory: " + file);
-    }
-    return p.toString();
-  }
-
-  protected Branch.NameKey resolveUserBranch(String user)
-      throws ConfigInvalidException, IOException, OrmException {
-    if (user == null) {
-      throw new ConfigInvalidException("External user not defined");
-    }
-    Account acct = accountResolver.find(user);
-    if (acct == null) {
-      throw new ConfigInvalidException("Cannot resolve user: " + user);
-    }
-    return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
   }
 
   protected boolean isValidQueries(ChangeData c, Task task) {

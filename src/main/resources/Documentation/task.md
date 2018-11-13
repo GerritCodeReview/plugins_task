@@ -123,11 +123,6 @@ Example:
     pass = label:verified+1
 ```
 
-Example:
-```
-    in-progress = label:patchset-lock,user=jenkins
-```
-
 `ready-hint`
 
 : This key defines a hint when a task is `READY` describing what
