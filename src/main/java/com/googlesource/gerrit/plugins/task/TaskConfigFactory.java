@@ -24,7 +24,10 @@ import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
 import com.google.gerrit.server.permissions.RefPermission;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Repository;
 import org.slf4j.Logger;
@@ -42,6 +45,8 @@ public class TaskConfigFactory {
   protected final CurrentUser user;
   protected final AllProjectsName allProjects;
 
+  protected final Map<Branch.NameKey, PatchSetArgument> psaMasquerades = new HashMap<>();
+
   @Inject
   protected TaskConfigFactory(
       GitRepositoryManager gitMgr, PermissionBackend permissionBackend, CurrentUser user) {
@@ -53,17 +58,30 @@ public class TaskConfigFactory {
   }
 
   public TaskConfig getRootConfig() throws ConfigInvalidException, IOException {
-    return getTaskConfig(getRootBranch(), DEFAULT);
+    return getTaskConfig(getRootBranch(), DEFAULT, true);
+  }
+
+  public void masquerade(PatchSetArgument psa) {
+    psaMasquerades.put(psa.change.getDest(), psa);
   }
 
   protected Branch.NameKey getRootBranch() {
     return new Branch.NameKey(allProjects, "refs/meta/config");
   }
 
-  public TaskConfig getTaskConfig(Branch.NameKey branch, String fileName)
+  public TaskConfig getTaskConfig(Branch.NameKey branch, String fileName, boolean isTrusted)
       throws ConfigInvalidException, IOException {
-    TaskConfig cfg = new TaskConfig(branch, fileName, canRead(branch));
+    PatchSetArgument psa = psaMasquerades.get(branch);
+    boolean visible = true; // invisible psas are filtered out by commandline
+    if (psa == null) {
+      visible = canRead(branch);
+    } else {
+      isTrusted = false;
+      branch = new Branch.NameKey(psa.change.getProject(), psa.patchSet.getId().toRefName());
+    }
+
     Project.NameKey project = branch.getParentKey();
+    TaskConfig cfg = new TaskConfig(branch, fileName, visible, isTrusted);
     try {
       Repository git = gitMgr.openRepository(project);
       try {

@@ -283,6 +283,13 @@ calling user, whether they apply to a change or not.  When this flag is used,
 an additional 'applicable' property is included in each task output to
 indicate whether the task actually met its applicability criteria or not.
 
+**\-\-@PLUGIN@\-\-preview**
+
+This switch is meant as a debug switch for previewing changes to task configs.
+This switch outputs tasks as if the supplied change were already merged.  This
+makes it possible to preview the effect of proposed changes before going live
+with them. More than one change may be previewed together.
+
 When tasks are appended to changes, they will have a "task" section under
 the plugins section like below:
 
