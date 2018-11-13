@@ -418,10 +418,6 @@ The expected output for the above task config looks like:
                "status" : "WAITING",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  },
-                  {
                      "hasPass" : true,
                      "name" : "userfile task/special.config PASS",
                      "status" : "PASS"
@@ -430,6 +426,10 @@ The expected output for the above task config looks like:
                      "hasPass" : true,
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
@@ -439,10 +439,6 @@ The expected output for the above task config looks like:
                "status" : "WAITING",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  },
-                  {
                      "hasPass" : true,
                      "name" : "userfile task/special.config PASS",
                      "status" : "PASS"
@@ -451,6 +447,10 @@ The expected output for the above task config looks like:
                      "hasPass" : true,
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
