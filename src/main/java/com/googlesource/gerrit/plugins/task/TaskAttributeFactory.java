@@ -94,7 +94,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   @Override
   public PluginDefinedInfo create(ChangeData c, ChangeQueryProcessor qp, String plugin) {
     options = (Modules.MyOptions) qp.getDynamicBean(plugin);
-    if (options.all || options.onlyApplicable) {
+    if (options.all || options.onlyApplicable || options.onlyInvalid) {
       for (PatchSetArgument psa : options.patchSetArguments) {
         taskFactory.masquerade(psa);
       }
@@ -155,14 +155,16 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         boolean groupApplicable = task.status != null;
 
         if (groupApplicable || !options.onlyApplicable) {
-          if (!options.onlyApplicable) {
-            task.applicable = applicable;
+          if (!options.onlyInvalid || task.status == Status.INVALID || task.subTasks != null) {
+            if (!options.onlyApplicable) {
+              task.applicable = applicable;
+            }
+            if (def.inProgress != null) {
+              task.inProgress = match(c, def.inProgress);
+            }
+            task.hint = getHint(task.status, def);
+            tasks.add(task);
           }
-          if (def.inProgress != null) {
-            task.inProgress = match(c, def.inProgress);
-          }
-          task.hint = getHint(task.status, def);
-          tasks.add(task);
         }
       }
     } catch (QueryParseException e) {

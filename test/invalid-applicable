@@ -1,0 +1,81 @@
+   "plugins" : [
+      {
+         "name" : "task",
+         "roots" : [
+            {
+               "name" : "Subtasks External (Missing)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "name" : "Subtasks External (User Missing)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "name" : "INVALIDS",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "No PASS criteria",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "name" : "WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "MISSING",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "Grouping WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "Grouping WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "MISSING",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "Subtask INVALID",
+                     "status" : "INVALID"
+                  }
+               ]
+            }
+         ]
+      }
+   ],

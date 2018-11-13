@@ -1,34 +1,34 @@
-[root "INVALIDS"]
+[root "INVALIDS Preview"]
   applicable = is:open
   subtasks-file = invalids.config
 
-[root "Root PASS"]
+[root "Root PASS Preview"]
   applicable = is:open
   pass = True
 
-[root "Root READY (subtask PASS)"]
+[root "Root READY (subtask PASS) Preview"]
   applicable = is:open
   pass = -is:open
-  subtask = Subtask PASS
+  subtask = Subtask PASS Preview
   ready-hint = You must now run the ready task
 
-[root "Subtasks External"]
+[root "Subtasks External Preview"]
   applicable = is:open
-  subtasks-external = user special
+  subtasks-external = user special Preview
 
-[root "Root NA Pass"]
+[root "Root NA Pass Preview"]
   applicable = -is:open
   pass = True
 
-[root "NA INVALIDS"]
+[root "NA INVALIDS Preview"]
   applicable = -is:open
   subtasks-file = invalids.config
 
-[task "Subtask PASS"]
+[task "Subtask PASS Preview"]
   applicable = is:open
   pass = is:open
 
-[external "user special"]
+[external "user special Preview"]
   user = mfick
   file = special.config
 
