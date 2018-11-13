@@ -16,9 +16,6 @@ states are affected by their own criteria and their subtasks' states.
   fail = is:open
   pass = is:open
 
-[root "Root straight INVALID"]
-  applicable = is:open
-
 [root "Root grouping PASS (subtask PASS)"]
   applicable = is:open
   subtask = Subtask PASS
@@ -30,14 +27,6 @@ states are affected by their own criteria and their subtasks' states.
 [root "Root grouping WAITING (subtask FAIL)"]
   applicable = is:open
   subtask = Subtask FAIL
-
-[root "Root grouping WAITING (subtask INVALID)"]
-  applicable = is:open
-  subtask = Subtask INVALID
-
-[root "Root grouping WAITING (subtask missing)"]
-  applicable = is:open
-  subtask = MISSING
 
 [root "Root READY (subtask PASS)"]
   applicable = is:open
@@ -54,16 +43,6 @@ states are affected by their own criteria and their subtasks' states.
   applicable = is:open
   pass = is:open
   subtask = Subtask FAIL
-
-[root "Root WAITING (subtask INVALID)"]
-  applicable = is:open
-  pass = is:open
-  subtask = Subtask INVALID
-
-[root "Root WAITING (subtask missing)"]
-  applicable = is:open
-  pass = is:open
-  subtask = MISSING
 
 [root "Root IN PROGRESS"]
    applicable = is:open
@@ -103,6 +82,10 @@ states are affected by their own criteria and their subtasks' states.
   subtasks-external = user special
   subtasks-external = file missing
 
+[root "INVALIDS"]
+  applicable = is:open
+  subtasks-file = invalids.config
+
 [task "Subtask FAIL"]
   applicable = is:open
   fail = is:open
@@ -116,9 +99,6 @@ states are affected by their own criteria and their subtasks' states.
 [task "Subtask PASS"]
   applicable = is:open
   pass = is:open
-
-[task "Subtask INVALID"]
-  applicable = is:open
 
 [external "user special"]
   user = current-user
@@ -144,6 +124,38 @@ states are affected by their own criteria and their subtasks' states.
   applicable = is:open
   fail = is:open
   pass = is:open
+```
+
+`task/invalids.config` file in project `All-Projects` on ref `refs/meta/config`.
+
+```
+[task "No PASS criteria"]
+  applicable = is:open
+
+[task "WAITING (subtask INVALID)"]
+  applicable = is:open
+  pass = is:open
+  subtask = Subtask INVALID
+
+[task "WAITING (subtask missing)"]
+  applicable = is:open
+  pass = is:open
+  subtask = MISSING # security bug: subtask name appears in output
+
+[task "Grouping WAITING (subtask INVALID)"]
+  applicable = is:open
+  subtask = Subtask INVALID
+
+[task "Grouping WAITING (subtask missing)"]
+  applicable = is:open
+  subtask = MISSING  # security bug: subtask name appears in output
+
+[task "Subtask INVALID"]
+  applicable = is:open
+
+[external "external missing"]
+  user = mfick
+  file = missing
 ```
 
 `task/special.config` file in project `All-Users` on ref `refs/users/self`.
@@ -177,10 +189,6 @@ The expected output for the above task config looks like:
             {
                "name" : "Root straight FAIL",
                "status" : "FAIL"
-            },
-            {
-               "name" : "Root straight INVALID",
-               "status" : "INVALID"
             },
             {
                "name" : "Root grouping PASS (subtask PASS)",
@@ -219,26 +227,6 @@ The expected output for the above task config looks like:
                ]
             },
             {
-               "name" : "Root grouping WAITING (subtask INVALID)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "name" : "Subtask INVALID",
-                     "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "name" : "Root grouping WAITING (subtask missing)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "name" : "MISSING",
-                     "status" : "INVALID"
-                  }
-               ]
-            },
-            {
                "name" : "Root READY (subtask PASS)",
                "readyHint" : "You must now run the ready task",
                "status" : "READY",
@@ -272,26 +260,6 @@ The expected output for the above task config looks like:
                   {
                      "name" : "Subtask FAIL",
                      "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "name" : "Root WAITING (subtask INVALID)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "name" : "Subtask INVALID",
-                     "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "name" : "Root WAITING (subtask missing)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "name" : "MISSING",
-                     "status" : "INVALID"
                   }
                ]
             },
@@ -394,6 +362,60 @@ The expected output for the above task config looks like:
                   {
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "name" : "INVALIDS",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "No PASS criteria",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "name" : "WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "MISSING",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "Grouping WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "Grouping WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "MISSING",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "Subtask INVALID",
+                     "status" : "INVALID"
                   }
                ]
             }
