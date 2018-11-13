@@ -22,6 +22,30 @@
       "revId": "f4cc3d7bf7d1f4179ce01c736cebb4ce6eb913d7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1fe4046_7b7c51e3",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-13T20:13:59Z",
+      "side": 1,
+      "message": "Done, I will rebase the others as they get reviewed in case they need more fixes.",
+      "parentUuid": "b9811e8f_b50c3715",
+      "range": {
+        "startLine": 4,
+        "startChar": 12,
+        "endLine": 4,
+        "endChar": 17
+      },
+      "revId": "f4cc3d7bf7d1f4179ce01c736cebb4ce6eb913d7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
