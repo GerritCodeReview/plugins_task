@@ -84,6 +84,25 @@ states are affected by their own criteria and their subtasks' states.
   subtasks-file = common.config
   subtasks-file = missing
 
+[root "Subtasks External"]
+  applicable = is:open
+  subtasks-external = user special
+
+[root "Subtasks External (Missing)"]
+  applicable = is:open
+  subtasks-external = user special
+  subtasks-external = missing
+
+[root "Subtasks External (User Missing)"]
+  applicable = is:open
+  subtasks-external = user special
+  subtasks-external = user missing
+
+[root "Subtasks External (File Missing)"]
+  applicable = is:open
+  subtasks-external = user special
+  subtasks-external = file missing
+
 [task "Subtask FAIL"]
   applicable = is:open
   fail = is:open
@@ -100,6 +119,18 @@ states are affected by their own criteria and their subtasks' states.
 
 [task "Subtask INVALID"]
   applicable = is:open
+
+[external "user special"]
+  user = current-user
+  file = special.config
+
+[external "user missing"]
+  user = missing
+  file = special.config
+
+[external "file missing"]
+  user = current-user
+  file = missing
 ```
 
 `task/common.config` file in project `All-Projects` on ref `refs/meta/config`.
@@ -110,6 +141,19 @@ states are affected by their own criteria and their subtasks' states.
   pass = is:open
 
 [task "file task/common.config FAIL"]
+  applicable = is:open
+  fail = is:open
+  pass = is:open
+```
+
+`task/special.config` file in project `All-Users` on ref `refs/users/self`.
+
+```
+[task "userfile task/special.config PASS"]
+  applicable = is:open
+  pass = is:open
+
+[task "userfile task/special.config FAIL"]
   applicable = is:open
   fail = is:open
   pass = is:open
@@ -285,6 +329,70 @@ The expected output for the above task config looks like:
                   },
                   {
                      "name" : "file task/common.config FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "name" : "Subtasks External",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "userfile task/special.config PASS",
+                     "status" : "PASS"
+                  },
+                  {
+                     "name" : "userfile task/special.config FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "name" : "Subtasks External (Missing)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "name" : "userfile task/special.config PASS",
+                     "status" : "PASS"
+                  },
+                  {
+                     "name" : "userfile task/special.config FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "name" : "Subtasks External (User Missing)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "name" : "userfile task/special.config PASS",
+                     "status" : "PASS"
+                  },
+                  {
+                     "name" : "userfile task/special.config FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "name" : "Subtasks External (File Missing)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "userfile task/special.config PASS",
+                     "status" : "PASS"
+                  },
+                  {
+                     "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
                   }
                ]
