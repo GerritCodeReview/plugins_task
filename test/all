@@ -234,10 +234,6 @@
                "status" : "WAITING",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  },
-                  {
                      "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config PASS",
@@ -248,6 +244,10 @@
                      "hasPass" : true,
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
@@ -258,10 +258,6 @@
                "status" : "WAITING",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  },
-                  {
                      "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config PASS",
@@ -272,6 +268,10 @@
                      "hasPass" : true,
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
