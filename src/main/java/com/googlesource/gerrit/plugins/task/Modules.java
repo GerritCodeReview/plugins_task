@@ -20,6 +20,10 @@ import com.google.gerrit.server.query.change.ChangeQueryProcessor.ChangeAttribut
 import com.google.gerrit.server.restapi.change.QueryChanges;
 import com.google.gerrit.sshd.commands.Query;
 import com.google.inject.AbstractModule;
+import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
+import java.util.ArrayList;
+import java.util.List;
 import org.kohsuke.args4j.Option;
 
 public class Modules {
@@ -52,5 +56,23 @@ public class Modules {
 
     @Option(name = "--applicable", usage = "Include only applicable tasks in the output")
     public boolean onlyApplicable = false;
+
+    @Option(
+        name = "--preview",
+        metaVar = "{CHANGE,PATCHSET}",
+        usage = "list of patch sets to preview task evaluation for")
+    public void addPatchSet(String token) {
+      PatchSetArgument psa = patchSetArgumentFactory.createForArgument(token);
+      patchSetArguments.add(psa);
+    }
+
+    public List<PatchSetArgument> patchSetArguments = new ArrayList<>();
+
+    public PatchSetArgument.Factory patchSetArgumentFactory;
+
+    @Inject
+    public MyOptions(PatchSetArgument.Factory patchSetArgumentFactory) {
+      this.patchSetArgumentFactory = patchSetArgumentFactory;
+    }
   }
 }
