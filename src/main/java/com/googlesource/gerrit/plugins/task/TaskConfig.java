@@ -43,7 +43,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public List<String> subTasksExternals;
     public List<String> subTasksFiles;
 
-    public Task(SubSection s) {
+    public boolean isVisible;
+
+    public Task(SubSection s, boolean isVisible) {
+      this.isVisible = isVisible;
       applicable = getString(s, KEY_APPLICABLE, null);
       fail = getString(s, KEY_FAIL, null);
       failHint = getString(s, KEY_FAIL_HINT, null);
@@ -85,8 +88,11 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String KEY_SUBTASKS_FILE = "subtasks-file";
   protected static final String KEY_USER = "user";
 
-  public TaskConfig(Branch.NameKey branch, String fileName) {
+  public boolean isVisible;
+
+  public TaskConfig(Branch.NameKey branch, String fileName, boolean isVisible) {
     super(branch, fileName);
+    this.isVisible = isVisible;
   }
 
   public List<Task> getRootTasks() {
@@ -101,7 +107,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     List<Task> tasks = new ArrayList<>();
     // No need to get a task with no name (what would we call it?)
     for (String task : cfg.getSubsections(type)) {
-      tasks.add(new Task(new SubSection(type, task)));
+      tasks.add(new Task(new SubSection(type, task), isVisible));
     }
     return tasks;
   }
@@ -116,7 +122,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   public Task getTask(String name) {
-    return new Task(new SubSection(SECTION_TASK, name));
+    return new Task(new SubSection(SECTION_TASK, name), isVisible);
   }
 
   public External getExternal(String name) {

@@ -14,10 +14,15 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.git.GitRepositoryManager;
+import com.google.gerrit.server.permissions.PermissionBackend;
+import com.google.gerrit.server.permissions.PermissionBackendException;
+import com.google.gerrit.server.permissions.RefPermission;
 import com.google.inject.Inject;
 import java.io.IOException;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -32,13 +37,19 @@ public class TaskConfigFactory {
   protected static final String DEFAULT = "task" + EXTENSION;
 
   protected final GitRepositoryManager gitMgr;
+  protected final PermissionBackend permissionBackend;
+
+  protected final CurrentUser user;
   protected final AllProjectsName allProjects;
 
   @Inject
-  protected TaskConfigFactory(GitRepositoryManager gitMgr) {
+  protected TaskConfigFactory(
+      GitRepositoryManager gitMgr, PermissionBackend permissionBackend, CurrentUser user) {
     // Injecting AllProjectsName doesn't work here
     this.allProjects = new AllProjectsName("All-Projects");
     this.gitMgr = gitMgr;
+    this.permissionBackend = permissionBackend;
+    this.user = user;
   }
 
   public TaskConfig getRootConfig() throws ConfigInvalidException, IOException {
@@ -51,7 +62,7 @@ public class TaskConfigFactory {
 
   public TaskConfig getTaskConfig(Branch.NameKey branch, String fileName)
       throws ConfigInvalidException, IOException {
-    TaskConfig cfg = new TaskConfig(branch, fileName);
+    TaskConfig cfg = new TaskConfig(branch, fileName, canRead(branch));
     Project.NameKey project = branch.getParentKey();
     try {
       Repository git = gitMgr.openRepository(project);
@@ -67,5 +78,16 @@ public class TaskConfigFactory {
       throw e;
     }
     return cfg;
+  }
+
+  public boolean canRead(Branch.NameKey branch) {
+    try {
+      PermissionBackend.ForProject permissions =
+          permissionBackend.user(user).project(branch.getParentKey());
+      permissions.ref(branch.get()).check(RefPermission.READ);
+      return true;
+    } catch (AuthException | PermissionBackendException e) {
+      return false;
+    }
   }
 }

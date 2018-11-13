@@ -4,6 +4,36 @@
 # All-Users.git - refs/users/self must already exist
 # All-Projects.git - must have 'Push' rights on refs/meta/config
 
+# ---- TEST RESULTS ----
+result() { # test [error_message]
+    local result=$?
+    if [ $result -eq 0 ] ; then
+        echo "PASSED - $1 test"
+    else
+        echo "*** FAILED *** - $1 test"
+        RESULT=$result
+        [ $# -gt 1 ] && echo "$2"
+    fi
+}
+
+# output must match expected to pass
+result_out() { # test expected output
+    local disp=$(echo "Expected Output:" ;\
+                 echo "    $2" ;\
+                 echo "Actual Output:" ;\
+                 echo "    $3")
+
+    [ "$2" = "$3" ]
+    result "$1" "$disp"
+}
+
+# --------
+
+# Run a test setup command quietly, exit on failure
+q_setup() { # cmd [args...]
+  local out ; out=$("$@" 2>&1) || { echo "$out" ; exit ; }
+}
+
 example() { # example_num
     awk '/```/{Q++;E=(Q+1)/2};E=='"$1" < "$DOC_STATES" | grep -v '```'
 }
@@ -29,13 +59,27 @@ update_repo() { # repo remote ref
 }
 
 query() { # query
-    ssh -x -p "$PORT" "$SERVER" gerrit query "$1" \
-            --format json --task--applicable| head -1 | python -c "import sys, json; \
+    ssh -x -p "$PORT" "$SERVER" gerrit query "$@" \
+            --format json | head -1 | python -c "import sys, json; \
             print json.dumps(json.loads(sys.stdin.read()), indent=3, \
             separators=(',', ' : '), sort_keys=True)"
 }
 
-query_plugins() { query "$1" | awk '$0=="   \"plugins\" : [",$0=="   ],"' ; }
+query_plugins() { query "$@" | awk '$0=="   \"plugins\" : [",$0=="   ],"' ; }
+
+test_tasks() { # name expected_file task_args...
+    local name=$1 expected=$2 ; shift 2
+    local output=$STATUSES.$name
+
+    query_plugins "$@" > "$output"
+    out=$(diff "$expected" "$output")
+    result "$name" "$out"
+}
+
+test_file() { # name task_args...
+    local name=$1 ; shift
+    test_tasks "$name" "$MYDIR/$name" "$@"
+}
 
 MYDIR=$(dirname "$0")
 DOCS=$MYDIR/.././src/main/resources/Documentation
@@ -69,8 +113,8 @@ REF_USERS=refs/users/self
 
 
 mkdir -p "$OUT"
-setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
-setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
+q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
+q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
 mkdir -p "$ALL_TASKS" "$USER_TASKS"
 
@@ -79,10 +123,11 @@ example 2 > "$COMMON_CFG"
 example 3 > "$INVALIDS_CFG"
 example 4 > "$USER_SPECIAL_CFG"
 
-update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
-update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
+q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
+q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
 example 5 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
 
-query_plugins "status:open limit:1" > "$STATUSES"
-diff "$EXPECTED" "$STATUSES"
+query="status:open limit:1"
+test_tasks statuses "$EXPECTED" --task--applicable "$query"
+test_file all --task--all "$query"
