@@ -53,6 +53,7 @@ STATUSES=$OUT/statuses
 
 ROOT_CFG=$ALL/task.config
 COMMON_CFG=$ALL_TASKS/common.config
+INVALIDS_CFG=$ALL_TASKS/invalids.config
 USER_SPECIAL_CFG=$USER_TASKS/special.config
 
 # --- Args ----
@@ -75,13 +76,13 @@ mkdir -p "$ALL_TASKS" "$USER_TASKS"
 
 example 1 |sed -e"s/current-user/$USER/" > "$ROOT_CFG"
 example 2 > "$COMMON_CFG"
-example 3 > "$USER_SPECIAL_CFG"
+example 3 > "$INVALIDS_CFG"
+example 4 > "$USER_SPECIAL_CFG"
 
 update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
-
-example 4 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
+example 5 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
 
 query_plugins "status:open limit:1" > "$STATUSES"
 diff "$EXPECTED" "$STATUSES"
