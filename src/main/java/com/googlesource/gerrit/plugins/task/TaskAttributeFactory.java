@@ -92,15 +92,14 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     if (options != null && options.include) {
       try {
         return createWithExceptions(c);
-      } catch (OrmException | QueryParseException e) {
+      } catch (OrmException e) {
         log.error("Cannot load tasks for: " + c, e);
       }
     }
     return null;
   }
 
-  protected PluginDefinedInfo createWithExceptions(ChangeData c)
-      throws OrmException, QueryParseException {
+  protected PluginDefinedInfo createWithExceptions(ChangeData c) throws OrmException {
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
       LinkedList<Task> path = new LinkedList<>();
@@ -119,7 +118,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   protected void addApplicableTasks(
       List<TaskAttribute> tasks, ChangeData c, LinkedList<Task> path, Task def)
-      throws OrmException, QueryParseException {
+      throws OrmException {
     if (path.contains(def)) { // looping definition
       tasks.add(invalid());
       return;
@@ -146,12 +145,12 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         tasks.add(task);
       }
     } catch (QueryParseException e) {
-      tasks.add(invalid()); // bad query definition
+      tasks.add(invalid()); // bad applicability query
     }
   }
 
   protected List<TaskAttribute> getSubTasks(ChangeData c, LinkedList<Task> path, Task parent)
-      throws OrmException, QueryParseException {
+      throws OrmException {
     List<Task> tasks = getSubTasks(parent);
 
     List<TaskAttribute> subTasks = new ArrayList<>();
@@ -238,7 +237,15 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
   }
 
-  protected Status getStatus(ChangeData c, Task task, TaskAttribute a)
+  protected Status getStatus(ChangeData c, Task task, TaskAttribute a) throws OrmException {
+    try {
+      return getStatusWithExceptions(c, task, a);
+    } catch (QueryParseException e) {
+      return Status.INVALID;
+    }
+  }
+
+  protected Status getStatusWithExceptions(ChangeData c, Task task, TaskAttribute a)
       throws OrmException, QueryParseException {
     if (task.pass == null && a.subTasks == null) {
       // A leaf without a PASS criteria is likely a missconfiguration.
