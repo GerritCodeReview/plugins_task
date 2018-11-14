@@ -4,7 +4,41 @@
          "roots" : [
             {
                "applicable" : true,
-               "name" : "INVALIDS Preview",
+               "name" : "Root grouping NA (subtask NA)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : false,
+                     "name" : "Subtask NA",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "name" : "Subtasks External (Missing)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "name" : "Subtasks External (User Missing)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "name" : "INVALIDS",
                "status" : "WAITING",
                "subTasks" : [
                   {
@@ -68,48 +102,8 @@
                ]
             },
             {
-               "applicable" : true,
-               "name" : "Root PASS Preview",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hint" : "You must now run the ready task",
-               "name" : "Root READY (subtask PASS) Preview",
-               "status" : "READY",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "name" : "Subtask PASS Preview",
-                     "status" : "PASS"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "name" : "Subtasks External Preview",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "name" : "userfile task/special.config PASS",
-                     "status" : "PASS"
-                  },
-                  {
-                     "applicable" : true,
-                     "name" : "userfile task/special.config FAIL",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
                "applicable" : false,
-               "name" : "Root NA Pass Preview",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : false,
-               "name" : "NA INVALIDS Preview",
+               "name" : "NA INVALIDS",
                "status" : "WAITING",
                "subTasks" : [
                   {
