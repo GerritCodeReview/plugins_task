@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9806487f_6f0acf89",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:33:48Z",
+      "side": 1,
+      "message": "fix author name",
+      "revId": "cb79fbc03d9b20b6a109640d7a36fbb73e9c53e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5604f32f_1fc7f76d",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 137,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:33:48Z",
+      "side": 1,
+      "message": "s/indicate/defines/ ?",
+      "range": {
+        "startLine": 137,
+        "startChar": 11,
+        "endLine": 137,
+        "endChar": 19
+      },
+      "revId": "cb79fbc03d9b20b6a109640d7a36fbb73e9c53e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "786fb694_306cd288",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:33:48Z",
+      "side": 1,
+      "message": "mention it must be in a \u0027task\u0027 subdir?",
+      "range": {
+        "startLine": 140,
+        "startChar": 10,
+        "endLine": 140,
+        "endChar": 34
+      },
+      "revId": "cb79fbc03d9b20b6a109640d7a36fbb73e9c53e9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
