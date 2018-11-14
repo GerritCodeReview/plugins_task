@@ -269,7 +269,7 @@ Example:
 Change Query Output
 -------------------
 It is possible to add a task section to the query output of changes using
-the task plugin switches.  The following switches are available:
+the task plugin switches. The following switches are available:
 
 **\-\-@PLUGIN@\-\-applicable**
 
@@ -279,16 +279,24 @@ tasks for each change, it outputs applicable tasks for a change.
 **\-\-@PLUGIN@\-\-all**
 
 This switch is meant as a debug switch, it outputs all tasks visible to the
-calling user, whether they apply to a change or not.  When this flag is used,
+calling user, whether they apply to a change or not. When this flag is used,
 an additional 'applicable' property is included in each task output to
 indicate whether the task actually met its applicability criteria or not.
 
 **\-\-@PLUGIN@\-\-preview**
 
 This switch is meant as a debug switch for previewing changes to task configs.
-This switch outputs tasks as if the supplied change were already merged.  This
+This switch outputs tasks as if the supplied change were already merged. This
 makes it possible to preview the effect of proposed changes before going live
 with them. More than one change may be previewed together.
+
+**\-\-@PLUGIN@\-\-invalid**
+
+This switch is meant as a debug switch to help find mis-configured tasks,
+it causes only invalid tasks and the tasks in the tree hierarchy above them
+to be output. If all tasks are properly configured, this switch should not
+output anything. This switch is particularly useful in combination with
+the **\-\-@PLUGIN@\-\-preview** switch.
 
 When tasks are appended to changes, they will have a "task" section under
 the plugins section like below:
