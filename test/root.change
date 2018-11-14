@@ -29,6 +29,5 @@
   pass = is:open
 
 [external "user special"]
-  user = mfick
+  user = testuser
   file = special.config
-

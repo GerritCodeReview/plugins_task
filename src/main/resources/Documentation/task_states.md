@@ -136,7 +136,7 @@ states are affected by their own criteria and their subtasks' states.
   applicable = NOT is:open
 
 [external "user special"]
-  user = current-user
+  user = testuser
   file = special.config
 
 [external "user missing"]
@@ -144,7 +144,7 @@ states are affected by their own criteria and their subtasks' states.
   file = special.config
 
 [external "file missing"]
-  user = current-user
+  user = testuser
   file = missing
 ```
 

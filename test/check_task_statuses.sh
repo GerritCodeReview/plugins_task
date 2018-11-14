@@ -36,8 +36,12 @@ q_setup() { # cmd [args...]
   local out ; out=$("$@" 2>&1) || { echo "$out" ; exit ; }
 }
 
+replace_user() { # < text_with_testuser > text_with_$USER
+    sed -e"s/testuser/$USER/"
+}
+
 example() { # example_num
-    awk '/```/{Q++;E=(Q+1)/2};E=='"$1" < "$DOC_STATES" | grep -v '```'
+    awk '/```/{Q++;E=(Q+1)/2};E=='"$1" < "$DOC_STATES" | grep -v '```' | replace_user
 }
 
 get_change_num() { # < gerrit_push_response > changenum
@@ -156,6 +160,6 @@ query="status:open limit:1"
 test_tasks statuses "$EXPECTED" --task--applicable "$query"
 test_file all --task--all "$query"
 
-cp "$MYDIR"/root.change "$ROOT_CFG"
+replace_user < "$MYDIR"/root.change > "$ROOT_CFG"
 cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
 test_file preview --task--preview "$cnum,1" --task--all "$query"
