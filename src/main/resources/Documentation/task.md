@@ -290,6 +290,14 @@ This switch outputs tasks as if the supplied change were already merged. This
 makes it possible to preview the effect of proposed changes before going live
 with them. Multiple changes may be previewed together.
 
+**\-\-@PLUGIN@\-\-invalid**
+
+This switch is meant as a debug switch to help find mis-configured tasks,
+it causes only invalid tasks and the tasks in the tree hierarchy above them
+to be output. If all tasks are properly configured, this switch should not
+output anything. This switch is particularly useful in combination with
+the **\-\-@PLUGIN@\-\-preview** switch.
+
 When tasks are appended to changes, they will have a "task" section under
 the plugins section like below:
 

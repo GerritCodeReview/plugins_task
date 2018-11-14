@@ -58,6 +58,11 @@ public class Modules {
     public boolean onlyApplicable = false;
 
     @Option(
+        name = "--invalid",
+        usage = "Include only invalid tasks and the tasks referencing them in the output")
+    public boolean onlyInvalid = false;
+
+    @Option(
         name = "--preview",
         metaVar = "{CHANGE,PATCHSET}",
         usage = "list of patch sets to preview task evaluation for")

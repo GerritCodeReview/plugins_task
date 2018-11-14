@@ -152,3 +152,7 @@ test_file all --task--all "$query"
 replace_user < "$MYDIR"/root.change > "$ROOT_CFG"
 cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
 test_file preview --task--preview "$cnum,1" --task--all "$query"
+test_file preview.invalid --task--preview "$cnum,1" --task--invalid "$query"
+
+test_file invalid --task--invalid "$query"
+test_file invalid-applicable --task--applicable --task--invalid "$query"
