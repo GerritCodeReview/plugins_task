@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "9392ddec_d6a00b78",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:57:03Z",
+      "side": 1,
+      "message": "maybe squash with the parent change?\n\nDefinitely add some explanation of why.",
+      "revId": "c50c326e677d79c31bd0366371cf862defd18461",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0c3c336e_51bb1f6d",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:57:03Z",
+      "side": 1,
+      "message": "this reasoning should also go in the commit message",
+      "range": {
+        "startLine": 297,
+        "startChar": 14,
+        "endLine": 300,
+        "endChar": 17
+      },
+      "revId": "c50c326e677d79c31bd0366371cf862defd18461",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
