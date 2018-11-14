@@ -1,0 +1,84 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "67eaf509_b29a96a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:53:44Z",
+      "side": 1,
+      "message": "fix author name",
+      "revId": "dce2efe280bef06f1c09f5bf0a9de28c5a8cd599",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "20b0dbf5_d2e80676",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:53:44Z",
+      "side": 1,
+      "message": "Multiple changes",
+      "range": {
+        "startLine": 10,
+        "startChar": 50,
+        "endLine": 10,
+        "endChar": 70
+      },
+      "revId": "dce2efe280bef06f1c09f5bf0a9de28c5a8cd599",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "397abecb_f5c1a151",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 291,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:53:44Z",
+      "side": 1,
+      "message": "Multiple changes",
+      "range": {
+        "startLine": 291,
+        "startChar": 11,
+        "endLine": 291,
+        "endChar": 31
+      },
+      "revId": "dce2efe280bef06f1c09f5bf0a9de28c5a8cd599",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b645cb12_356183ad",
+        "filename": "test/check_task_statuses.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 44,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:53:44Z",
+      "side": 1,
+      "message": "works for 2.16?",
+      "revId": "dce2efe280bef06f1c09f5bf0a9de28c5a8cd599",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
