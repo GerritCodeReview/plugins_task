@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "819163b6_ee5e50be",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 276,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:58:02Z",
+      "side": 1,
+      "message": "push to parent(s)",
+      "range": {
+        "startLine": 276,
+        "startChar": 2,
+        "endLine": 276,
+        "endChar": 11
+      },
+      "revId": "cde5ac48ba436614af04a5e4442c6c7744ec5e07",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "77447a87_848867bb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 386,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:58:02Z",
+      "side": 1,
+      "message": "push to parent(s)",
+      "range": {
+        "startLine": 386,
+        "startChar": 2,
+        "endLine": 386,
+        "endChar": 11
+      },
+      "revId": "cde5ac48ba436614af04a5e4442c6c7744ec5e07",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
