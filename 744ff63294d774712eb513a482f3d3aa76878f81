@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f486bd8e_f323325d",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:23:42Z",
+      "side": 1,
+      "message": "fix author name",
+      "revId": "744ff63294d774712eb513a482f3d3aa76878f81",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "89587dfa_f0527c37",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:23:42Z",
+      "side": 1,
+      "message": "pass and fail were included in the parent change\u0027s docs. Should that be moved here?",
+      "range": {
+        "startLine": 11,
+        "startChar": 21,
+        "endLine": 11,
+        "endChar": 58
+      },
+      "revId": "744ff63294d774712eb513a482f3d3aa76878f81",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "04c72d34_9209676a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:23:42Z",
+      "side": 1,
+      "message": "use type inference",
+      "range": {
+        "startLine": 102,
+        "startChar": 49,
+        "endLine": 102,
+        "endChar": 62
+      },
+      "revId": "744ff63294d774712eb513a482f3d3aa76878f81",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "08e1acf2_1184dfb0",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:23:42Z",
+      "side": 1,
+      "message": "push into parent",
+      "range": {
+        "startLine": 27,
+        "startChar": 14,
+        "endLine": 27,
+        "endChar": 24
+      },
+      "revId": "744ff63294d774712eb513a482f3d3aa76878f81",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "538d803f_98f68e78",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:23:42Z",
+      "side": 1,
+      "message": "simplify to \"to define tasks\" ?",
+      "range": {
+        "startLine": 64,
+        "startChar": 51,
+        "endLine": 65,
+        "endChar": 8
+      },
+      "revId": "744ff63294d774712eb513a482f3d3aa76878f81",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "0e7e27d4_2d350e22",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 98,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:23:42Z",
+      "side": 1,
+      "message": "This is the section that I think shouldn\u0027t be in the parent change.",
+      "range": {
+        "startLine": 79,
+        "startChar": 0,
+        "endLine": 98,
+        "endChar": 3
+      },
+      "revId": "744ff63294d774712eb513a482f3d3aa76878f81",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f4a093d2_fec0e23b",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:23:42Z",
+      "side": 1,
+      "message": "We don\u0027t quite use sub and root tasks that way. Our root task has many subtasks, but no pass criteria. We delegate this \"final criteria\" to the top-level subtasks as it varies slightly even for a single CI system.",
+      "range": {
+        "startLine": 143,
+        "startChar": 47,
+        "endLine": 145,
+        "endChar": 4
+      },
+      "revId": "744ff63294d774712eb513a482f3d3aa76878f81",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "692cb0eb_05c2fdc9",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-14T23:23:42Z",
+      "side": 1,
+      "message": "Worth mentioning that subtasks can include more subtasks?",
+      "revId": "744ff63294d774712eb513a482f3d3aa76878f81",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
