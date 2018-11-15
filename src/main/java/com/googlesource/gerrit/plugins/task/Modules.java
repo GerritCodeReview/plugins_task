@@ -47,7 +47,10 @@ public class Modules {
   }
 
   public static class MyOptions implements DynamicBean {
-    @Option(name = "--applicable", usage = "Include applicable tasks")
-    public boolean include = false;
+    @Option(name = "--all", usage = "Include all visible tasks in the output")
+    public boolean all = false;
+
+    @Option(name = "--applicable", usage = "Include only applicable tasks in the output")
+    public boolean onlyApplicable = false;
   }
 }
