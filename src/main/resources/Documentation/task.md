@@ -69,7 +69,9 @@ Tasks
 Tasks can either be root tasks, or subtasks. Tasks are defined in the
 `All-Projects` project, on the `refs/meta/config` branch, in a file named
 `task.config`. This file uses the gitconfig format to define tasks. The
-following keys may be defined in any task section:
+special "True" keyword may be used as any query definition to indicate
+an always matching query. The following keys may be defined in any
+task section:
 
 `applicable`
 
@@ -99,7 +101,9 @@ Example:
 currently in-progress or not. A CI system may use this to ensure that it
 only runs one verification instance for a specific change. Either a pass
 or fail key is mandatory for leaf tasks. A task with a fail criteria,
-but no pass criteria, will pass if it otherwise would be ready.
+but no pass criteria, will pass if it otherwise would be ready. Setting
+this to "True" is useful for defining blocking criteria that do not
+actually have a task to execute.
 
 Example:
 ```
@@ -109,10 +113,11 @@ Example:
 `pass`
 
 : This key defines a query that is used to determine whether a task has
-already executed and passed for each change. Either a pass or fail
-key is mandatory for leaf tasks. Tasks with no defined pass criteria and
-with defined subtasks are valid, but they are only applicable when at least
-one subtask is applicable.
+already executed and passed for each change. Either a pass or fail key is
+mandatory for leaf tasks. Tasks with no defined pass criteria and with
+defined subtasks are valid, but they are only applicable when at least
+one subtask is applicable. Setting this to "True" is useful for defining
+informational tasks that are not really expected to execute.
 
 Example:
 ```

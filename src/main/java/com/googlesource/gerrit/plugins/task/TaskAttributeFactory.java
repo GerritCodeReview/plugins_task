@@ -323,7 +323,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   }
 
   protected boolean match(ChangeData c, String query) throws OrmException, QueryParseException {
-    if (query == null) {
+    if (query == null || query.equalsIgnoreCase("true")) {
       return true;
     }
     return ((Matchable) cqb.parse(query)).match(c);
