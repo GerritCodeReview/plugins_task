@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "e91c195a_df9bd7bb",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Better. :)",
+      "parentUuid": "8c5a88ea_1a2a6ddc",
+      "range": {
+        "startLine": 25,
+        "startChar": 11,
+        "endLine": 25,
+        "endChar": 19
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "bba60490_860efb15",
         "filename": "pom.xml",
         "patchSetId": 3
@@ -48,6 +72,30 @@
     },
     {
       "key": {
+        "uuid": "85dfa83b_89a435ce",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bba60490_860efb15",
+      "range": {
+        "startLine": 30,
+        "startChar": 23,
+        "endLine": 30,
+        "endChar": 41
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "54b21f87_3726ddd5",
         "filename": "pom.xml",
         "patchSetId": 3
@@ -59,6 +107,30 @@
       "writtenOn": "2018-11-14T23:08:37Z",
       "side": 1,
       "message": "probably needs to be 1.8 to work?",
+      "range": {
+        "startLine": 64,
+        "startChar": 18,
+        "endLine": 64,
+        "endChar": 21
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "eb503b66_c19c057f",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Actually it works with 1.7.",
+      "parentUuid": "54b21f87_3726ddd5",
       "range": {
         "startLine": 64,
         "startChar": 18,
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "bc3878c0_7ce875cc",
+        "filename": "src/main/java/com/google/gerrit/README",
+        "patchSetId": 3
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f0dbeb7c_69d96dd9",
+      "range": {
+        "startLine": 1,
+        "startChar": 4,
+        "endLine": 1,
+        "endChar": 21
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "1e4421ab_524d7482",
         "filename": "src/main/java/com/google/gerrit/README",
         "patchSetId": 3
@@ -114,6 +210,30 @@
       "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "205dc261_b00f1aa0",
+        "filename": "src/main/java/com/google/gerrit/README",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1e4421ab_524d7482",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 67
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -140,6 +260,30 @@
     },
     {
       "key": {
+        "uuid": "9f56e8d1_ff7f2282",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 39,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f636f12_f791d2de",
+      "range": {
+        "startLine": 39,
+        "startChar": 4,
+        "endLine": 39,
+        "endChar": 50
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "93c57c0a_ca750954",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigFactory.java",
         "patchSetId": 3
@@ -160,6 +304,30 @@
       "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "205acaf9_5a2a2d2a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 57,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "93c57c0a_ca750954",
+      "range": {
+        "startLine": 57,
+        "startChar": 6,
+        "endLine": 57,
+        "endChar": 54
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -186,6 +354,30 @@
     },
     {
       "key": {
+        "uuid": "f2bb7d75_d91cb617",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c95b56e9_2968b0f1",
+      "range": {
+        "startLine": 5,
+        "startChar": 26,
+        "endLine": 5,
+        "endChar": 30
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "76e61f43_4cb10e0e",
         "filename": "src/main/resources/Documentation/task.md",
         "patchSetId": 3
@@ -206,6 +398,30 @@
       "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7a353700_c66bf9b1",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "76e61f43_4cb10e0e",
+      "range": {
+        "startLine": 11,
+        "startChar": 29,
+        "endLine": 11,
+        "endChar": 33
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -232,6 +448,30 @@
     },
     {
       "key": {
+        "uuid": "04285d47_7bfa501b",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "78f52093_42765957",
+      "range": {
+        "startLine": 82,
+        "startChar": 0,
+        "endLine": 82,
+        "endChar": 10
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "fd9314db_0337e4d1",
         "filename": "src/main/resources/Documentation/task_states.md",
         "patchSetId": 3
@@ -255,6 +495,30 @@
     },
     {
       "key": {
+        "uuid": "93bdbe98_707c04ba",
+        "filename": "src/main/resources/Documentation/task_states.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fd9314db_0337e4d1",
+      "range": {
+        "startLine": 4,
+        "startChar": 12,
+        "endLine": 4,
+        "endChar": 18
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "f3d762f9_7434ce43",
         "filename": "test/check_task_statuses.sh",
         "patchSetId": 3
@@ -266,6 +530,24 @@
       "writtenOn": "2018-11-14T23:08:37Z",
       "side": 1,
       "message": "Is this actually required? I don\u0027t see All-Users referenced below.",
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7534b7a8_6b43b032",
+        "filename": "test/check_task_statuses.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:11:49Z",
+      "side": 1,
+      "message": "Not yet. Done.",
+      "parentUuid": "f3d762f9_7434ce43",
       "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
