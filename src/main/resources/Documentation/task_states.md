@@ -10,6 +10,14 @@ states are affected by their own criteria and their subtasks' states.
 [root "Root N/A"]
   applicable = is:closed
 
+[root "Root PASS"]
+  applicable = is:open
+  pass = True
+
+[root "Root FAIL"]
+  applicable = is:open
+  fail = True
+
 [root "Root straight PASS"]
   applicable = is:open
   pass = is:open
@@ -200,6 +208,14 @@ The expected output for the above task config looks like:
       {
          "name" : "task",
          "roots" : [
+            {
+               "name" : "Root PASS",
+               "status" : "PASS"
+            },
+            {
+               "name" : "Root FAIL",
+               "status" : "FAIL"
+            },
             {
                "name" : "Root straight PASS",
                "status" : "PASS"
