@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.gerrit.common.Container;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
 import java.util.ArrayList;
@@ -22,6 +23,34 @@ import java.util.List;
 
 /** Task Configuration file living in git */
 public class TaskConfig extends AbstractVersionedMetaData {
+  protected class Section extends Container {
+    public TaskConfig config;
+
+    public Section() {
+      this.config = TaskConfig.this;
+    }
+  }
+
+  public class Task extends Section {
+    public String applicable;
+    public String fail;
+    public String inProgress;
+    public String name;
+    public String pass;
+    public String readyHint;
+    public List<String> subTasks;
+
+    public Task(SubSection s) {
+      applicable = getString(s, KEY_APPLICABLE, null);
+      fail = getString(s, KEY_FAIL, null);
+      inProgress = getString(s, KEY_IN_PROGRESS, null);
+      name = getString(s, KEY_NAME, s.subSection);
+      pass = getString(s, KEY_PASS, null);
+      readyHint = getString(s, KEY_READY_HINT, null);
+      subTasks = getStringList(s, KEY_SUBTASK);
+    }
+  }
+
   protected static final String SECTION_ROOT = "root";
   protected static final String SECTION_TASK = "task";
   protected static final String KEY_APPLICABLE = "applicable";
@@ -36,49 +65,41 @@ public class TaskConfig extends AbstractVersionedMetaData {
     super(branch, fileName);
   }
 
-  public List<TaskDefinition> getRootTaskDefinitions() {
-    List<TaskDefinition> roots = new ArrayList<TaskDefinition>();
-    // No need to get a root with no name (what would we call it?)
-    for (String root : cfg.getSubsections(SECTION_ROOT)) {
-      roots.add(getRootDefinition(root));
+  public List<Task> getRootTasks() {
+    return getTasks(SECTION_ROOT);
+  }
+
+  public List<Task> getTasks() {
+    return getTasks(SECTION_TASK);
+  }
+
+  protected List<Task> getTasks(String type) {
+    List<Task> tasks = new ArrayList<>();
+    // No need to get a task with no name (what would we call it?)
+    for (String task : cfg.getSubsections(type)) {
+      tasks.add(new Task(new SubSection(type, task)));
     }
-    return roots;
+    return tasks;
   }
 
-  protected TaskDefinition getRootDefinition(String name) {
-    return getTaskDefinition(new Section(SECTION_ROOT, name));
+  public Task getTask(String name) {
+    return new Task(new SubSection(SECTION_TASK, name));
   }
 
-  public TaskDefinition getTaskDefinition(String name) {
-    return getTaskDefinition(new Section(SECTION_TASK, name));
-  }
-
-  protected TaskDefinition getTaskDefinition(Section s) {
-    TaskDefinition task = new TaskDefinition(branch, fileName);
-    task.applicable = getString(s, KEY_APPLICABLE, null);
-    task.fail = getString(s, KEY_FAIL, null);
-    task.inProgress = getString(s, KEY_IN_PROGRESS, null);
-    task.name = getString(s, KEY_NAME, s.subSection);
-    task.pass = getString(s, KEY_PASS, null);
-    task.readyHint = getString(s, KEY_READY_HINT, null);
-    task.subTasks = getStringList(s, KEY_SUBTASK);
-    return task;
-  }
-
-  protected String getString(Section s, String key, String def) {
+  protected String getString(SubSection s, String key, String def) {
     String v = cfg.getString(s.section, s.subSection, key);
     return v != null ? v : def;
   }
 
-  protected List<String> getStringList(Section s, String key) {
+  protected List<String> getStringList(SubSection s, String key) {
     return Arrays.asList(cfg.getStringList(s.section, s.subSection, key));
   }
 
-  protected static class Section {
+  protected static class SubSection {
     public final String section;
     public final String subSection;
 
-    protected Section(String section, String subSection) {
+    protected SubSection(String section, String subSection) {
       this.section = section;
       this.subSection = subSection;
     }
