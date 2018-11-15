@@ -17,13 +17,18 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /** Task Configuration file living in git */
 public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String SECTION_ROOT = "root";
+  protected static final String SECTION_TASK = "task";
   protected static final String KEY_APPLICABLE = "applicable";
+  protected static final String KEY_FAIL = "fail";
   protected static final String KEY_NAME = "name";
+  protected static final String KEY_PASS = "pass";
+  protected static final String KEY_SUBTASK = "subtask";
 
   public TaskConfig(Branch.NameKey branch, String fileName) {
     super(branch, fileName);
@@ -39,16 +44,30 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   protected TaskDefinition getRootDefinition(String name) {
-    Section s = new Section(SECTION_ROOT, name);
-    TaskDefinition root = new TaskDefinition();
-    root.applicable = getString(s, KEY_APPLICABLE, null);
-    root.name = getString(s, KEY_NAME, name);
-    return root;
+    return getTaskDefinition(new Section(SECTION_ROOT, name));
+  }
+
+  public TaskDefinition getTaskDefinition(String name) {
+    return getTaskDefinition(new Section(SECTION_TASK, name));
+  }
+
+  protected TaskDefinition getTaskDefinition(Section s) {
+    TaskDefinition task = new TaskDefinition(branch, fileName);
+    task.applicable = getString(s, KEY_APPLICABLE, null);
+    task.fail = getString(s, KEY_FAIL, null);
+    task.name = getString(s, KEY_NAME, s.subSection);
+    task.pass = getString(s, KEY_PASS, null);
+    task.subTasks = getStringList(s, KEY_SUBTASK);
+    return task;
   }
 
   protected String getString(Section s, String key, String def) {
     String v = cfg.getString(s.section, s.subSection, key);
     return v != null ? v : def;
+  }
+
+  protected List<String> getStringList(Section s, String key) {
+    return Arrays.asList(cfg.getStringList(s.section, s.subSection, key));
   }
 
   protected static class Section {
