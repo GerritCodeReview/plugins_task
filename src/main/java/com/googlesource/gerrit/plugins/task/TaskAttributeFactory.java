@@ -30,6 +30,7 @@ import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.TaskConfig.External;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
+import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -94,6 +95,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   public PluginDefinedInfo create(ChangeData c, ChangeQueryProcessor qp, String plugin) {
     options = (Modules.MyOptions) qp.getDynamicBean(plugin);
     if (options.all || options.onlyApplicable) {
+      for (PatchSetArgument psa : options.patchSetArguments) {
+        taskFactory.masquerade(psa);
+      }
       try {
         return createWithExceptions(c);
       } catch (OrmException e) {
@@ -137,9 +141,11 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       throws OrmException {
     try {
       boolean applicable = match(c, def.applicable);
-      if (!applicable && !def.isVisible && !options.onlyApplicable) {
-        tasks.add(unknown());
-        return;
+      if (!def.isVisible) {
+        if (!def.isTrusted || (!applicable && !options.onlyApplicable)) {
+          tasks.add(unknown());
+          return;
+        }
       }
 
       if (applicable || !options.onlyApplicable) {
@@ -171,7 +177,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     List<TaskAttribute> subTasks = new ArrayList<>();
     for (String file : parent.subTasksFiles) {
       try {
-        tasks.addAll(getTasks(parent.config.getBranch(), resolveTaskFileName(file)));
+        tasks.addAll(
+            getTasks(parent.config.getBranch(), resolveTaskFileName(file), parent.isTrusted));
       } catch (ConfigInvalidException | IOException e) {
         subTasks.add(invalid());
       }
@@ -182,7 +189,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         if (ext == null) {
           subTasks.add(invalid());
         } else {
-          tasks.addAll(getTasks(ext));
+          tasks.addAll(getTasks(ext, parent.isTrusted));
         }
       } catch (ConfigInvalidException | IOException e) {
         subTasks.add(invalid());
@@ -225,14 +232,15 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return tasks;
   }
 
-  protected List<Task> getTasks(External external)
+  protected List<Task> getTasks(External external, boolean isTrusted)
       throws ConfigInvalidException, IOException, OrmException {
-    return getTasks(resolveUserBranch(external.user), resolveTaskFileName(external.file));
+    return getTasks(
+        resolveUserBranch(external.user), resolveTaskFileName(external.file), isTrusted);
   }
 
-  protected List<Task> getTasks(Branch.NameKey branch, String file)
+  protected List<Task> getTasks(Branch.NameKey branch, String file, boolean isTrusted)
       throws ConfigInvalidException, IOException {
-    return taskFactory.getTaskConfig(branch, file).getTasks();
+    return taskFactory.getTaskConfig(branch, file, isTrusted).getTasks();
   }
 
   protected String resolveTaskFileName(String file) throws ConfigInvalidException {

@@ -18,13 +18,30 @@ result() { # test [error_message]
 
 # --------
 
+q() { "$@" > /dev/null 2>&1 ; } # cmd [args...]  # quiet a command
+
 # Run a test setup command quietly, exit on failure
 q_setup() { # cmd [args...]
   local out ; out=$("$@" 2>&1) || { echo "$out" ; exit ; }
 }
 
+replace_user() { # < text_with_testuser > text_with_$USER
+    sed -e"s/testuser/$USER/"
+}
+
 example() { # example_num
-    awk '/```/{Q++;E=(Q+1)/2};E=='"$1" < "$DOC_STATES" | grep -v '```'
+    awk '/```/{Q++;E=(Q+1)/2};E=='"$1" < "$DOC_STATES" | grep -v '```' | replace_user
+}
+
+get_change_num() { # < gerrit_push_response > changenum
+    local url=$(awk '/New Changes:/ { getline; print $2 }')
+    echo "${url##*\/}" | tr -d -c '[:digit:]'
+}
+
+install_changeid_hook() { # repo
+    local hook=$(git rev-parse --git-dir)/hooks/commit-msg
+    scp -p -P "$PORT" "$SERVER":hooks/commit-msg "$hook"
+    chmod +x "$hook"
 }
 
 setup_repo() { # repo remote ref
@@ -32,6 +49,7 @@ setup_repo() { # repo remote ref
     git init "$repo"
     (
         cd "$repo"
+        install_changeid_hook "$repo"
         git fetch "$remote" "$ref"
         git checkout FETCH_HEAD
     )
@@ -44,6 +62,16 @@ update_repo() { # repo remote ref
         git add .
         git commit -m 'Testing task plugin'
         git push "$remote" HEAD:"$ref"
+    )
+}
+
+create_repo_change() { # repo remote ref > change_num
+    local repo=$1 remote=$2 ref=$3
+    (
+        q cd "$repo"
+        q git add .
+        q git commit -m 'Testing task plugin'
+        git push "$remote" HEAD:"refs/for/$ref" 2>&1 | get_change_num
     )
 }
 
@@ -120,3 +148,7 @@ example 5 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
 query="status:open limit:1"
 test_tasks statuses "$EXPECTED" --task--applicable "$query"
 test_file all --task--all "$query"
+
+replace_user < "$MYDIR"/root.change > "$ROOT_CFG"
+cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
+test_file preview --task--preview "$cnum,1" --task--all "$query"
