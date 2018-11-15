@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3758cf96_a09c3dae",
+        "filename": "src/main/resources/Documentation/task_states.md",
+        "patchSetId": 4
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-15T19:26:14Z",
+      "side": 1,
+      "message": "s/an/a/",
+      "range": {
+        "startLine": 4,
+        "startChar": 9,
+        "endLine": 4,
+        "endChar": 11
+      },
+      "revId": "0827a124c3cceafc1c63c7cc79e10bc7e4566753",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
