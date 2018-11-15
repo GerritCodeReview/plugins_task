@@ -17,13 +17,18 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.extensions.common.PluginDefinedInfo;
 import com.google.gerrit.index.query.Matchable;
 import com.google.gerrit.index.query.QueryParseException;
+import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.Branch;
+import com.google.gerrit.reviewdb.client.RefNames;
+import com.google.gerrit.server.account.AccountResolver;
+import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor.ChangeAttributeFactory;
 import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
+import com.googlesource.gerrit.plugins.task.TaskConfig.External;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import java.io.IOException;
 import java.nio.file.Path;
@@ -64,11 +69,19 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   protected static final String TASK_DIR = "task";
 
+  protected final AccountResolver accountResolver;
+  protected final AllUsersNameProvider allUsers;
   protected final TaskConfigFactory taskFactory;
   protected final ChangeQueryBuilder cqb;
 
   @Inject
-  public TaskAttributeFactory(TaskConfigFactory taskFactory, ChangeQueryBuilder cqb) {
+  public TaskAttributeFactory(
+      AccountResolver accountResolver,
+      AllUsersNameProvider allUsers,
+      TaskConfigFactory taskFactory,
+      ChangeQueryBuilder cqb) {
+    this.accountResolver = accountResolver;
+    this.allUsers = allUsers;
     this.taskFactory = taskFactory;
     this.cqb = cqb;
   }
@@ -149,6 +162,18 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         subTasks.add(invalid());
       }
     }
+    for (String external : parent.subTasksExternals) {
+      try {
+        External ext = parent.config.getExternal(external);
+        if (ext == null) {
+          subTasks.add(invalid());
+        } else {
+          tasks.addAll(getTasks(ext));
+        }
+      } catch (ConfigInvalidException | IOException e) {
+        subTasks.add(invalid());
+      }
+    }
 
     for (Task task : tasks) {
       addApplicableTasks(subTasks, c, path, task);
@@ -180,6 +205,11 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return tasks;
   }
 
+  protected List<Task> getTasks(External external)
+      throws ConfigInvalidException, IOException, OrmException {
+    return getTasks(resolveUserBranch(external.user), resolveTaskFileName(external.file));
+  }
+
   protected List<Task> getTasks(Branch.NameKey branch, String file)
       throws ConfigInvalidException, IOException {
     return taskFactory.getTaskConfig(branch, file).getTasks();
@@ -194,6 +224,18 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       throw new ConfigInvalidException("task file not under " + TASK_DIR + " directory: " + file);
     }
     return p.toString();
+  }
+
+  protected Branch.NameKey resolveUserBranch(String user)
+      throws ConfigInvalidException, IOException, OrmException {
+    if (user == null) {
+      throw new ConfigInvalidException("External user not defined");
+    }
+    Account acct = accountResolver.find(user);
+    if (acct == null) {
+      throw new ConfigInvalidException("Cannot resolve user: " + user);
+    }
+    return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
   }
 
   protected Status getStatus(ChangeData c, Task task, TaskAttribute a)

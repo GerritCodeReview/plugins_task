@@ -1,6 +1,7 @@
 #!/bin/bash
 
 # Usage:
+# All-Users.git - refs/users/self must already exist
 # All-Projects.git - must have 'Push' rights on refs/meta/config
 
 example() { # example_num
@@ -43,12 +44,16 @@ OUT=$MYDIR/../target/tests
 ALL=$OUT/All-Projects
 ALL_TASKS=$ALL/task
 
+USERS=$OUT/All-Users
+USER_TASKS=$USERS/task
+
 DOC_STATES=$DOCS/task_states.md
 EXPECTED=$OUT/expected
 STATUSES=$OUT/statuses
 
 ROOT_CFG=$ALL/task.config
 COMMON_CFG=$ALL_TASKS/common.config
+USER_SPECIAL_CFG=$USER_TASKS/special.config
 
 # --- Args ----
 SERVER=$1
@@ -56,21 +61,27 @@ SERVER=$1
 
 PORT=29418
 REMOTE_ALL=ssh://$SERVER:$PORT/All-Projects
+REMOTE_USERS=ssh://$SERVER:$PORT/All-Users
 
 REF_ALL=refs/meta/config
+REF_USERS=refs/users/self
 
 
 mkdir -p "$OUT"
 setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
+setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
-mkdir -p "$ALL_TASKS"
+mkdir -p "$ALL_TASKS" "$USER_TASKS"
 
-example 1 > "$ROOT_CFG"
+example 1 |sed -e"s/current-user/$USER/" > "$ROOT_CFG"
 example 2 > "$COMMON_CFG"
+example 3 > "$USER_SPECIAL_CFG"
 
 update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
+update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
-example 3 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
+
+example 4 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
 
 query_plugins "status:open limit:1" > "$STATUSES"
 diff "$EXPECTED" "$STATUSES"
