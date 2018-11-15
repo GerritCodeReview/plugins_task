@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "133c4411_cf196839",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:32:50Z",
+      "side": 1,
+      "message": "Added explanation.  It feels like enough of a conceptual and code change to keep separate from the parent to me.",
+      "parentUuid": "9392ddec_d6a00b78",
+      "revId": "c50c326e677d79c31bd0366371cf862defd18461",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "0c3c336e_51bb1f6d",
         "filename": "src/main/resources/Documentation/task.md",
         "patchSetId": 2
@@ -39,6 +57,30 @@
       "revId": "c50c326e677d79c31bd0366371cf862defd18461",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "93843be8_d04d6d41",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 300,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T06:32:50Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0c3c336e_51bb1f6d",
+      "range": {
+        "startLine": 297,
+        "startChar": 14,
+        "endLine": 300,
+        "endChar": 17
+      },
+      "revId": "c50c326e677d79c31bd0366371cf862defd18461",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
