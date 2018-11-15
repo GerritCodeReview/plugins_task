@@ -99,6 +99,24 @@
       "revId": "01e6e18275050e0b068fc073c7508cec0fcecb10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f5b399cb_acfb6d2d",
+        "filename": "src/main/java/com/google/gerrit/common/Container.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T20:26:40Z",
+      "side": 1,
+      "message": "Oh, I see the problem. The class was renamed to TaskConfig.Task and the old file was left around.  Fixed.",
+      "parentUuid": "a87ecf87_7f6f7eed",
+      "revId": "01e6e18275050e0b068fc073c7508cec0fcecb10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
