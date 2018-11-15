@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.extensions.common.PluginDefinedInfo;
 import com.google.gerrit.index.query.Matchable;
 import com.google.gerrit.index.query.QueryParseException;
+import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor;
@@ -25,6 +26,8 @@ import com.google.gwtorm.server.OrmException;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import java.io.IOException;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -58,6 +61,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   public static class TaskPluginAttribute extends PluginDefinedInfo {
     public List<TaskAttribute> roots = new ArrayList<>();
   }
+
+  protected static final String TASK_DIR = "task";
 
   protected final TaskConfigFactory taskFactory;
   protected final ChangeQueryBuilder cqb;
@@ -134,8 +139,18 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   protected List<TaskAttribute> getSubTasks(ChangeData c, LinkedList<Task> path, Task parent)
       throws OrmException, QueryParseException {
+    List<Task> tasks = getSubTasks(parent);
+
     List<TaskAttribute> subTasks = new ArrayList<>();
-    for (Task task : getSubTasks(parent)) {
+    for (String file : parent.subTasksFiles) {
+      try {
+        tasks.addAll(getTasks(parent.config.getBranch(), resolveTaskFileName(file)));
+      } catch (ConfigInvalidException | IOException e) {
+        subTasks.add(invalid());
+      }
+    }
+
+    for (Task task : tasks) {
       addApplicableTasks(subTasks, c, path, task);
     }
 
@@ -163,6 +178,22 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       tasks.add(parent.config.getTask(name));
     }
     return tasks;
+  }
+
+  protected List<Task> getTasks(Branch.NameKey branch, String file)
+      throws ConfigInvalidException, IOException {
+    return taskFactory.getTaskConfig(branch, file).getTasks();
+  }
+
+  protected String resolveTaskFileName(String file) throws ConfigInvalidException {
+    if (file == null) {
+      throw new ConfigInvalidException("External file not defined");
+    }
+    Path p = Paths.get(TASK_DIR, file);
+    if (!p.startsWith(TASK_DIR)) {
+      throw new ConfigInvalidException("task file not under " + TASK_DIR + " directory: " + file);
+    }
+    return p.toString();
   }
 
   protected Status getStatus(ChangeData c, Task task, TaskAttribute a)

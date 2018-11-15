@@ -132,6 +132,21 @@ Example:
     subtask = "License Approval"
 ```
 
+`subtasks-file`
+
+: This key defines a file containing subtasks of the current task. This
+key may be used several times in a task section to define more than one file
+containing subtasks for a particular task. The subtasks-file key points to
+a file under the top level task directory in the same project and ref as the
+current task file. Note: all of the tasks in the referenced file will be
+included as subtasks of the current task!
+
+Example:
+
+```
+    subtasks-file = common.config  # references the file named task/common.config
+```
+
 Root Tasks
 ----------
 Root tasks typically define the "final verification" tasks for changes. Each
