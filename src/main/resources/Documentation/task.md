@@ -36,6 +36,12 @@ It helps them identify blocking tasks. It helps them figure out what they
 can do, or perhaps who they need to talk to to ensure that their changes do
 make progress through all their hoops.
 
+Task definitions can be split up across multiple files/refs, and even
+across multiple projects. This splitting of task definitions allows the
+control of task definitions to be delegated to different entities. By
+aligning ref boundaries with controlling entities, the standard gerrit ref
+ACL mechanisms may be used to control who can define tasks on which changes.
+
 Task Status
 -----------
 Task status is used to indicate either the readiness of a task for execution
@@ -132,6 +138,20 @@ Example:
     subtask = "License Approval"
 ```
 
+`subtasks-external`
+
+: This key defines a file containing subtasks of the current task. This
+key may be used several times in a task section to define more than one file
+containing subtasks for a particular task. The subtasks-external key points
+to an external file defined by external section. Note: all of the tasks in
+the referenced file will be included as subtasks of the current task!
+
+Example:
+
+```
+    subtasks-external = my-external
+```
+
 `subtasks-file`
 
 : This key defines a file containing subtasks of the current task. This
@@ -189,6 +209,36 @@ Subtasks are defined using a "task" section. An example subtask definition:
 [task "Code Review"]
     pass = label:code-review+2
     fail = label:code-review-2
+```
+
+External Entries
+----------------
+A name for external task files on other projects and branches may be given
+by defining an `external` section in a task file. This later allows this
+external name to then be referenced by other definitions. The following
+keys may be defined in an external section. External references are limited
+to files under the top level task directory.
+
+`file`
+
+: This key defines the name of the external task file under the
+task directory referenced.
+
+Example:
+
+```
+    file = common.config  # references the file named task/common.config
+```
+
+`user`
+
+: This key defines the username of the user's ref in the `All-Users` project
+of the external file referenced.
+
+Example:
+
+```
+    user = first-user # references the sharded user ref refs/users/01/1000001
 ```
 
 Change Query Output
