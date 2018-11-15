@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "8e0108e9_94841051",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T07:02:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1d03e67_cb5d9380",
+      "range": {
+        "startLine": 9,
+        "startChar": 53,
+        "endLine": 10,
+        "endChar": 18
+      },
+      "revId": "01e6e18275050e0b068fc073c7508cec0fcecb10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b96a80d9_b0ea2fd4",
         "filename": "src/main/java/com/google/gerrit/common/Container.java",
         "patchSetId": 2
@@ -36,6 +60,24 @@
       "writtenOn": "2018-11-14T23:30:01Z",
       "side": 1,
       "message": "Use this for TaskDefinition too?",
+      "revId": "01e6e18275050e0b068fc073c7508cec0fcecb10",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "ec557a8f_554b48c9",
+        "filename": "src/main/java/com/google/gerrit/common/Container.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2018-11-15T07:02:36Z",
+      "side": 1,
+      "message": "It is (it inherits from Section).",
+      "parentUuid": "b96a80d9_b0ea2fd4",
       "revId": "01e6e18275050e0b068fc073c7508cec0fcecb10",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
