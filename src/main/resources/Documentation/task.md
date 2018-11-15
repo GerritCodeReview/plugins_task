@@ -264,8 +264,23 @@ Example:
 
 Change Query Output
 -------------------
-Changes which have tasks applicable to them will have a "task" section
-which will include applicable tasks for the change added to their output.
+It is possible to add a task section to the query output of changes using
+the task plugin switches.  The following switches are available:
+
+**\-\-@PLUGIN@\-\-applicable**
+
+This switch is meant to be used to determine the state of applicable
+tasks for each change, it outputs applicable tasks for a change.
+
+**\-\-@PLUGIN@\-\-all**
+
+This switch is meant as a debug switch, it outputs all tasks visible to the
+calling user, whether they apply to a change or not.  When this flag is used,
+an additional 'applicable' property is included in each task output to
+indicate whether the task actually met its applicability criteria or not.
+
+When tasks are appended to changes, they will have a "task" section under
+the plugins section like below:
 
 ```
   $ ssh -x -p 29418 example.com gerrit query change:123

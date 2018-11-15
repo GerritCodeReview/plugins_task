@@ -45,6 +45,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   public enum Status {
     INVALID,
+    UNKNOWN,
     WAITING,
     READY,
     PASS,
@@ -52,6 +53,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   }
 
   public static class TaskAttribute {
+    public Boolean applicable;
     public String hint;
     public Boolean inProgress;
     public String name;
@@ -74,6 +76,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected final TaskConfigFactory taskFactory;
   protected final ChangeQueryBuilder cqb;
 
+  protected Modules.MyOptions options;
+
   @Inject
   public TaskAttributeFactory(
       AccountResolver accountResolver,
@@ -88,8 +92,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   @Override
   public PluginDefinedInfo create(ChangeData c, ChangeQueryProcessor qp, String plugin) {
-    Modules.MyOptions options = (Modules.MyOptions) qp.getDynamicBean(plugin);
-    if (options != null && options.include) {
+    options = (Modules.MyOptions) qp.getDynamicBean(plugin);
+    if (options.all || options.onlyApplicable) {
       try {
         return createWithExceptions(c);
       } catch (OrmException e) {
@@ -132,14 +136,25 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       List<TaskAttribute> tasks, ChangeData c, LinkedList<Task> path, Task def)
       throws OrmException {
     try {
-      if (match(c, def.applicable)) {
+      boolean applicable = match(c, def.applicable);
+      if (!applicable && !def.isVisible && !options.onlyApplicable) {
+        tasks.add(unknown());
+        return;
+      }
+
+      if (applicable || !options.onlyApplicable) {
         TaskAttribute task = new TaskAttribute(def.name);
-        if (def.inProgress != null) {
-          task.inProgress = match(c, def.inProgress);
-        }
         task.subTasks = getSubTasks(c, path, def);
         task.status = getStatus(c, def, task);
-        if (task.status != null) { // task still applies
+        boolean groupApplicable = task.status != null;
+
+        if (groupApplicable || !options.onlyApplicable) {
+          if (!options.onlyApplicable) {
+            task.applicable = applicable;
+          }
+          if (def.inProgress != null) {
+            task.inProgress = match(c, def.inProgress);
+          }
           task.hint = getHint(task.status, def);
           tasks.add(task);
         }
@@ -187,8 +202,14 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected static TaskAttribute invalid() {
     // For security reasons, do not expose the task name without knowing
     // the visibility which is derived from its applicability.
-    TaskAttribute a = new TaskAttribute("UNKNOWN");
+    TaskAttribute a = unknown();
     a.status = Status.INVALID;
+    return a;
+  }
+
+  protected static TaskAttribute unknown() {
+    TaskAttribute a = new TaskAttribute("UNKNOWN");
+    a.status = Status.UNKNOWN;
     return a;
   }
 
