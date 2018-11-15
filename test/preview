@@ -1,0 +1,177 @@
+   "plugins" : [
+      {
+         "name" : "task",
+         "roots" : [
+            {
+               "applicable" : true,
+               "name" : "INVALIDS",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "name" : "No PASS criteria",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "name" : "MISSING",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "Grouping WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "Grouping WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "name" : "MISSING",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "Subtask INVALID",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "name" : "Root PASS",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hint" : "You must now run the ready task",
+               "name" : "Root READY (subtask PASS)",
+               "status" : "READY",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "name" : "Subtasks External",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "name" : "userfile task/special.config PASS",
+                     "status" : "PASS"
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "userfile task/special.config FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "applicable" : false,
+               "name" : "Root NA Pass",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : false,
+               "name" : "NA INVALIDS",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "name" : "No PASS criteria",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "name" : "MISSING",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "Grouping WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "Grouping WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "name" : "MISSING",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "name" : "Subtask INVALID",
+                     "status" : "INVALID"
+                  }
+               ]
+            }
+         ]
+      }
+   ],
