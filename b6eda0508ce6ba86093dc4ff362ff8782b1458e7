@@ -143,6 +143,30 @@
     },
     {
       "key": {
+        "uuid": "928a0147_0970b610",
+        "filename": "pom.xml",
+        "patchSetId": 3
+      },
+      "lineNbr": 64,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2018-11-15T19:46:16Z",
+      "side": 1,
+      "message": "Nope, you get this big stacktrace when you try to run it on a 2.16 server:\n\n [2018-11-15 11:33:31,945] [main] WARN  com.google.gerrit.server.plugins.PluginLoader : Cannot load plugin task-2.16\n com.google.gerrit.server.plugins.InvalidPluginException: Unable to load plugin Guice Modules\n         at com.google.gerrit.server.plugins.ServerPlugin.loadGuiceModules(ServerPlugin.java:109)\n         at com.google.gerrit.server.plugins.ServerPlugin.\u003cinit\u003e(ServerPlugin.java:85)\n         at com.google.gerrit.server.plugins.JarPluginProvider.loadJarPlugin(JarPluginProvider.java:156)\n         at com.google.gerrit.server.plugins.JarPluginProvider.get(JarPluginProvider.java:85)\n         at com.google.gerrit.server.plugins.UniversalServerPluginProvider.get(UniversalServerPluginProvider.java:41)\n         at com.google.gerrit.server.plugins.PluginLoader.loadServerPlugin(PluginLoader.java:610)\n         at com.google.gerrit.server.plugins.PluginLoader.loadPlugin(PluginLoader.java:580)\n         at com.google.gerrit.server.plugins.PluginLoader.runPlugin(PluginLoader.java:479)\n         at com.google.gerrit.server.plugins.PluginLoader.rescan(PluginLoader.java:423)\n         at com.google.gerrit.server.plugins.PluginLoader.start(PluginLoader.java:328)\n         at com.google.gerrit.lifecycle.LifecycleManager.start(LifecycleManager.java:95)\n         at com.google.gerrit.pgm.Daemon.start(Daemon.java:358)\n         at com.google.gerrit.pgm.Daemon.run(Daemon.java:267)\n         at com.google.gerrit.pgm.util.AbstractProgram.main(AbstractProgram.java:61)\n         at sun.reflect.NativeMethodAccessorImpl.invoke0(Native Method)\n         at sun.reflect.NativeMethodAccessorImpl.invoke(NativeMethodAccessorImpl.java:62)\n         at sun.reflect.DelegatingMethodAccessorImpl.invoke(DelegatingMethodAccessorImpl.java:43)\n         at java.lang.reflect.Method.invoke(Method.java:498)\n         at com.google.gerrit.launcher.GerritLauncher.invokeProgram(GerritLauncher.java:226)\n         at com.google.gerrit.launcher.GerritLauncher.mainImpl(GerritLauncher.java:122)\n         at com.google.gerrit.launcher.GerritLauncher.main(GerritLauncher.java:66)\n         at Main.main(Main.java:28)\n Caused by: java.lang.ClassNotFoundException: com.googlesource.gerrit.plugins.task.Modules$Module\n         at java.net.URLClassLoader.findClass(URLClassLoader.java:381)\n         at java.lang.ClassLoader.loadClass(ClassLoader.java:424)\n         at java.net.FactoryURLClassLoader.loadClass(URLClassLoader.java:814)\n         at java.lang.ClassLoader.loadClass(ClassLoader.java:357)\n         at java.lang.Class.forName0(Native Method)\n         at java.lang.Class.forName(Class.java:348)\n         at com.google.gerrit.server.plugins.ServerPlugin.load(ServerPlugin.java:120)\n         at com.google.gerrit.server.plugins.ServerPlugin.loadGuiceModules(ServerPlugin.java:105)\n         ... 21 more",
+      "parentUuid": "eb503b66_c19c057f",
+      "range": {
+        "startLine": 64,
+        "startChar": 18,
+        "endLine": 64,
+        "endChar": 21
+      },
+      "revId": "b6eda0508ce6ba86093dc4ff362ff8782b1458e7",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "f0dbeb7c_69d96dd9",
         "filename": "src/main/java/com/google/gerrit/README",
         "patchSetId": 3
