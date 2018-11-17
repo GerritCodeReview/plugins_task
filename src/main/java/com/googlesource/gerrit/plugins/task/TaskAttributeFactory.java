@@ -15,7 +15,6 @@
 package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.extensions.common.PluginDefinedInfo;
-import com.google.gerrit.index.query.Matchable;
 import com.google.gerrit.index.query.Predicate;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.query.change.ChangeData;
@@ -292,7 +291,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       pred = cqb.parse(query);
       predicatesByQuery.put(query, pred);
     }
-    return ((Matchable) pred).match(c);
+    return pred.asMatchable().match(c);
   }
 
   protected Boolean matchOrNull(ChangeData c, String query) {
@@ -301,7 +300,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         if (query.equalsIgnoreCase("true")) {
           return true;
         }
-        return ((Matchable) cqb.parse(query)).match(c);
+        return cqb.parse(query).asMatchable().match(c);
       } catch (OrmException | QueryParseException e) {
       }
     }

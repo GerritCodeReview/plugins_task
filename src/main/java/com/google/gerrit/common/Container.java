@@ -45,7 +45,7 @@ public class Container {
 
   @Override
   public int hashCode() {
-    List values = new ArrayList();
+    List<Object> values = new ArrayList<>();
     try {
       for (Field field : getClass().getDeclaredFields()) {
         field.setAccessible(true);
