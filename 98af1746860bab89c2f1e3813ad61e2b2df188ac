@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "bd637cdf_83e4740d",
+        "filename": "tools/bzl/plugin.bzl",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-11-17T16:56:47Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0997ca1a_612740f1",
+      "revId": "98af1746860bab89c2f1e3813ad61e2b2df188ac",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "10dbc867_ba91f48a",
         "filename": "tools/workspace-status.sh",
         "patchSetId": 1
@@ -33,6 +51,24 @@
       "revId": "98af1746860bab89c2f1e3813ad61e2b2df188ac",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "adc6c5c7_4f563954",
+        "filename": "tools/workspace-status.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1011123
+      },
+      "writtenOn": "2018-11-17T16:56:47Z",
+      "side": 1,
+      "message": "Not sure why that\u0027s there, I just copied it from another plugin.\n\nRemoved.",
+      "parentUuid": "10dbc867_ba91f48a",
+      "revId": "98af1746860bab89c2f1e3813ad61e2b2df188ac",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
