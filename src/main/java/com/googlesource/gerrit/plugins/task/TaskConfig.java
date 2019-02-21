@@ -19,7 +19,11 @@ import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 /** Task Configuration file living in git */
 public class TaskConfig extends AbstractVersionedMetaData {
@@ -38,6 +42,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String inProgress;
     public String name;
     public String pass;
+    public Map<String, String> properties;
     public String readyHint;
     public List<String> subTasks;
     public List<String> subTasksExternals;
@@ -55,6 +60,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
       inProgress = getString(s, KEY_IN_PROGRESS, null);
       name = s.subSection;
       pass = getString(s, KEY_PASS, null);
+      properties = getProperties(s, KEY_PROPERTIES_PREFIX);
       readyHint = getString(s, KEY_READY_HINT, null);
       subTasks = getStringList(s, KEY_SUBTASK);
       subTasksExternals = getStringList(s, KEY_SUBTASKS_EXTERNAL);
@@ -84,6 +90,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String KEY_IN_PROGRESS = "in-progress";
   protected static final String KEY_NAME = "name";
   protected static final String KEY_PASS = "pass";
+  protected static final String KEY_PROPERTIES_PREFIX = "set-";
   protected static final String KEY_READY_HINT = "ready-hint";
   protected static final String KEY_SUBTASK = "subtask";
   protected static final String KEY_SUBTASKS_EXTERNAL = "subtasks-external";
@@ -137,9 +144,45 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return new External(s);
   }
 
+  protected Map<String, String> getProperties(SubSection s, String prefix) {
+    Map<String, String> valueByName = new HashMap<>();
+    for (Map.Entry<String, String> e :
+        getStringByName(s, getMatchingNames(s, prefix + ".+")).entrySet()) {
+      String name = e.getKey();
+      valueByName.put(name.substring(prefix.length()), e.getValue());
+    }
+    return valueByName;
+  }
+
+  protected Map<String, String> getStringByName(SubSection s, Iterable<String> names) {
+    Map<String, String> valueByName = new HashMap<>();
+    for (String name : names) {
+      valueByName.put(name, getString(s, name));
+    }
+    return valueByName;
+  }
+
+  protected Set<String> getMatchingNames(SubSection s, String match) {
+    Set<String> matched = new HashSet<>();
+    for (String name : getNames(s)) {
+      if (name.matches(match)) {
+        matched.add(name);
+      }
+    }
+    return matched;
+  }
+
+  protected Set<String> getNames(SubSection s) {
+    return cfg.getNames(s.section, s.subSection);
+  }
+
   protected String getString(SubSection s, String key, String def) {
-    String v = cfg.getString(s.section, s.subSection, key);
+    String v = getString(s, key);
     return v != null ? v : def;
+  }
+
+  protected String getString(SubSection s, String key) {
+    return cfg.getString(s.section, s.subSection, key);
   }
 
   protected List<String> getStringList(SubSection s, String key) {

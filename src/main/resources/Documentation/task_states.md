@@ -122,6 +122,7 @@ states are affected by their own criteria and their subtasks' states.
   subtasks-file = invalids.config
 
 [root "Root Properties"]
+  set-root-property = root-value
   fail = True
   fail-hint = Name(${_name})
   subtask = Subtask Properties
@@ -144,8 +145,11 @@ states are affected by their own criteria and their subtasks' states.
   applicable = NOT is:open
 
 [task "Subtask Properties"]
+  set-first-property = first-value
+  set-second-property = ${first-property} second-extra ${third-property}
+  set-third-property = third-value
   fail = True
-  fail-hint = Name(${_name})
+  fail-hint = Name(${_name}) root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
   subtask = Chained ${_name}
 
 [task "Chained Subtask Properties"]
@@ -557,7 +561,7 @@ The expected output for the above task config looks like:
                "subTasks" : [
                   {
                      "hasPass" : true,
-                     "hint" : "Name(Subtask Properties)",
+                     "hint" : "Name(Subtask Properties) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
                      "name" : "Subtask Properties",
                      "status" : "FAIL",
                      "subTasks" : [

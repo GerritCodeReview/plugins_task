@@ -272,6 +272,25 @@ Example:
     fail-hint = {$_name} needs to be fixed
 ```
 
+Custom properties may be defined on task using the following syntax:
+```
+    set-<property-name> = <property-value>
+```
+
+Subtasks inherit all custom properties from their parents. A task is invalid
+if it attempts to override an already set property.
+
+Example:
+```
+    [task "foo-project"]
+        set-project-name = foo
+        subtask = common-to-many-projects
+
+    [task "common-to-many-projects"]
+        fail-hint = ${project-name} needs to be fixed
+        ...
+```
+
 Change Query Output
 -------------------
 It is possible to add a task section to the query output of changes using
