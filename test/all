@@ -392,6 +392,10 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "FAIL"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
@@ -498,6 +502,10 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "FAIL"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
@@ -511,7 +519,7 @@
                   {
                      "applicable" : true,
                      "hasPass" : true,
-                     "hint" : "Name(Subtask Properties)",
+                     "hint" : "Name(Subtask Properties) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
                      "name" : "Subtask Properties",
                      "status" : "FAIL",
                      "subTasks" : [
