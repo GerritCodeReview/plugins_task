@@ -17,9 +17,11 @@ package com.googlesource.gerrit.plugins.task;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import java.lang.reflect.Field;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -28,11 +30,26 @@ public class Properties {
   // "${_name}" -> group(1) = "_name"
   protected static final Pattern PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
 
+  protected Task definition;
   protected Map<String, String> expanded = new HashMap<>();
+  protected Map<String, String> unexpanded;
+  protected boolean expandingNonPropertyFields;
+  protected Set<String> expanding;
 
-  public Properties(Task definition) {
+  public Properties(Task definition, Map<String, String> parentProperties) {
+    expanded.putAll(parentProperties);
     expanded.put("_name", definition.name);
 
+    unexpanded = definition.properties;
+    expandAllUnexpanded();
+    definition.properties = expanded;
+
+    this.definition = definition;
+    expandNonPropertyFields();
+  }
+
+  protected void expandNonPropertyFields() {
+    expandingNonPropertyFields = true;
     for (Field field : Task.class.getFields()) {
       try {
         field.setAccessible(true);
@@ -46,6 +63,33 @@ public class Properties {
         throw new RuntimeException(e);
       }
     }
+  }
+
+  protected void expandAllUnexpanded() {
+    String property;
+    // A traditional iterator won't work because the recursive expansion may end up
+    // expanding more than one property per iteration behind the iterator's back.
+    while ((property = getFirstUnexpandedProperty()) != null) {
+      expanding = new HashSet<>();
+      expandProperty(property);
+    }
+  }
+
+  protected void expandProperty(String property) {
+    if (!expanding.add(property)) {
+      throw new RuntimeException("Looping property definitions.");
+    }
+    String value = unexpanded.remove(property);
+    if (value != null) {
+      expanded.put(property, expandLiteral(value));
+    }
+  }
+
+  protected String getFirstUnexpandedProperty() {
+    for (String property : unexpanded.keySet()) {
+      return property;
+    }
+    return null;
   }
 
   protected void expandInPlace(List<String> list) {
@@ -70,6 +114,9 @@ public class Properties {
   }
 
   protected String getExpandedValue(String property) {
+    if (!expandingNonPropertyFields) {
+      expandProperty(property); // recursive call
+    }
     String value = expanded.get(property);
     return value == null ? "" : value;
   }

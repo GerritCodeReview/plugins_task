@@ -30,8 +30,10 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class TaskTree {
@@ -68,10 +70,14 @@ public class TaskTree {
     protected LinkedList<Task> path = new LinkedList<>();
     protected List<Node> nodes;
 
-    protected void addSubDefinitions(List<Task> tasks) {
+    protected void addSubDefinitions(List<Task> tasks, Map<String, String> parentProperties) {
       for (Task task : tasks) {
         // path check detects looping definitions
-        nodes.add(path.contains(task) ? null : new Node(task, path));
+        try {
+          nodes.add(path.contains(task) ? null : new Node(task, path, parentProperties));
+        } catch (Exception e) {
+          nodes.add(null);
+        }
       }
     }
   }
@@ -80,7 +86,7 @@ public class TaskTree {
     public List<Node> getRootNodes() throws ConfigInvalidException, IOException {
       if (nodes == null) {
         nodes = new ArrayList<>();
-        addSubDefinitions(getRootTasks());
+        addSubDefinitions(getRootTasks(), new HashMap<String, String>());
       }
       return nodes;
     }
@@ -93,11 +99,11 @@ public class TaskTree {
   public class Node extends NodeList {
     public final Task definition;
 
-    public Node(Task definition, List<Task> path) {
+    public Node(Task definition, List<Task> path, Map<String, String> parentProperties) {
       this.definition = definition;
       this.path.addAll(path);
       this.path.add(definition);
-      new Properties(definition);
+      new Properties(definition, parentProperties);
     }
 
     public List<Node> getSubNodes() throws OrmException {
@@ -112,6 +118,10 @@ public class TaskTree {
       addSubDefinitions(getSubTasks());
       addSubFileDefinitions();
       addExternalDefinitions();
+    }
+
+    protected void addSubDefinitions(List<Task> tasks) {
+      addSubDefinitions(tasks, definition.properties);
     }
 
     protected void addSubFileDefinitions() {

@@ -93,6 +93,10 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "INVALID"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
@@ -186,6 +190,10 @@
                      "applicable" : false,
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "name" : "UNKNOWN",
                      "status" : "INVALID"
                   }
                ]

@@ -392,6 +392,10 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "FAIL"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
@@ -498,6 +502,10 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "FAIL"
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
@@ -510,15 +518,27 @@
                "subTasks" : [
                   {
                      "applicable" : true,
-                     "hasPass" : true,
-                     "hint" : "Name(Subtask Properties)",
+                     "hasPass" : false,
                      "name" : "Subtask Properties",
-                     "status" : "FAIL",
+                     "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
                            "hasPass" : true,
+                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
+                           "name" : "Subtask Properties Hints",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
                            "name" : "Chained Subtask Properties",
+                           "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask Properties Reset",
                            "status" : "PASS"
                         }
                      ]
