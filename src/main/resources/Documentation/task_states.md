@@ -121,6 +121,11 @@ states are affected by their own criteria and their subtasks' states.
   applicable = -is:open
   subtasks-file = invalids.config
 
+[root "Root Properties"]
+  fail = True
+  fail-hint = Name(${_name})
+  subtask = Subtask Properties
+
 [task "Subtask FAIL"]
   applicable = is:open
   fail = is:open
@@ -137,6 +142,14 @@ states are affected by their own criteria and their subtasks' states.
 
 [task "Subtask NA"]
   applicable = NOT is:open
+
+[task "Subtask Properties"]
+  fail = True
+  fail-hint = Name(${_name})
+  subtask = Chained ${_name}
+
+[task "Chained Subtask Properties"]
+  pass = True
 
 [external "user special"]
   user = testuser
@@ -533,6 +546,27 @@ The expected output for the above task config looks like:
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "hasPass" : true,
+               "hint" : "Name(Root Properties)",
+               "name" : "Root Properties",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "hint" : "Name(Subtask Properties)",
+                     "name" : "Subtask Properties",
+                     "status" : "FAIL",
+                     "subTasks" : [
+                        {
+                           "hasPass" : true,
+                           "name" : "Chained Subtask Properties",
+                           "status" : "PASS"
+                        }
+                     ]
                   }
                ]
             }

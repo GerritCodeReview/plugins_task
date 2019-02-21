@@ -262,6 +262,16 @@ Example:
     user = first-user # references the sharded user ref refs/users/01/1000001
 ```
 
+Properties
+----------
+The task plugin supplies the `${_name}` property which may be used anywhere in
+a task definition as a token representing the name of the current task.
+
+Example:
+```
+    fail-hint = {$_name} needs to be fixed
+```
+
 Change Query Output
 -------------------
 It is possible to add a task section to the query output of changes using

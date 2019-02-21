@@ -27,6 +27,7 @@ import com.googlesource.gerrit.plugins.task.TaskConfig.External;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -97,6 +98,7 @@ public class TaskTree {
       this.definition = definition;
       this.path.addAll(path);
       this.path.add(definition);
+      expandProperties(definition);
     }
 
     public List<Node> getSubNodes() throws OrmException {
@@ -180,5 +182,37 @@ public class TaskTree {
       }
       return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
     }
+  }
+
+  protected static void expandProperties(Task definition) {
+    for (Field field : Task.class.getFields()) {
+      try {
+        field.setAccessible(true);
+        Object o = field.get(definition);
+        if (o instanceof String) {
+          o = expandProperties((String) o, definition);
+        } else if (o instanceof List) {
+          o = expandProperties((List<String>) o, definition);
+        }
+        field.set(definition, o);
+      } catch (IllegalAccessException e) {
+        throw new RuntimeException(e);
+      }
+    }
+  }
+
+  protected static List<String> expandProperties(List<String> strings, Task definition) {
+    if (strings == null) {
+      return null;
+    }
+    List<String> expanded = new ArrayList<>(strings.size());
+    for (String string : strings) {
+      expanded.add(expandProperties(string, definition));
+    }
+    return expanded;
+  }
+
+  protected static String expandProperties(String string, Task definition) {
+    return string == null ? null : string.replaceAll("\\$\\{_name\\}", definition.name);
   }
 }
