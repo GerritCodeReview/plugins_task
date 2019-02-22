@@ -1,0 +1,46 @@
+<!--
+Copyright (C) 2019 The Android Open Source Project
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<dom-module id="gr-task-plugin">
+  <template>
+      <div id="tasks" hidden$="[[!_tasks.length]]">
+        <h3>Tasks: (Needs + Blocked)</h3>
+        <gr-task-plugin-tasks tasks="[[_tasks]]"></gr-task-plugin-tasks>
+      </div>
+  </template>
+  <script src="gr-task-plugin.js"></script>
+</dom-module>
+
+<dom-module id="gr-task-plugin-tasks">
+  <template>
+    <template is="dom-repeat" as="task" items="[[tasks]]">
+      <p>[[task.message]]</p>
+      <gr-task-plugin-tasks tasks="[[task.sub_tasks]]"></gr-task-plugin-tasks>
+    </template>
+  </template>
+  <script>
+      Polymer({
+        is: 'gr-task-plugin-tasks',
+        properties: {
+          tasks: {
+            type: Array,
+            notify: true,
+            value() { return []; },
+          },
+        },
+      });
+  </script>
+</dom-module>
