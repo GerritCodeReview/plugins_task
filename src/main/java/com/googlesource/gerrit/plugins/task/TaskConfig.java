@@ -53,7 +53,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
       fail = getString(s, KEY_FAIL, null);
       failHint = getString(s, KEY_FAIL_HINT, null);
       inProgress = getString(s, KEY_IN_PROGRESS, null);
-      name = getString(s, KEY_NAME, s.subSection);
+      name = s.subSection;
       pass = getString(s, KEY_PASS, null);
       readyHint = getString(s, KEY_READY_HINT, null);
       subTasks = getStringList(s, KEY_SUBTASK);
