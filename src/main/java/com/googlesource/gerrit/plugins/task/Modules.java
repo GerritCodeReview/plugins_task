@@ -15,6 +15,9 @@
 package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.extensions.annotations.Exports;
+import com.google.gerrit.extensions.registration.DynamicSet;
+import com.google.gerrit.extensions.webui.JavaScriptPlugin;
+import com.google.gerrit.extensions.webui.WebUiPlugin;
 import com.google.gerrit.server.DynamicOptions.DynamicBean;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor.ChangeAttributeFactory;
 import com.google.gerrit.server.restapi.change.QueryChanges;
@@ -47,6 +50,7 @@ public class Modules {
     @Override
     protected void configure() {
       bind(DynamicBean.class).annotatedWith(Exports.named(QueryChanges.class)).to(MyOptions.class);
+      DynamicSet.bind(binder(), WebUiPlugin.class).toInstance(new JavaScriptPlugin("gr-task.html"));
     }
   }
 
