@@ -16,7 +16,6 @@ package com.googlesource.gerrit.plugins.task.cli;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.reviewdb.client.PatchSet;
-import com.google.gerrit.reviewdb.server.ReviewDb;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.PatchSetUtil;
 import com.google.gerrit.server.notedb.ChangeNotes;
@@ -31,7 +30,6 @@ public class PatchSetArgument {
   public static class Factory {
     protected final PermissionBackend permissionBackend;
     protected final ChangeNotes.Factory notesFactory;
-    protected final ReviewDb reviewDb;
     protected final PatchSetUtil psUtil;
     protected final CurrentUser user;
 
@@ -39,12 +37,10 @@ public class PatchSetArgument {
     protected Factory(
         ChangeNotes.Factory notesFactory,
         PermissionBackend permissionBackend,
-        ReviewDb reviewDb,
         PatchSetUtil psUtil,
         CurrentUser user) {
       this.notesFactory = notesFactory;
       this.permissionBackend = permissionBackend;
-      this.reviewDb = reviewDb;
       this.psUtil = psUtil;
       this.user = user;
     }
@@ -55,11 +51,10 @@ public class PatchSetArgument {
         ChangeNotes changeNotes = notesFactory.createChecked(patchSetId.getParentKey());
         permissionBackend
             .user(user)
-            .database(reviewDb)
             .change(changeNotes)
             .check(ChangePermission.READ);
         return new PatchSetArgument(
-            changeNotes.getChange(), psUtil.get(reviewDb, changeNotes, patchSetId));
+            changeNotes.getChange(), psUtil.get(changeNotes, patchSetId));
       } catch (PermissionBackendException | AuthException e) {
         throw new IllegalArgumentException("database error", e);
       } catch (UnloggedFailure e) {

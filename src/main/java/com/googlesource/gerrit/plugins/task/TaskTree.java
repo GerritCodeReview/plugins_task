@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.gerrit.extensions.restapi.UnprocessableEntityException;
 import com.google.gerrit.reviewdb.client.Account;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.RefNames;
@@ -174,11 +175,13 @@ public class TaskTree {
       if (user == null) {
         throw new ConfigInvalidException("External user not defined");
       }
-      Account acct = accountResolver.find(user);
-      if (acct == null) {
+      Account.Id acct;
+      try {
+        acct = accountResolver.resolve(user).asUnique().getAccount().getId();
+      } catch (UnprocessableEntityException e) {
         throw new ConfigInvalidException("Cannot resolve user: " + user);
       }
-      return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
+      return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct));
     }
   }
 }
