@@ -503,6 +503,9 @@
             },
             {
                "applicable" : true,
+               "exported" : {
+                  "root" : "Root Properties"
+               },
                "hasPass" : true,
                "hint" : "Name(Root Properties)",
                "name" : "Root Properties",
@@ -510,8 +513,11 @@
                "subTasks" : [
                   {
                      "applicable" : true,
+                     "exported" : {
+                        "subtask" : "Subtask Properties"
+                     },
                      "hasPass" : true,
-                     "hint" : "Name(Subtask Properties) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
+                     "hint" : "Name(Subtask Properties) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
                      "name" : "Subtask Properties",
                      "status" : "FAIL",
                      "subTasks" : [
