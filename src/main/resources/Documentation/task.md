@@ -291,6 +291,31 @@ Example:
         ...
 ```
 
+It is possible to define a custom property value and to export that value
+to the json on the current task by using the following syntax:
+```
+    export-<property-name> = <property-value>
+```
+
+Example:
+```
+    [task "foo"]
+        export-ci-system = jenkins
+```
+
+```
+     "subTasks" : [
+        {
+           "exported" : {
+              "ci-system" : "jenkins"
+           },
+           ...
+           "name" : "foo",
+           ...
+        }
+     ]
+```
+
 Change Query Output
 -------------------
 It is possible to add a task section to the query output of changes using

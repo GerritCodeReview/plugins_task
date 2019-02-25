@@ -48,6 +48,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   public static class TaskAttribute {
     public Boolean applicable;
+    public Map<String, String> exported;
     public Boolean hasPass;
     public String hint;
     public Boolean inProgress;
@@ -140,6 +141,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
               task.inProgress = matchOrNull(c, def.inProgress);
             }
             task.hint = getHint(task.status, def);
+            task.exported = def.exported;
             tasks.add(task);
           }
         }

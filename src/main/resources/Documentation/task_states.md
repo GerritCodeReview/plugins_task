@@ -123,6 +123,7 @@ states are affected by their own criteria and their subtasks' states.
 
 [root "Root Properties"]
   set-root-property = root-value
+  export-root = ${_name}
   fail = True
   fail-hint = Name(${_name})
   subtask = Subtask Properties
@@ -153,8 +154,9 @@ states are affected by their own criteria and their subtasks' states.
   set-first-property = first-value
   set-second-property = ${first-property} second-extra ${third-property}
   set-third-property = third-value
+  export-subtask = ${_name}
   fail = True
-  fail-hint = Name(${_name}) root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
+  fail-hint = Name(${_name}) root-property(${root-property}) first-property(${first-property}) second-property(${second-property}) root(${root})
 
 [task "Chained Subtask Properties"]
   pass = True
@@ -571,6 +573,9 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "exported" : {
+                  "root" : "Root Properties"
+               },
                "hasPass" : true,
                "hint" : "Name(Root Properties)",
                "name" : "Root Properties",
@@ -582,8 +587,11 @@ The expected output for the above task config looks like:
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "exported" : {
+                              "subtask" : "Subtask Properties Hints"
+                           },
                            "hasPass" : true,
-                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
+                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
                            "name" : "Subtask Properties Hints",
                            "status" : "FAIL"
                         },
