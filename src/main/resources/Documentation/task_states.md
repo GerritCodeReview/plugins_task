@@ -197,10 +197,15 @@ states are affected by their own criteria and their subtasks' states.
 ```
 [task "No PASS criteria"]
   applicable = is:open
+  fail-hint = Invalid without Pass criteria and without subtasks
 
 [task "WAITING (subtask INVALID)"]
   applicable = is:open
   pass = is:open
+  subtask = Subtask INVALID
+
+[task "WAITING (subtask duplicate)"]
+  subtask = Subtask INVALID
   subtask = Subtask INVALID
 
 [task "WAITING (subtask missing)"]
@@ -218,6 +223,7 @@ states are affected by their own criteria and their subtasks' states.
 
 [task "Subtask INVALID"]
   applicable = is:open
+  fail-hint = Use when an INVALID subtask is needed, not meant as a test case in itself
 
 [task "NA Bad PASS query"]
   applicable = -is:open
@@ -521,6 +527,22 @@ The expected output for the above task config looks like:
                         {
                            "hasPass" : false,
                            "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "WAITING (subtask duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : false,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]

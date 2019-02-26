@@ -31,11 +31,19 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
+/**
+ * Add structure to access the task definitions from the config as a tree.
+ *
+ * <p>This class is a "middle" representation of the task tree. The task config is represented as a
+ * lazily loaded tree, and much of the tree validity is enforced at this layer.
+ */
 public class TaskTree {
   protected static final String TASK_DIR = "task";
 
@@ -69,15 +77,20 @@ public class TaskTree {
   protected class NodeList {
     protected LinkedList<Task> path = new LinkedList<>();
     protected List<Node> nodes;
+    protected Set<String> names = new HashSet<>();
 
     protected void addSubDefinitions(List<Task> tasks, Map<String, String> parentProperties) {
       for (Task task : tasks) {
-        // path check detects looping definitions
-        try {
-          nodes.add(path.contains(task) ? null : new Node(task, path, parentProperties));
-        } catch (Exception e) {
-          nodes.add(null);
+        if (task != null && !path.contains(task) && names.add(task.name)) {
+          // path check above detects looping definitions
+          // names check above detects duplicate subtasks
+          try {
+            nodes.add(new Node(task, path, parentProperties));
+            continue;
+          } catch (Exception e) {
+          } // bad definition, handled below
         }
+        nodes.add(null);
       }
     }
   }

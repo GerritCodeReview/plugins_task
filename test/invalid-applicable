@@ -47,6 +47,22 @@
                      ]
                   },
                   {
+                     "hasPass" : false,
+                     "name" : "WAITING (subtask duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : false,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
                      "hasPass" : true,
                      "name" : "WAITING (subtask missing)",
                      "status" : "WAITING",
