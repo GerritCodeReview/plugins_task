@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "f96a9c88_b532ced4",
+        "filename": "gr-task/gr-task.html",
+        "patchSetId": 1
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2019-02-26T22:29:03Z",
+      "side": 1,
+      "message": "If anyone has a tip for me on how to hide this when we don\u0027t end up adding any tasks, please let me know. My js-foo is weak.",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 39
+      },
+      "revId": "170a750f7fc0d80c97a1ff702f17b65ec4454d0d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
