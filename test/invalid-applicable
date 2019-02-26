@@ -86,6 +86,17 @@
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }

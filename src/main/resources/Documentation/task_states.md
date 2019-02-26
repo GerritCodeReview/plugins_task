@@ -219,6 +219,9 @@ states are affected by their own criteria and their subtasks' states.
   fail = True
   in-progress = has:bad
 
+[task "Looping"]
+  subtask = Looping
+
 ```
 
 `task/special.config` file in project `All-Users` on ref `refs/users/self`.
@@ -546,6 +549,17 @@ The expected output for the above task config looks like:
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             },

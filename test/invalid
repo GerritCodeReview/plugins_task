@@ -137,6 +137,18 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             },
@@ -231,6 +243,18 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }
