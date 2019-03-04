@@ -303,6 +303,30 @@
             },
             {
                "applicable" : true,
+               "hasPass" : true,
+               "hint" : "Name(Root Properties)",
+               "name" : "Root Properties",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "hint" : "Name(Subtask Properties)",
+                     "name" : "Subtask Properties",
+                     "status" : "FAIL",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Chained Subtask Properties",
+                           "status" : "PASS"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
@@ -520,30 +544,6 @@
                         {
                            "name" : "UNKNOWN",
                            "status" : "INVALID"
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "Name(Root Properties)",
-               "name" : "Root Properties",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "hint" : "Name(Subtask Properties)",
-                     "name" : "Subtask Properties",
-                     "status" : "FAIL",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Chained Subtask Properties",
-                           "status" : "PASS"
                         }
                      ]
                   }

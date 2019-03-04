@@ -105,6 +105,11 @@ states are affected by their own criteria and their subtasks' states.
   subtasks-external = user special
   subtasks-external = file missing
 
+[root "Root Properties"]
+  fail = True
+  fail-hint = Name(${_name})
+  subtask = Subtask Properties
+
 [root "INVALIDS"]
   applicable = is:open
   subtasks-file = invalids.config
@@ -120,11 +125,6 @@ states are affected by their own criteria and their subtasks' states.
 [root "NA INVALIDS"]
   applicable = -is:open
   subtasks-file = invalids.config
-
-[root "Root Properties"]
-  fail = True
-  fail-hint = Name(${_name})
-  subtask = Subtask Properties
 
 [task "Subtask FAIL"]
   applicable = is:open
@@ -488,6 +488,27 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "hasPass" : true,
+               "hint" : "Name(Root Properties)",
+               "name" : "Root Properties",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "hint" : "Name(Subtask Properties)",
+                     "name" : "Subtask Properties",
+                     "status" : "FAIL",
+                     "subTasks" : [
+                        {
+                           "hasPass" : true,
+                           "name" : "Chained Subtask Properties",
+                           "status" : "PASS"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
                "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
@@ -558,27 +579,6 @@ The expected output for the above task config looks like:
                         {
                            "name" : "UNKNOWN",
                            "status" : "INVALID"
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "hasPass" : true,
-               "hint" : "Name(Root Properties)",
-               "name" : "Root Properties",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "hasPass" : true,
-                     "hint" : "Name(Subtask Properties)",
-                     "name" : "Subtask Properties",
-                     "status" : "FAIL",
-                     "subTasks" : [
-                        {
-                           "hasPass" : true,
-                           "name" : "Chained Subtask Properties",
-                           "status" : "PASS"
                         }
                      ]
                   }
