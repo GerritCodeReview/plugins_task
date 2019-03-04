@@ -303,6 +303,48 @@
             },
             {
                "applicable" : true,
+               "exported" : {
+                  "root" : "Root Properties"
+               },
+               "hasPass" : true,
+               "hint" : "Name(Root Properties)",
+               "name" : "Root Properties",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask Properties",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "exported" : {
+                              "subtask" : "Subtask Properties Hints"
+                           },
+                           "hasPass" : true,
+                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
+                           "name" : "Subtask Properties Hints",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Chained Subtask Properties",
+                           "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask Properties Reset",
+                           "status" : "PASS"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
@@ -542,48 +584,6 @@
                   {
                      "name" : "UNKNOWN",
                      "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "exported" : {
-                  "root" : "Root Properties"
-               },
-               "hasPass" : true,
-               "hint" : "Name(Root Properties)",
-               "name" : "Root Properties",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Subtask Properties",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "exported" : {
-                              "subtask" : "Subtask Properties Hints"
-                           },
-                           "hasPass" : true,
-                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
-                           "name" : "Subtask Properties Hints",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Chained Subtask Properties",
-                           "status" : "PASS"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask Properties Reset",
-                           "status" : "PASS"
-                        }
-                     ]
                   }
                ]
             }

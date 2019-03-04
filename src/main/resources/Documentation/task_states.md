@@ -105,6 +105,13 @@ states are affected by their own criteria and their subtasks' states.
   subtasks-external = user special
   subtasks-external = file missing
 
+[root "Root Properties"]
+  set-root-property = root-value
+  export-root = ${_name}
+  fail = True
+  fail-hint = Name(${_name})
+  subtask = Subtask Properties
+
 [root "INVALIDS"]
   applicable = is:open
   subtasks-file = invalids.config
@@ -120,13 +127,6 @@ states are affected by their own criteria and their subtasks' states.
 [root "NA INVALIDS"]
   applicable = -is:open
   subtasks-file = invalids.config
-
-[root "Root Properties"]
-  set-root-property = root-value
-  export-root = ${_name}
-  fail = True
-  fail-hint = Name(${_name})
-  subtask = Subtask Properties
 
 [task "Subtask FAIL"]
   applicable = is:open
@@ -510,6 +510,43 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "exported" : {
+                  "root" : "Root Properties"
+               },
+               "hasPass" : true,
+               "hint" : "Name(Root Properties)",
+               "name" : "Root Properties",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "hasPass" : false,
+                     "name" : "Subtask Properties",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "exported" : {
+                              "subtask" : "Subtask Properties Hints"
+                           },
+                           "hasPass" : true,
+                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
+                           "name" : "Subtask Properties Hints",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Chained Subtask Properties",
+                           "status" : "PASS"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask Properties Reset",
+                           "status" : "PASS"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
                "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
@@ -591,43 +628,6 @@ The expected output for the above task config looks like:
                   {
                      "name" : "UNKNOWN",
                      "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "exported" : {
-                  "root" : "Root Properties"
-               },
-               "hasPass" : true,
-               "hint" : "Name(Root Properties)",
-               "name" : "Root Properties",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "hasPass" : false,
-                     "name" : "Subtask Properties",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "exported" : {
-                              "subtask" : "Subtask Properties Hints"
-                           },
-                           "hasPass" : true,
-                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
-                           "name" : "Subtask Properties Hints",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "hasPass" : true,
-                           "name" : "Chained Subtask Properties",
-                           "status" : "PASS"
-                        },
-                        {
-                           "hasPass" : true,
-                           "name" : "Subtask Properties Reset",
-                           "status" : "PASS"
-                        }
-                     ]
                   }
                ]
             }
