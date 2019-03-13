@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "91243ff4_8b15c903",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1014252
+      },
+      "writtenOn": "2019-03-13T08:57:09Z",
+      "side": 1,
+      "message": "This bit of logic confuses me.\nWould it be more clear if you did something like:\n\n    VALID_STATUSES \u003d [\u0027FAIL\u0027,\u0027READY\u0027,\u0027INVALID\u0027]\n    ...\n       if (task.status in VALID_STATUSES) {\n         this.has_tasks \u003d true;\n         const taskMessage \u003d document.createElement(\u0027div\u0027);\n         taskMessage.appendChild(document.createTextNode(this._getTaskDescription(task)));\n         this.tasksFragment.appendChile(taskMessage);\n       }",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "0340e5f3b1fae9d04cae9194008e93aded22c1ec",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
