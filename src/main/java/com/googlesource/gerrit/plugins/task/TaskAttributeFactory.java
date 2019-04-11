@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.common.PluginDefinedInfo;
 import com.google.gerrit.index.query.Predicate;
 import com.google.gerrit.index.query.QueryParseException;
@@ -32,11 +33,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TaskAttributeFactory implements ChangeAttributeFactory {
-  private static final Logger log = LoggerFactory.getLogger(TaskAttributeFactory.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
 
   public enum Status {
     INVALID,
@@ -88,7 +87,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       try {
         return createWithExceptions(c);
       } catch (OrmException e) {
-        log.error("Cannot load tasks for: " + c, e);
+        log.atSevere().withCause(e).log("Cannot load tasks for: %s", c);
       }
     }
     return null;

@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Project;
@@ -30,11 +31,9 @@ import java.util.HashMap;
 import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Repository;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 public class TaskConfigFactory {
-  private static final Logger log = LoggerFactory.getLogger(TaskConfigFactory.class);
+  private static final FluentLogger log = FluentLogger.forEnclosingClass();
 
   protected static final String EXTENSION = ".config";
   protected static final String DEFAULT = "task" + EXTENSION;
@@ -87,7 +86,7 @@ public class TaskConfigFactory {
     try (Repository git = gitMgr.openRepository(project)) {
       cfg.load(project, git);
     } catch (IOException e) {
-      log.warn("Failed to load " + fileName + " for " + project.get(), e);
+      log.atWarning().withCause(e).log("Failed to load %s for %s", fileName, project);
       throw e;
     } catch (ConfigInvalidException e) {
       throw e;
