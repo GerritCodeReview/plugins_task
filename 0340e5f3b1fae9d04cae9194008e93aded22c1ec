@@ -22,6 +22,30 @@
       "revId": "0340e5f3b1fae9d04cae9194008e93aded22c1ec",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "7ae9875c_45d5255b",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2019-04-12T12:53:17Z",
+      "side": 1,
+      "message": "This is not about checking validity, it is mainly about getting the appropriate message (which happens to be the same for those three states currently).",
+      "parentUuid": "91243ff4_8b15c903",
+      "range": {
+        "startLine": 65,
+        "startChar": 0,
+        "endLine": 71,
+        "endChar": 9
+      },
+      "revId": "0340e5f3b1fae9d04cae9194008e93aded22c1ec",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
