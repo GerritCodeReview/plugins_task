@@ -22,12 +22,12 @@ limitations under the License.
   <groupId>com.googlesource.gerrit.plugins.task</groupId>
   <artifactId>task</artifactId>
   <packaging>jar</packaging>
-  <version>3.0-SNAPSHOT</version>
+  <version>3.0</version>
   <name>task</name>
 
   <properties>
     <Gerrit-ApiType>plugin</Gerrit-ApiType>
-    <Gerrit-ApiVersion>3.0-SNAPSHOT</Gerrit-ApiVersion>
+    <Gerrit-ApiVersion>3.0.0</Gerrit-ApiVersion>
   </properties>
 
   <build>
@@ -40,8 +40,6 @@ limitations under the License.
           <archive>
             <manifestEntries>
               <Gerrit-Module>com.googlesource.gerrit.plugins.task.Modules$Module</Gerrit-Module>
-              <Gerrit-HttpModule>com.googlesource.gerrit.plugins.task.Modules$HttpModule</Gerrit-HttpModule>
-              <Gerrit-SshModule>com.googlesource.gerrit.plugins.task.Modules$SshModule</Gerrit-SshModule>
               <Implementation-Vendor>Gerrit Code Review</Implementation-Vendor>
               <Implementation-URL>http://code.google.com/p/gerrit/</Implementation-URL>
 

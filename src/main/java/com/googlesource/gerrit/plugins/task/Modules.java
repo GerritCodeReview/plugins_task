@@ -33,19 +33,8 @@ public class Modules {
       bind(ChangeAttributeFactory.class)
           .annotatedWith(Exports.named("task"))
           .to(TaskAttributeFactory.class);
-    }
-  }
 
-  public static class SshModule extends AbstractModule {
-    @Override
-    protected void configure() {
       bind(DynamicBean.class).annotatedWith(Exports.named(Query.class)).to(MyOptions.class);
-    }
-  }
-
-  public static class HttpModule extends AbstractModule {
-    @Override
-    protected void configure() {
       bind(DynamicBean.class).annotatedWith(Exports.named(QueryChanges.class)).to(MyOptions.class);
     }
   }
