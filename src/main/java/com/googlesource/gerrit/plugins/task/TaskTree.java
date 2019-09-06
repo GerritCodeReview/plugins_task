@@ -30,10 +30,20 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
+/**
+ * Add structure to access the task definitions from the config as a tree.
+ *
+ * <p>This class is a "middle" representation of the task tree. The task config is represented as a
+ * lazily loaded tree, and much of the tree validity is enforced at this layer.
+ */
 public class TaskTree {
   protected static final String TASK_DIR = "task";
 
@@ -65,13 +75,22 @@ public class TaskTree {
   }
 
   protected class NodeList {
-    protected LinkedList<Task> path = new LinkedList<>();
+    protected LinkedList<String> path = new LinkedList<>();
     protected List<Node> nodes;
+    protected Set<String> names = new HashSet<>();
 
-    protected void addSubDefinitions(List<Task> tasks) {
-      for (Task task : tasks) {
-        // path check detects looping definitions
-        nodes.add(path.contains(task) ? null : new Node(task, path));
+    protected void addSubDefinitions(List<Task> defs, Map<String, String> parentProperties) {
+      for (Task def : defs) {
+        if (def != null && !path.contains(def.name) && names.add(def.name)) {
+          // path check above detects looping definitions
+          // names check above detects duplicate subtasks
+          try {
+            nodes.add(new Node(def, path, parentProperties));
+            continue;
+          } catch (Exception e) {
+          } // bad definition, handled below
+        }
+        nodes.add(null);
       }
     }
   }
@@ -80,12 +99,12 @@ public class TaskTree {
     public List<Node> getRootNodes() throws ConfigInvalidException, IOException {
       if (nodes == null) {
         nodes = new ArrayList<>();
-        addSubDefinitions(getRootTasks());
+        addSubDefinitions(getRootDefinitions(), new HashMap<String, String>());
       }
       return nodes;
     }
 
-    protected List<Task> getRootTasks() throws ConfigInvalidException, IOException {
+    protected List<Task> getRootDefinitions() throws ConfigInvalidException, IOException {
       return taskFactory.getRootConfig().getRootTasks();
     }
   }
@@ -93,10 +112,13 @@ public class TaskTree {
   public class Node extends NodeList {
     public final Task definition;
 
-    public Node(Task definition, List<Task> path) {
+    public Node(Task definition, List<String> path, Map<String, String> parentProperties)
+        throws ConfigInvalidException {
       this.definition = definition;
       this.path.addAll(path);
-      this.path.add(definition);
+      this.path.add(definition.name);
+      Preloader.preload(definition);
+      new Properties(definition, parentProperties);
     }
 
     public List<Node> getSubNodes() {
@@ -108,9 +130,13 @@ public class TaskTree {
     }
 
     protected void addSubDefinitions() {
-      addSubDefinitions(getSubTasks());
+      addSubDefinitions(getSubDefinitions());
       addSubFileDefinitions();
       addExternalDefinitions();
+    }
+
+    protected void addSubDefinitions(List<Task> defs) {
+      addSubDefinitions(defs, definition.properties);
     }
 
     protected void addSubFileDefinitions() {
@@ -130,7 +156,7 @@ public class TaskTree {
           if (ext == null) {
             nodes.add(null);
           } else {
-            addSubDefinitions(getTasks(ext));
+            addSubDefinitions(getTaskDefinitions(ext));
           }
         } catch (ConfigInvalidException | IOException e) {
           nodes.add(null);
@@ -138,15 +164,23 @@ public class TaskTree {
       }
     }
 
-    protected List<Task> getSubTasks() {
-      List<Task> tasks = new ArrayList<>();
-      for (String subTask : definition.subTasks) {
-        tasks.add(definition.config.getTask(subTask));
+    protected List<Task> getSubDefinitions() {
+      List<Task> defs = new ArrayList<>();
+      for (String name : definition.subTasks) {
+        try {
+          Task def = definition.config.getTaskOptional(name);
+          if (def != null) {
+            defs.add(def);
+          }
+        } catch (ConfigInvalidException e) {
+          defs.add(null);
+        }
       }
-      return tasks;
+      return defs;
     }
 
-    protected List<Task> getTasks(External external) throws ConfigInvalidException, IOException {
+    protected List<Task> getTaskDefinitions(External external)
+        throws ConfigInvalidException, IOException {
       return getTasks(resolveUserBranch(external.user), external.file);
     }
 

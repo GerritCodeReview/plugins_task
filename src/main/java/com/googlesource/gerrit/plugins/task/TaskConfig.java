@@ -19,7 +19,14 @@ import com.google.gerrit.reviewdb.client.BranchNameKey;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Task Configuration file living in git */
 public class TaskConfig extends AbstractVersionedMetaData {
@@ -33,11 +40,14 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   public class Task extends Section {
     public String applicable;
+    public Map<String, String> exported;
     public String fail;
     public String failHint;
     public String inProgress;
     public String name;
     public String pass;
+    public String preloadTask;
+    public Map<String, String> properties;
     public String readyHint;
     public List<String> subTasks;
     public List<String> subTasksExternals;
@@ -50,11 +60,14 @@ public class TaskConfig extends AbstractVersionedMetaData {
       this.isVisible = isVisible;
       this.isTrusted = isTrusted;
       applicable = getString(s, KEY_APPLICABLE, null);
+      exported = getProperties(s, KEY_EXPORT_PREFIX);
       fail = getString(s, KEY_FAIL, null);
       failHint = getString(s, KEY_FAIL_HINT, null);
       inProgress = getString(s, KEY_IN_PROGRESS, null);
-      name = getString(s, KEY_NAME, s.subSection);
+      name = s.subSection;
       pass = getString(s, KEY_PASS, null);
+      preloadTask = getString(s, KEY_PRELOAD_TASK, null);
+      properties = getProperties(s, KEY_PROPERTIES_PREFIX);
       readyHint = getString(s, KEY_READY_HINT, null);
       subTasks = getStringList(s, KEY_SUBTASK);
       subTasksExternals = getStringList(s, KEY_SUBTASKS_EXTERNAL);
@@ -74,16 +87,22 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
   }
 
+  protected static final Pattern OPTIONAL_TASK_PATTERN =
+      Pattern.compile("([^ |]*( *[^ |])*) *\\| *");
+
   protected static final String SECTION_EXTERNAL = "external";
   protected static final String SECTION_ROOT = "root";
   protected static final String SECTION_TASK = "task";
   protected static final String KEY_APPLICABLE = "applicable";
+  protected static final String KEY_EXPORT_PREFIX = "export-";
   protected static final String KEY_FAIL = "fail";
   protected static final String KEY_FAIL_HINT = "fail-hint";
   protected static final String KEY_FILE = "file";
   protected static final String KEY_IN_PROGRESS = "in-progress";
   protected static final String KEY_NAME = "name";
   protected static final String KEY_PASS = "pass";
+  protected static final String KEY_PRELOAD_TASK = "preload-task";
+  protected static final String KEY_PROPERTIES_PREFIX = "set-";
   protected static final String KEY_READY_HINT = "ready-hint";
   protected static final String KEY_SUBTASK = "subtask";
   protected static final String KEY_SUBTASKS_EXTERNAL = "subtasks-external";
@@ -125,8 +144,33 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return externals;
   }
 
-  public Task getTask(String name) {
-    return new Task(new SubSection(SECTION_TASK, name), isVisible, isTrusted);
+  /* returs null only if optional and not found */
+  public Task getTaskOptional(String name) throws ConfigInvalidException {
+    int end = 0;
+    Matcher m = OPTIONAL_TASK_PATTERN.matcher(name);
+    while (m.find()) {
+      end = m.end();
+      Task task = getTaskOrNull(m.group(1));
+      if (task != null) {
+        return task;
+      }
+    }
+
+    String last = name.substring(end);
+    if (!"".equals(last)) { // Last entry was not optional
+      Task task = getTaskOrNull(last);
+      if (task != null) {
+        return task;
+      }
+      throw new ConfigInvalidException("task not defined");
+    }
+    return null;
+  }
+
+  /* returns null if not found */
+  protected Task getTaskOrNull(String name) {
+    SubSection subSection = new SubSection(SECTION_TASK, name);
+    return getNames(subSection).isEmpty() ? null : new Task(subSection, isVisible, isTrusted);
   }
 
   public External getExternal(String name) {
@@ -137,9 +181,45 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return new External(s);
   }
 
+  protected Map<String, String> getProperties(SubSection s, String prefix) {
+    Map<String, String> valueByName = new HashMap<>();
+    for (Map.Entry<String, String> e :
+        getStringByName(s, getMatchingNames(s, prefix + ".+")).entrySet()) {
+      String name = e.getKey();
+      valueByName.put(name.substring(prefix.length()), e.getValue());
+    }
+    return valueByName;
+  }
+
+  protected Map<String, String> getStringByName(SubSection s, Iterable<String> names) {
+    Map<String, String> valueByName = new HashMap<>();
+    for (String name : names) {
+      valueByName.put(name, getString(s, name));
+    }
+    return valueByName;
+  }
+
+  protected Set<String> getMatchingNames(SubSection s, String match) {
+    Set<String> matched = new HashSet<>();
+    for (String name : getNames(s)) {
+      if (name.matches(match)) {
+        matched.add(name);
+      }
+    }
+    return matched;
+  }
+
+  protected Set<String> getNames(SubSection s) {
+    return cfg.getNames(s.section, s.subSection);
+  }
+
   protected String getString(SubSection s, String key, String def) {
-    String v = cfg.getString(s.section, s.subSection, key);
+    String v = getString(s, key);
     return v != null ? v : def;
+  }
+
+  protected String getString(SubSection s, String key) {
+    return cfg.getString(s.section, s.subSection, key);
   }
 
   protected List<String> getStringList(SubSection s, String key) {

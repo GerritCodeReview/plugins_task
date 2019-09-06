@@ -74,14 +74,30 @@
                   },
                   {
                      "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "WAITING (subtask missing)",
+                     "hasPass" : false,
+                     "name" : "WAITING (subtask duplicate)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
                            "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -107,9 +123,7 @@
                      "status" : "WAITING",
                      "subTasks" : [
                         {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -119,6 +133,18 @@
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask Optional",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   },
                   {
                      "applicable" : false,
@@ -136,6 +162,22 @@
                      "applicable" : false,
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "UNKNOWN",
                      "status" : "INVALID"
                   }
                ]
@@ -168,14 +210,30 @@
                   },
                   {
                      "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "WAITING (subtask missing)",
+                     "hasPass" : false,
+                     "name" : "WAITING (subtask duplicate)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
                            "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -201,9 +259,7 @@
                      "status" : "WAITING",
                      "subTasks" : [
                         {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -213,6 +269,18 @@
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask Optional",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   },
                   {
                      "applicable" : false,
@@ -230,6 +298,22 @@
                      "applicable" : false,
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "UNKNOWN",
                      "status" : "INVALID"
                   }
                ]

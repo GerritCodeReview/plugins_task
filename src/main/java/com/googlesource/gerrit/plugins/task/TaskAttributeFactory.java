@@ -48,12 +48,14 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
   public static class TaskAttribute {
     public Boolean applicable;
+    public Map<String, String> exported;
     public Boolean hasPass;
     public String hint;
     public Boolean inProgress;
     public String name;
     public Status status;
     public List<TaskAttribute> subTasks;
+    public Long evaluationMilliSeconds;
 
     public TaskAttribute(String name) {
       this.name = name;
@@ -109,43 +111,56 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return a;
   }
 
-  protected void addApplicableTasks(List<TaskAttribute> tasks, ChangeData c, Node node) {
+  protected void addApplicableTasks(List<TaskAttribute> atts, ChangeData c, Node node) {
     try {
       Task def = node.definition;
+      TaskAttribute att = new TaskAttribute(def.name);
+      if (options.evaluationTime) {
+        att.evaluationMilliSeconds = millis();
+      }
+
       boolean applicable = match(c, def.applicable);
       if (!def.isVisible) {
         if (!def.isTrusted || (!applicable && !options.onlyApplicable)) {
-          tasks.add(unknown());
+          atts.add(unknown());
           return;
         }
       }
 
       if (applicable || !options.onlyApplicable) {
-        TaskAttribute task = new TaskAttribute(def.name);
-        task.hasPass = def.pass != null || def.fail != null;
-        task.subTasks = getSubTasks(c, node);
-        task.status = getStatus(c, def, task);
+        att.hasPass = def.pass != null || def.fail != null;
+        att.subTasks = getSubTasks(c, node);
+        att.status = getStatus(c, def, att);
         if (options.onlyInvalid && !isValidQueries(c, def)) {
-          task.status = Status.INVALID;
+          att.status = Status.INVALID;
         }
-        boolean groupApplicable = task.status != null;
+        boolean groupApplicable = att.status != null;
 
         if (groupApplicable || !options.onlyApplicable) {
-          if (!options.onlyInvalid || task.status == Status.INVALID || task.subTasks != null) {
+          if (!options.onlyInvalid || att.status == Status.INVALID || att.subTasks != null) {
             if (!options.onlyApplicable) {
-              task.applicable = applicable;
+              att.applicable = applicable;
             }
             if (def.inProgress != null) {
-              task.inProgress = matchOrNull(c, def.inProgress);
+              att.inProgress = matchOrNull(c, def.inProgress);
             }
-            task.hint = getHint(task.status, def);
-            tasks.add(task);
+            att.hint = getHint(att.status, def);
+            att.exported = def.exported;
+
+            if (options.evaluationTime) {
+              att.evaluationMilliSeconds = millis() - att.evaluationMilliSeconds;
+            }
+            atts.add(att);
           }
         }
       }
     } catch (QueryParseException e) {
-      tasks.add(invalid()); // bad applicability query
+      atts.add(invalid()); // bad applicability query
     }
+  }
+
+  protected long millis() {
+    return System.nanoTime() / 1000000;
   }
 
   protected List<TaskAttribute> getSubTasks(ChangeData c, Node node) {
@@ -177,33 +192,33 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return a;
   }
 
-  protected boolean isValidQueries(ChangeData c, Task task) {
+  protected boolean isValidQueries(ChangeData c, Task def) {
     try {
-      match(c, task.inProgress);
-      match(c, task.fail);
-      match(c, task.pass);
+      match(c, def.inProgress);
+      match(c, def.fail);
+      match(c, def.pass);
       return true;
     } catch (StorageException | QueryParseException e) {
       return false;
     }
   }
 
-  protected Status getStatus(ChangeData c, Task task, TaskAttribute a) {
+  protected Status getStatus(ChangeData c, Task def, TaskAttribute a) {
     try {
-      return getStatusWithExceptions(c, task, a);
+      return getStatusWithExceptions(c, def, a);
     } catch (QueryParseException e) {
       return Status.INVALID;
     }
   }
 
-  protected Status getStatusWithExceptions(ChangeData c, Task task, TaskAttribute a)
+  protected Status getStatusWithExceptions(ChangeData c, Task def, TaskAttribute a)
       throws QueryParseException {
-    if (isAllNull(task.pass, task.fail, a.subTasks)) {
-      // A leaf task has no defined subtasks.
+    if (isAllNull(def.pass, def.fail, a.subTasks)) {
+      // A leaf def has no defined subdefs.
       boolean hasDefinedSubtasks =
-          !(task.subTasks.isEmpty()
-              && task.subTasksFiles.isEmpty()
-              && task.subTasksExternals.isEmpty());
+          !(def.subTasks.isEmpty()
+              && def.subTasksFiles.isEmpty()
+              && def.subTasksExternals.isEmpty());
       if (hasDefinedSubtasks) {
         // Remove 'Grouping" tasks (tasks with subtasks but no PASS
         // or FAIL criteria) from the output if none of their subtasks
@@ -217,8 +232,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       return Status.INVALID;
     }
 
-    if (task.fail != null) {
-      if (match(c, task.fail)) {
+    if (def.fail != null) {
+      if (match(c, def.fail)) {
         // A FAIL definition is meant to be a hard blocking criteria
         // (like a CodeReview -2).  Thus, if hard blocked, it is
         // irrelevant what the subtask states, or the PASS criteria are.
@@ -230,7 +245,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         // to make a task have a FAIL status.
         return Status.FAIL;
       }
-      if (task.pass == null) {
+      if (def.pass == null) {
         // A task with a FAIL but no PASS criteria is a PASS-FAIL task
         // (they are never "READY").  It didn't fail, so pass.
         return Status.PASS;
@@ -249,7 +264,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       return Status.WAITING;
     }
 
-    if (task.pass != null && !match(c, task.pass)) {
+    if (def.pass != null && !match(c, def.pass)) {
       // Non-leaf tasks with no PASS criteria are supported in order
       // to support "grouping tasks" (tasks with no function aside from
       // organizing tasks).  A task without a PASS criteria, cannot ever
@@ -262,18 +277,18 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return Status.PASS;
   }
 
-  protected String getHint(Status status, Task task) {
+  protected String getHint(Status status, Task def) {
     if (status == Status.READY) {
-      return task.readyHint;
+      return def.readyHint;
     } else if (status == Status.FAIL) {
-      return task.failHint;
+      return def.failHint;
     }
     return null;
   }
 
-  protected static boolean isAll(Iterable<TaskAttribute> tasks, Status state) {
-    for (TaskAttribute task : tasks) {
-      if (task.status != state) {
+  protected static boolean isAll(Iterable<TaskAttribute> atts, Status state) {
+    for (TaskAttribute att : atts) {
+      if (att.status != state) {
         return false;
       }
     }

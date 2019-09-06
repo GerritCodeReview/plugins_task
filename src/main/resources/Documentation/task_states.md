@@ -8,14 +8,17 @@ states are affected by their own criteria and their subtasks' states.
 
 ```
 [root "Root N/A"]
-  applicable = is:closed
+  applicable = is:closed # Assumes test query is "is:open"
+
+[root "Root APPLICABLE"]
+  applicable = is:open # Assumes test query is "is:open"
+  pass = True
+  subtask = Subtask APPLICABLE
 
 [root "Root PASS"]
-  applicable = is:open
   pass = True
 
 [root "Root FAIL"]
-  applicable = is:open
   fail = True
 
 [root "Root straight PASS"]
@@ -36,24 +39,21 @@ states are affected by their own criteria and their subtasks' states.
   fail = is:open
 
 [root "Root grouping PASS (subtask PASS)"]
-  applicable = is:open
   subtask = Subtask PASS
 
 [root "Root grouping WAITING (subtask READY)"]
-  applicable = is:open
   subtask = Subtask READY
 
 [root "Root grouping WAITING (subtask FAIL)"]
-  applicable = is:open
   subtask = Subtask FAIL
 
 [root "Root grouping NA (subtask NA)"]
-  applicable = is:open
+  applicable = is:open # Assumes Subtask NA has "applicable = NOT is:open"
   subtask = Subtask NA
 
 [root "Root READY (subtask PASS)"]
   applicable = is:open
-  pass = -is:open
+  pass = NOT is:open
   subtask = Subtask PASS
   ready-hint = You must now run the ready task
 
@@ -70,56 +70,68 @@ states are affected by their own criteria and their subtasks' states.
 [root "Root IN PROGRESS"]
    applicable = is:open
    in-progress = is:open
-   pass = -is:open
+   pass = NOT is:open
 
 [root "Root NOT IN PROGRESS"]
    applicable = is:open
-   in-progress = -is:open
-   pass = -is:open
+   in-progress = NOT is:open
+   pass = NOT is:open
+
+[root "Root Optional subtasks"]
+   subtask = OPTIONAL MISSING |
+   subtask = Subtask Optional |
 
 [root "Subtasks File"]
-  applicable = is:open
   subtasks-file = common.config
 
 [root "Subtasks File (Missing)"]
-  applicable = is:open
   subtasks-file = common.config
   subtasks-file = missing
 
 [root "Subtasks External"]
-  applicable = is:open
   subtasks-external = user special
 
 [root "Subtasks External (Missing)"]
-  applicable = is:open
   subtasks-external = user special
   subtasks-external = missing
 
 [root "Subtasks External (User Missing)"]
-  applicable = is:open
   subtasks-external = user special
   subtasks-external = user missing
 
 [root "Subtasks External (File Missing)"]
-  applicable = is:open
   subtasks-external = user special
   subtasks-external = file missing
 
+[root "Root Properties"]
+  set-root-property = root-value
+  export-root = ${_name}
+  fail = True
+  fail-hint = Name(${_name})
+  subtask = Subtask Properties
+
+[root "Root Preload"]
+   preload-task = Subtask FAIL
+   subtask = Subtask Preload
+
 [root "INVALIDS"]
-  applicable = is:open
   subtasks-file = invalids.config
 
 [root "Root NA Pass"]
-  applicable = -is:open
+  applicable = NOT is:open # Assumes test query is "is:open"
   pass = True
 
 [root "Root NA Fail"]
-  applicable = -is:open
+  applicable = NOT is:open # Assumes test query is "is:open"
   fail = True
 
 [root "NA INVALIDS"]
-  applicable = -is:open
+  applicable = NOT is:open # Assumes test query is "is:open"
   subtasks-file = invalids.config
+
+[task "Subtask APPLICABLE"]
+  applicable = is:open
+  pass = True
 
 [task "Subtask FAIL"]
   applicable = is:open
@@ -128,15 +140,91 @@ states are affected by their own criteria and their subtasks' states.
 
 [task "Subtask READY"]
   applicable = is:open
-  pass = -is:open
+  pass = NOT is:open
   subtask = Subtask PASS
 
 [task "Subtask PASS"]
   applicable = is:open
   pass = is:open
 
+[task "Subtask Optional"]
+   subtask = Subtask PASS |
+   subtask = OPTIONAL MISSING | Subtask FAIL
+   subtask = OPTIONAL MISSING | OPTIONAL MISSING |
+   subtask = OPTIONAL MISSING | OPTIONAL MISSING | Subtask READY
+
 [task "Subtask NA"]
-  applicable = NOT is:open
+  applicable = NOT is:open # Assumes test query is "is:open"
+
+[task "Subtask Properties"]
+  export-subtask = ${_name}
+  subtask = Subtask Properties Hints
+  subtask = Chained ${_name}
+  subtask = Subtask Properties Reset
+
+[task "Subtask Properties Hints"]
+  set-first-property = first-value
+  set-second-property = ${first-property} second-extra ${third-property}
+  set-third-property = third-value
+  fail = True
+  fail-hint = Name(${_name}) root-property(${root-property}) first-property(${first-property}) second-property(${second-property}) root(${root})
+
+[task "Chained Subtask Properties"]
+  pass = True
+
+[task "Subtask Properties Reset"]
+  pass = True
+  set-first-property = reset-first-value
+  fail-hint = first-property(${first-property})
+
+[task "Subtask Preload"]
+  preload-task = Subtask READY
+  subtask = Subtask Preload Preload
+  subtask = Subtask Preload Hints PASS
+  subtask = Subtask Preload Hints FAIL
+  subtask = Subtask Preload Override Pass
+  subtask = Subtask Preload Override Fail
+  subtask = Subtask Preload Extend Subtasks
+  subtask = Subtask Preload Optional
+  subtask = Subtask Preload Properties
+
+[task "Subtask Preload Preload"]
+  preload-task = Subtask Preload with Preload
+
+[task "Subtask Preload with Preload"]
+  preload-task = Subtask PASS
+
+[task "Subtask Preload Hints PASS"]
+  preload-task = Subtask Hints
+  pass = False
+
+[task "Subtask Preload Hints FAIL"]
+  preload-task = Subtask Hints
+  fail = True
+
+[task "Subtask Preload Override Pass"]
+  preload-task = Subtask PASS
+  pass = False
+
+[task "Subtask Preload Override Fail"]
+  preload-task = Subtask FAIL
+  fail = False
+
+[task "Subtask Preload Extend Subtasks"]
+  preload-task = Subtask READY
+  subtask = Subtask APPLICABLE
+
+[task "Subtask Preload Optional"]
+  preload-task = Missing | Subtask PASS
+
+[task "Subtask Preload Properties"]
+  preload-task = Subtask Properties Hints
+  set-fourth-property = fourth-value
+  fail-hint = second-property(${second-property}) fourth-property(${fourth-property})
+
+[task "Subtask Hints"] # meant to be preloaded, not a test case in itself
+  ready-hint = Task is ready
+  fail-hint = Task failed
 
 [external "user special"]
   user = testuser
@@ -161,51 +249,60 @@ states are affected by their own criteria and their subtasks' states.
 [task "file task/common.config FAIL"]
   applicable = is:open
   fail = is:open
-  pass = is:open
 ```
 
 `task/invalids.config` file in project `All-Projects` on ref `refs/meta/config`.
 
 ```
 [task "No PASS criteria"]
-  applicable = is:open
+  fail-hint = Invalid without Pass criteria and without subtasks
 
 [task "WAITING (subtask INVALID)"]
-  applicable = is:open
   pass = is:open
   subtask = Subtask INVALID
 
+[task "WAITING (subtask duplicate)"]
+  subtask = Subtask INVALID
+  subtask = Subtask INVALID
+
 [task "WAITING (subtask missing)"]
-  applicable = is:open
   pass = is:open
   subtask = MISSING # security bug: subtask name appears in output
 
 [task "Grouping WAITING (subtask INVALID)"]
-  applicable = is:open
   subtask = Subtask INVALID
 
 [task "Grouping WAITING (subtask missing)"]
-  applicable = is:open
   subtask = MISSING  # security bug: subtask name appears in output
 
 [task "Subtask INVALID"]
-  applicable = is:open
+  fail-hint = Use when an INVALID subtask is needed, not meant as a test case in itself
+
+[task "Subtask Optional"]
+   subtask = MISSING | MISSING
 
 [task "NA Bad PASS query"]
-  applicable = -is:open
+  applicable = NOT is:open # Assumes test query is "is:open"
   fail = True
   pass = has:bad
 
 [task "NA Bad FAIL query"]
-  applicable = -is:open
+  applicable = NOT is:open # Assumes test query is "is:open"
   pass = True
   fail = has:bad
 
 [task "NA Bad INPROGRESS query"]
-  applicable = -is:open
+  applicable = NOT is:open # Assumes test query is "is:open"
   fail = True
   in-progress = has:bad
 
+[task "Looping"]
+  subtask = Looping
+
+[task "Looping Properties"]
+  set-A = ${B}
+  set-B = ${A}
+  fail = True
 ```
 
 `task/special.config` file in project `All-Users` on ref `refs/users/self`.
@@ -218,7 +315,6 @@ states are affected by their own criteria and their subtasks' states.
 [task "userfile task/special.config FAIL"]
   applicable = is:open
   fail = is:open
-  pass = is:open
 ```
 
 The expected output for the above task config looks like:
@@ -232,6 +328,18 @@ The expected output for the above task config looks like:
       {
          "name" : "task",
          "roots" : [
+            {
+               "hasPass" : true,
+               "name" : "Root APPLICABLE",
+               "status" : "PASS",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "name" : "Subtask APPLICABLE",
+                     "status" : "PASS"
+                  }
+               ]
+            },
             {
                "hasPass" : true,
                "name" : "Root PASS",
@@ -363,6 +471,42 @@ The expected output for the above task config looks like:
             },
             {
                "hasPass" : false,
+               "name" : "Root Optional subtasks",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "hasPass" : false,
+                     "name" : "Subtask Optional",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask PASS",
+                           "status" : "PASS"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask FAIL",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask READY",
+                           "status" : "READY",
+                           "subTasks" : [
+                              {
+                                 "hasPass" : true,
+                                 "name" : "Subtask PASS",
+                                 "status" : "PASS"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "hasPass" : false,
                "name" : "Subtasks File",
                "status" : "WAITING",
                "subTasks" : [
@@ -472,6 +616,117 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "exported" : {
+                  "root" : "Root Properties"
+               },
+               "hasPass" : true,
+               "hint" : "Name(Root Properties)",
+               "name" : "Root Properties",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "exported" : {
+                        "subtask" : "Subtask Properties"
+                     },
+                     "hasPass" : false,
+                     "name" : "Subtask Properties",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : true,
+                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
+                           "name" : "Subtask Properties Hints",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Chained Subtask Properties",
+                           "status" : "PASS"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask Properties Reset",
+                           "status" : "PASS"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "hasPass" : true,
+               "name" : "Root Preload",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "name" : "Subtask Preload",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask PASS",
+                           "status" : "PASS"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Preload",
+                           "status" : "PASS"
+                        },
+                        {
+                           "hasPass" : true,
+                           "hint" : "Task is ready",
+                           "name" : "Subtask Preload Hints PASS",
+                           "status" : "READY"
+                        },
+                        {
+                           "hasPass" : true,
+                           "hint" : "Task failed",
+                           "name" : "Subtask Preload Hints FAIL",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Override Pass",
+                           "status" : "READY"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Override Fail",
+                           "status" : "PASS"
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Extend Subtasks",
+                           "status" : "READY",
+                           "subTasks" : [
+                              {
+                                 "hasPass" : true,
+                                 "name" : "Subtask PASS",
+                                 "status" : "PASS"
+                              },
+                              {
+                                 "hasPass" : true,
+                                 "name" : "Subtask APPLICABLE",
+                                 "status" : "PASS"
+                              }
+                           ]
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Optional",
+                           "status" : "PASS"
+                        },
+                        {
+                           "hasPass" : true,
+                           "hint" : "second-property(first-value second-extra third-value) fourth-property(fourth-value)",
+                           "name" : "Subtask Preload Properties",
+                           "status" : "FAIL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
                "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
@@ -494,13 +749,28 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "hasPass" : false,
+                     "name" : "WAITING (subtask duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : false,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
                      "hasPass" : true,
                      "name" : "WAITING (subtask missing)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
-                           "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -523,8 +793,7 @@ The expected output for the above task config looks like:
                      "status" : "WAITING",
                      "subTasks" : [
                         {
-                           "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -532,6 +801,32 @@ The expected output for the above task config looks like:
                   {
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "Subtask Optional",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "UNKNOWN",
                      "status" : "INVALID"
                   }
                ]
