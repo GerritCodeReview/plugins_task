@@ -11,6 +11,20 @@
             {
                "applicable" : true,
                "hasPass" : true,
+               "name" : "Root APPLICABLE",
+               "status" : "PASS",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask APPLICABLE",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
                "name" : "Root PASS",
                "status" : "PASS"
             },
@@ -176,6 +190,48 @@
             {
                "applicable" : true,
                "hasPass" : false,
+               "name" : "Root Optional subtasks",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask Optional",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask PASS",
+                           "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask FAIL",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask READY",
+                           "status" : "READY",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : true,
+                                 "name" : "Subtask PASS",
+                                 "status" : "PASS"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : false,
                "name" : "Subtasks File",
                "status" : "WAITING",
                "subTasks" : [
@@ -303,6 +359,135 @@
             },
             {
                "applicable" : true,
+               "exported" : {
+                  "root" : "Root Properties"
+               },
+               "hasPass" : true,
+               "hint" : "Name(Root Properties)",
+               "name" : "Root Properties",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "exported" : {
+                        "subtask" : "Subtask Properties"
+                     },
+                     "hasPass" : false,
+                     "name" : "Subtask Properties",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
+                           "name" : "Subtask Properties Hints",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Chained Subtask Properties",
+                           "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask Properties Reset",
+                           "status" : "PASS"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Root Preload",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask Preload",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask PASS",
+                           "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Preload",
+                           "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "Task is ready",
+                           "name" : "Subtask Preload Hints PASS",
+                           "status" : "READY"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "Task failed",
+                           "name" : "Subtask Preload Hints FAIL",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Override Pass",
+                           "status" : "READY"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Override Fail",
+                           "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Extend Subtasks",
+                           "status" : "READY",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : true,
+                                 "name" : "Subtask PASS",
+                                 "status" : "PASS"
+                              },
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : true,
+                                 "name" : "Subtask APPLICABLE",
+                                 "status" : "PASS"
+                              }
+                           ]
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "Subtask Preload Optional",
+                           "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "second-property(first-value second-extra third-value) fourth-property(fourth-value)",
+                           "name" : "Subtask Preload Properties",
+                           "status" : "FAIL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
@@ -329,14 +514,30 @@
                   },
                   {
                      "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "WAITING (subtask missing)",
+                     "hasPass" : false,
+                     "name" : "WAITING (subtask duplicate)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
                            "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -362,9 +563,7 @@
                      "status" : "WAITING",
                      "subTasks" : [
                         {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -374,6 +573,18 @@
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask Optional",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   },
                   {
                      "applicable" : false,
@@ -392,6 +603,22 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             },
@@ -435,14 +662,30 @@
                   },
                   {
                      "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "WAITING (subtask missing)",
+                     "hasPass" : false,
+                     "name" : "WAITING (subtask duplicate)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
                            "applicable" : true,
                            "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -468,9 +711,7 @@
                      "status" : "WAITING",
                      "subTasks" : [
                         {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "MISSING",
+                           "name" : "UNKNOWN",
                            "status" : "INVALID"
                         }
                      ]
@@ -480,6 +721,18 @@
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask Optional",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   },
                   {
                      "applicable" : false,
@@ -498,6 +751,22 @@
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
                      "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
                   }
                ]
             }

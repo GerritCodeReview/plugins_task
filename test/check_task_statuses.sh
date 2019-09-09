@@ -34,7 +34,7 @@ example() { # example_num
 }
 
 get_change_num() { # < gerrit_push_response > changenum
-    local url=$(awk '/New Changes:/ { getline; print $2 }')
+    local url=$(awk '$NF ~ /\[NEW\]/ { print $2 }')
     echo "${url##*\/}" | tr -d -c '[:digit:]'
 }
 

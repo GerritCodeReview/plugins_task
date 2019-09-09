@@ -146,17 +146,39 @@ Example:
     fail-hint = Blocked by a negative review score
 ```
 
+`preload-task`
+
+: This key defines a task whose attributes will be preloaded into the current
+task before the current task's attributes are set. Most attributes defined
+in the preload-task will be loaded first, and will be overridden by attributes
+from the current task if they redefined in the current task. Attributes
+which are lists (such as subtasks) or maps (such as properties), will be
+preloaded by the preload-task and then extended with the attributes from the
+current task. See [Optional Tasks](#optional_tasks) for how to define optional
+preload-tasks.
+
+Example:
+```
+    preload-task = Base Jenkins Verification # has a pass criteria and hints
+```
+
 `subtask`
 
 : This key lists the name of a subtask of the current task. This key may be
 used several times in a task section to define more than one subtask for a
-particular task.
+particular task. See [Optional Tasks](#optional_tasks) for how to define
+optional subtasks.
 
 Example:
 
 ```
     subtask = "Code Review"
     subtask = "License Approval"
+    ...
+    [task "Code Review"]
+    ...
+    [task "License Approval"]
+    ...
 ```
 
 `subtasks-external`
@@ -232,6 +254,27 @@ Subtasks are defined using a "task" section. An example subtask definition:
     fail = label:code-review-2
 ```
 
+<a id="optional_tasks"/>
+Optional Tasks
+--------------
+To define a task that may not exist and that will not cause the task referencing
+it to be INVALID, follow the task name with pipe (`|`) character. This feature
+is particularly useful when a property is used in the task name.
+
+```
+    preload-task = Optional Subtask {$_name} |
+```
+
+To define an alternate task to load when an optional task does not exist,
+list the alterante task name after the pipe (`|`) character. This feature
+may be chained together as many times as needed.
+
+```
+    subtask = Optional Subtask {$_name} |
+              Backup Optional Subtask {$_name} Backup |
+              Default Subtask # Must exist if the above two don't!
+```
+
 External Entries
 ----------------
 A name for external task files on other projects and branches may be given
@@ -260,6 +303,60 @@ Example:
 
 ```
     user = first-user # references the sharded user ref refs/users/01/1000001
+```
+
+Properties
+----------
+The task plugin supplies the `${_name}` property which may be used anywhere in
+a task definition as a token representing the name of the current task.
+
+Example:
+```
+    fail-hint = {$_name} needs to be fixed
+```
+
+Custom properties may be defined on a task using the following syntax:
+```
+    set-<property-name> = <property-value>
+```
+
+Subtasks inherit all custom properties from their parents. A task is invalid
+if it attempts to override an already set property.
+
+Example:
+```
+    [task "foo-project"]
+        set-project-name = foo
+        subtask = common-to-many-projects
+
+    [task "common-to-many-projects"]
+        fail-hint = ${project-name} needs to be fixed
+        ...
+```
+
+It is possible to define a custom property value and to export that value
+to the json on the current task by using the following syntax:
+```
+    export-<property-name> = <property-value>
+```
+
+Example:
+```
+    [task "foo"]
+        export-ci-system = jenkins
+```
+
+```
+     "subTasks" : [
+        {
+           "exported" : {
+              "ci-system" : "jenkins"
+           },
+           ...
+           "name" : "foo",
+           ...
+        }
+     ]
 ```
 
 Change Query Output
@@ -296,6 +393,12 @@ detect some additional configuration problems which may not be detected when
 running normally. If all tasks are properly configured, this switch should
 not output anything. This switch is particularly useful in combination
 with the **\-\-@PLUGIN@\-\-preview** switch.
+
+**\-\-@PLUGIN@\-\-task\-\-evaluation-time**
+
+This switch is meant as a debug switch to evaluate task performance. This
+switch outputs an elapsed time value on every task indicating how much time
+it took to evaluate a task and its subtasks.
 
 When tasks are appended to changes, they will have a "task" section under
 the plugins section like below:
