@@ -1,0 +1,228 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "3962d631_bc46581e",
+        "filename": "gr-task/gr-task.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "maybe use a more specific name or a different prefix other than `gr-` ? Usually components from Gerrit Core will have this `gr-` prefix. And in case we may have `gr-task` in core, then this plugin will not load because of name collision.",
+      "range": {
+        "startLine": 17,
+        "startChar": 16,
+        "endLine": 17,
+        "endChar": 23
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27e51ce4_4893fe35",
+        "filename": "gr-task/gr-task.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "maybe use `hidden$\u003d[[!hasTasks]]` instead ? then you can get rid of the style as well.",
+      "range": {
+        "startLine": 24,
+        "startChar": 22,
+        "endLine": 24,
+        "endChar": 60
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "dcbc2c3a_558e4c0e",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "naming for properties probably should follow `camelCase`, and then in html, you will use `came-case` to pass the attribute down 😊\n\n\u003e https://polymer-library.polymer-project.org/2.0/docs/devguide/properties#property-name-mapping",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 15
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "b7a64cd8_2f4beca1",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "is this necessary ? will you expect a event emitted when this property changed ?\n\n\u003e https://polymer-library.polymer-project.org/2.0/docs/devguide/properties#notify",
+      "range": {
+        "startLine": 22,
+        "startChar": 8,
+        "endLine": 22,
+        "endChar": 21
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "99cfa5bf_971b998c",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "nit: new line between methods will improve the readability a lot :)",
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "992c36d3_c1d769ea",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "this seems not very common to see as in url ? i assume this is the endpoint this plugin modified to support this parameter ?",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 71
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e37177b_8ce4b5cf",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "maybe also define it in properties. It will work without that, but better have it defined in it.",
+      "range": {
+        "startLine": 32,
+        "startChar": 37,
+        "endLine": 32,
+        "endChar": 43
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "4396d4f0_7be29d99",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "nit: single character variables usually not good to read :)",
+      "range": {
+        "startLine": 34,
+        "startChar": 54,
+        "endLine": 34,
+        "endChar": 56
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "7217d916_24994644",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "seems you only need the entry with name as `task`, maybe just do:\n```\nconst taskPluginInfo \u003d changeInfo.plugins.find(pluginInfo \u003d\u003e pluginInfo.name \u003d\u003d\u003d \"task\")\n\nif (taskPluginInfo) {\n}\n```",
+      "range": {
+        "startLine": 38,
+        "startChar": 11,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "3703ec3b_a9598c99",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-13T23:43:12Z",
+      "side": 1,
+      "message": "you can move to `\u003ctemplate is\u003d\"dom-repeat\"\u003e\u003c/template\u003e` and do this in the template. It can make the code much cleaner :)\n\n\u003e https://polymer-library.polymer-project.org/2.0/api/elements/Polymer.DomRepeat",
+      "range": {
+        "startLine": 64,
+        "startChar": 5,
+        "endLine": 73,
+        "endChar": 9
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
