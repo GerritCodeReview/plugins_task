@@ -505,6 +505,30 @@
       "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "f6697048_0f0008e4",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T02:17:17Z",
+      "side": 1,
+      "message": "Ok, so do something like https://stackoverflow.com/questions/30468581/polymer-recursive-template-binding ?",
+      "parentUuid": "734d1d32_d974070c",
+      "range": {
+        "startLine": 64,
+        "startChar": 5,
+        "endLine": 73,
+        "endChar": 9
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }

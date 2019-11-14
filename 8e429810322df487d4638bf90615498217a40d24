@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "f2766058_4c9cb227",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T02:17:17Z",
+      "side": 1,
+      "message": "Oh yeah, meant to do that, thanks!",
+      "parentUuid": "6c6e989a_ab0ee120",
+      "revId": "8e429810322df487d4638bf90615498217a40d24",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "73e92c16_83cba89e",
         "filename": "package-lock.json",
         "patchSetId": 5
@@ -36,6 +54,24 @@
     },
     {
       "key": {
+        "uuid": "10ee590e_7b47c74d",
+        "filename": "package-lock.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T02:17:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "73e92c16_83cba89e",
+      "revId": "8e429810322df487d4638bf90615498217a40d24",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "c4d7efe1_ebc67d6b",
         "filename": "plugin.html",
         "patchSetId": 5
@@ -47,6 +83,24 @@
       "writtenOn": "2019-11-14T01:13:53Z",
       "side": 1,
       "message": "you will need to update this link as well :) \n\nBTW: you can follow here https://gerrit.googlesource.com/gerrit-fe-dev-helper/+/master/README.md and use the extension we just released to test your plugins!",
+      "revId": "8e429810322df487d4638bf90615498217a40d24",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "72857ecc_ae3d70a5",
+        "filename": "plugin.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T02:17:17Z",
+      "side": 1,
+      "message": "Ugh, browser caching. I tested, but not my changes apparently :-( I will definitely check out the extension. I\u0027ve just been using a local gerrit site so far.",
+      "parentUuid": "c4d7efe1_ebc67d6b",
       "revId": "8e429810322df487d4638bf90615498217a40d24",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
@@ -73,6 +127,30 @@
       "revId": "8e429810322df487d4638bf90615498217a40d24",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "6d10d5e2_4f758926",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/Modules.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T02:17:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1db4007_09a732f7",
+      "range": {
+        "startLine": 53,
+        "startChar": 84,
+        "endLine": 53,
+        "endChar": 96
+      },
+      "revId": "8e429810322df487d4638bf90615498217a40d24",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
