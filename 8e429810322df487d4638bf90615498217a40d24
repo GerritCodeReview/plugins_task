@@ -1,0 +1,78 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "6c6e989a_ab0ee120",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-14T01:13:53Z",
+      "side": 1,
+      "message": "I think you can remove this now :)",
+      "revId": "8e429810322df487d4638bf90615498217a40d24",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "73e92c16_83cba89e",
+        "filename": "package-lock.json",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-14T01:13:53Z",
+      "side": 1,
+      "message": "oops :)",
+      "revId": "8e429810322df487d4638bf90615498217a40d24",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "c4d7efe1_ebc67d6b",
+        "filename": "plugin.html",
+        "patchSetId": 5
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-14T01:13:53Z",
+      "side": 1,
+      "message": "you will need to update this link as well :) \n\nBTW: you can follow here https://gerrit.googlesource.com/gerrit-fe-dev-helper/+/master/README.md and use the extension we just released to test your plugins!",
+      "revId": "8e429810322df487d4638bf90615498217a40d24",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d1db4007_09a732f7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/Modules.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-14T01:13:53Z",
+      "side": 1,
+      "message": "ditto :)",
+      "range": {
+        "startLine": 53,
+        "startChar": 84,
+        "endLine": 53,
+        "endChar": 96
+      },
+      "revId": "8e429810322df487d4638bf90615498217a40d24",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}

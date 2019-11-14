@@ -319,6 +319,30 @@
     },
     {
       "key": {
+        "uuid": "7d466e05_a712dbb8",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-14T01:13:53Z",
+      "side": 1,
+      "message": "i see, thx",
+      "parentUuid": "23758dfa_2393e860",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 71
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "4396d4f0_7be29d99",
         "filename": "gr-task/gr-task.js",
         "patchSetId": 4
@@ -448,6 +472,30 @@
       "side": 1,
       "message": "I was going to do that, but can I do it recursively like I\u0027m doing here?",
       "parentUuid": "3703ec3b_a9598c99",
+      "range": {
+        "startLine": 64,
+        "startChar": 5,
+        "endLine": 73,
+        "endChar": 9
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "734d1d32_d974070c",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-14T01:13:53Z",
+      "side": 1,
+      "message": "`dom-repeat` will have a few advantages compared to manually manipulate dom here:\n1. dom manipulation logic can be captured at the same place: the html template\n2. polymer will do the dom update for you, so you don\u0027t need to clean it up and update when your property changed, and polymer can do it much more efficiently\n3. it will be easier to maintain in the long run (imagine you need to add a few more nodes to each task message, do it with document.createElement and appendChild will be painful)\n\n:) so I will suggest move to template :)",
+      "parentUuid": "10c93b7a_f5e68453",
       "range": {
         "startLine": 64,
         "startChar": 5,
