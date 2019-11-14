@@ -1,0 +1,72 @@
+{
+  "comments": [
+    {
+      "key": {
+        "uuid": "718715e0_6a98a08c",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2019-11-14T23:20:47Z",
+      "side": 1,
+      "message": "Should we check if this.change is undefined?",
+      "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "70d67ceb_e97c994c",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2019-11-14T23:20:47Z",
+      "side": 1,
+      "message": "Probably want cinfo \u0026\u0026 cinfo.plugins?",
+      "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "195feab5_3b07c0e0",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2019-11-14T23:20:47Z",
+      "side": 1,
+      "message": "Check for undefined here?",
+      "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "a9e6c5a7_b8beaa3b",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2019-11-14T23:20:47Z",
+      "side": 1,
+      "message": "Check for undefined here?",
+      "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    }
+  ]
+}
