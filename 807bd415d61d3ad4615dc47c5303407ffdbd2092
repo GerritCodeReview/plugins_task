@@ -25,6 +25,30 @@
     },
     {
       "key": {
+        "uuid": "ca7c9c9a_0a7854ad",
+        "filename": "gr-task/gr-task.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3962d631_bc46581e",
+      "range": {
+        "startLine": 17,
+        "startChar": 16,
+        "endLine": 17,
+        "endChar": 23
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "27e51ce4_4893fe35",
         "filename": "gr-task/gr-task.html",
         "patchSetId": 4
@@ -45,6 +69,30 @@
       "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "9a5d561b_c2c1f677",
+        "filename": "gr-task/gr-task.html",
+        "patchSetId": 4
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "27e51ce4_4893fe35",
+      "range": {
+        "startLine": 24,
+        "startChar": 22,
+        "endLine": 24,
+        "endChar": 60
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -71,6 +119,30 @@
     },
     {
       "key": {
+        "uuid": "0be0e4c6_dbbc9d89",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "dcbc2c3a_558e4c0e",
+      "range": {
+        "startLine": 20,
+        "startChar": 6,
+        "endLine": 20,
+        "endChar": 15
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "b7a64cd8_2f4beca1",
         "filename": "gr-task/gr-task.js",
         "patchSetId": 4
@@ -94,6 +166,30 @@
     },
     {
       "key": {
+        "uuid": "ac673ef1_31504b52",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 22,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Looks like it works fine without it, so nope 😊",
+      "parentUuid": "b7a64cd8_2f4beca1",
+      "range": {
+        "startLine": 22,
+        "startChar": 8,
+        "endLine": 22,
+        "endChar": 21
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "99cfa5bf_971b998c",
         "filename": "gr-task/gr-task.js",
         "patchSetId": 4
@@ -108,6 +204,24 @@
       "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "1925607c_f959c3d2",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "99cfa5bf_971b998c",
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     },
     {
       "key": {
@@ -157,6 +271,54 @@
     },
     {
       "key": {
+        "uuid": "12d58798_fe5d78c6",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5e37177b_8ce4b5cf",
+      "range": {
+        "startLine": 32,
+        "startChar": 37,
+        "endLine": 32,
+        "endChar": 43
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "23758dfa_2393e860",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Yes. The task plugin adds option switches to the \u0027gerrit query\u0027 APIs. The \u0027--task--applicable\u0027 option directs the plugin to include information for each change returned by the query about which tasks are applicable to the change.",
+      "parentUuid": "992c36d3_c1d769ea",
+      "range": {
+        "startLine": 32,
+        "startChar": 0,
+        "endLine": 32,
+        "endChar": 71
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
         "uuid": "4396d4f0_7be29d99",
         "filename": "gr-task/gr-task.js",
         "patchSetId": 4
@@ -168,6 +330,30 @@
       "writtenOn": "2019-11-13T23:43:12Z",
       "side": 1,
       "message": "nit: single character variables usually not good to read :)",
+      "range": {
+        "startLine": 34,
+        "startChar": 54,
+        "endLine": 34,
+        "endChar": 56
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
+        "uuid": "e2b24081_cb3cf766",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 34,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4396d4f0_7be29d99",
       "range": {
         "startLine": 34,
         "startChar": 54,
@@ -203,6 +389,30 @@
     },
     {
       "key": {
+        "uuid": "bc34bc39_4651258f",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7217d916_24994644",
+      "range": {
+        "startLine": 38,
+        "startChar": 11,
+        "endLine": 38,
+        "endChar": 44
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "3703ec3b_a9598c99",
         "filename": "gr-task/gr-task.js",
         "patchSetId": 4
@@ -214,6 +424,30 @@
       "writtenOn": "2019-11-13T23:43:12Z",
       "side": 1,
       "message": "you can move to `\u003ctemplate is\u003d\"dom-repeat\"\u003e\u003c/template\u003e` and do this in the template. It can make the code much cleaner :)\n\n\u003e https://polymer-library.polymer-project.org/2.0/api/elements/Polymer.DomRepeat",
+      "range": {
+        "startLine": 64,
+        "startChar": 5,
+        "endLine": 73,
+        "endChar": 9
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "10c93b7a_f5e68453",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T00:50:59Z",
+      "side": 1,
+      "message": "I was going to do that, but can I do it recursively like I\u0027m doing here?",
+      "parentUuid": "3703ec3b_a9598c99",
       "range": {
         "startLine": 64,
         "startChar": 5,
