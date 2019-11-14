@@ -529,6 +529,30 @@
       "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "27a47d4c_4a5315aa",
+        "filename": "gr-task/gr-task.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 1086906
+      },
+      "writtenOn": "2019-11-14T04:20:24Z",
+      "side": 1,
+      "message": "oh sorry, misunderstood your question before. Ya, that can work, recursive template will be the way to go~",
+      "parentUuid": "f6697048_0f0008e4",
+      "range": {
+        "startLine": 64,
+        "startChar": 5,
+        "endLine": 73,
+        "endChar": 9
+      },
+      "revId": "807bd415d61d3ad4615dc47c5303407ffdbd2092",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
     }
   ]
 }
