@@ -19,6 +19,24 @@
     },
     {
       "key": {
+        "uuid": "a3515407_2c521cd6",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 48,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T23:34:23Z",
+      "side": 1,
+      "message": "I could, but I don\u0027t like checks for failure conditions where I can only fail anyway. I think there\u0027s bigger problems if I\u0027m on a change page and there\u0027s no change info.",
+      "parentUuid": "718715e0_6a98a08c",
+      "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "70d67ceb_e97c994c",
         "filename": "gr-task-plugin/gr-task-plugin.js",
         "patchSetId": 9
@@ -30,6 +48,24 @@
       "writtenOn": "2019-11-14T23:20:47Z",
       "side": 1,
       "message": "Probably want cinfo \u0026\u0026 cinfo.plugins?",
+      "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "5e3fd641_236a2c45",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T23:34:23Z",
+      "side": 1,
+      "message": "hm, won\u0027t the !cinfo case already be caught by the response.length check above?",
+      "parentUuid": "70d67ceb_e97c994c",
       "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
@@ -53,6 +89,24 @@
     },
     {
       "key": {
+        "uuid": "deafa7a8_618fff33",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T23:34:23Z",
+      "side": 1,
+      "message": "The caller won\u0027t ever pass null.",
+      "parentUuid": "195feab5_3b07c0e0",
+      "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
+    },
+    {
+      "key": {
         "uuid": "a9e6c5a7_b8beaa3b",
         "filename": "gr-task-plugin/gr-task-plugin.js",
         "patchSetId": 9
@@ -67,6 +121,24 @@
       "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
       "unresolved": true
+    },
+    {
+      "key": {
+        "uuid": "d021a2db_ed9aacf8",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 9
+      },
+      "lineNbr": 71,
+      "author": {
+        "id": 1006432
+      },
+      "writtenOn": "2019-11-14T23:34:23Z",
+      "side": 1,
+      "message": "The caller won\u0027t ever pass null.",
+      "parentUuid": "a9e6c5a7_b8beaa3b",
+      "revId": "c9550fef6241d02c86054b4fc4b0a29b95ab3ec3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153",
+      "unresolved": false
     }
   ]
 }
