@@ -1,0 +1,21 @@
+{
+  "name": "task",
+  "version": "2.16.13-SNAPSHOT",
+  "description": "Task Plugin",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^6.6.0",
+    "eslint-config-google": "^0.13.0",
+    "eslint-plugin-html": "^6.0.0"
+  },
+  "scripts": {
+    "eslint": "./node_modules/eslint/bin/eslint.js --ext .html,.js gr-task-plugin || exit 0",
+    "eslintfix": "./node_modules/eslint/bin/eslint.js --fix --ext .html,.js gr-task-plugin || exit 0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://gerrit.googlesource.com/plugins/task"
+  },
+  "author": "",
+  "license": "Apache-2.0"
+}

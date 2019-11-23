@@ -7,5 +7,6 @@
 /.settings/org.eclipse.m2e.core.prefs
 /.settings/org.eclipse.core.resources.prefs
 /.settings/org.eclipse.jdt.core.prefs
-
+/package-lock.json
 /task.iml
+/node_modules/
