@@ -44,29 +44,56 @@ public class Preloader {
 
       try {
         field.setAccessible(true);
-        Object pre = field.get(preloadFrom);
-        if (pre != null) {
-          Object val = field.get(definition);
-          if (val == null) {
-            field.set(definition, pre);
-          } else if (val instanceof List) {
-            field.set(definition, preloadListFrom((List) val, (List) pre));
-          } else if (val instanceof Map) {
-            field.set(definition, preloadMapFrom((Map) val, (Map) pre));
-          } // nothing to do for overridden preloaded scalars
-        }
+        preloadField(field.getType(), field, definition, preloadFrom);
       } catch (IllegalAccessException | IllegalArgumentException e) {
         throw new RuntimeException();
       }
     }
   }
 
-  protected static List preloadListFrom(List list, List preList) {
-    List extended = list;
+  protected static <T, S, K, V> void preloadField(
+      Class<T> clz, Field field, Task definition, Task preloadFrom)
+      throws IllegalArgumentException, IllegalAccessException {
+    T pre = getField(clz, field, preloadFrom);
+    if (pre != null) {
+      T val = getField(clz, field, definition);
+      if (val == null) {
+        field.set(definition, pre);
+      } else if (val instanceof List) {
+        List<?> valList = List.class.cast(val);
+        List<?> preList = List.class.cast(pre);
+        field.set(definition, preloadListFrom(castUnchecked(valList), castUnchecked(preList)));
+      } else if (val instanceof Map) {
+        Map<?, ?> valMap = Map.class.cast(val);
+        Map<?, ?> preMap = Map.class.cast(pre);
+        field.set(definition, preloadMapFrom(castUnchecked(valMap), castUnchecked(preMap)));
+      } // nothing to do for overridden preloaded scalars
+    }
+  }
+
+  protected static <T> T getField(Class<T> clz, Field field, Object obj)
+      throws IllegalArgumentException, IllegalAccessException {
+    return clz.cast(field.get(obj));
+  }
+
+  @SuppressWarnings("unchecked")
+  protected static <S> List<S> castUnchecked(List<?> list) {
+    List<S> forceCheck = (List<S>) list;
+    return forceCheck;
+  }
+
+  @SuppressWarnings("unchecked")
+  protected static <K, V> Map<K, V> castUnchecked(Map<?, ?> map) {
+    Map<K, V> forceCheck = (Map<K, V>) map;
+    return forceCheck;
+  }
+
+  protected static <T> List<T> preloadListFrom(List<T> list, List<T> preList) {
+    List<T> extended = list;
     if (!preList.isEmpty()) {
       extended = preList;
       if (!list.isEmpty()) {
-        extended = new ArrayList(list.size() + preList.size());
+        extended = new ArrayList<>(list.size() + preList.size());
         extended.addAll(preList);
         extended.addAll(list);
       }
@@ -74,12 +101,12 @@ public class Preloader {
     return extended;
   }
 
-  protected static Map preloadMapFrom(Map map, Map preMap) {
-    Map extended = map;
+  protected static <K, V> Map<K, V> preloadMapFrom(Map<K, V> map, Map<K, V> preMap) {
+    Map<K, V> extended = map;
     if (!preMap.isEmpty()) {
       extended = preMap;
       if (!map.isEmpty()) {
-        extended = new HashMap(map.size() + preMap.size());
+        extended = new HashMap<>(map.size() + preMap.size());
         extended.putAll(preMap);
         extended.putAll(map);
       }

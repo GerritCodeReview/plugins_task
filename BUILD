@@ -22,6 +22,7 @@ gerrit_plugin(
     ],
     resource_jars = [":gr-task-plugin-static"],
     resources = glob(["src/main/resources/**/*"]),
+    javacopts = [ "-Werror", "-Xlint:all", "-Xlint:-classfile"],
 )
 
 genrule2(

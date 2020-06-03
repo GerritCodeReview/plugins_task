@@ -66,7 +66,9 @@ public class Properties {
         if (o instanceof String) {
           field.set(definition, expandLiteral((String) o));
         } else if (o instanceof List) {
-          expandInPlace((List<String>) o);
+          @SuppressWarnings("unchecked")
+          List<String> forceCheck = List.class.cast(o);
+          expandInPlace(forceCheck);
         }
       } catch (IllegalAccessException e) {
         throw new RuntimeException(e);
