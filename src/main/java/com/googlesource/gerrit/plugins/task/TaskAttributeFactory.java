@@ -29,6 +29,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class TaskAttributeFactory implements ChangeAttributeFactory {
@@ -90,7 +91,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
       for (Node node : definitions.getRootNodes()) {
-        addApplicableTasks(a.roots, c, node);
+        new AttributeFactory(c, node).create().ifPresent(t -> a.roots.add(t));
       }
     } catch (ConfigInvalidException | IOException e) {
       a.roots.add(invalid());
@@ -102,51 +103,166 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return a;
   }
 
-  protected void addApplicableTasks(List<TaskAttribute> atts, ChangeData c, Node node) {
-    try {
-      Task def = node.definition;
-      TaskAttribute att = new TaskAttribute(def.name);
-      if (options.evaluationTime) {
-        att.evaluationMilliSeconds = millis();
-      }
+  protected class AttributeFactory {
+    public ChangeData changeData;
+    public Node node;
+    protected Task definition;
+    protected TaskAttribute attribute;
 
-      boolean applicable = predicateCache.match(c, def.applicable);
-      if (!def.isVisible) {
-        if (!def.isTrusted || (!applicable && !options.onlyApplicable)) {
-          atts.add(unknown());
-          return;
+    protected AttributeFactory(ChangeData changeData, Node node) {
+      this.changeData = changeData;
+      this.node = node;
+      this.definition = node.definition;
+      this.attribute = new TaskAttribute(definition.name);
+    }
+
+    public Optional<TaskAttribute> create() {
+      try {
+        if (options.evaluationTime) {
+          attribute.evaluationMilliSeconds = millis();
         }
-      }
 
-      if (applicable || !options.onlyApplicable) {
-        att.hasPass = def.pass != null || def.fail != null;
-        att.subTasks = getSubTasks(c, node);
-        att.status = getStatus(c, def, att);
-        if (options.onlyInvalid && !isValidQueries(c, def)) {
-          att.status = Status.INVALID;
-        }
-        boolean groupApplicable = att.status != null;
-
-        if (groupApplicable || !options.onlyApplicable) {
-          if (!options.onlyInvalid || att.status == Status.INVALID || att.subTasks != null) {
-            if (!options.onlyApplicable) {
-              att.applicable = applicable;
-            }
-            if (def.inProgress != null) {
-              att.inProgress = predicateCache.matchOrNull(c, def.inProgress);
-            }
-            att.hint = getHint(att.status, def);
-            att.exported = def.exported;
-
-            if (options.evaluationTime) {
-              att.evaluationMilliSeconds = millis() - att.evaluationMilliSeconds;
-            }
-            atts.add(att);
+        boolean applicable = predicateCache.match(changeData, definition.applicable);
+        if (!definition.isVisible) {
+          if (!definition.isTrusted || (!applicable && !options.onlyApplicable)) {
+            return Optional.of(unknown());
           }
         }
+
+        if (applicable || !options.onlyApplicable) {
+          attribute.hasPass = definition.pass != null || definition.fail != null;
+          attribute.subTasks = getSubTasks();
+          attribute.status = getStatus();
+          if (options.onlyInvalid && !isValidQueries()) {
+            attribute.status = Status.INVALID;
+          }
+          boolean groupApplicable = attribute.status != null;
+
+          if (groupApplicable || !options.onlyApplicable) {
+            if (!options.onlyInvalid
+                || attribute.status == Status.INVALID
+                || attribute.subTasks != null) {
+              if (!options.onlyApplicable) {
+                attribute.applicable = applicable;
+              }
+              if (definition.inProgress != null) {
+                attribute.inProgress =
+                    predicateCache.matchOrNull(changeData, definition.inProgress);
+              }
+              attribute.hint = getHint(attribute.status, definition);
+              attribute.exported = definition.exported;
+
+              if (options.evaluationTime) {
+                attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
+              }
+              return Optional.of(attribute);
+            }
+          }
+        }
+      } catch (OrmException | QueryParseException | RuntimeException e) {
+        return Optional.of(invalid()); // bad applicability query
       }
-    } catch (OrmException | QueryParseException | RuntimeException e) {
-      atts.add(invalid()); // bad applicability query
+      return Optional.empty();
+    }
+
+    protected Status getStatusWithExceptions() throws OrmException, QueryParseException {
+      if (isAllNull(definition.pass, definition.fail, attribute.subTasks)) {
+        // A leaf def has no defined subdefs.
+        boolean hasDefinedSubtasks =
+            !(definition.subTasks.isEmpty()
+                && definition.subTasksFiles.isEmpty()
+                && definition.subTasksExternals.isEmpty()
+                && definition.subTasksFactories.isEmpty());
+        if (hasDefinedSubtasks) {
+          // Remove 'Grouping" tasks (tasks with subtasks but no PASS
+          // or FAIL criteria) from the output if none of their subtasks
+          // are applicable.  i.e. grouping tasks only really apply if at
+          // least one of their subtasks apply.
+          return null;
+        }
+        // A leaf configuration without a PASS or FAIL criteria is a
+        // missconfiguration.  Either someone forgot to add subtasks, or
+        // they forgot to add a PASS or FAIL criteria.
+        return Status.INVALID;
+      }
+
+      if (definition.fail != null) {
+        if (predicateCache.match(changeData, definition.fail)) {
+          // A FAIL definition is meant to be a hard blocking criteria
+          // (like a CodeReview -2).  Thus, if hard blocked, it is
+          // irrelevant what the subtask states, or the PASS criteria are.
+          //
+          // It is also important that FAIL be useable to indicate that
+          // the task has actually executed.  Thus subtask status,
+          // including a subtask FAIL should not appear as a FAIL on the
+          // parent task.  This means that this is should be the only path
+          // to make a task have a FAIL status.
+          return Status.FAIL;
+        }
+        if (definition.pass == null) {
+          // A task with a FAIL but no PASS criteria is a PASS-FAIL task
+          // (they are never "READY").  It didn't fail, so pass.
+          return Status.PASS;
+        }
+      }
+
+      if (attribute.subTasks != null && !isAll(attribute.subTasks, Status.PASS)) {
+        // It is possible for a subtask's PASS criteria to change while
+        // a parent task is executing, or even after the parent task
+        // completes.  This can result in the parent PASS criteria being
+        // met while one or more of its subtasks no longer meets its PASS
+        // criteria (the subtask may now even meet a FAIL criteria).  We
+        // never want the parent task to reflect a PASS criteria in these
+        // cases, thus we can safely return here without ever evaluating
+        // the task's PASS criteria.
+        return Status.WAITING;
+      }
+
+      if (definition.pass != null && !predicateCache.match(changeData, definition.pass)) {
+        // Non-leaf tasks with no PASS criteria are supported in order
+        // to support "grouping tasks" (tasks with no function aside from
+        // organizing tasks).  A task without a PASS criteria, cannot ever
+        // be expected to execute (how would you know if it has?), thus a
+        // pass criteria is required to possibly even be considered for
+        // READY.
+        return Status.READY;
+      }
+
+      return Status.PASS;
+    }
+
+    protected Status getStatus() {
+      try {
+        return getStatusWithExceptions();
+      } catch (OrmException | QueryParseException | RuntimeException e) {
+        return Status.INVALID;
+      }
+    }
+
+    protected List<TaskAttribute> getSubTasks() throws OrmException {
+      List<TaskAttribute> subTasks = new ArrayList<>();
+      for (Node subNode : node.getSubNodes()) {
+        if (subNode == null) {
+          subTasks.add(invalid());
+        } else {
+          new AttributeFactory(changeData, subNode).create().ifPresent(t -> subTasks.add(t));
+        }
+      }
+      if (subTasks.isEmpty()) {
+        return null;
+      }
+      return subTasks;
+    }
+
+    protected boolean isValidQueries() {
+      try {
+        predicateCache.match(changeData, definition.inProgress);
+        predicateCache.match(changeData, definition.fail);
+        predicateCache.match(changeData, definition.pass);
+        return true;
+      } catch (OrmException | QueryParseException | RuntimeException e) {
+        return false;
+      }
     }
   }
 
@@ -154,22 +270,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return System.nanoTime() / 1000000;
   }
 
-  protected List<TaskAttribute> getSubTasks(ChangeData c, Node node) throws OrmException {
-    List<TaskAttribute> subTasks = new ArrayList<>();
-    for (Node subNode : node.getSubNodes()) {
-      if (subNode == null) {
-        subTasks.add(invalid());
-      } else {
-        addApplicableTasks(subTasks, c, subNode);
-      }
-    }
-    if (subTasks.isEmpty()) {
-      return null;
-    }
-    return subTasks;
-  }
-
-  protected static TaskAttribute invalid() {
+  protected TaskAttribute invalid() {
     // For security reasons, do not expose the task name without knowing
     // the visibility which is derived from its applicability.
     TaskAttribute a = unknown();
@@ -177,96 +278,10 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return a;
   }
 
-  protected static TaskAttribute unknown() {
+  protected TaskAttribute unknown() {
     TaskAttribute a = new TaskAttribute("UNKNOWN");
     a.status = Status.UNKNOWN;
     return a;
-  }
-
-  protected boolean isValidQueries(ChangeData c, Task def) {
-    try {
-      predicateCache.match(c, def.inProgress);
-      predicateCache.match(c, def.fail);
-      predicateCache.match(c, def.pass);
-      return true;
-    } catch (OrmException | QueryParseException | RuntimeException e) {
-      return false;
-    }
-  }
-
-  protected Status getStatus(ChangeData c, Task def, TaskAttribute a) {
-    try {
-      return getStatusWithExceptions(c, def, a);
-    } catch (OrmException | QueryParseException | RuntimeException e) {
-      return Status.INVALID;
-    }
-  }
-
-  protected Status getStatusWithExceptions(ChangeData c, Task def, TaskAttribute a)
-      throws OrmException, QueryParseException {
-    if (isAllNull(def.pass, def.fail, a.subTasks)) {
-      // A leaf def has no defined subdefs.
-      boolean hasDefinedSubtasks =
-          !(def.subTasks.isEmpty()
-              && def.subTasksFiles.isEmpty()
-              && def.subTasksExternals.isEmpty()
-              && def.subTasksFactories.isEmpty());
-      if (hasDefinedSubtasks) {
-        // Remove 'Grouping" tasks (tasks with subtasks but no PASS
-        // or FAIL criteria) from the output if none of their subtasks
-        // are applicable.  i.e. grouping tasks only really apply if at
-        // least one of their subtasks apply.
-        return null;
-      }
-      // A leaf configuration without a PASS or FAIL criteria is a
-      // missconfiguration.  Either someone forgot to add subtasks, or
-      // they forgot to add a PASS or FAIL criteria.
-      return Status.INVALID;
-    }
-
-    if (def.fail != null) {
-      if (predicateCache.match(c, def.fail)) {
-        // A FAIL definition is meant to be a hard blocking criteria
-        // (like a CodeReview -2).  Thus, if hard blocked, it is
-        // irrelevant what the subtask states, or the PASS criteria are.
-        //
-        // It is also important that FAIL be useable to indicate that
-        // the task has actually executed.  Thus subtask status,
-        // including a subtask FAIL should not appear as a FAIL on the
-        // parent task.  This means that this is should be the only path
-        // to make a task have a FAIL status.
-        return Status.FAIL;
-      }
-      if (def.pass == null) {
-        // A task with a FAIL but no PASS criteria is a PASS-FAIL task
-        // (they are never "READY").  It didn't fail, so pass.
-        return Status.PASS;
-      }
-    }
-
-    if (a.subTasks != null && !isAll(a.subTasks, Status.PASS)) {
-      // It is possible for a subtask's PASS criteria to change while
-      // a parent task is executing, or even after the parent task
-      // completes.  This can result in the parent PASS criteria being
-      // met while one or more of its subtasks no longer meets its PASS
-      // criteria (the subtask may now even meet a FAIL criteria).  We
-      // never want the parent task to reflect a PASS criteria in these
-      // cases, thus we can safely return here without ever evaluating
-      // the task's PASS criteria.
-      return Status.WAITING;
-    }
-
-    if (def.pass != null && !predicateCache.match(c, def.pass)) {
-      // Non-leaf tasks with no PASS criteria are supported in order
-      // to support "grouping tasks" (tasks with no function aside from
-      // organizing tasks).  A task without a PASS criteria, cannot ever
-      // be expected to execute (how would you know if it has?), thus a
-      // pass criteria is required to possibly even be considered for
-      // READY.
-      return Status.READY;
-    }
-
-    return Status.PASS;
   }
 
   protected String getHint(Status status, Task def) {
