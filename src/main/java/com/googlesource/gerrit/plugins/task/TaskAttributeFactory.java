@@ -106,12 +106,18 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected class AttributeFactory {
     public ChangeData changeData;
     public Node node;
+    public MatchCache matchCache;
     protected Task definition;
     protected TaskAttribute attribute;
 
     protected AttributeFactory(ChangeData changeData, Node node) {
+      this(changeData, node, new MatchCache(predicateCache, changeData));
+    }
+
+    protected AttributeFactory(ChangeData changeData, Node node, MatchCache matchCache) {
       this.changeData = changeData;
       this.node = node;
+      this.matchCache = matchCache;
       this.definition = node.definition;
       this.attribute = new TaskAttribute(definition.name);
     }
@@ -122,7 +128,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
           attribute.evaluationMilliSeconds = millis();
         }
 
-        boolean applicable = predicateCache.match(changeData, definition.applicable);
+        boolean applicable = matchCache.match(definition.applicable);
         if (!definition.isVisible) {
           if (!definition.isTrusted || (!applicable && !options.onlyApplicable)) {
             return Optional.of(unknown());
@@ -146,8 +152,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
                 attribute.applicable = applicable;
               }
               if (definition.inProgress != null) {
-                attribute.inProgress =
-                    predicateCache.matchOrNull(changeData, definition.inProgress);
+                attribute.inProgress = matchCache.matchOrNull(definition.inProgress);
               }
               attribute.hint = getHint(attribute.status, definition);
               attribute.exported = definition.exported;
@@ -187,7 +192,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       }
 
       if (definition.fail != null) {
-        if (predicateCache.match(changeData, definition.fail)) {
+        if (matchCache.match(definition.fail)) {
           // A FAIL definition is meant to be a hard blocking criteria
           // (like a CodeReview -2).  Thus, if hard blocked, it is
           // irrelevant what the subtask states, or the PASS criteria are.
@@ -218,7 +223,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         return Status.WAITING;
       }
 
-      if (definition.pass != null && !predicateCache.match(changeData, definition.pass)) {
+      if (definition.pass != null && !matchCache.match(definition.pass)) {
         // Non-leaf tasks with no PASS criteria are supported in order
         // to support "grouping tasks" (tasks with no function aside from
         // organizing tasks).  A task without a PASS criteria, cannot ever
@@ -245,7 +250,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         if (subNode == null) {
           subTasks.add(invalid());
         } else {
-          new AttributeFactory(changeData, subNode).create().ifPresent(t -> subTasks.add(t));
+          new AttributeFactory(changeData, subNode, matchCache)
+              .create()
+              .ifPresent(t -> subTasks.add(t));
         }
       }
       if (subTasks.isEmpty()) {
@@ -256,9 +263,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
     protected boolean isValidQueries() {
       try {
-        predicateCache.match(changeData, definition.inProgress);
-        predicateCache.match(changeData, definition.fail);
-        predicateCache.match(changeData, definition.pass);
+        matchCache.match(definition.inProgress);
+        matchCache.match(definition.fail);
+        matchCache.match(definition.pass);
         return true;
       } catch (OrmException | QueryParseException | RuntimeException e) {
         return false;
