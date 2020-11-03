@@ -38,6 +38,21 @@ states are affected by their own criteria and their subtasks' states.
   applicable = is:open
   fail = is:open
 
+[root "Root PASS-waiting-fail"]
+  applicable = is:open
+  fail = NOT is:open
+  subtask = Subtask PASS
+
+[root "Root pass-WAITING-fail"]
+  applicable = is:open
+  fail = NOT is:open
+  subtask = Subtask FAIL
+
+[root "Root pass-waiting-FAIL"]
+  applicable = is:open
+  fail = is:open
+  subtask = Subtask PASS
+
 [root "Root grouping PASS (subtask PASS)"]
   subtask = Subtask PASS
 
@@ -486,6 +501,42 @@ The expected output for the above task config looks like:
                "hasPass" : true,
                "name" : "Root pass-FAIL",
                "status" : "FAIL"
+            },
+            {
+               "hasPass" : true,
+               "name" : "Root PASS-waiting-fail",
+               "status" : "PASS",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "hasPass" : true,
+               "name" : "Root pass-WAITING-fail",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "name" : "Subtask FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "hasPass" : true,
+               "name" : "Root pass-waiting-FAIL",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
             },
             {
                "hasPass" : false,

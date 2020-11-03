@@ -60,6 +60,48 @@
             },
             {
                "applicable" : true,
+               "hasPass" : true,
+               "name" : "Root PASS-waiting-fail",
+               "status" : "PASS",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Root pass-WAITING-fail",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Root pass-waiting-FAIL",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Root grouping PASS (subtask PASS)",
                "status" : "PASS",

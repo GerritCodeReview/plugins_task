@@ -119,6 +119,12 @@ defined subtasks are valid, but they are only applicable when at least
 one subtask is applicable. Setting this to "True" is useful for defining
 informational tasks that are not really expected to execute.
 
+A task with a `fail` key but no pass key has an implied `pass` key which is
+the opposite of the `fail` key as if the fail had a `NOT` in front of it.
+Such tasks can only pass, fail, or be waiting for their subtasks, they
+can never be ready! If they have not failed, and their subtasks have
+passed, they have passed also.
+
 Example:
 ```
     pass = label:verified+1

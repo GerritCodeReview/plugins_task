@@ -204,11 +204,6 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
           // to make a task have a FAIL status.
           return Status.FAIL;
         }
-        if (definition.pass == null) {
-          // A task with a FAIL but no PASS criteria is a PASS-FAIL task
-          // (they are never "READY").  It didn't fail, so pass.
-          return Status.PASS;
-        }
       }
 
       if (attribute.subTasks != null && !isAll(attribute.subTasks, Status.PASS)) {
