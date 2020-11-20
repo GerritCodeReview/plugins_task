@@ -94,28 +94,37 @@ public class TaskTree {
     protected LinkedList<String> path = new LinkedList<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
+    protected Map<String, String> properties;
 
-    protected void addSubDefinitions(List<Task> defs, Map<String, String> parentProperties) {
+    protected void addSubDefinitions(List<Task> defs) {
       for (Task def : defs) {
-        if (def != null && !path.contains(def.name) && names.add(def.name)) {
-          // path check above detects looping definitions
-          // names check above detects duplicate subtasks
-          try {
-            nodes.add(new Node(def, path, parentProperties));
-            continue;
-          } catch (Exception e) {
-          } // bad definition, handled below
-        }
-        nodes.add(null);
+        addSubDefinition(def);
       }
+    }
+
+    protected void addSubDefinition(Task def) {
+      Node node = null;
+      if (def != null && !path.contains(def.name) && names.add(def.name)) {
+        // path check above detects looping definitions
+        // names check above detects duplicate subtasks
+        try {
+          node = new Node(def, path, properties);
+        } catch (Exception e) {
+        } // bad definition, handled with null
+      }
+      nodes.add(node);
     }
   }
 
   protected class Root extends NodeList {
+    protected Root() {
+      properties = new HashMap<String, String>();
+    }
+
     public List<Node> getRootNodes() throws ConfigInvalidException, IOException {
       if (nodes == null) {
         nodes = new ArrayList<>();
-        addSubDefinitions(getRootDefinitions(), new HashMap<String, String>());
+        addSubDefinitions(getRootDefinitions());
       }
       return nodes;
     }
@@ -135,6 +144,7 @@ public class TaskTree {
       this.path.add(definition.name);
       Preloader.preload(definition);
       new Properties(definition, parentProperties);
+      properties = definition.properties;
     }
 
     public List<Node> getSubNodes() throws OrmException {
@@ -150,10 +160,6 @@ public class TaskTree {
       addSubDefinitions(getTasksFactoryDefinitions());
       addSubFileDefinitions();
       addExternalDefinitions();
-    }
-
-    protected void addSubDefinitions(List<Task> defs) {
-      addSubDefinitions(defs, definition.properties);
     }
 
     protected void addSubFileDefinitions() {
