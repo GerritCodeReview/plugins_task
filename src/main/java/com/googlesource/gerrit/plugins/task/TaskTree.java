@@ -65,6 +65,8 @@ public class TaskTree {
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
 
+  protected ChangeData changeData;
+
   @Inject
   public TaskTree(
       AccountResolver accountResolver,
@@ -86,7 +88,8 @@ public class TaskTree {
     taskFactory.masquerade(psa);
   }
 
-  public List<Node> getRootNodes() throws ConfigInvalidException, IOException {
+  public List<Node> getRootNodes(ChangeData changeData) throws ConfigInvalidException, IOException {
+    this.changeData = changeData;
     return root.getRootNodes();
   }
 
@@ -113,6 +116,10 @@ public class TaskTree {
         } // bad definition, handled with null
       }
       nodes.add(node);
+    }
+
+    public ChangeData getChangeData() {
+      return TaskTree.this.changeData;
     }
   }
 

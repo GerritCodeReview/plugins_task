@@ -90,8 +90,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected PluginDefinedInfo createWithExceptions(ChangeData c) {
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
-      for (Node node : definitions.getRootNodes()) {
-        new AttributeFactory(c, node).create().ifPresent(t -> a.roots.add(t));
+      for (Node node : definitions.getRootNodes(c)) {
+        new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
       }
     } catch (ConfigInvalidException | IOException e) {
       a.roots.add(invalid());
@@ -104,18 +104,16 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   }
 
   protected class AttributeFactory {
-    public ChangeData changeData;
     public Node node;
     public MatchCache matchCache;
     protected Task definition;
     protected TaskAttribute attribute;
 
-    protected AttributeFactory(ChangeData changeData, Node node) {
-      this(changeData, node, new MatchCache(predicateCache, changeData));
+    protected AttributeFactory(Node node) {
+      this(node, new MatchCache(predicateCache, node.getChangeData()));
     }
 
-    protected AttributeFactory(ChangeData changeData, Node node, MatchCache matchCache) {
-      this.changeData = changeData;
+    protected AttributeFactory(Node node, MatchCache matchCache) {
       this.node = node;
       this.matchCache = matchCache;
       this.definition = node.definition;
@@ -245,9 +243,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         if (subNode == null) {
           subTasks.add(invalid());
         } else {
-          new AttributeFactory(changeData, subNode, matchCache)
-              .create()
-              .ifPresent(t -> subTasks.add(t));
+          new AttributeFactory(subNode, matchCache).create().ifPresent(t -> subTasks.add(t));
         }
       }
       if (subTasks.isEmpty()) {
