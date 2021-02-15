@@ -10,3 +10,4 @@
 /package-lock.json
 /task.iml
 /node_modules/
+/test/docker/gerrit/artifacts
