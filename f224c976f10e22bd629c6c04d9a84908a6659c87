@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c28cd4c_67137a7a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2021-02-23T05:25:21Z",
+      "side": 1,
+      "message": "Looks like Zuul failure is real. Needs a fix to update ChangeAttributeFactory to new interface.",
+      "revId": "f224c976f10e22bd629c6c04d9a84908a6659c87",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
