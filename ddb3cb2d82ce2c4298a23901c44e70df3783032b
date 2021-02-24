@@ -86,6 +86,24 @@
       "parentUuid": "45e345ca_92f2bdb9",
       "revId": "ddb3cb2d82ce2c4298a23901c44e70df3783032b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dfbef3e0_41983086",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117824
+      },
+      "writtenOn": "2021-02-24T15:49:01Z",
+      "side": 1,
+      "message": "i have used following command to run the tests :\n\n./test_task_plugin.sh --gerrit-war \u0027https://gerrit-ci.gerritforge.com/job/Gerrit-bazel-stable-2.16/lastSuccessfulBuild/artifact/gerrit/bazel-bin/release.war\u0027 --task-plugin-jar \u0027https://gerrit-ci.gerritforge.com/job/plugin-task-bazel-stable-2.16/lastSuccessfulBuild/artifact/bazel-bin/plugins/task/task.jar\u0027",
+      "parentUuid": "7135e93e_64e966f6",
+      "revId": "ddb3cb2d82ce2c4298a23901c44e70df3783032b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
