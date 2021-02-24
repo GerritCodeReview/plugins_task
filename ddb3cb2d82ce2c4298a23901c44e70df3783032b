@@ -16,6 +16,23 @@
       "message": "Can you apply V+1 if these tests are passing against 2.16",
       "revId": "ddb3cb2d82ce2c4298a23901c44e70df3783032b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45e345ca_92f2bdb9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117824
+      },
+      "writtenOn": "2021-02-24T07:16:21Z",
+      "side": 1,
+      "message": "verified this change on branch stable-2.16\n\nrun_tests_1  | Running Task plugin tests ...\nrun_tests_1  | PASSED - statuses test\nrun_tests_1  | PASSED - all test\nrun_tests_1  | PASSED - preview test\nrun_tests_1  | PASSED - preview.invalid test\nrun_tests_1  | PASSED - invalid test\nrun_tests_1  | PASSED - invalid-applicable test\n",
+      "revId": "ddb3cb2d82ce2c4298a23901c44e70df3783032b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
