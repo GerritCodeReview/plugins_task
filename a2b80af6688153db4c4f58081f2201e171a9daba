@@ -50,6 +50,24 @@
       "message": "This doesn\u0027t seem to be exposed through bazlets (or however it should be exposed) and so it breaks the standalone build. Are there any UI plugins that support standalone builds still? (I see reviewers removed it [1])\n\n[1] https://gerrit.googlesource.com/plugins/reviewers/+/d642d9664770257a9eacd09d8e35c22eea4dacb3",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5091c56b_08b0056c",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2021-04-07T22:46:55Z",
+      "side": 1,
+      "message": "Going off that change, it doesn\u0027t seem like gerrit supports polymer 3 plugins in standalone mode.",
+      "parentUuid": "9b23c789_fc15847c",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
