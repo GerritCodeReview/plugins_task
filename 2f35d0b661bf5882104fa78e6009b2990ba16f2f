@@ -16,6 +16,24 @@
       "message": "task needs updates for 3.2, 3.3 and master before it converts to Polymer 3 (which I\u0027m happy to do if you\u0027re looking to do the polymer work!). When is the earliest that Polymer 3 is supported?",
       "revId": "2f35d0b661bf5882104fa78e6009b2990ba16f2f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6f99aa18_f4afa5ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2021-04-07T21:02:35Z",
+      "side": 1,
+      "message": "Polymer 3.0 has been used since gerrit 3.2. Though this is more about gerrit 3.4 dropping support for html elements thus we need to convert to the newer polymer 3.0 module format.\n\nGerrit 3.2+ i think supports loading .js modules only not just html.",
+      "parentUuid": "1479f631_7f9dcfac",
+      "revId": "2f35d0b661bf5882104fa78e6009b2990ba16f2f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
