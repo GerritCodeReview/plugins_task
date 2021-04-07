@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3d72ba87_58c04615",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-04-07T21:30:15Z",
+      "side": 1,
+      "message": "Why not 3.2.8? This is the latest fix release for 3.2 release line: [1].\n\n[1] https://repo1.maven.org/maven2/com/google/gerrit/gerrit-plugin-api/3.2.8/",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "48492dd1bf13a9e73aa0f8ec15833969d6bdfdf8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
