@@ -2,11 +2,16 @@
   "name": "task",
   "version": "2.16.13-SNAPSHOT",
   "description": "Task Plugin",
-  "dependencies": {},
+  "dependencies": {
+    "@bazel/rollup": "^3.4.0",
+    "@bazel/terser": "^3.4.0"
+  },
   "devDependencies": {
     "eslint": "^6.6.0",
     "eslint-config-google": "^0.13.0",
-    "eslint-plugin-html": "^6.0.0"
+    "eslint-plugin-html": "^6.0.0",
+    "rollup": "^2.45.2",
+    "terser": "^5.6.1"
   },
   "scripts": {
     "eslint": "./node_modules/eslint/bin/eslint.js --ext .html,.js gr-task-plugin || exit 0",
