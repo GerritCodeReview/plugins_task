@@ -86,6 +86,24 @@
       "parentUuid": "5091c56b_08b0056c",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "08f40f52_dfec41c7",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-04-07T22:57:11Z",
+      "side": 1,
+      "message": "Also, seems like https://gerrit-review.googlesource.com/Documentation/dev-build-plugins.html and other docs need update(s) for UI plugins.",
+      "parentUuid": "1affc388_5ad11a7b",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
