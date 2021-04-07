@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1479f631_7f9dcfac",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-04-07T20:54:21Z",
+      "side": 1,
+      "message": "task needs updates for 3.2, 3.3 and master before it converts to Polymer 3 (which I\u0027m happy to do if you\u0027re looking to do the polymer work!). When is the earliest that Polymer 3 is supported?",
+      "revId": "2f35d0b661bf5882104fa78e6009b2990ba16f2f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
