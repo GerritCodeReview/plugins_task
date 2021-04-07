@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": true,
+      "key": {
+        "uuid": "bd6adbc9_74db921b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-04-07T21:39:23Z",
+      "side": 1,
+      "message": "Because it\u0027s the latest available in bazlets [2] and I wanted to keep bazel and maven in sync. I can do some bazlets updates later, but I wanted to get this up to keep Paladox unblocked 😊\n\n[2] https://gerrit.googlesource.com/bazlets/+/refs/heads/stable-3.2",
+      "parentUuid": "3d72ba87_58c04615",
+      "range": {
+        "startLine": 7,
+        "startChar": 16,
+        "endLine": 7,
+        "endChar": 21
+      },
+      "revId": "48492dd1bf13a9e73aa0f8ec15833969d6bdfdf8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": false,
       "key": {
         "uuid": "feab099e_016d3ba5",
@@ -37,6 +61,23 @@
       "writtenOn": "2021-04-07T21:35:16Z",
       "side": 1,
       "message": "Built locally using gerrit 3.2 and builds successfully.",
+      "revId": "48492dd1bf13a9e73aa0f8ec15833969d6bdfdf8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "45b9f866_90db5c58",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-04-07T21:39:23Z",
+      "side": 1,
+      "message": "Passes tests locally",
       "revId": "48492dd1bf13a9e73aa0f8ec15833969d6bdfdf8",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
