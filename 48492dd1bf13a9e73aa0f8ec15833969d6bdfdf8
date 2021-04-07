@@ -22,6 +22,23 @@
       },
       "revId": "48492dd1bf13a9e73aa0f8ec15833969d6bdfdf8",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "feab099e_016d3ba5",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2021-04-07T21:35:16Z",
+      "side": 1,
+      "message": "Built locally using gerrit 3.2 and builds successfully.",
+      "revId": "48492dd1bf13a9e73aa0f8ec15833969d6bdfdf8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
