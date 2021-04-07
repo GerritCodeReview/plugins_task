@@ -1,4 +1,4 @@
-// Copyright (C) 2019 The Android Open Source Project
+// Copyright (C) 2021 The Android Open Source Project
 //
 // Licensed under the Apache License, Version 2.0 (the "License");
 // you may not use this file except in compliance with the License.
@@ -11,24 +11,34 @@
 // WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 // See the License for the specific language governing permissions and
 // limitations under the License.
-(function() {
-  'use strict';
 
-  const Defs = {};
-  /**
-   * @typedef {{
-   *  message: string,
-   *  sub_tasks: Array<Defs.Task>,
-   *  hint: ?string,
-   *  name: string,
-   *  status: string
-   * }}
-   */
-  Defs.Task;
+import './gr-task-plugin-tasks.js';
 
-  Polymer({
-    is: 'gr-task-plugin',
-    properties: {
+import {htmlTemplate} from './gr-task-plugin_html.js';
+
+const Defs = {};
+/**
+ * @typedef {{
+ *  message: string,
+ *  sub_tasks: Array<Defs.Task>,
+ *  hint: ?string,
+ *  name: string,
+ *  status: string
+ * }}
+ */
+Defs.Task;
+
+class GrTaskPlugin extends Polymer.Element {
+  static get is() {
+    return 'gr-task-plugin';
+  }
+
+  static get template() {
+    return htmlTemplate;
+  }
+
+  static get properties() {
+    return {
       change: {
         type: Object,
       },
@@ -69,111 +79,119 @@
         notify: true,
         value: 0,
       },
-    },
+    };
+  }
 
-    _is_show_all(show_all) {
-      return show_all === 'true';
-    },
+  _is_show_all(show_all) {
+    return show_all === 'true';
+  }
 
-    attached() {
-      this._getTasks();
-    },
+  connectedCallback() {
+    super.connectedCallback();
 
-    _getTasks() {
-      const endpoint =
-          `/changes/?q=change:${this.change._number}&--task--applicable`;
+    this._getTasks();
+  }
 
-      return this.plugin.restApi().get(endpoint).then(response => {
-        if (response && response.length === 1) {
-          const cinfo = response[0];
-          if (cinfo.plugins) {
-            const taskPluginInfo = cinfo.plugins.find(
-                pluginInfo => pluginInfo.name === 'task');
+  _getTasks() {
+    if (!this.change) {
+      return;
+    }
 
-            if (taskPluginInfo) {
-              this._tasks = this._addTasks(taskPluginInfo.roots);
-            }
+    const endpoint =
+        `/changes/?q=change:${this.change._number}&--task--applicable`;
+
+    return this.plugin.restApi().get(endpoint).then(response => {
+      if (response && response.length === 1) {
+        const cinfo = response[0];
+        if (cinfo.plugins) {
+          const taskPluginInfo = cinfo.plugins.find(
+              pluginInfo => pluginInfo.name === 'task');
+
+          if (taskPluginInfo) {
+            this._tasks = this._addTasks(taskPluginInfo.roots);
           }
         }
-      });
-    },
-
-    _computeIcon(task) {
-      const icon = {};
-      switch (task.status) {
-        case 'FAIL':
-          icon.id = 'gr-icons:close';
-          icon.color = 'red';
-          icon.tooltip = 'Failed';
-          break;
-        case 'READY':
-          icon.id = 'gr-icons:rebase';
-          icon.color = 'green';
-          icon.tooltip = 'Ready';
-          break;
-        case 'INVALID':
-          icon.id = 'gr-icons:abandon';
-          icon.color = 'red';
-          icon.tooltip = 'Invalid';
-          break;
-        case 'WAITING':
-          icon.id = 'gr-icons:side-by-side';
-          icon.color = 'red';
-          icon.tooltip = 'Waiting';
-          break;
-        case 'PASS':
-          icon.id = 'gr-icons:check';
-          icon.color = 'green';
-          icon.tooltip = 'Passed';
-          break;
       }
-      return icon;
-    },
+    });
+  }
 
-    _computeShowOnNeedsAndBlockedFilter(task) {
-      switch (task.status) {
-        case 'FAIL':
-        case 'READY':
-        case 'INVALID':
-          return true;
-      }
-      return false;
-    },
+  _computeIcon(task) {
+    const icon = {};
+    switch (task.status) {
+      case 'FAIL':
+        icon.id = 'gr-icons:close';
+        icon.color = 'red';
+        icon.tooltip = 'Failed';
+        break;
+      case 'READY':
+        icon.id = 'gr-icons:rebase';
+        icon.color = 'green';
+        icon.tooltip = 'Ready';
+        break;
+      case 'INVALID':
+        icon.id = 'gr-icons:abandon';
+        icon.color = 'red';
+        icon.tooltip = 'Invalid';
+        break;
+      case 'WAITING':
+        icon.id = 'gr-icons:side-by-side';
+        icon.color = 'red';
+        icon.tooltip = 'Waiting';
+        break;
+      case 'PASS':
+        icon.id = 'gr-icons:check';
+        icon.color = 'green';
+        icon.tooltip = 'Passed';
+        break;
+    }
+    return icon;
+  }
 
-    _compute_counts(task) {
-      this._all_count++;
-      switch (task.status) {
-        case 'FAIL':
-          this._fail_count++;
-          break;
-        case 'READY':
-          this._ready_count++;
-          break;
-      }
-    },
+  _computeShowOnNeedsAndBlockedFilter(task) {
+    switch (task.status) {
+      case 'FAIL':
+      case 'READY':
+      case 'INVALID':
+        return true;
+    }
+    return false;
+  }
 
-    _addTasks(tasks) { // rename to process, remove DOM bits
-      if (!tasks) return [];
-      tasks.forEach(task => {
-        task.message = task.hint || task.name;
-        task.icon = this._computeIcon(task);
-        task.showOnFilter = this._computeShowOnNeedsAndBlockedFilter(task);
-        this._compute_counts(task);
-        this._addTasks(task.sub_tasks);
-      });
-      return tasks;
-    },
+  _compute_counts(task) {
+    this._all_count++;
+    switch (task.status) {
+      case 'FAIL':
+        this._fail_count++;
+        break;
+      case 'READY':
+        this._ready_count++;
+        break;
+    }
+  }
 
-    _show_all_tap() {
-      this._show_all = 'true';
-    },
+  _addTasks(tasks) { // rename to process, remove DOM bits
+    if (!tasks) return [];
+    tasks.forEach(task => {
+      task.message = task.hint || task.name;
+      task.icon = this._computeIcon(task);
+      task.showOnFilter = this._computeShowOnNeedsAndBlockedFilter(task);
+      this._compute_counts(task);
+      this._addTasks(task.sub_tasks);
+    });
+    return tasks;
+  }
 
-    _needs_and_blocked_tap() {
-      this._show_all = 'false';
-    },
+  _show_all_tap() {
+    this._show_all = 'true';
+  }
 
-    _switch_expand() {
-      this._expand_all = !this._expand_all;
-    },
-  });
-})();
+  _needs_and_blocked_tap() {
+    this._show_all = 'false';
+  }
+
+  _switch_expand() {
+    this._expand_all = !this._expand_all;
+  }
+}
+
+customElements.define(GrTaskPlugin.is, GrTaskPlugin);

@@ -1,9 +1,14 @@
-workspace(name = "task")
+workspace(
+    name = "task",
+    managed_directories = {
+        "@npm": ["node_modules"],
+    },
+)
 
 load("//:bazlets.bzl", "load_bazlets")
 
 load_bazlets(
-    commit = "8dc0767541f16b35d2136eccebffd9ebe2b81133",
+    commit = "bd28cc1eaeb01b2118e85e76e00ef4f39a6c9958",
     #local_path = "/home/<user>/projects/bazlets",
 )
 
@@ -15,24 +20,13 @@ load(
 
 gerrit_polymer()
 
-# Load closure compiler with transitive dependencies
-load("@io_bazel_rules_closure//closure:repositories.bzl", "rules_closure_dependencies", "rules_closure_toolchains")
+load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
 
-rules_closure_dependencies()
-
-rules_closure_toolchains()
-
-# Load Gerrit npm_binary toolchain
-load("@com_googlesource_gerrit_bazlets//tools:js.bzl", "GERRIT", "npm_binary")
-
-npm_binary(
-    name = "polymer-bundler",
-    repository = GERRIT,
-)
-
-npm_binary(
-    name = "crisper",
-    repository = GERRIT,
+yarn_install(
+    name = "npm",
+    frozen_lockfile = False,
+    package_json = "//:package.json",
+    yarn_lock = "//:yarn.lock",
 )
 
 # Load plugin API
