@@ -1,3 +1,4 @@
+load("@npm//@bazel/rollup:index.bzl", "rollup_bundle")
 load(
     "//tools/bzl:plugin.bzl",
     "PLUGIN_DEPS",
@@ -34,9 +35,18 @@ genrule2(
 
 polygerrit_plugin(
     name = "gr-task-plugin",
-    srcs = glob([
-        "gr-task-plugin/*.html",
-        "gr-task-plugin/*.js",
-    ]),
-    app = "plugin.html",
+    app = "gr-task-plugin-bundle.js",
+    plugin_name = "gr-task-plugin",
+)
+
+rollup_bundle(
+    name = "gr-task-plugin-bundle",
+    srcs = glob(["gr-task-plugin/*.js"]),
+    entry_point = "gr-task-plugin/plugin.js",
+    format = "iife",
+    rollup_bin = "//tools/node_tools:rollup-bin",
+    sourcemap = "hidden",
+    deps = [
+        "@tools_npm//rollup-plugin-node-resolve",
+    ],
 )
