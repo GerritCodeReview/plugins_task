@@ -16,6 +16,24 @@
       "message": "CI failure seems to be related:\n\n  Error: Could not resolve \u0027./gr-task-pugin_html.js\u0027 from plugins/task/gr-task-plugin/gr-task-plugin.js",
       "revId": "5928f36463b42511eb4be8152b2d52cdc292f20f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9225602b_732e4e15",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1029953
+      },
+      "writtenOn": "2021-04-07T21:44:45Z",
+      "side": 1,
+      "message": "Thanks, fixed!",
+      "parentUuid": "7c1bb0f1_03fd8cd4",
+      "revId": "5928f36463b42511eb4be8152b2d52cdc292f20f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
