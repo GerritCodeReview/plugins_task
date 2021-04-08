@@ -104,6 +104,24 @@
       "parentUuid": "1affc388_5ad11a7b",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8484ba58_a20195e0",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-04-08T08:38:30Z",
+      "side": 1,
+      "message": "\u003e That\u0027s a real bummer. @DavidO/Ben, any thoughts on how we can fix that?\n\nRemove standalone build mode. rules_nodejs support was never added to standalone build mode.",
+      "parentUuid": "08f40f52_dfec41c7",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
