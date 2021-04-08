@@ -140,6 +140,24 @@
       "parentUuid": "8484ba58_a20195e0",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b35467b0_5328feae",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-04-08T14:07:44Z",
+      "side": 1,
+      "message": "\u003e I am not aware of any UI plugins that support standalone build mode.\n\nThis was working in the task plugin and the reviewers plugin prior to Polymer 3.\n\n\u003e \n\u003e I am not the expert here (Dmitrii and David are), but my guess is that maintaining standalone build mode for UI plugins is a substantial amount of work, so we would need to understand the benefit of it.\n\nThe face value benefit is that I only need to clone the plugin I want to develop on to be able to develop it. I would think most non-core-plugin development happens against a stable Gerrit version, so having the Gerrit source tree shouldn\u0027t be required. That benefit multiplies into others like a simpler CI/CD setup too.\n\n\u003e \n\u003e Re documentation: Yes, we are aware of that and I promise to update the docs substantially this quarter. Until that is done feel free to send me emails directly asking for help.\n\nThanks!",
+      "parentUuid": "488030e4_a9bd5813",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
