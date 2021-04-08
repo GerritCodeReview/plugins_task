@@ -122,6 +122,24 @@
       "parentUuid": "08f40f52_dfec41c7",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "488030e4_a9bd5813",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1013302
+      },
+      "writtenOn": "2021-04-08T10:11:09Z",
+      "side": 1,
+      "message": "I am not aware of any UI plugins that support standalone build mode.\n\nI am not the expert here (Dmitrii and David are), but my guess is that maintaining standalone build mode for UI plugins is a substantial amount of work, so we would need to understand the benefit of it.\n\nRe documentation: Yes, we are aware of that and I promise to update the docs substantially this quarter. Until that is done feel free to send me emails directly asking for help.",
+      "parentUuid": "8484ba58_a20195e0",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
