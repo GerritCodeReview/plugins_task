@@ -158,6 +158,24 @@
       "parentUuid": "488030e4_a9bd5813",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4d0af775_81467798",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1013302
+      },
+      "writtenOn": "2021-04-12T07:42:04Z",
+      "side": 1,
+      "message": "Building a Gerrit frontend plugin means building a js file and putting it into the resources of the gerrit_plugin() rule. You can build this js file in any way you want. We are just providing and maintaining one canonical way of building the core frontend plugins, and that way does not support standalone build at the moment. I have no idea how hard it would be to add this support, but it would cost me a day or so to figure it out, so I cannot prioritize that, because I don\u0027t think it is the Gerrit frontend teams\u0027 responsibility to build this.\n\nBut I think there is another way to unblock you, if you cannot do without the standalone build for 3.4:\n\nThese three BUILD rules look a bit intimidating, but they don\u0027t actually do much:\n\n1. rollup_bundle: Roll up the 3 js files into 1 but resolving the module imports.\n2. polygerrit_plugin: Minify the js.\n3. genrule2: Zip the js file.\n\nWhat about just checking in 1 javascript file for your plugin instead of 3? The plugin is small enough, so this is still readable. Minifying and zipping also seems unnecessary boilerplate. So if you just have one js file, then you can reference that from your gerrit_plugin() resources directly and do not have to use any of the above 3 BUILD rules. WDYT?",
+      "parentUuid": "b35467b0_5328feae",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
