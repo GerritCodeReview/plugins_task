@@ -163,10 +163,23 @@ public class TaskTree {
     }
 
     protected void addSubDefinitions() throws OrmException {
-      addSubDefinitions(getSubDefinitions());
-      addSubDefinitions(getTasksFactoryDefinitions());
+      addSubTaskDefinitions();
+      addSubTasksFactoryDefinitions();
       addSubFileDefinitions();
       addExternalDefinitions();
+    }
+
+    protected void addSubTaskDefinitions() {
+      for (String name : task.subTasks) {
+        try {
+          Task def = task.config.getTaskOptional(name);
+          if (def != null) {
+            addSubDefinition(def);
+          }
+        } catch (ConfigInvalidException e) {
+          addSubDefinition(null);
+        }
+      }
     }
 
     protected void addSubFileDefinitions() {
@@ -174,7 +187,7 @@ public class TaskTree {
         try {
           addSubDefinitions(getTaskDefinitions(task.config.getBranch(), file));
         } catch (ConfigInvalidException | IOException e) {
-          nodes.add(null);
+          addSubDefinition(null);
         }
       }
     }
@@ -184,32 +197,17 @@ public class TaskTree {
         try {
           External ext = task.config.getExternal(external);
           if (ext == null) {
-            nodes.add(null);
+            addSubDefinition(null);
           } else {
             addSubDefinitions(getTaskDefinitions(ext));
           }
         } catch (ConfigInvalidException | IOException e) {
-          nodes.add(null);
+          addSubDefinition(null);
         }
       }
     }
 
-    protected List<Task> getSubDefinitions() {
-      List<Task> defs = new ArrayList<>();
-      for (String name : task.subTasks) {
-        try {
-          Task def = task.config.getTaskOptional(name);
-          if (def != null) {
-            defs.add(def);
-          }
-        } catch (ConfigInvalidException e) {
-          defs.add(null);
-        }
-      }
-      return defs;
-    }
-
-    protected List<Task> getTasksFactoryDefinitions() throws OrmException {
+    protected void addSubTasksFactoryDefinitions() throws OrmException {
       List<Task> taskList = new ArrayList<>();
       for (String taskFactoryName : task.subTasksFactories) {
         TasksFactory tasksFactory = task.config.getTasksFactory(taskFactoryName);
@@ -219,28 +217,27 @@ public class TaskTree {
             new Properties(namesFactory, task.properties);
             switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
               case STATIC:
-                getStaticTypeTasksDefinitions(tasksFactory, namesFactory, taskList);
+                addStaticTypeTasksDefinitions(tasksFactory, namesFactory);
                 continue;
               case CHANGE:
-                getChangesTypeTaskDefinitions(tasksFactory, namesFactory, taskList);
+                addChangesTypeTaskDefinitions(tasksFactory, namesFactory);
                 continue;
             }
           }
         }
-        taskList.add(null);
+        addSubDefinition(null);
       }
-      return taskList;
     }
 
-    protected void getStaticTypeTasksDefinitions(
-        TasksFactory tasksFactory, NamesFactory namesFactory, List<Task> taskList) {
+    protected void addStaticTypeTasksDefinitions(
+        TasksFactory tasksFactory, NamesFactory namesFactory) {
       for (String name : namesFactory.names) {
-        taskList.add(task.config.createTask(tasksFactory, name));
+        addSubDefinition(task.config.createTask(tasksFactory, name));
       }
     }
 
-    protected void getChangesTypeTaskDefinitions(
-        TasksFactory tasksFactory, NamesFactory namesFactory, List<Task> taskList) {
+    protected void addChangesTypeTaskDefinitions(
+        TasksFactory tasksFactory, NamesFactory namesFactory) {
       try {
         if (namesFactory.changes != null) {
           List<ChangeData> changeDataList =
@@ -248,7 +245,7 @@ public class TaskTree {
                   .get()
                   .query(changeQueryBuilderProvider.get().parse(namesFactory.changes)).entities();
           for (ChangeData changeData : changeDataList) {
-            taskList.add(task.config.createTask(tasksFactory, changeData.getId().toString()));
+            addSubDefinition(task.config.createTask(tasksFactory, changeData.getId().toString()));
           }
           return;
         }
@@ -256,7 +253,7 @@ public class TaskTree {
         log.atSevere().withCause(e).log("ERROR: running changes query: " + namesFactory.changes);
       } catch (QueryParseException e) {
       }
-      taskList.add(null);
+      addSubDefinition(null);
     }
 
     protected List<Task> getTaskDefinitions(External external)
