@@ -137,6 +137,19 @@ states are affected by their own criteria and their subtasks' states.
   fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   subtask = Subtask Properties
 
+[root "Root Properties Expansion"]
+  applicable = status:open
+  subtask = Subtask Property Expansion fail-hint
+
+[task "Subtask Property Expansion fail-hint"]
+  subtasks-factory = tasks-factory Property Expansion fail-hint
+
+[tasks-factory "tasks-factory Property Expansion fail-hint"]
+  set-first-property = first-property ${_name}
+  fail-hint = ${first-property}
+  fail = true
+  names-factory = names-factory static list
+
 [root "Root Preload"]
    preload-task = Subtask FAIL
    subtask = Subtask Preload
@@ -976,6 +989,50 @@ The expected output for the above task config looks like:
                            "hasPass" : true,
                            "hint" : "Name(_change1_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
                            "name" : "_change1_number",
+                           "status" : "FAIL"
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Root Properties Expansion",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask Property Expansion fail-hint",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "first-property my a task",
+                           "name" : "my a task",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "first-property my b task",
+                           "name" : "my b task",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "first-property my c task",
+                           "name" : "my c task",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "first-property my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+                           "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
                            "status" : "FAIL"
                         }
                      ]
