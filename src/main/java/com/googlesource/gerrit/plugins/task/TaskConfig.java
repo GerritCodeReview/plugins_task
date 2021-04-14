@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.common.primitives.Primitives;
 import com.google.gerrit.common.Container;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
@@ -90,14 +91,40 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
 
     protected TaskBase(TaskBase base) {
-      for (Field field : TaskBase.class.getDeclaredFields()) {
+      copyDeclaredFields(TaskBase.class, base);
+    }
+
+    protected <T> void copyDeclaredFields(Class<T> cls, T from) {
+      for (Field field : cls.getDeclaredFields()) {
         try {
           field.setAccessible(true);
-          field.set(this, field.get(base));
+          Class<?> fieldCls = field.getType();
+          Object val = field.get(from);
+          if (field.getType().isPrimitive()
+              || Primitives.isWrapperType(fieldCls)
+              || (val instanceof String)
+              || val == null) {
+            field.set(this, val);
+          } else if (val instanceof List) {
+            List<?> list = List.class.cast(val);
+            field.set(this, new ArrayList<>(list));
+          } else if (val instanceof Map) {
+            Map<?, ?> map = Map.class.cast(val);
+            field.set(this, new HashMap<>(map));
+          } else if (field.getName().equals("this$0")) { // Don't copy internal final field
+          } else {
+            throw new RuntimeException(
+                "Don't know how to deep copy " + fieldValueToString(field, val));
+          }
         } catch (IllegalAccessException e) {
-          throw new RuntimeException(e);
+          throw new RuntimeException(
+              "Cannot access field to copy it " + fieldValueToString(field, "unknown"));
         }
       }
+    }
+
+    protected String fieldValueToString(Field field, Object val) {
+      return "field:" + field.getName() + " value:" + val + " type:" + field.getType();
     }
   }
 
