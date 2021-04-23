@@ -58,13 +58,8 @@ public class Properties {
     unexpanded.putAll(definition.exported);
     expandAllUnexpanded();
     definition.properties = expanded;
-
-    if (definition.exported.isEmpty()) {
-      definition.exported = null;
-    } else {
-      for (String property : definition.exported.keySet()) {
-        definition.exported.put(property, expanded.get(property));
-      }
+    for (String property : definition.exported.keySet()) {
+      definition.exported.put(property, expanded.get(property));
     }
 
     this.definition = definition;

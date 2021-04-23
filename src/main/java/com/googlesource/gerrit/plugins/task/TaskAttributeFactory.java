@@ -153,7 +153,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
                 attribute.inProgress = matchCache.matchOrNull(task.inProgress);
               }
               attribute.hint = getHint(attribute.status, task);
-              attribute.exported = task.exported;
+              attribute.exported = task.exported.isEmpty() ? null : task.exported;
 
               if (options.evaluationTime) {
                 attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
