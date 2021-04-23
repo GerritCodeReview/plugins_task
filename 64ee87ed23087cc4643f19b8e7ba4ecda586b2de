@@ -140,6 +140,30 @@
       },
       "revId": "64ee87ed23087cc4643f19b8e7ba4ecda586b2de",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6131d33a_500118ed",
+        "filename": "test/docker/run_tests/start.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2021-04-23T14:59:24Z",
+      "side": 1,
+      "message": "\u003e My reason is like providing separation from setup part and execution part. \n\u003e \n\u003e Till line 15 it\u0027s all setup from line 17 we are entering the actual test execution part so in that sense i thought maybe a space is a good thing to have here.\n\nI agree with Aditya\u0027s reasoning for the blank line, however I think Prudhvi was talking about the extra blank space on that line.",
+      "parentUuid": "24eee229_9b65923f",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "64ee87ed23087cc4643f19b8e7ba4ecda586b2de",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
