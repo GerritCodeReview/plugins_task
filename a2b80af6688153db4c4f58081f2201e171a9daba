@@ -248,6 +248,24 @@
       "parentUuid": "ab2e911e_4f8f0cdf",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c87b294a_ea1444b0",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-04-23T14:32:10Z",
+      "side": 1,
+      "message": "I fixed standalone build for Polymer 3 plugins.\n\nThis change depends on this Bazlets change 304117.\n\nTo verify, fetch this Bazlets change, uncomment in WORKSPACE file bazlets import line, for me\n\n  local_path \u003d \"/home/davido/projects/bazlets\",\n\nand run:\n\n  $ bazel build :task\nINFO: Analyzed target //:task (49 packages loaded, 695 targets configured).\nINFO: Found 1 target...\nTarget //:task up-to-date:\n  bazel-bin/task.jar\nINFO: Elapsed time: 18.568s, Critical Path: 7.03s\nINFO: 11 processes: 2 internal, 7 linux-sandbox, 2 worker.\nINFO: Build completed successfully, 11 total actions\n\nAnd looking into bundled and minified gr-task-plugin.js (using terser plugin) static/gr-task-plugin.js: it looks sane: [1].\n\n[1] http://paste.openstack.org/show/804749",
+      "parentUuid": "3482a8dd_63200455",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
