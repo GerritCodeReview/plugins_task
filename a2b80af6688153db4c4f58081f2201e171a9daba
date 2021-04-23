@@ -194,6 +194,24 @@
       "parentUuid": "4d0af775_81467798",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab2e911e_4f8f0cdf",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1085901
+      },
+      "writtenOn": "2021-04-23T09:07:50Z",
+      "side": 1,
+      "message": "Sorry, I didn\u0027t notice that actually \"task\" plugin already has its own WORKSPACE and there is a bazlets :(\nI need some time to think about it.",
+      "parentUuid": "8a964480_8590d726",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
