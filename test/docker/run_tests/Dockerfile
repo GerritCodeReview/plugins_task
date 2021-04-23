@@ -14,5 +14,13 @@ RUN groupadd -f -g $GID users2
 RUN useradd -u $UID -g $GID $USER
 RUN mkdir -p $WORKSPACE $USER_HOME/.ssh
 RUN chown -R $USER $USER_HOME
+
 USER $USER
-ENTRYPOINT $RUN_TESTS_DIR/start.sh
+
+RUN ssh-keygen -P '' -f "$USER_HOME"/.ssh/id_rsa
+RUN chmod 400 "$USER_HOME"/.ssh/id_rsa
+RUN chmod 400 "$USER_HOME"/.ssh/id_rsa.pub
+RUN git config --global user.name "Gerrit Admin"
+RUN git config --global user.email "gerrit_admin@localdomain"
+
+ENTRYPOINT ["tail", "-f", "/dev/null"]
