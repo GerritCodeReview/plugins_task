@@ -2,7 +2,22 @@
 
 readlink --canonicalize / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
 MYDIR=$(dirname -- "$(readlink -f -- "$0")")
-cd "$MYDIR"
+ARTIFACTS=$MYDIR/gerrit/artifacts
+
+die() { echo -e "\nERROR: $@" ; kill $$ ; exit 1 ; } # error_message
+
+progress() { # message cmd [args]...
+    local message=$1 ; shift
+    echo -n "$message"
+    "$@" &
+    local pid=$!
+    while kill -0 $pid 2> /dev/null ; do
+        echo -n "."
+        sleep 2
+    done
+    echo
+    wait "$pid"
+}
 
 usage() { # [error_message]
     local prog=$(basename "$0")
@@ -25,54 +40,57 @@ EOF
 }
 
 check_prerequisite() {
-    local error_msg
-    docker --version >> /dev/null || error_msg="\nERROR: docker is not installed"
-    docker-compose --version >> /dev/null || \
-        error_msg+="\nERROR: docker-compose is not installed"
-    if [ -n "$error_msg" ] ; then
-        echo -e "$error_msg"
-        exit 1
-    fi
+    docker --version > /dev/null || die "docker is not installed"
+    docker-compose --version > /dev/null || die "docker-compose is not installed"
 }
 
-# source_location output_path
-gcurl() { curl --fail --netrc "$1" --output "$2" --create-dirs || exit ; }
-
-run_test() {
-    local ret
-    local compose_args=(--project-name "task_$$" -f "$MYDIR/docker-compose.yaml")
-    local build_args=()
-
-    if [ -n "$GERRIT_WAR" -a -n "$TASK_PLUGIN_JAR" ] ; then
-        gcurl "$GERRIT_WAR" "./gerrit/artifacts/gerrit.war"
-        gcurl "$TASK_PLUGIN_JAR" "./gerrit/artifacts/task.jar"
-        build_args+=(--build-arg GERRIT_WAR="/artifacts/gerrit.war" \
-            --build-arg TASK_PLUGIN_JAR="/artifacts/task.jar" \
-            --build-arg UID="$(id -u)" --build-arg GID="$(id -g)")
-    else
-        message="please set '--gerrit-war' and '--task-plugin-jar'"
-        usage "$message"
-    fi
-
-    docker-compose "${compose_args[@]}" build "${build_args[@]}" ; ret=$?
-    if [ $ret -eq 0 ] ; then
-        docker-compose "${compose_args[@]}" up --abort-on-container-exit \
-            --exit-code-from run_tests ; ret=$?
-    fi
-    docker-compose "${compose_args[@]}" down -v --rmi local
-    echo "exit code: $ret"
-    return $ret
+fetch_artifact() { # source_location output_path
+    curl --silent --fail --netrc "$1" --output "$2" --create-dirs || die "unable to fetch $1"
 }
 
-check_prerequisite
+fetch_artifacts() {
+    fetch_artifact "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
+    fetch_artifact "$TASK_PLUGIN_JAR" "$ARTIFACTS/task.jar"
+}
+
+build_images() {
+    local build_args=(--build-arg GERRIT_WAR="/artifacts/gerrit.war" \
+        --build-arg TASK_PLUGIN_JAR="/artifacts/task.jar" \
+        --build-arg UID="$(id -u)" --build-arg GID="$(id -g)")
+    docker-compose "${COMPOSE_ARGS[@]}" build "${build_args[@]}" --quiet
+    rm -r "$ARTIFACTS"
+}
+
+run_task_plugin_tests() {
+    docker-compose "${COMPOSE_ARGS[@]}" up --detach
+    local runtests_container=$(docker ps | grep "$PROJECT_NAME"_run_tests | \
+        awk '{print $1}')
+    docker exec --user=gerrit_admin "$runtests_container" \
+            '/task/test/docker/run_tests/start.sh'
+}
+
+cleanup() {
+    docker-compose "${COMPOSE_ARGS[@]}" down -v --rmi local 2>/dev/null
+}
+
 while (( "$#" )) ; do
     case "$1" in
         --help|-h)                usage ;;
         --gerrit-war|-g)          shift ; GERRIT_WAR=$1 ;;
         --task-plugin-jar|-t)     shift ; TASK_PLUGIN_JAR=$1 ;;
-        *)                        usage "invalid argument '$1'" ;;
+        *)                        usage "invalid argument $1" ;;
     esac
     shift
 done
+[ -n "$GERRIT_WAR" ] || usage "'--gerrit-war' not set"
+[ -n "$TASK_PLUGIN_JAR" ] || usage "'--task-plugin-jar' not set"
+PROJECT_NAME="task_$$"
+COMPOSE_YAML="$MYDIR/docker-compose.yaml"
+COMPOSE_ARGS=(--project-name "$PROJECT_NAME" -f "$COMPOSE_YAML")
+check_prerequisite
+progress "fetching artifacts" fetch_artifacts
+progress "Building docker images" build_images
+run_task_plugin_tests ; RESULT=$?
+cleanup
 
-run_test
+exit "$RESULT"
