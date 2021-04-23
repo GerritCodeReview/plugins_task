@@ -19,4 +19,4 @@ RUN groupadd -f -g $GID users2 && \
   chown -R $GERRIT_USER $GERRIT_SITE $USER_HOME
 
 USER $GERRIT_USER
-ENTRYPOINT /docker/gerrit_start.sh
+ENTRYPOINT ["/docker/gerrit_start.sh"]

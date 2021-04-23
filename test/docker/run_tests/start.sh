@@ -3,13 +3,6 @@
 USER_RUN_TESTS_DIR="$USER_HOME"/"$RUN_TESTS_DIR"
 cp -r /task "$USER_HOME"/
 
-ssh-keygen -P '' -f "$USER_HOME"/.ssh/id_rsa
-chmod 400 "$USER_HOME"/.ssh/id_rsa
-chmod 400 "$USER_HOME"/.ssh/id_rsa.pub
-
-git config --global user.name "gerrit_admin"
-git config --global user.email "gerrit_admin@localdomain"
-
 ./"$USER_RUN_TESTS_DIR"/wait-for-it.sh "$GERRIT_HOST":29418 -t 60 -- echo "gerrit is up"
 
 echo "Creating a default user account ..."
