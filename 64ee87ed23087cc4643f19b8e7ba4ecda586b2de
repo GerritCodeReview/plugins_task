@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fc1a58e9_fdd8d048",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1117824
+      },
+      "writtenOn": "2021-04-23T17:01:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bc4269c0_fc6edbd0",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 28
+      },
+      "revId": "64ee87ed23087cc4643f19b8e7ba4ecda586b2de",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c5f35b7_eecd5400",
@@ -37,6 +61,30 @@
       "writtenOn": "2021-04-23T10:59:53Z",
       "side": 1,
       "message": "nit: s/, also a/. A",
+      "range": {
+        "startLine": 13,
+        "startChar": 48,
+        "endLine": 13,
+        "endChar": 54
+      },
+      "revId": "64ee87ed23087cc4643f19b8e7ba4ecda586b2de",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a4eb4e7e_45fa39ff",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1117824
+      },
+      "writtenOn": "2021-04-23T17:01:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9c5f35b7_eecd5400",
       "range": {
         "startLine": 13,
         "startChar": 48,
@@ -156,6 +204,30 @@
       "side": 1,
       "message": "\u003e My reason is like providing separation from setup part and execution part. \n\u003e \n\u003e Till line 15 it\u0027s all setup from line 17 we are entering the actual test execution part so in that sense i thought maybe a space is a good thing to have here.\n\nI agree with Aditya\u0027s reasoning for the blank line, however I think Prudhvi was talking about the extra blank space on that line.",
       "parentUuid": "24eee229_9b65923f",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 1
+      },
+      "revId": "64ee87ed23087cc4643f19b8e7ba4ecda586b2de",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cdfac776_4092d7f6",
+        "filename": "test/docker/run_tests/start.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1117824
+      },
+      "writtenOn": "2021-04-23T17:01:18Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6131d33a_500118ed",
       "range": {
         "startLine": 16,
         "startChar": 0,
