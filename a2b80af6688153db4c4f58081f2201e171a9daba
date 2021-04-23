@@ -230,6 +230,24 @@
       "parentUuid": "ab2e911e_4f8f0cdf",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3482a8dd_63200455",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-04-23T09:49:11Z",
+      "side": 1,
+      "message": "I added standalone build mode to Buck years ago, based on Bucklets, and later migrated it to Bazel and Bazlets. It was always kind of \"best efforts\" support only, though. As the matter of fact, standalone build mode was removed from all gerrit plugins, that I support. I stopped working on standalone build mode.\n\nStandalone build mode is based on bazlets rules, where for example gerrit_plugin rule is implemented. Bazlets are fetched from the plugin\u0027s own WORKSPACE file, obviously. Recursive workspace is not supported in Bazel (it worked in Buck).\n\nWith UI migration to Polymer we added rules_closure dependency as well to bazlets: [1].\n\nYou can see it in action, for example in reviewers plugin on branch stable-3.1:\n\n  $ cd reviewers\n  $ git checkout stable-3.1\n  $ git describe --always HEAD\n  6bfb8c9\n  $ bazel build :reviewers\n  Target //:reviewers up-to-date:\n  bazel-bin/reviewers.jar\nINFO: Elapsed time: 185.651s, Critical Path: 45.76s\nINFO: 258 processes: 18 internal, 221 linux-sandbox, 2 local, 17 worker.\nINFO: Build completed successfully, 258 total actions\n\nin stable-3.1, reviewers plugin used Polymer 1/2 only:\n\n  polygerrit_plugin(\n    name \u003d \"rv-reviewers\",\n    srcs \u003d glob([\n        \"rv-reviewers/*.html\",\n        \"rv-reviewers/*.js\",\n    ]),\n    app \u003d \"plugin.html\",\n  )\n\nthat worked in standalone build mode, see: [2].\n\nAs I mentioned, standalone build mode was removed from all plugins, in reviewers plugin in: [3], with this commit message:\n\n  Bazel: Remove standalone build mode\n  This change is a preparation to migrate reviewers plugin to Polymer 3.\n\nMy thoughts to your comment:\n\n\u003e 2a) The plugin should either has its own package.json with all dependencies (including rollup.js) \n\nYes basically, dump the content of WORKSPACE from gerrit into the plugin, copy all BZL-files in bazlets.\n\n\u003e OR\n\u003e 2b) we should create our own rules for gerrit plugins and publish them separately \u003e (similar to rules_nodejs), so Gerrit plugins can use it.\n\nI don\u0027t think it would be needed, because JS plugins don\u0027t use any JavaScript API from gerrit core. You would only need it, if Gerrit-Polymer-API is exposed. Then yes, we would publish it to Rule NodeJs Regsitry. I did it all for GWT UI, obviously, see: [4]. That way, plugin were able to consume the GWT plugin API in standalone build mode from Maven Central.\n\n[1] https://gerrit-review.googlesource.com/c/bazlets/+/194794\n[2] https://gerrit-review.googlesource.com/c/bazlets/+/194794/2/tools/js.bzl#431\n[3] https://gerrit-review.googlesource.com/c/plugins/reviewers/+/221354\n[4] https://mvnrepository.com/artifact/com.google.gerrit/gerrit-plugin-gwtui",
+      "parentUuid": "ab2e911e_4f8f0cdf",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
