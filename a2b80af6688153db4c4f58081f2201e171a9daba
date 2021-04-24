@@ -266,6 +266,24 @@
       "parentUuid": "3482a8dd_63200455",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f8bf1679_b9179359",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-04-24T12:21:30Z",
+      "side": 1,
+      "message": "Not applicable any more. This is now moved to //tools/bzl:js.bzl in core or Bazlets in standalone build mode.",
+      "parentUuid": "c9112f37_a31d7500",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }

@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e7d24bf_716a7146",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 12
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-04-24T12:21:30Z",
+      "side": 1,
+      "message": "This now depends on new rule in core (change 304193) and Bazlets (change 304117).\n",
+      "revId": "0e2272fe2b2b9b36684047a3271433c330b579eb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
