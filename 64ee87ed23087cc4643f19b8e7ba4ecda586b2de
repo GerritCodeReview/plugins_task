@@ -48,6 +48,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "11690c3b_607dfb2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1080788
+      },
+      "writtenOn": "2021-04-26T05:28:29Z",
+      "side": 1,
+      "message": "2nd comment is still unaddressed",
+      "parentUuid": "fc1a58e9_fdd8d048",
+      "range": {
+        "startLine": 9,
+        "startChar": 16,
+        "endLine": 9,
+        "endChar": 28
+      },
+      "revId": "64ee87ed23087cc4643f19b8e7ba4ecda586b2de",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9c5f35b7_eecd5400",
