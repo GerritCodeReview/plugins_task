@@ -1,0 +1,4 @@
+- hosts: all
+  roles:
+    - name: ensure-docker
+      docker_compose_install: true
