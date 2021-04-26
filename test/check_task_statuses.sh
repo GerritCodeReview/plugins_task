@@ -131,6 +131,7 @@ REMOTE_USERS=ssh://$SERVER:$PORT/All-Users
 REF_ALL=refs/meta/config
 REF_USERS=refs/users/self
 
+RESULT=0
 
 mkdir -p "$OUT"
 q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
@@ -159,3 +160,5 @@ test_file preview.invalid --task--preview "$cnum,1" --task--invalid "$query"
 
 test_file invalid --task--invalid "$query"
 test_file invalid-applicable --task--applicable --task--invalid "$query"
+
+exit $RESULT
