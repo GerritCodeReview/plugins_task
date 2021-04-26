@@ -33,6 +33,29 @@
       "message": "@Nasser, could you please have a look as and when you get a chance",
       "revId": "fd6e05c08db8d13e5d7c831f0413941fd2902b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "edc3aa37_c339be07",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-04-26T21:43:15Z",
+      "side": 1,
+      "message": "We can do these two lines at the same time using docker-compose:\n\n docker-compose \"${COMPOSE_ARGS[@]}\" exec --user\u003dgerrit_admin run_tests \\\n     \u0027/task/test/docker/run_tests/start.sh\u0027",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 50
+      },
+      "revId": "fd6e05c08db8d13e5d7c831f0413941fd2902b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
