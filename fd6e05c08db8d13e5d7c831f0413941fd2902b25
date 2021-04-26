@@ -16,6 +16,23 @@
       "message": "\n./test_task_plugin.sh --gerrit-war \u0027https://gerrit-ci.gerritforge.com/job/Gerrit-bazel-stable-2.16/lastSuccessfulBuild/artifact/gerrit/bazel-bin/release.war\u0027 --task-plugin-jar \u0027https://gerrit-ci.gerritforge.com/job/plugin-task-bazel-stable-2.16/lastSuccessfulBuild/artifact/bazel-bin/plugins/task/task.jar\u0027\n\n\nRunning Task plugin tests ...\nPASSED - statuses test\nPASSED - all test\nPASSED - preview test\nPASSED - preview.invalid test\nPASSED - invalid test\nPASSED - invalid-applicable test",
       "revId": "fd6e05c08db8d13e5d7c831f0413941fd2902b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a955baf_c6b8492c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2021-04-26T18:42:32Z",
+      "side": 1,
+      "message": "@Nasser, could you please have a look as and when you get a chance",
+      "revId": "fd6e05c08db8d13e5d7c831f0413941fd2902b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
