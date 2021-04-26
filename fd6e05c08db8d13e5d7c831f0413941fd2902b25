@@ -56,6 +56,30 @@
       },
       "revId": "fd6e05c08db8d13e5d7c831f0413941fd2902b25",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a593736a_b57a28ba",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 4
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-04-26T21:55:49Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "edc3aa37_c339be07",
+      "range": {
+        "startLine": 66,
+        "startChar": 4,
+        "endLine": 69,
+        "endChar": 50
+      },
+      "revId": "fd6e05c08db8d13e5d7c831f0413941fd2902b25",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }

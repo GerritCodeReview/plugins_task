@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "28d76f3d_dd00c2bf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-04-26T21:55:49Z",
+      "side": 1,
+      "message": "Verified with:\n\n $ ./test/docker/run.sh -g \u0027file:///Users/nasserg/work/gerrit-plugins/gerrit-2.16-stable.war\u0027 -t  file:///Users/nasserg/work/gerrit-plugins/task/bazel-bin/task.jar\n Running Task plugin tests ...\n PASSED - statuses test\n PASSED - all test\n PASSED - preview test\n PASSED - preview.invalid test\n PASSED - invalid test\n PASSED - invalid-applicable test\n",
+      "revId": "c1cb110388ceea81e90ed0b3d87cb667ef0b8eb9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
