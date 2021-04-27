@@ -27,6 +27,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -114,10 +115,11 @@ public class Properties {
   }
 
   protected String getFirstUnexpandedProperty() {
-    for (String property : unexpanded.keySet()) {
-      return property;
+    try {
+      return unexpanded.keySet().iterator().next();
+    } catch (NoSuchElementException e) {
+      return null;
     }
-    return null;
   }
 
   protected void expandInPlace(List<String> list) {
