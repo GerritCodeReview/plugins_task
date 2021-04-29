@@ -6,9 +6,11 @@
   "devDependencies": {
     "eslint": "^6.6.0",
     "eslint-config-google": "^0.13.0",
-    "eslint-plugin-html": "^6.0.0"
+    "eslint-plugin-html": "^6.0.0",
+    "rollup": "^2.46.0"
   },
   "scripts": {
+    "build": "rollup -c",
     "eslint": "./node_modules/eslint/bin/eslint.js --ext .html,.js gr-task-plugin || exit 0",
     "eslintfix": "./node_modules/eslint/bin/eslint.js --fix --ext .html,.js gr-task-plugin || exit 0"
   },
