@@ -284,6 +284,24 @@
       "parentUuid": "c9112f37_a31d7500",
       "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2ffe061_b4e42d9a",
+        "filename": "BUILD",
+        "patchSetId": 5
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-04-29T20:57:21Z",
+      "side": 1,
+      "message": "\u003e These three BUILD rules look a bit intimidating, but they don\u0027t actually do much:\n\u003e \n\u003e 1. rollup_bundle: Roll up the 3 js files into 1 but resolving the module imports.\n\u003e 2. polygerrit_plugin: Minify the js.\n\u003e 3. genrule2: Zip the js file.\n\u003e \n\u003e What about just checking in 1 javascript file for your plugin instead of 3? The \u003eplugin is small enough, so this is still readable. Minifying and zipping also seems unnecessary boilerplate. So if you just have one js file, then you can reference that from your gerrit_plugin() resources directly and do not have to use any of the above 3 BUILD rules. WDYT?\n\n@Ben, I\u0027ve just implemented your above suggestion in change 304595.\n\nI went one step further, and still use separated JS file, and create rollup bundle manually, with `npm run build` invocation:\n\n  $ npm run build\n  \u003e task@2.16.13-SNAPSHOT build /home/davido/projects/task\n  \u003e rollup -c\n  gr-task-plugin/plugin.js → src/main/resources/static/gr-task-plugin.js...\n  created src/main/resources/static/gr-task-plugin.js in 49ms\n\nDone. I compared the produced output file and the content is exactly the same as the one produced with polygerrit_plugin/gerrit_js_bundle with Bazel, but without minification step. Of course we could also add terser plugin to perform JS minification with this setup outside Bazel.\n\nThe only disadvantage that I see is that manually performed bundling step. One could change the sources, but missed to run `npm run build` command and would end up with stale JS bundle inside final plugin artifact.\n\nBut the point was to demonstrate, that we don\u0027t really need rules_nodejs, and npm dependencies semi-managed by Bazel/npm integration and just could do bundling outside of Bazel (or not at all, if you would just use bundled JS as source of truth, and don\u0027t run/use rollup/terser at all).",
+      "parentUuid": "c87b294a_ea1444b0",
+      "revId": "a2b80af6688153db4c4f58081f2201e171a9daba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
