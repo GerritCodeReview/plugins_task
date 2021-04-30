@@ -20,18 +20,24 @@ progress() { # message cmd [args]...
 }
 
 usage() { # [error_message]
-    local prog=$(basename "$0")
+    local prog=$(basename -- "$0")
 
     cat <<-EOF
 Usage:
-    "$prog" --gerrit-war|-g <Gerrit WAR URL or file path> \
-        --task-plugin-jar|-t <task plugin URL or file path>
+    $prog [--task-plugin-jar|-t <FILE_PATH>] [--gerrit-war|-g <FILE_PATH>]
 
+    This tool runs the plugin functional tests in a Docker environment built
+    from the gerritcodereview/gerrit base Docker image.
+
+    The task plugin JAR and optionally a Gerrit WAR are expected to be in the
+    $ARTIFACTS dir;
+    however, the --task-plugin-jar and --gerrit-war switches may be used as
+    helpers to specify which files to copy there.
+
+    Options:
     --help|-h
-    --gerrit-war|-g            gerrit WAR URL (or) the file path in local workspace
-                               eg: file:///path/to/source/file
-    --task-plugin-jar|-t       task plugin JAR URL (or) the file path in local workspace
-                               eg: file:///path/to/source/file
+    --gerrit-war|-g            path to Gerrit WAR file
+    --task-plugin-jar|-t       path to task plugin JAR file
 
 EOF
 
@@ -44,26 +50,13 @@ check_prerequisite() {
     docker-compose --version > /dev/null || die "docker-compose is not installed"
 }
 
-fetch_artifact() { # source_location output_path
-    curl --silent --fail --netrc "$1" --output "$2" --create-dirs || die "unable to fetch $1"
-}
-
-fetch_artifacts() {
-    fetch_artifact "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
-    fetch_artifact "$TASK_PLUGIN_JAR" "$ARTIFACTS/task.jar"
-}
-
 build_images() {
-    local build_args=(--build-arg GERRIT_WAR="/artifacts/gerrit.war" \
-        --build-arg TASK_PLUGIN_JAR="/artifacts/task.jar" \
-        --build-arg UID="$(id -u)" --build-arg GID="$(id -g)")
-    docker-compose "${COMPOSE_ARGS[@]}" build "${build_args[@]}" --quiet
-    rm -r "$ARTIFACTS"
+    docker-compose "${COMPOSE_ARGS[@]}" build --quiet
 }
 
 run_task_plugin_tests() {
     docker-compose "${COMPOSE_ARGS[@]}" up --detach
-    docker-compose "${COMPOSE_ARGS[@]}" exec --user=gerrit_admin run_tests \
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=gerrit_admin run_tests \
         '/task/test/docker/run_tests/start.sh'
 }
 
@@ -80,13 +73,18 @@ while (( "$#" )) ; do
     esac
     shift
 done
-[ -n "$GERRIT_WAR" ] || usage "'--gerrit-war' not set"
-[ -n "$TASK_PLUGIN_JAR" ] || usage "'--task-plugin-jar' not set"
 PROJECT_NAME="task_$$"
 COMPOSE_YAML="$MYDIR/docker-compose.yaml"
 COMPOSE_ARGS=(--project-name "$PROJECT_NAME" -f "$COMPOSE_YAML")
 check_prerequisite
-progress "fetching artifacts" fetch_artifacts
+mkdir -p -- "$ARTIFACTS"
+[ -n "$TASK_PLUGIN_JAR" ] && cp -f "$TASK_PLUGIN_JAR" "$ARTIFACTS/task.jar"
+if [ ! -e "$ARTIFACTS/task.jar" ] ; then
+    MISSING="Missing $ARTIFACTS/task.jar"
+    [ -n "$TASK_PLUGIN_JAR" ] && die "$MISSING, check for copy failure?"
+    usage "$MISSING, did you forget --task-plugin-jar?"
+fi
+[ -n "$GERRIT_WAR" ] && cp -f "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
 progress "Building docker images" build_images
 run_task_plugin_tests ; RESULT=$?
 cleanup
