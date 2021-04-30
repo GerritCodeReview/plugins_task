@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f612642c_1b7dad4c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1013302
+      },
+      "writtenOn": "2021-04-30T06:08:19Z",
+      "side": 1,
+      "message": "Nice. Yeah, that would work. :-)",
+      "revId": "e1cfd4801cc58128c57d77e3e6aa6538d3c79370",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99645a60_c6fb7698",
+        "filename": "src/main/resources/static/gr-task-plugin.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1013302
+      },
+      "writtenOn": "2021-04-30T06:08:19Z",
+      "side": 1,
+      "message": "This is the artifact that rollup produces, right? So that would probably not be checked in? Well, I guess you could ...",
+      "revId": "e1cfd4801cc58128c57d77e3e6aa6538d3c79370",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
