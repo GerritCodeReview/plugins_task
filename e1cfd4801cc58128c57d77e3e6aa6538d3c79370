@@ -33,6 +33,24 @@
       "message": "This is the artifact that rollup produces, right? So that would probably not be checked in? Well, I guess you could ...",
       "revId": "e1cfd4801cc58128c57d77e3e6aa6538d3c79370",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "1121644d_4db5fd1c",
+        "filename": "src/main/resources/static/gr-task-plugin.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-04-30T06:21:53Z",
+      "side": 1,
+      "message": "Right. I considered it, but then CI would also have to set up the npm machinery and invoke `npm run build` before running `bazel build :task`, but this approach would work too.",
+      "parentUuid": "99645a60_c6fb7698",
+      "revId": "e1cfd4801cc58128c57d77e3e6aa6538d3c79370",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
