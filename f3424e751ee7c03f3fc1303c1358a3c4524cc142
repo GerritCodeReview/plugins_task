@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0554414c_55161b14",
+        "filename": "test/check_task_statuses.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-05T20:29:55Z",
+      "side": 1,
+      "message": "This comment should be removed now too.",
+      "range": {
+        "startLine": 4,
+        "startChar": 18,
+        "endLine": 4,
+        "endChar": 52
+      },
+      "revId": "f3424e751ee7c03f3fc1303c1358a3c4524cc142",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
