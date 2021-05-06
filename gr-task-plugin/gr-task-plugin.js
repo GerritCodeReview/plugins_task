@@ -78,10 +78,28 @@
       }
     },
 
+    _computeIcon(task) {
+      const icon = {};
+      switch (task.status) {
+        case 'FAIL':
+          icon.id = 'gr-icons:close';
+          icon.color = 'red';
+          icon.tooltip = 'Blocked';
+          break;
+        case 'READY':
+          icon.id = 'gr-icons:check';
+          icon.color = 'green';
+          icon.tooltip = 'Needs';
+          break;
+      }
+      return icon;
+    },
+
     _addTasks(tasks) { // rename to process, remove DOM bits
       if (!tasks) return [];
       tasks.forEach(task => {
         task.message = this._computeMessage(task);
+        task.icon = this._computeIcon(task);
         this._addTasks(task.sub_tasks);
       });
       return tasks;

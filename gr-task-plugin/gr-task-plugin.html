@@ -17,13 +17,13 @@ limitations under the License.
 <dom-module id="gr-task-plugin">
   <template>
       <style>
-        ul { padding-left: 30px; }
-        h3 { padding-left: 5px; }
+        ul { padding-left: 0.5em; }
+        h3 { padding-left: 0.1em; }
       </style>
 
       <div id="tasks" hidden$="[[!_tasks.length]]">
         <h3>Tasks: (Needs + Blocked)</h3>
-        <ul>
+        <ul style="list-style-type:none;">
           <gr-task-plugin-tasks tasks="[[_tasks]]"></gr-task-plugin-tasks>
         </ul>
       </div>
@@ -35,7 +35,36 @@ limitations under the License.
   <template>
     <template is="dom-repeat" as="task" items="[[tasks]]">
       <template is="dom-if" if="[[task.message]]">
-        <li>[[task.message]]</li>
+        <li>
+          <style>
+            .green {
+              color: greenyellow
+            }
+            .red {
+              color: chocolate
+            }
+          </style>
+          <template is="dom-if" if="[[task.icon.id]]">
+            <gr-tooltip-content
+                has-tooltip
+                title="In Progress">
+                <iron-icon
+                  icon="gr-icons:hourglass"
+                  class="green"
+                  hidden$="[[!task.in_progress]]">
+                </iron-icon>
+            </gr-tooltip-content>
+            <gr-tooltip-content
+                has-tooltip
+                title$="[[task.icon.tooltip]]">
+                <iron-icon
+                  icon="[[task.icon.id]]"
+                  class$="[[task.icon.color]]">
+                </iron-icon>
+            </gr-tooltip-content>
+          </template>
+          [[task.message]]
+        </li>
       </template>
       <gr-task-plugin-tasks tasks="[[task.sub_tasks]]"></gr-task-plugin-tasks>
     </template>
