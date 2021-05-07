@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1f5fa44c_adcbfa81",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-07T20:57:25Z",
+      "side": 1,
+      "message": "Jim, looks like this is failing because the node Zuul is running this job on doesn\u0027t have docker installed:\n\n 2021-05-07 20:24:41.852594 | testnode | ERROR: docker is not installed\n\nhttps://ci.gerritcodereview.com/t/gerrit/stream/477b82db5cb045f6994b8ebab5279bb6?logfile\u003dconsole.log\n\nIs it possible to have docker installed? Is that something I can help configure?",
+      "revId": "a731b1dcf015c9d6e98d7af34ded0b00aaac0f55",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
