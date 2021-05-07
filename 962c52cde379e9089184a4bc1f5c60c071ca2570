@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "80d06cbc_4490b79c",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1117824
+      },
+      "writtenOn": "2021-05-07T16:42:36Z",
+      "side": 1,
+      "message": "./run.sh --gerrit-war file://$PWD/gerrit.war --task-plugin-jar file://$PWD/task.jar\n\nRunning Task plugin tests ...\nPASSED - statuses test\nPASSED - all test\nPASSED - preview test\nPASSED - preview.invalid test\nPASSED - invalid test\nPASSED - invalid-applicable test",
+      "revId": "962c52cde379e9089184a4bc1f5c60c071ca2570",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
