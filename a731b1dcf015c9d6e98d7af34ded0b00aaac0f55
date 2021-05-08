@@ -16,6 +16,24 @@
       "message": "Jim, looks like this is failing because the node Zuul is running this job on doesn\u0027t have docker installed:\n\n 2021-05-07 20:24:41.852594 | testnode | ERROR: docker is not installed\n\nhttps://ci.gerritcodereview.com/t/gerrit/stream/477b82db5cb045f6994b8ebab5279bb6?logfile\u003dconsole.log\n\nIs it possible to have docker installed? Is that something I can help configure?",
       "revId": "a731b1dcf015c9d6e98d7af34ded0b00aaac0f55",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6259e7c9_15ccc436",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1087826
+      },
+      "writtenOn": "2021-05-08T15:08:37Z",
+      "side": 1,
+      "message": "Yes! First some general thoughts just to make sure all the implications are known:\n\nUsing a docker image of Gerrit for the tests means than any changes to this plugin which depend on a change to Gerrit won\u0027t be able to pass until the change to Gerrit merges.  You may have recently seen that we used Zuul\u0027s dependency feature to show that a change to a plugin that depended on a change to a core would pass if both were tested together.  Because the gerrit in this docker test is a fixed version, that won\u0027t work.\n\nThere is a way to make that work using speculative container images, but it involves setting up quite a bit more infrastructure (docker builds of Gerrit and a temporary container registry).  It\u0027s probably not worth doing unless functional tests with docker are going to be widely used in other repos.\n\nAnother option which would maintain the ability to use cross-repo-dependencies while still running this test as currently written would be to put it in a second job.  Then the docker test would fail if a change depended on an unmerged change to Gerrit, but the normal test suite which can take advantage of CRDs would succeed.\n\nHaving said all of that, it may be that you anticipate never needing a change to Gerrit itself.  In that case, the change as written is probably fine and the other solutions aren\u0027t worth the effort.\n\nThe easiest way to do that is probably to override the `gerrit-plugin-build` job in this repo by adding a .zuul.yaml with the following:\n\n(The first line of this is being eaten by gerrit comment parsing, it should be \" - job:\" with the j aligned with the n on the next line.)\n\n\u003e - job:\n\u003e   name: plugins-task-build\n\u003e   parent: gerrit-plugin-build\n\u003e   pre-run:\n\u003e     playbooks/install_docker.yaml\n\u003e \n\u003e - project:\n\u003e     check:\n\u003e       jobs:\n\u003e         - plugins-task-build\n\nThat will run the existing job, but run a playbook before it starts where you can install docker.\n\nAdd a playbooks/install_docker.yaml file (you can put that file anywhere and update the zuul config accordingly; maybe you want it in tools/playbooks or something):\n\n(Same deal with this first line.)\n\n\u003e - hosts: all\n\u003e   tasks:\n\u003e     - name: Install docker\n\u003e       shell: |\n\u003e         # steps to install docker here\n\nZuul will dynamically run the new job with these changes as soon as you upload them for review (they don\u0027t need to merge).\n\nBut since the project configuration that tells Zuul to run this job is in the zuul/config repo, the original job will still be running; remove the plugins/task project stanza from zuul/config/zuul.d/projects.yaml in that repo.  That change is not dynamically evaluated (the zuul/config repo is special), so it will have to merge to take effect in order to remove the old job.",
+      "parentUuid": "1f5fa44c_adcbfa81",
+      "revId": "a731b1dcf015c9d6e98d7af34ded0b00aaac0f55",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
