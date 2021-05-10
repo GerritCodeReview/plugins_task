@@ -34,6 +34,24 @@
       "parentUuid": "1f5fa44c_adcbfa81",
       "revId": "a731b1dcf015c9d6e98d7af34ded0b00aaac0f55",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ed30ffb0_35f597b3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-10T16:42:17Z",
+      "side": 1,
+      "message": "\u003e Yes! First some general thoughts just to make sure all the implications are known:\n\u003e \n\u003e Using a docker image of Gerrit for the tests means than any changes to this plugin which depend on a change to Gerrit won\u0027t be able to pass until the change to Gerrit merges.  You may have recently seen that we used Zuul\u0027s dependency feature to show that a change to a plugin that depended on a change to a core would pass if both were tested together.  Because the gerrit in this docker test is a fixed version, that won\u0027t work.\n\nThis is a good point. I think it\u0027ll be ok for stable branches, but maybe not for too long and I probably will want to explore the speculative image option at some point. We do plan to introduce functional tests with docker in several other repos.\n\n[snip]\n\n\u003e \n\u003e Add a playbooks/install_docker.yaml file (you can put that file anywhere and update the zuul config accordingly; maybe you want it in tools/playbooks or something):\n\u003e \n\u003e (Same deal with this first line.)\n\u003e \n\u003e \u003e - hosts: all\n\u003e \u003e   tasks:\n\u003e \u003e     - name: Install docker\n\u003e \u003e       shell: |\n\u003e \u003e         # steps to install docker here\n\nHow do I know what OS flavor to write the steps for here? Do I look at zuul/config.git/zuul.d/nodesets.yaml ? That currently looks to be debian-stretch based and docker claims to want debian-buster or newer. What\u0027s the appropriate way to resolve that?\n\n\u003e \n\u003e Zuul will dynamically run the new job with these changes as soon as you upload them for review (they don\u0027t need to merge).\n\nCool!\n\n\u003e \n\u003e But since the project configuration that tells Zuul to run this job is in the zuul/config repo, the original job will still be running; remove the plugins/task project stanza from zuul/config/zuul.d/projects.yaml in that repo.  That change is not dynamically evaluated (the zuul/config repo is special), so it will have to merge to take effect in order to remove the old job.\n\nGot it, will do.\n\nThanks for all the help here!",
+      "parentUuid": "6259e7c9_15ccc436",
+      "revId": "a731b1dcf015c9d6e98d7af34ded0b00aaac0f55",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
