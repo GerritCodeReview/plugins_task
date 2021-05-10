@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ef74f340_43c35339",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2021-05-10T10:53:29Z",
+      "side": 1,
+      "message": "nit: wrap under 72 chars.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 75
+      },
+      "revId": "3a4630ea026f48952fb173569b00e5035832c539",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "60924540_2afb7959",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2021-05-10T10:53:29Z",
+      "side": 1,
+      "message": "Verified.\n\n./test/docker/run.sh --gerrit-war file:///Users/prudhvi/Documents/gerrit-2.16.25.war --task-plugin-jar file:///Users/prudhvi/Clones/googletask/bazel-bin/task.jar\n\nRunning Task plugin tests ...\nPASSED - statuses test\nPASSED - all test\nPASSED - preview test\nPASSED - preview.invalid test\nPASSED - invalid test\nPASSED - invalid-applicable test",
+      "revId": "3a4630ea026f48952fb173569b00e5035832c539",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
