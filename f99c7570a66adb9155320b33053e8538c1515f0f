@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "34c2bdd1_6f98e9a4",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-10T20:10:52Z",
+      "side": 1,
+      "message": "Verified using child change:\n\n $ bazel test docker-tests\n DEBUG: /Users/nasserg/.cache/bazel/f0b3c0a174d1cc9d35784dadc91f4c37/external/io_bazel_rules_closure/closure/compiler/closure_js_binary.bzl:37:5: dependency_mode\u003dLOOSE is deprecated and will be removed soon; prefer to use its equivalent PRUNE_LEGACY\n INFO: Analyzed target //:docker-tests (1 packages loaded, 54 targets configured).\n INFO: Found 1 test target...\n Target //:docker-tests up-to-date:\n   bazel-bin/docker-tests\n INFO: Elapsed time: 121.682s, Critical Path: 121.38s\n INFO: 7 processes: 4 darwin-sandbox, 2 local, 1 worker.\n INFO: Build completed successfully, 7 total actions\n //:docker-tests                                                          PASSED in 120.8s\n \n INFO: Build completed successfully, 7 total actions",
+      "revId": "f99c7570a66adb9155320b33053e8538c1515f0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
