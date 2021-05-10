@@ -22,6 +22,30 @@
       },
       "revId": "8761921370797993627996665dc62d6255fa0bdd",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f90bddc_4bccb92d",
+        "filename": "tools/playbooks/install_docker.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1087826
+      },
+      "writtenOn": "2021-05-10T22:21:32Z",
+      "side": 1,
+      "message": "At the end of this shell process, we\u0027ll drop back to the previous group membership and the next process won\u0027t pick it up because the SSH connection is cached.  That can be fixed by having Ansible reset the ssh connection, but this looks like it has a lot in common with the \"ensure-docker\" role that\u0027s in the zuul-jobs library.  So we might be able to make this simpler by using that role for some or all of this.\n\nIf you want, you can replace the tasks section with just a role section like this:\n\n  roles:\n    - ensure-docker\n\nOr, actually since it looks like you also want compose:\n\n  roles:\n    - name: ensure-docker\n      docker_compose_install: true\n\nAnd if you need to do anything else, you can keep the tasks section with the shell task (it will run after the role).\n\nHere\u0027s the doc for the role: https://zuul-ci.org/docs/zuul-jobs/container-roles.html#role-ensure-docker\n\nAnd here\u0027s the source if there are any questions about what it\u0027s doing; https://opendev.org/zuul/zuul-jobs/src/branch/master/roles/ensure-docker\n\nFor completeness, here\u0027s where that role resets the ssh connection: https://opendev.org/zuul/zuul-jobs/src/branch/master/roles/ensure-docker/tasks/docker-setup.yaml#L62",
+      "parentUuid": "6268cfeb_55d8f94e",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "8761921370797993627996665dc62d6255fa0bdd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
