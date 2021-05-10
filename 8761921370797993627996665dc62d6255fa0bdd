@@ -70,6 +70,30 @@
       },
       "revId": "8761921370797993627996665dc62d6255fa0bdd",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e05ec618_1ef2023e",
+        "filename": "tools/playbooks/install_docker.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-10T22:57:30Z",
+      "side": 1,
+      "message": "\u003e \u003e Or, actually since it looks like you also want compose:\n\u003e \u003e \n\u003e \u003e   roles:\n\u003e \u003e     - name: ensure-docker\n\u003e \u003e       docker_compose_install: true\n\u003e \u003e \n\u003e \n\u003e Well that\u0027s a lot simpler, thanks 😊\n\nUgh, except the version of compose it installed is too old. 😭\n\n Version in\n \"/home/zuul/src/gerrit.googlesource.com/gerrit/plugins/task/test/docker/docker-compose.yaml\"\n is unsupported. You might be seeing this error because you\u0027re using the wrong\n Compose file version. Either specify a version of \"2\" (or \"2.0\") and place your\n service definitions under the `services` key, or omit the `version` key and place\n your service definitions at the root of the file to use version 1.\n\nWe\u0027re using version: \u00273\u0027, which has been supported since compose version 1.10.0: https://github.com/docker/compose/releases/tag/1.10.0\n\nDo I go back to installing compose myself in a task?",
+      "parentUuid": "617dfc39_2085561c",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "8761921370797993627996665dc62d6255fa0bdd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
