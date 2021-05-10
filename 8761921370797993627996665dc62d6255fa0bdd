@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6268cfeb_55d8f94e",
+        "filename": "tools/playbooks/install_docker.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-10T20:54:57Z",
+      "side": 1,
+      "message": "This is supposed to be enough to get the user\u0027s groups updated so that it can run docker commands without sudo, but it doesn\u0027t seem to be working:\n\n PermissionError: [Errno 13] Permission denied\n\nhttps://ci.gerritcodereview.com/t/gerrit/build/7c53b8eaad544d90b7c0021a49799fb5",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "8761921370797993627996665dc62d6255fa0bdd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
