@@ -46,6 +46,30 @@
       },
       "revId": "8761921370797993627996665dc62d6255fa0bdd",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "617dfc39_2085561c",
+        "filename": "tools/playbooks/install_docker.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-10T22:29:22Z",
+      "side": 1,
+      "message": "\u003e Or, actually since it looks like you also want compose:\n\u003e \n\u003e   roles:\n\u003e     - name: ensure-docker\n\u003e       docker_compose_install: true\n\u003e \n\nWell that\u0027s a lot simpler, thanks 😊\n\nI didn\u0027t see anywhere in the docs where it provides an overview of what roles are. Does that exist?",
+      "parentUuid": "5f90bddc_4bccb92d",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "8761921370797993627996665dc62d6255fa0bdd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
