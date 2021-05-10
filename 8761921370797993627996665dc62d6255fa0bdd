@@ -94,6 +94,30 @@
       },
       "revId": "8761921370797993627996665dc62d6255fa0bdd",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd95b393_265fbb2d",
+        "filename": "tools/playbooks/install_docker.yaml",
+        "patchSetId": 6
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1087826
+      },
+      "writtenOn": "2021-05-10T23:52:53Z",
+      "side": 1,
+      "message": "(I probably should have thought of the ensure-docker role first, sorry!)\n\nIt looks like the role installs docker-compose from the distro, and we\u0027re on an old debian right now.  So that might be the best approach (short of updating ensure-docker to install from elsewhere).  We can always remove the local task after we upgrade our base images.\n\nSo it looks like the job passes now and you\u0027re set; you cane remove the other job from zuul/config.  But note that right now, this job only exists on this branch; you\u0027ll need to copy it to other branches in this repo if you want it to run there.",
+      "parentUuid": "e05ec618_1ef2023e",
+      "range": {
+        "startLine": 11,
+        "startChar": 8,
+        "endLine": 11,
+        "endChar": 21
+      },
+      "revId": "8761921370797993627996665dc62d6255fa0bdd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
