@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c44d1196_4547f5a9",
+        "filename": "test/docker/gerrit/Dockerfile",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-11T14:50:05Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e740ae8c_93ee5c80",
+      "revId": "cfbdf21cefb562f581f0715bf28b402bed81a1c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "99fee4a9_9155fa45",
@@ -31,6 +49,30 @@
       "writtenOn": "2021-05-11T14:40:04Z",
       "side": 1,
       "message": "Can you kindly use full length switch if available..?",
+      "range": {
+        "startLine": 59,
+        "startChar": 45,
+        "endLine": 59,
+        "endChar": 47
+      },
+      "revId": "cfbdf21cefb562f581f0715bf28b402bed81a1c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9cd17aa6_0d6c5c80",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-11T14:50:05Z",
+      "side": 1,
+      "message": "There isn\u0027t one available :(",
+      "parentUuid": "99fee4a9_9155fa45",
       "range": {
         "startLine": 59,
         "startChar": 45,
