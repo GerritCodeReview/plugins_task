@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d33cfc7b_3c9b62e2",
+        "filename": ".bazelversion",
+        "patchSetId": 1
+      },
+      "lineNbr": 1,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2021-05-11T14:49:20Z",
+      "side": 1,
+      "message": "Gerrit 2.16.27 uses bazel 3.1.0, I think we should map to the stable version for which this branch is destined.",
+      "range": {
+        "startLine": 1,
+        "startChar": 0,
+        "endLine": 1,
+        "endChar": 5
+      },
+      "revId": "af455f38d97fd3ef04f623dc07449fceff044fd2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
