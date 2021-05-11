@@ -46,10 +46,11 @@ limitations under the License.
           <template is="dom-if" if="[[_expand_all]]">
             <gr-button
                 on-tap="_show_all_tap"
-                disabled="[[_is_show_all(_show_all)]]"> Show All </gr-button>
+                disabled="[[_is_show_all(_show_all)]]"> Show All ([[_all_count]]) </gr-button>
             <gr-button
                 on-tap="_needs_and_blocked_tap"
-                disabled="[[!_is_show_all(_show_all)]]"> Needs + Blocked</gr-button>
+                disabled="[[!_is_show_all(_show_all)]]">
+              Needs + Blocked ([[_ready_count]], [[_fail_count]]) </gr-button>
           </template>
         </div>
         </div>
