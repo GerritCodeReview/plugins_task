@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e740ae8c_93ee5c80",
+        "filename": "test/docker/gerrit/Dockerfile",
+        "patchSetId": 3
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2021-05-11T14:40:04Z",
+      "side": 1,
+      "message": "I don\u0027t think touch is needed ..?\ngerrit.config is created in gerrit image..?\nhttps://github.com/GerritCodeReview/docker-gerrit/blob/stable-2.16/ubuntu/16/Dockerfile",
+      "revId": "cfbdf21cefb562f581f0715bf28b402bed81a1c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "99fee4a9_9155fa45",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 59,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2021-05-11T14:40:04Z",
+      "side": 1,
+      "message": "Can you kindly use full length switch if available..?",
+      "range": {
+        "startLine": 59,
+        "startChar": 45,
+        "endLine": 59,
+        "endChar": 47
+      },
+      "revId": "cfbdf21cefb562f581f0715bf28b402bed81a1c8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
