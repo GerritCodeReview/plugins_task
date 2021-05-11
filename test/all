@@ -359,6 +359,43 @@
             },
             {
                "applicable" : true,
+               "hasPass" : false,
+               "name" : "Root tasks-factory",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "my a task",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "my b task",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "my c task",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Root tasks-factory static (empty name)"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Root tasks-factory static (empty name PASS)",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
                "exported" : {
                   "root" : "Root Properties"
                },
@@ -619,6 +656,42 @@
                   {
                      "name" : "UNKNOWN",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             },
@@ -767,6 +840,42 @@
                   {
                      "name" : "UNKNOWN",
                      "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }

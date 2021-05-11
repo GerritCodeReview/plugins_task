@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.common.Container;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -38,7 +39,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
   }
 
-  public class Task extends Section {
+  public class TaskBase extends Section {
     public String applicable;
     public Map<String, String> exported;
     public String fail;
@@ -51,12 +52,13 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String readyHint;
     public List<String> subTasks;
     public List<String> subTasksExternals;
+    public List<String> subTasksFactories;
     public List<String> subTasksFiles;
 
     public boolean isVisible;
     public boolean isTrusted;
 
-    public Task(SubSection s, boolean isVisible, boolean isTrusted) {
+    public TaskBase(SubSection s, boolean isVisible, boolean isTrusted) {
       this.isVisible = isVisible;
       this.isTrusted = isTrusted;
       applicable = getString(s, KEY_APPLICABLE, null);
@@ -71,7 +73,51 @@ public class TaskConfig extends AbstractVersionedMetaData {
       readyHint = getString(s, KEY_READY_HINT, null);
       subTasks = getStringList(s, KEY_SUBTASK);
       subTasksExternals = getStringList(s, KEY_SUBTASKS_EXTERNAL);
+      subTasksFactories = getStringList(s, KEY_SUBTASKS_FACTORY);
       subTasksFiles = getStringList(s, KEY_SUBTASKS_FILE);
+    }
+
+    protected TaskBase(TaskBase base) {
+      for (Field field : TaskBase.class.getDeclaredFields()) {
+        try {
+          field.setAccessible(true);
+          field.set(this, field.get(base));
+        } catch (IllegalAccessException e) {
+          throw new RuntimeException(e);
+        }
+      }
+    }
+  }
+
+  public class Task extends TaskBase {
+    public String name;
+
+    public Task(SubSection s, boolean isVisible, boolean isTrusted) {
+      super(s, isVisible, isTrusted);
+      name = getString(s, KEY_NAME, s.subSection);
+    }
+
+    protected Task(TaskBase base) {
+      super(base);
+    }
+  }
+
+  public class TasksFactory extends TaskBase {
+    public String namesFactory;
+
+    public TasksFactory(SubSection s, boolean isVisible, boolean isTrusted) {
+      super(s, isVisible, isTrusted);
+      namesFactory = getString(s, KEY_NAMES_FACTORY, null);
+    }
+  }
+
+  public class NamesFactory extends Section {
+    public List<String> names;
+    public String type;
+
+    public NamesFactory(SubSection s) {
+      names = getStringList(s, KEY_NAME);
+      type = getString(s, KEY_TYPE, null);
     }
   }
 
@@ -91,8 +137,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
       Pattern.compile("([^ |]*( *[^ |])*) *\\| *");
 
   protected static final String SECTION_EXTERNAL = "external";
+  protected static final String SECTION_NAMES_FACTORY = "names-factory";
   protected static final String SECTION_ROOT = "root";
   protected static final String SECTION_TASK = "task";
+  protected static final String SECTION_TASKS_FACTORY = "tasks-factory";
   protected static final String KEY_APPLICABLE = "applicable";
   protected static final String KEY_EXPORT_PREFIX = "export-";
   protected static final String KEY_FAIL = "fail";
@@ -100,17 +148,26 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String KEY_FILE = "file";
   protected static final String KEY_IN_PROGRESS = "in-progress";
   protected static final String KEY_NAME = "name";
+  protected static final String KEY_NAMES_FACTORY = "names-factory";
   protected static final String KEY_PASS = "pass";
   protected static final String KEY_PRELOAD_TASK = "preload-task";
   protected static final String KEY_PROPERTIES_PREFIX = "set-";
   protected static final String KEY_READY_HINT = "ready-hint";
   protected static final String KEY_SUBTASK = "subtask";
   protected static final String KEY_SUBTASKS_EXTERNAL = "subtasks-external";
+  protected static final String KEY_SUBTASKS_FACTORY = "subtasks-factory";
   protected static final String KEY_SUBTASKS_FILE = "subtasks-file";
+  protected static final String KEY_TYPE = "type";
   protected static final String KEY_USER = "user";
 
   public boolean isVisible;
   public boolean isTrusted;
+
+  public Task createTask(TasksFactory tasks, String name) {
+    Task task = new Task(tasks);
+    task.name = name;
+    return task;
+  }
 
   public TaskConfig(Branch.NameKey branch, String fileName, boolean isVisible, boolean isTrusted) {
     super(branch, fileName);
@@ -171,6 +228,14 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected Task getTaskOrNull(String name) {
     SubSection subSection = new SubSection(SECTION_TASK, name);
     return getNames(subSection).isEmpty() ? null : new Task(subSection, isVisible, isTrusted);
+  }
+
+  public TasksFactory getTasksFactory(String name) {
+    return new TasksFactory(new SubSection(SECTION_TASKS_FACTORY, name), isVisible, isTrusted);
+  }
+
+  public NamesFactory getNamesFactory(String name) {
+    return new NamesFactory(new SubSection(SECTION_NAMES_FACTORY, name));
   }
 
   public External getExternal(String name) {

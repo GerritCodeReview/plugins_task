@@ -69,7 +69,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected final TaskTree definitions;
   protected final ChangeQueryBuilder cqb;
 
-  protected final Map<String, Predicate<ChangeData>> predicatesByQuery = new HashMap<>();
+  protected final Map<String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
+      predicatesByQuery = new HashMap<>();
 
   protected Modules.MyOptions options;
 
@@ -86,11 +87,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       for (PatchSetArgument psa : options.patchSetArguments) {
         definitions.masquerade(psa);
       }
-      try {
-        return createWithExceptions(c);
-      } catch (StorageException e) {
-        log.atSevere().withCause(e).log("Cannot load tasks for: %s", c);
-      }
+      return createWithExceptions(c);
     }
     return null;
   }
@@ -154,7 +151,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
           }
         }
       }
-    } catch (QueryParseException e) {
+    } catch (QueryParseException | RuntimeException e) {
       atts.add(invalid()); // bad applicability query
     }
   }
@@ -198,7 +195,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       match(c, def.fail);
       match(c, def.pass);
       return true;
-    } catch (StorageException | QueryParseException e) {
+    } catch (QueryParseException | RuntimeException e) {
       return false;
     }
   }
@@ -206,7 +203,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   protected Status getStatus(ChangeData c, Task def, TaskAttribute a) {
     try {
       return getStatusWithExceptions(c, def, a);
-    } catch (QueryParseException e) {
+    } catch (QueryParseException | RuntimeException e) {
       return Status.INVALID;
     }
   }
@@ -218,7 +215,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       boolean hasDefinedSubtasks =
           !(def.subTasks.isEmpty()
               && def.subTasksFiles.isEmpty()
-              && def.subTasksExternals.isEmpty());
+              && def.subTasksExternals.isEmpty()
+              && def.subTasksFactories.isEmpty());
       if (hasDefinedSubtasks) {
         // Remove 'Grouping" tasks (tasks with subtasks but no PASS
         // or FAIL criteria) from the output if none of their subtasks
@@ -295,29 +293,46 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     return true;
   }
 
-  protected boolean match(ChangeData c, String query) throws QueryParseException {
-    if (query == null || query.equalsIgnoreCase("true")) {
+  protected boolean match(ChangeData c, String query) throws StorageException, QueryParseException {
+    if (query == null) {
       return true;
     }
-    Predicate<ChangeData> pred = predicatesByQuery.get(query);
-    if (pred == null) {
-      pred = cqb.parse(query);
-      predicatesByQuery.put(query, pred);
-    }
-    return pred.asMatchable().match(c);
+    return matchWithExceptions(c, query);
   }
 
   protected Boolean matchOrNull(ChangeData c, String query) {
     if (query != null) {
       try {
-        if (query.equalsIgnoreCase("true")) {
-          return true;
-        }
-        return cqb.parse(query).asMatchable().match(c);
-      } catch (StorageException | QueryParseException e) {
+        return matchWithExceptions(c, query);
+      } catch (QueryParseException | RuntimeException e) {
       }
     }
     return null;
+  }
+
+  protected boolean matchWithExceptions(ChangeData c, String query)
+      throws QueryParseException, StorageException {
+    if ("true".equalsIgnoreCase(query)) {
+      return true;
+    }
+    return getPredicate(query).asMatchable().match(c);
+  }
+
+  protected Predicate<ChangeData> getPredicate(String query) throws QueryParseException {
+    ThrowingProvider<Predicate<ChangeData>, QueryParseException> predProvider =
+        predicatesByQuery.get(query);
+    if (predProvider != null) {
+      return predProvider.get();
+    }
+    // never seen 'query' before
+    try {
+      Predicate<ChangeData> pred = cqb.parse(query);
+      predicatesByQuery.put(query, new ThrowingProvider.Entry<>(pred));
+      return pred;
+    } catch (QueryParseException e) {
+      predicatesByQuery.put(query, new ThrowingProvider.Thrown<>(e));
+      throw e;
+    }
   }
 
   protected static boolean isAllNull(Object... vals) {

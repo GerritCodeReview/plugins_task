@@ -6,14 +6,16 @@ load(
 load("//tools/bzl:genrule2.bzl", "genrule2")
 load("//tools/bzl:js.bzl", "polygerrit_plugin")
 
+plugin_name = "task"
+
 gerrit_plugin(
-    name = "task",
+    name = plugin_name,
     srcs = glob(["src/main/java/**/*.java"]),
     manifest_entries = [
-        "Gerrit-PluginName: task",
-        "Gerrit-ApiVersion: 3.0-SNAPSHOT",
+        "Gerrit-PluginName: " + plugin_name,
+        "Gerrit-ApiVersion: 3.0.15",
         "Implementation-Title: Task Plugin",
-        "Implementation-URL: https://gerrit-review.googlesource.com/#/admin/projects/plugins/task",
+        "Implementation-URL: https://gerrit-review.googlesource.com/#/admin/projects/plugins/" + plugin_name,
         "Gerrit-Module: com.googlesource.gerrit.plugins.task.Modules$Module",
     ],
     resource_jars = [":gr-task-plugin-static"],
@@ -39,4 +41,13 @@ polygerrit_plugin(
         "gr-task-plugin/*.js",
     ]),
     app = "plugin.html",
+)
+
+sh_test(
+    name = "docker-tests",
+    size = "medium",
+    srcs = ["test/docker/run.sh"],
+    args = ["--task-plugin-jar", "$(location :task)"],
+    data = [plugin_name] + glob(["test/**"]),
+    local = True,
 )

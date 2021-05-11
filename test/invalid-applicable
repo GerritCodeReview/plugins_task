@@ -126,6 +126,39 @@
                   {
                      "name" : "UNKNOWN",
                      "status" : "INVALID"
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory type INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }
