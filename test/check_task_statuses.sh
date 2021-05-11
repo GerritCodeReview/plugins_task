@@ -16,6 +16,7 @@ result() { # test [error_message]
 }
 
 # --------
+gssh() { ssh -x -p "$PORT" "$SERVER" gerrit "$@" ; } # cmd [args]...
 
 q() { "$@" > /dev/null 2>&1 ; } # cmd [args...]  # quiet a command
 
@@ -79,10 +80,10 @@ create_repo_change() { # repo remote ref > change_num
 }
 
 query() { # query
-    ssh -x -p "$PORT" "$SERVER" gerrit query "$@" \
-            --format json | head -1 | python -c "import sys, json; \
-            print json.dumps(json.loads(sys.stdin.read()), indent=3, \
-            separators=(',', ' : '), sort_keys=True)"
+    gssh query "$@" \
+        --format json | head -1 | python -c "import sys, json; \
+        print json.dumps(json.loads(sys.stdin.read()), indent=3, \
+        separators=(',', ' : '), sort_keys=True)"
 }
 
 query_plugins() { query "$@" | awk '$0=="   \"plugins\" : [",$0=="   ],"' ; }
@@ -99,6 +100,10 @@ test_tasks() { # name expected_file task_args...
 test_file() { # name task_args...
     local name=$1 ; shift
     test_tasks "$name" "$MYDIR/$name" "$@"
+}
+
+update_change_number() { # file change_number change_token
+      sed -i -e "s|_change$3_number|$2|" "$1"
 }
 
 MYDIR=$(dirname "$0")
@@ -138,6 +143,20 @@ q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS" --initial-commit
 
 mkdir -p "$ALL_TASKS" "$USER_TASKS"
+
+CHANGES=($(gssh query "status:open limit:2" | grep 'number:' | awk '{print $2}'))
+update_change_number "$DOC_STATES" "${CHANGES[0]}" "1"
+update_change_number "$DOC_STATES" "${CHANGES[1]}" "2"
+update_change_number "$MYDIR/all" "${CHANGES[0]}" "1"
+update_change_number "$MYDIR/all" "${CHANGES[1]}" "2"
+update_change_number "$MYDIR/preview" "${CHANGES[0]}" "1"
+update_change_number "$MYDIR/preview" "${CHANGES[1]}" "2"
+update_change_number "$MYDIR/preview.invalid" "${CHANGES[0]}" "1"
+update_change_number "$MYDIR/preview.invalid" "${CHANGES[1]}" "2"
+update_change_number "$MYDIR/invalid" "${CHANGES[0]}" "1"
+update_change_number "$MYDIR/invalid" "${CHANGES[1]}" "2"
+update_change_number "$MYDIR/invalid-applicable" "${CHANGES[0]}" "1"
+update_change_number "$MYDIR/invalid-applicable" "${CHANGES[1]}" "2"
 
 example 1 |sed -e"s/current-user/$USER/" > "$ROOT_CFG"
 example 2 > "$COMMON_CFG"

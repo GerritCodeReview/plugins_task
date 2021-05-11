@@ -331,6 +331,16 @@ this:
 
 The following keys may be defined in any names-factory section:
 
+`changes`
+
+: This key defines a query that is used to fetch change numbers which will be used
+as the names of the task(s).
+
+Example:
+```
+    changes = change:1 OR change:2
+```
+
 `name`
 
 : This key defines the name of the tasks.  This key may be used several times
@@ -345,12 +355,15 @@ Example:
 
 `type`
 
-: This key defines the type of the names-factory section.  The only
-accepted value is `static`.
+: This key defines the type of the names-factory section.  The type
+can be either `static` or `change`. For names-factory of type `static`,
+`name` key(s) should be defined where as names-factory of type `change`
+needs a `change` key to be defined.
 
 Example:
 ```
     type = static
+    type = change
 ```
 
 External Entries

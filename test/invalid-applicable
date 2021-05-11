@@ -159,6 +159,79 @@
                            "status" : "INVALID"
                         }
                      ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes invalid)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        }
+                     ]
                   }
                ]
             }
