@@ -51,6 +51,24 @@
         notify: true,
         value: true,
       },
+
+      _all_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
+
+      _ready_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
+
+      _fail_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
     },
 
     _is_show_all(show_all) {
@@ -122,12 +140,24 @@
       return false;
     },
 
+    _compute_counts(task) {
+      this._all_count++;
+      switch (task.status) {
+        case 'FAIL':
+          this._fail_count++;
+          break;
+        case 'READY':
+          this._ready_count++;
+      }
+    },
+
     _addTasks(tasks) { // rename to process, remove DOM bits
       if (!tasks) return [];
       tasks.forEach(task => {
         task.message = task.hint || task.name;
         task.icon = this._computeIcon(task);
         task.showOnFilter = this._computeShowOnNeedsAndBlockedFilter(task);
+        this._compute_counts(task);
         this._addTasks(task.sub_tasks);
       });
       return tasks;
