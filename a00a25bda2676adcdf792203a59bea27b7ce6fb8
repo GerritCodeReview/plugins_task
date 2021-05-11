@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8c566770_e2b220d7",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 9
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2021-05-11T14:56:08Z",
+      "side": 1,
+      "message": "Verified.\n\n$ bazel test docker-tests\n\n//:docker-tests                                                          PASSED in 128.5s\n\n$ bazel test docker-tests\n\n//:docker-tests                                                          FAILED in 130.0s\n  .../bazel-out/darwin-fastbuild/testlogs/docker-tests/test.log",
+      "revId": "a00a25bda2676adcdf792203a59bea27b7ce6fb8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
