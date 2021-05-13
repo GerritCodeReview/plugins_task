@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "972cac37_208e4fba",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-13T21:10:56Z",
+      "side": 1,
+      "message": " $ bazel test docker-tests\n Starting local Bazel server and connecting to it...\n DEBUG: Rule \u0027com_googlesource_gerrit_bazlets\u0027 indicated that a canonical reproducible form can be obtained by modifying arguments shallow_since \u003d \"1616435427 -0400\"\n DEBUG: Repository com_googlesource_gerrit_bazlets instantiated at:\n   /Users/nasserg/work/gerrit-plugins/task/WORKSPACE:5:13: in \u003ctoplevel\u003e\n   /Users/nasserg/work/gerrit-plugins/task/bazlets.bzl:9:23: in load_bazlets\n Repository rule git_repository defined at:\n   /Users/nasserg/.cache/bazel/f0b3c0a174d1cc9d35784dadc91f4c37/external/bazel_tools/tools/build_defs/repo/git.bzl:199:33: in \u003ctoplevel\u003e\n DEBUG: /Users/nasserg/.cache/bazel/f0b3c0a174d1cc9d35784dadc91f4c37/external/io_bazel_rules_closure/closure/compiler/closure_js_binary.bzl:37:10: dependency_mode\u003dLOOSE is deprecated and will be removed soon; prefer to use its equivalent PRUNE_LEGACY\n INFO: Analyzed target //:docker-tests (62 packages loaded, 1255 targets configured).\n INFO: Found 1 test target...\n INFO: From Linking external/com_google_protobuf/libprotobuf_lite.a [for host]:\n /Library/Developer/CommandLineTools/usr/bin/libtool: file: bazel-out/host/bin/external/com_google_protobuf/_objs/protobuf_lite/io_win32.o has no symbols\n INFO: From Linking external/com_google_protobuf/libprotobuf.a [for host]:\n /Library/Developer/CommandLineTools/usr/bin/libtool: file: bazel-out/host/bin/external/com_google_protobuf/_objs/protobuf/error_listener.o has no symbols\n Target //:docker-tests up-to-date:\n   bazel-bin/docker-tests\n INFO: Elapsed time: 303.563s, Critical Path: 197.19s\n INFO: 239 processes: 9 internal, 209 darwin-sandbox, 4 local, 17 worker.\n INFO: Build completed successfully, 239 total actions\n //:docker-tests                                                          PASSED in 167.9s\n \n INFO: Build completed successfully, 239 total actions",
+      "revId": "32b222c1d8544e46ab43c913a52ced1d3f7e68b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
