@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "88bdd466_33e7682a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-13T22:24:07Z",
+      "side": 1,
+      "message": "I moved this to 3.2 and updated it to depend on a bazlets change on stable-3.2 as well: 306445: Add Polymer 3 support | https://gerrit-review.googlesource.com/c/bazlets/+/306445\n\nEverything seems to work. Thank you for showing me how to do this conversion.",
+      "revId": "e8fb687297de5b5f7b709729df9bc43866c18b18",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
