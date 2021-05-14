@@ -56,6 +56,30 @@
       },
       "revId": "e8fb687297de5b5f7b709729df9bc43866c18b18",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b17ee721_47097287",
+        "filename": "BUILD",
+        "patchSetId": 16
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-14T14:15:41Z",
+      "side": 1,
+      "message": "\u003e How the build supposed to work in gerrit tree build? We have only included gerrit_js_bundle starting from stable-3.4 branch, see change 304225.\n\nAh yes, I entirely forgot to try that. I cherry-picked that change back to stable-3.2 https://gerrit-review.googlesource.com/c/gerrit/+/306642 and I think it\u0027s trivial enough to merge there (once I test it).\n\n\u003e I understand, that it would work in standalone build mode, but I am not aware of any plugin, where the build only work in standalone build mode, and we probably shouldn\u0027t start doing that here...\n\nI completely agree.",
+      "parentUuid": "473fd04d_d8ff3360",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 46
+      },
+      "revId": "e8fb687297de5b5f7b709729df9bc43866c18b18",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
