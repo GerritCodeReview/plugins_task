@@ -33,6 +33,29 @@
       "message": "bazlets change is merged now and docker tests pass:\n\n $ bazel test docker-tests\n DEBUG: Rule \u0027com_googlesource_gerrit_bazlets\u0027 indicated that a canonical reproducible form can be obtained by modifying arguments shallow_since \u003d \"1620941399 -0600\"\n DEBUG: Repository com_googlesource_gerrit_bazlets instantiated at:\n   /Users/nasserg/work/gerrit-plugins/task/WORKSPACE:10:13: in \u003ctoplevel\u003e\n   /Users/nasserg/work/gerrit-plugins/task/bazlets.bzl:9:23: in load_bazlets\n Repository rule git_repository defined at:\n   /Users/nasserg/.cache/bazel/f0b3c0a174d1cc9d35784dadc91f4c37/external/bazel_tools/tools/build_defs/repo/git.bzl:199:33: in \u003ctoplevel\u003e\n INFO: Analyzed target //:docker-tests (54 packages loaded, 788 targets configured).\n INFO: Found 1 test target...\n Target //:docker-tests up-to-date:\n   bazel-bin/docker-tests\n INFO: Elapsed time: 169.580s, Critical Path: 165.68s\n INFO: 4 processes: 2 darwin-sandbox, 2 local.\n INFO: Build completed successfully, 4 total actions\n //:docker-tests                                                          PASSED in 165.3s\n \n INFO: Build completed successfully, 4 total actions",
       "revId": "e8fb687297de5b5f7b709729df9bc43866c18b18",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "473fd04d_d8ff3360",
+        "filename": "BUILD",
+        "patchSetId": 16
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2021-05-14T12:38:55Z",
+      "side": 1,
+      "message": "How the build supposed to work in gerrit tree build? We have only included gerrit_js_bundle starting from stable-3.4 branch, see change 304225.\n\nRight now the build would fail:\n\n  ERROR: Traceback (most recent call last):\n\tFile \"/home/davido/projects/gerrit2/plugins/task/BUILD\", line 2, column 29, in \u003ctoplevel\u003e\n\t\tload(\"//tools/bzl:js.bzl\", \"gerrit_js_bundle\")\n  Error: file \u0027//tools/bzl:js.bzl\u0027 does not contain symbol \u0027gerrit_js_bundle\u0027\n\nI understand, that it would work in standalone build mode, but I am not aware of any plugin, where the build only work in standalone build mode, and we probably shouldn\u0027t start doing that here...",
+      "range": {
+        "startLine": 2,
+        "startChar": 0,
+        "endLine": 2,
+        "endChar": 46
+      },
+      "revId": "e8fb687297de5b5f7b709729df9bc43866c18b18",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
