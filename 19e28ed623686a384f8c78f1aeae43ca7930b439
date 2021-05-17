@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "daec1660_3bc264b6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 18
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-17T16:50:28Z",
+      "side": 1,
+      "message": "UI looks correct from in-tree build and tests pass in-tree:\n\n $ bazel test plugins/task:docker-tests\n INFO: Invocation ID: d6304a03-6f4c-4c58-a434-e7316b223324\n INFO: Analyzed target //plugins/task:docker-tests (0 packages loaded, 0 targets configured).\n INFO: Found 1 test target...\n Target //plugins/task:docker-tests up-to-date:\n   bazel-bin/plugins/task/docker-tests\n INFO: Elapsed time: 126.611s, Critical Path: 125.48s\n INFO: 2 processes: 2 local.\n INFO: Build completed successfully, 2 total actions\n //plugins/task:docker-tests                                              PASSED in 125.4s\n \n INFO: Build completed successfully, 2 total actions",
+      "revId": "19e28ed623686a384f8c78f1aeae43ca7930b439",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
