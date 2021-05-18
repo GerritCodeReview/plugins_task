@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1ae41433_b9e5f139",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105741
+      },
+      "writtenOn": "2021-05-18T23:52:28Z",
+      "side": 1,
+      "message": " INFO: Analyzed target //:docker-tests (62 packages loaded, 1254 targets configured).\n INFO: Found 1 test target...\n INFO: From Linking external/com_google_protobuf/libprotobuf.a [for host]:\n/Library/Developer/CommandLineTools/usr/bin/libtool: file: bazel-out/host/bin/external/com_google_protobuf/_objs/protobuf/error_listener.o has no symbols\n INFO: From Linking external/com_google_protobuf/libprotobuf_lite.a [for host]:\n/Library/Developer/CommandLineTools/usr/bin/libtool: file: bazel-out/host/bin/external/com_google_protobuf/_objs/protobuf_lite/io_win32.o has no symbols\n Target //:docker-tests up-to-date:\n  bazel-bin/docker-tests\n INFO: Elapsed time: 334.840s, Critical Path: 274.46s\n INFO: 231 processes: 8 internal, 204 darwin-sandbox, 2 local, 17 worker.\n INFO: Build completed successfully, 231 total actions\n //:docker-tests                                         PASSED in 207.5s\n\n INFO: Build completed successfully, 231 total actions",
+      "revId": "dcd34e4d1e7713a0a5490e4eca469fbeec54dc90",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
