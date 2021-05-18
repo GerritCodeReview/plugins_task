@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "39c2b91b_0610f8e6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1105741
+      },
+      "writtenOn": "2021-05-18T23:37:09Z",
+      "side": 1,
+      "message": " $ bazel test docker-tests\n INFO: Analyzed target //:docker-tests (59 packages loaded, 1178 targets configured).\n INFO: Found 1 test target...\n Target //:docker-tests up-to-date:\n bazel-bin/docker-tests\n INFO: Elapsed time: 207.798s, Critical Path: 196.75s\n INFO: 8 processes: 2 internal, 3 darwin-sandbox, 2 local, 1 worker.\n INFO: Build completed successfully, 8 total actions\n //:docker-tests                PASSED in 193.0s\n\n INFO: Build completed successfully, 8 total actions",
+      "revId": "af4b36bbed99323aa33862f5fee2a1fd76d93343",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
