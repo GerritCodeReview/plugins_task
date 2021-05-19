@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ed13581e_9eada3a1",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-19T14:42:14Z",
+      "side": 1,
+      "message": "UI looks correct and tests pass:\n\n $ bazel test docker-tests\n INFO: Analyzed target //:docker-tests (2 packages loaded, 36 targets configured).\n INFO: Found 1 test target...\n Target //:docker-tests up-to-date:\n   bazel-bin/docker-tests\n INFO: Elapsed time: 177.321s, Critical Path: 177.08s\n INFO: 2 processes: 2 local.\n INFO: Build completed successfully, 2 total actions\n //:docker-tests                                                          PASSED in 176.9s\n \n INFO: Build completed successfully, 2 total actions",
+      "revId": "45b64d8c4bd0c4af572b8a3163a837adb8d0ed14",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
