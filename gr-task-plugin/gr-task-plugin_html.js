@@ -26,6 +26,11 @@ export const htmlTemplate = Polymer.html`
     margin: 0 0 0 0;
   }
   .cursor { cursor: pointer; }
+  .links {
+    color: blue;
+    cursor: pointer;
+    text-decoration: underline;
+  }
   #tasks_header {
     align-items: center;
     background-color: #fafafa;
@@ -49,14 +54,18 @@ export const htmlTemplate = Polymer.html`
         class="cursor"> </iron-icon>
     <div style="display: flex; align-items: center; column-gap: 1em;">
     <h3 on-tap="_switch_expand" class="cursor"> Tasks </h3>
-    <template is="dom-if" if="[[_expand_all]]">
-      <gr-button
-          on-tap="_show_all_tap"
-          disabled="[[_is_show_all(_show_all)]]"> Show All ([[_all_count]]) </gr-button>
-      <gr-button
-          on-tap="_needs_and_blocked_tap"
-          disabled="[[!_is_show_all(_show_all)]]">
-        Needs ([[_ready_count]]) + Blocked ([[_fail_count]]) </gr-button>
+    <template is="dom-if" if="[[_is_show_all(_show_all)]]">
+      <p>All ([[_all_count]]) |&nbsp;
+        <span
+            on-click="_needs_and_blocked_tap"
+            class="links">Needs + Blocked ([[_ready_count]], [[_fail_count]])</span>
+      <p>
+    </template>
+    <template is="dom-if" if="[[!_is_show_all(_show_all)]]">
+      <p> <span
+            class="links"
+            on-click="_show_all_tap">All ([[_all_count]])</span>
+        &nbsp;| Needs + Blocked ([[_ready_count]], [[_fail_count]])</p>
     </template>
   </div>
   </div>
