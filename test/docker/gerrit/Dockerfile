@@ -1,4 +1,4 @@
-FROM gerritcodereview/gerrit:3.3.1-ubuntu20
+FROM gerritcodereview/gerrit:3.3.4-ubuntu20
 
 ENV GERRIT_SITE /var/gerrit
 RUN git config -f "$GERRIT_SITE/etc/gerrit.config" auth.type \
