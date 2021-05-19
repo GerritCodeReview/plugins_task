@@ -34,6 +34,24 @@
       "parentUuid": "88970343_32e9551e",
       "revId": "b995c142ed002cdbff6204ec5eeb40eb3b98b500",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49d99427_c03af15d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-05-19T21:10:48Z",
+      "side": 1,
+      "message": "Also, looking at that error, you need to exclude processing from the warnings with \u0027-Xlint:-processing\u0027.",
+      "parentUuid": "9afcff51_e05c38e7",
+      "revId": "b995c142ed002cdbff6204ec5eeb40eb3b98b500",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
