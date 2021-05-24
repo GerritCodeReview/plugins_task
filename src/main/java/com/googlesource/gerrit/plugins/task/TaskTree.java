@@ -39,11 +39,9 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
@@ -97,7 +95,6 @@ public class TaskTree {
     protected LinkedList<String> path = new LinkedList<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
-    protected Map<String, String> properties;
 
     protected void addSubDefinitions(List<Task> defs) {
       for (Task def : defs) {
@@ -111,7 +108,7 @@ public class TaskTree {
         // path check above detects looping definitions
         // names check above detects duplicate subtasks
         try {
-          node = new Node(def, path, properties);
+          node = new Node(def, path, getProperties());
         } catch (Exception e) {
         } // bad definition, handled with null
       }
@@ -121,13 +118,13 @@ public class TaskTree {
     public ChangeData getChangeData() {
       return TaskTree.this.changeData;
     }
+
+    protected Properties.Task getProperties() {
+      return Properties.Task.EMPTY_PARENT;
+    }
   }
 
   protected class Root extends NodeList {
-    protected Root() {
-      properties = new HashMap<String, String>();
-    }
-
     public List<Node> getRootNodes() throws ConfigInvalidException, IOException {
       if (nodes == null) {
         nodes = new ArrayList<>();
@@ -143,15 +140,15 @@ public class TaskTree {
 
   public class Node extends NodeList {
     public final Task task;
+    protected final Properties.Task properties;
 
-    public Node(Task definition, List<String> path, Map<String, String> parentProperties)
+    public Node(Task definition, List<String> path, Properties.Task parentProperties)
         throws ConfigInvalidException, OrmException {
       this.task = definition;
       this.path.addAll(path);
       this.path.add(definition.name);
       Preloader.preload(definition);
-      new Properties(getChangeData(), definition, parentProperties);
-      properties = definition.properties;
+      properties = new Properties.Task(getChangeData(), definition, parentProperties);
     }
 
     public List<Node> getSubNodes() throws OrmException {
@@ -214,7 +211,7 @@ public class TaskTree {
         if (tasksFactory != null) {
           NamesFactory namesFactory = task.config.getNamesFactory(tasksFactory.namesFactory);
           if (namesFactory != null && namesFactory.type != null) {
-            new Properties(namesFactory, task.properties);
+            new Properties.NamesFactory(namesFactory, getProperties());
             switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
               case STATIC:
                 addStaticTypeTasksDefinitions(tasksFactory, namesFactory);
@@ -267,6 +264,11 @@ public class TaskTree {
       return taskFactory
           .getTaskConfig(branch, resolveTaskFileName(file), task.isTrusted)
           .getTasks();
+    }
+
+    @Override
+    protected Properties.Task getProperties() {
+      return properties;
     }
 
     protected String resolveTaskFileName(String file) throws ConfigInvalidException {
