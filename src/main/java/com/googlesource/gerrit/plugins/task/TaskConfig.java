@@ -139,6 +139,20 @@ public class TaskConfig extends AbstractVersionedMetaData {
     protected Task(TaskBase base) {
       super(base);
     }
+
+    protected Map<String, String> getAllProperties() {
+      Map<String, String> all = new HashMap<>(properties);
+      all.putAll(exported);
+      return all;
+    }
+
+    protected void setExpandedProperties(Map<String, String> expanded) {
+      properties.clear();
+      properties.putAll(expanded);
+      for (String property : exported.keySet()) {
+        exported.put(property, properties.get(property));
+      }
+    }
   }
 
   public class TasksFactory extends TaskBase {

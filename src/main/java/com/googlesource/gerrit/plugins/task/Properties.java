@@ -38,14 +38,9 @@ public class Properties {
       throws OrmException {
     Map<String, String> expanded = new HashMap<>(parentProperties);
     expanded.putAll(getInternalProperties(definition, changeData));
-    Map<String, String> unexpanded = definition.properties;
-    unexpanded.putAll(definition.exported);
-    new RecursiveExpander(expanded).expand(unexpanded);
+    new RecursiveExpander(expanded).expand(definition.getAllProperties());
 
-    definition.properties = expanded;
-    for (String property : definition.exported.keySet()) {
-      definition.exported.put(property, expanded.get(property));
-    }
+    definition.setExpandedProperties(expanded);
 
     new Expander(expanded).expandFieldValues(definition, Collections.emptySet());
   }
