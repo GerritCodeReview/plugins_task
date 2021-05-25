@@ -36,30 +36,24 @@ public class Properties {
   public static class Task extends Expander {
     public static final Task EMPTY_PARENT = new Task();
 
-    public Task() {
-      super(Collections.emptyMap());
-    }
+    public Task() {}
 
     public Task(ChangeData changeData, TaskConfig.Task definition, Task parentProperties)
         throws OrmException {
-      super(parentProperties.forDescendants());
-      valueByName.putAll(getInternalProperties(definition, changeData));
-      new RecursiveExpander(valueByName).expand(definition.getAllProperties());
+      putAll(parentProperties.getAll());
+      putAll(getInternalProperties(definition, changeData));
+      putAll(definition.getAllProperties());
 
-      definition.setExpandedProperties(valueByName);
+      definition.setExpandedProperties(getAll());
 
       expandFieldValues(definition, Collections.emptySet());
-    }
-
-    protected Map<String, String> forDescendants() {
-      return new HashMap<>(valueByName);
     }
   }
 
   /** Use to expand properties specifically for NamesFactories. */
   public static class NamesFactory extends Expander {
     public NamesFactory(TaskConfig.NamesFactory namesFactory, Task properties) {
-      super(properties.valueByName);
+      putAll(properties.getAll());
       expandFieldValues(namesFactory, Sets.newHashSet(TaskConfig.KEY_TYPE));
     }
   }
@@ -98,68 +92,65 @@ public class Properties {
    *
    * <p>will expand to: <code>"The brown fox jumped over the fence."</code>
    */
-  protected static class RecursiveExpander {
-    protected final Expander expander;
-    protected Map<String, String> unexpandedByName;
-    protected Set<String> expanding;
+  protected static class Expander extends AbstractExpander {
+    protected final Map<String, String> valueByName = new HashMap<>();
+    protected final Map<String, String> unexpandedByName = new HashMap<>();
+    protected final Set<String> expanding = new HashSet<>();
 
-    public RecursiveExpander(Map<String, String> valueByName) {
-      expander =
-          new Expander(valueByName) {
-            @Override
-            protected String getValueForName(String name) {
-              expandUnexpanded(name); // recursive call
-              return super.getValueForName(name);
-            }
-          };
+    public void putAll(Map<String, String> unexpandedByName) {
+      this.unexpandedByName.putAll(unexpandedByName);
     }
 
-    public void expand(Map<String, String> unexpandedByName) {
-      this.unexpandedByName = unexpandedByName;
-
-      // Copy keys to allow out of order removals during iteration
-      for (String unexpanedName : new ArrayList<>(unexpandedByName.keySet())) {
-        expanding = new HashSet<>();
-        expandUnexpanded(unexpanedName);
+    public Map<String, String> getAll() {
+      // Copying keys enables out of order removals during iteration
+      for (String name : new ArrayList<>(unexpandedByName.keySet())) {
+        getValueForName(name);
       }
+      return Collections.unmodifiableMap(valueByName);
     }
 
-    protected void expandUnexpanded(String name) {
+    @Override
+    public String getValueForName(String name) {
       if (!expanding.add(name)) {
         throw new RuntimeException("Looping property definitions.");
       }
       String value = unexpandedByName.remove(name);
       if (value != null) {
-        expander.valueByName.put(name, expander.expandText(value));
+        value = expandText(value);
+        expanding.remove(name);
+      } else {
+        expanding.remove(name);
+        value = valueByName.get(name);
+        if (value != null) {
+          return value;
+        }
+        value = "";
       }
-      expanding.remove(name);
+      valueByName.put(name, value);
+      return value;
     }
   }
 
   /**
    * Use to expand properties like ${property} in Strings into their values.
    *
-   * <p>Given some property name/value asssociations defined like this:
+   * <p>Given some property name/value associations like this:
    *
    * <p><code>
-   * valueByName.put("animal", "fox");
-   * valueByName.put("bar", "foo");
-   * valueByName.put("obstacle", "fence");
+   * "animal" -> "fox"
+   * "bar" -> "foo"
+   * "obstacle" -> "fence"
    * </code>
    *
    * <p>a String like: <code>"The brown ${animal} jumped over the ${obstacle}."</code>
    *
-   * <p>will expand to: <code>"The brown fox jumped over the fence."</code>
+   * <p>will expand to: <code>"The brown fox jumped over the fence."</code> This class is meant to
+   * be used as a building block for other full featured expanders and thus must be overriden to
+   * provide the name/value associations via the getValueForName() method.
    */
-  protected static class Expander {
+  protected abstract static class AbstractExpander {
     // "${_name}" -> group(1) = "_name"
     protected static final Pattern PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
-
-    public final Map<String, String> valueByName;
-
-    public Expander(Map<String, String> valueByName) {
-      this.valueByName = valueByName;
-    }
 
     /** Expand all properties in the Strings in the object's Fields (except the exclude ones) */
     protected void expandFieldValues(Object object, Set<String> excludedFieldNames) {
@@ -206,9 +197,6 @@ public class Properties {
     }
 
     /** Get the replacement value for the property identified by name */
-    protected String getValueForName(String name) {
-      String value = valueByName.get(name);
-      return value == null ? "" : value;
-    }
+    protected abstract String getValueForName(String name);
   }
 }
