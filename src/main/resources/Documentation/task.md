@@ -430,13 +430,18 @@ Custom properties may be defined on a task using the following syntax:
     set-<property-name> = <property-value>
 ```
 
-Subtasks inherit all custom properties from their parents. A task is invalid
-if it attempts to override an already set property.
+Subtasks inherit all custom properties from their parents, however
+subtasks may override inherrited properties and give them new values.
 
 Example:
 ```
     [task "foo-project"]
         set-project-name = foo
+        subtask = sub-project
+        subtask = common-to-many-projects
+
+    [task "sub-project"]
+        set-project-name = sub-foo # Overrides value from 'foo-project'
         subtask = common-to-many-projects
 
     [task "common-to-many-projects"]
