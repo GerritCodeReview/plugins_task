@@ -774,11 +774,12 @@ The config below is expected to be in the `task.config` file in project
 
 [root "Root Properties"]
   set-root-property = root-value
+  set-root-to-reset-by-subtask = reset-my-root-value
   subtask = Subtask Properties
 
 [task "Subtask Properties"]
   subtask = Subtask Properties Hints
-  subtask = Subtask Properties Reset
+  subtask = Subtask Properties Reset By Subtask
 
 [task "Subtask Properties Hints"]
   set-first-property = first-value
@@ -787,10 +788,10 @@ The config below is expected to be in the `task.config` file in project
   fail = True
   fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
 
-[task "Subtask Properties Reset"]
-  pass = True
-  set-first-property = reset-first-value
-  fail-hint = first-property(${first-property})
+[task "Subtask Properties Reset By Subtask"]
+  fail = True
+  set-root-to-reset-by-subtask = reset-by-subtask-root-value
+  fail-hint = root-to-reset-by-subtask:(${root-to-reset-by-subtask})
 
 {
    "applicable" : true,
@@ -814,8 +815,9 @@ The config below is expected to be in the `task.config` file in project
             {
                "applicable" : true,
                "hasPass" : true,
-               "name" : "Subtask Properties Reset",
-               "status" : "PASS"
+               "hint" : "root-to-reset-by-subtask:(reset-by-subtask-root-value)",
+               "name" : "Subtask Properties Reset By Subtask",
+               "status" : "FAIL"
             }
          ]
       }
