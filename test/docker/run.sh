@@ -38,6 +38,7 @@ Usage:
     --help|-h
     --gerrit-war|-g            path to Gerrit WAR file
     --task-plugin-jar|-t       path to task plugin JAR file
+    --preserve                 To preserve the docker setup for debugging
 
 EOF
 
@@ -60,15 +61,32 @@ run_task_plugin_tests() {
         '/task/test/docker/run_tests/start.sh'
 }
 
-cleanup() {
-    docker-compose "${COMPOSE_ARGS[@]}" down -v --rmi local 2>/dev/null
+get_run_test_container() {
+    docker-compose "${COMPOSE_ARGS[@]}" ps | grep run_tests | awk '{ print $1 }'
 }
 
+cleanup() {
+    if [ "$PRESERVE" = "true" ] ; then
+        echo "Preserving the following docker setup"
+        docker-compose "${COMPOSE_ARGS[@]}" ps
+        echo ""
+        echo "To exec into runtests container, use following command:"
+        echo "docker exec -it $(get_run_test_container) /bin/bash"
+        echo ""
+        echo "Run the following command to bring down the setup:"
+        echo "docker-compose ${COMPOSE_ARGS[@]} down -v --rmi local"
+    else
+        docker-compose "${COMPOSE_ARGS[@]}" down -v --rmi local 2>/dev/null
+    fi
+}
+
+PRESERVE="false"
 while (( "$#" )) ; do
     case "$1" in
         --help|-h)                usage ;;
         --gerrit-war|-g)          shift ; GERRIT_WAR=$1 ;;
         --task-plugin-jar|-t)     shift ; TASK_PLUGIN_JAR=$1 ;;
+        --preserve)               PRESERVE="true" ;;
         *)                        usage "invalid argument $1" ;;
     esac
     shift
