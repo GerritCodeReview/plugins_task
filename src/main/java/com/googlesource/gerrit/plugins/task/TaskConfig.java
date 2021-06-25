@@ -31,7 +31,19 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Task Configuration file living in git */
 public class TaskConfig extends AbstractVersionedMetaData {
-  protected class Section extends Container {
+  public enum NamesFactoryType {
+    CHANGE,
+    STATIC;
+
+    public static NamesFactoryType getNamesFactoryType(String str) {
+      for (NamesFactoryType type : NamesFactoryType.values()) {
+        if (type.name().equalsIgnoreCase(str)) return type;
+      }
+      return null;
+    }
+  }
+
+  private class Section extends Container {
     public TaskConfig config;
 
     public Section() {
@@ -112,10 +124,12 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   public class NamesFactory extends Section {
+    public String changes;
     public List<String> names;
     public String type;
 
     public NamesFactory(SubSection s) {
+      changes = getString(s, KEY_CHANGES, null);
       names = getStringList(s, KEY_NAME);
       type = getString(s, KEY_TYPE, null);
     }
@@ -142,6 +156,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String SECTION_TASK = "task";
   protected static final String SECTION_TASKS_FACTORY = "tasks-factory";
   protected static final String KEY_APPLICABLE = "applicable";
+  protected static final String KEY_CHANGES = "changes";
   protected static final String KEY_EXPORT_PREFIX = "export-";
   protected static final String KEY_FAIL = "fail";
   protected static final String KEY_FAIL_HINT = "fail-hint";
