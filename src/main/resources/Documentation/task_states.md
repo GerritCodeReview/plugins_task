@@ -467,7 +467,7 @@ The expected output for the above task config looks like:
 
 ```
  $  ssh -x -p 29418 review-example gerrit query is:open \
-     --task--applicable --format json|head -1 |json_pp
+     --task--all --format json|head -1 |json_pp
 {
    ...,
    "plugins" : [
@@ -475,11 +475,19 @@ The expected output for the above task config looks like:
          "name" : "task",
          "roots" : [
             {
+               "applicable" : false,
+               "hasPass" : false,
+               "name" : "Root N/A",
+               "status" : "INVALID"
+            },
+            {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root APPLICABLE",
                "status" : "PASS",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask APPLICABLE",
                      "status" : "PASS"
@@ -487,41 +495,49 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root PASS",
                "status" : "PASS"
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root FAIL",
                "status" : "FAIL"
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root straight PASS",
                "status" : "PASS"
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root straight FAIL",
                "status" : "FAIL"
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root PASS-fail",
                "status" : "PASS"
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root pass-FAIL",
                "status" : "FAIL"
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root PASS-waiting-fail",
                "status" : "PASS",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask PASS",
                      "status" : "PASS"
@@ -529,11 +545,13 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root pass-WAITING-fail",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask FAIL",
                      "status" : "FAIL"
@@ -541,11 +559,13 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root pass-waiting-FAIL",
                "status" : "FAIL",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask PASS",
                      "status" : "PASS"
@@ -553,11 +573,13 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Root grouping PASS (subtask PASS)",
                "status" : "PASS",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask PASS",
                      "status" : "PASS"
@@ -565,16 +587,19 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Root grouping WAITING (subtask READY)",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask READY",
                      "status" : "READY",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask PASS",
                            "status" : "PASS"
@@ -584,11 +609,13 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Root grouping WAITING (subtask FAIL)",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask FAIL",
                      "status" : "FAIL"
@@ -596,12 +623,28 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Root grouping NA (subtask NA)",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : false,
+                     "hasPass" : false,
+                     "name" : "Subtask NA",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
                "hasPass" : true,
                "hint" : "You must now run the ready task",
                "name" : "Root READY (subtask PASS)",
                "status" : "READY",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask PASS",
                      "status" : "PASS"
@@ -609,16 +652,19 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root WAITING (subtask READY)",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask READY",
                      "status" : "READY",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask PASS",
                            "status" : "PASS"
@@ -628,11 +674,13 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root WAITING (subtask FAIL)",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask FAIL",
                      "status" : "FAIL"
@@ -640,43 +688,51 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "inProgress" : true,
                "name" : "Root IN PROGRESS",
                "status" : "READY"
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "inProgress" : false,
                "name" : "Root NOT IN PROGRESS",
                "status" : "READY"
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Root Optional subtasks",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "Subtask Optional",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask PASS",
                            "status" : "PASS"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask FAIL",
                            "status" : "FAIL"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask READY",
                            "status" : "READY",
                            "subTasks" : [
                               {
+                                 "applicable" : true,
                                  "hasPass" : true,
                                  "name" : "Subtask PASS",
                                  "status" : "PASS"
@@ -688,16 +744,19 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Subtasks File",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "file task/common.config PASS",
                      "status" : "PASS"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "file task/common.config FAIL",
                      "status" : "FAIL"
@@ -705,16 +764,19 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Subtasks File (Missing)",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "file task/common.config PASS",
                      "status" : "PASS"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "file task/common.config FAIL",
                      "status" : "FAIL"
@@ -722,16 +784,19 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Subtasks External",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config PASS",
                      "status" : "PASS"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
@@ -739,16 +804,19 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Subtasks External (Missing)",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config PASS",
                      "status" : "PASS"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
@@ -760,16 +828,19 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Subtasks External (User Missing)",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config PASS",
                      "status" : "PASS"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
@@ -781,16 +852,19 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Subtasks External (File Missing)",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config PASS",
                      "status" : "PASS"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "userfile task/special.config FAIL",
                      "status" : "FAIL"
@@ -798,36 +872,43 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Root tasks-factory",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "my a task",
                      "status" : "FAIL"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "my b task",
                      "status" : "FAIL"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "my c task",
                      "status" : "FAIL"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
                      "status" : "FAIL"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "_change1_number",
                      "status" : "FAIL"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "_change2_number",
                      "status" : "FAIL"
@@ -835,11 +916,18 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Root tasks-factory static (empty name)"
+            },
+            {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root tasks-factory static (empty name PASS)",
                "status" : "PASS"
             },
             {
+               "applicable" : true,
                "exported" : {
                   "root" : "Root Properties"
                },
@@ -849,6 +937,7 @@ The expected output for the above task config looks like:
                "status" : "FAIL",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "exported" : {
                         "subtask" : "Subtask Properties"
                      },
@@ -857,28 +946,33 @@ The expected output for the above task config looks like:
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
                            "name" : "Subtask Properties Hints",
                            "status" : "FAIL"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Chained Subtask Properties",
                            "status" : "PASS"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask Properties Reset",
                            "status" : "PASS"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "hint" : "Name(_change3_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
                            "name" : "_change3_number",
                            "status" : "FAIL"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "hint" : "Name(_change1_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
                            "name" : "_change1_number",
@@ -889,58 +983,69 @@ The expected output for the above task config looks like:
                ]
             },
             {
+               "applicable" : true,
                "hasPass" : true,
                "name" : "Root Preload",
                "status" : "FAIL",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "Subtask Preload",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask PASS",
                            "status" : "PASS"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask Preload Preload",
                            "status" : "PASS"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "hint" : "Task is ready",
                            "name" : "Subtask Preload Hints PASS",
                            "status" : "READY"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "hint" : "Task failed",
                            "name" : "Subtask Preload Hints FAIL",
                            "status" : "FAIL"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask Preload Override Pass",
                            "status" : "READY"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask Preload Override Fail",
                            "status" : "PASS"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask Preload Extend Subtasks",
                            "status" : "READY",
                            "subTasks" : [
                               {
+                                 "applicable" : true,
                                  "hasPass" : true,
                                  "name" : "Subtask PASS",
                                  "status" : "PASS"
                               },
                               {
+                                 "applicable" : true,
                                  "hasPass" : true,
                                  "name" : "Subtask APPLICABLE",
                                  "status" : "PASS"
@@ -948,11 +1053,13 @@ The expected output for the above task config looks like:
                            ]
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "Subtask Preload Optional",
                            "status" : "PASS"
                         },
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "hint" : "second-property(first-value second-extra third-value) fourth-property(fourth-value)",
                            "name" : "Subtask Preload Properties",
@@ -967,21 +1074,25 @@ The expected output for the above task config looks like:
                "status" : "INVALID"
             },
             {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "INVALIDS",
                "status" : "WAITING",
                "subTasks" : [
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "No PASS criteria",
                      "status" : "INVALID"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "WAITING (subtask INVALID)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
@@ -989,11 +1100,13 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "WAITING (subtask duplicate)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
@@ -1005,6 +1118,7 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : true,
                      "name" : "WAITING (subtask missing)",
                      "status" : "WAITING",
@@ -1016,11 +1130,13 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "Grouping WAITING (subtask INVALID)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : false,
                            "name" : "Subtask INVALID",
                            "status" : "INVALID"
@@ -1028,6 +1144,7 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "Grouping WAITING (subtask missing)",
                      "status" : "WAITING",
@@ -1039,11 +1156,13 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "Subtask INVALID",
                      "status" : "INVALID"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "Subtask Optional",
                      "status" : "WAITING",
@@ -1055,6 +1174,25 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : false,
+                     "hasPass" : true,
+                     "name" : "NA Bad PASS query",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : false,
+                     "hasPass" : true,
+                     "name" : "NA Bad FAIL query",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : false,
+                     "hasPass" : true,
+                     "name" : "NA Bad INPROGRESS query",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "Looping",
                      "status" : "WAITING",
@@ -1070,6 +1208,7 @@ The expected output for the above task config looks like:
                      "status" : "INVALID"
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "task (tasks-factory missing)",
                      "status" : "WAITING",
@@ -1081,6 +1220,7 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "task (names-factory type missing)",
                      "status" : "WAITING",
@@ -1092,6 +1232,7 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "task (names-factory type INVALID)",
                      "status" : "WAITING",
@@ -1103,11 +1244,13 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "task (names-factory duplicate)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "duplicate",
                            "status" : "FAIL"
@@ -1119,6 +1262,7 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "task (names-factory changes type missing)",
                      "status" : "WAITING",
@@ -1130,6 +1274,7 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "task (names-factory changes missing)",
                      "status" : "WAITING",
@@ -1141,6 +1286,7 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "task (names-factory changes invalid)",
                      "status" : "WAITING",
@@ -1152,11 +1298,13 @@ The expected output for the above task config looks like:
                      ]
                   },
                   {
+                     "applicable" : true,
                      "hasPass" : false,
                      "name" : "task (tasks-factory changes loop)",
                      "status" : "WAITING",
                      "subTasks" : [
                         {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "_change1_number",
                            "status" : "FAIL",
@@ -1168,6 +1316,277 @@ The expected output for the above task config looks like:
                            ]
                         },
                         {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "applicable" : false,
+               "hasPass" : true,
+               "name" : "Root NA Pass",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : false,
+               "hasPass" : true,
+               "name" : "Root NA Fail",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : false,
+               "hasPass" : false,
+               "name" : "NA INVALIDS",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "No PASS criteria",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : false,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "WAITING (subtask duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : false,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Grouping WAITING (subtask INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : false,
+                           "name" : "Subtask INVALID",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Grouping WAITING (subtask missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask INVALID",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Subtask Optional",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : false,
+                     "hasPass" : true,
+                     "name" : "NA Bad PASS query",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : false,
+                     "hasPass" : true,
+                     "name" : "NA Bad FAIL query",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : false,
+                     "hasPass" : true,
+                     "name" : "NA Bad INPROGRESS query",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "Looping",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory type INVALID)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "duplicate",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes invalid)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        },
+                        {
+                           "applicable" : true,
                            "hasPass" : true,
                            "name" : "_change2_number",
                            "status" : "FAIL",
