@@ -1,4 +1,18 @@
 #!/bin/bash
+#
+# Copyright (C) 2021 The Android Open Source Project
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
 
 # Usage:
 # All-Projects.git - must have 'Push' rights on refs/meta/config
@@ -102,7 +116,11 @@ query() { # query
         separators=(',', ' : '), sort_keys=True)"
 }
 
-query_plugins() { query "$@" | awk '$0=="   \"plugins\" : [",$0=="   ],"' ; }
+query_plugins() { # query
+    gssh query "$@" --format json | head -1 | python -c "import sys, json; \
+        plugins={}; plugins['plugins']=json.loads(sys.stdin.read())['plugins']; \
+        print json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True)"
+}
 
 test_tasks() { # name expected_file task_args...
     local name=$1 expected=$2 ; shift 2
@@ -113,9 +131,18 @@ test_tasks() { # name expected_file task_args...
     result "$name" "$out"
 }
 
+test_generated() { # name task_args...
+    local name=$1 ; shift
+    test_tasks "$name" "$EXPECTED.$name" "$@"
+}
+
 test_file() { # name task_args...
     local name=$1 ; shift
-    test_tasks "$name" "$MYDIR/$name" "$@"
+    local expected=$MYDIR/$name output=$STATUSES.$name
+
+    query "$@" | awk '$0=="   \"plugins\" : [",$0=="   ],"' > "$output"
+    out=$(diff "$expected" "$output")
+    result "$name" "$out"
 }
 
 readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
@@ -152,8 +179,6 @@ REMOTE_TEST=ssh://$SERVER:$PORT/$PROJECT
 REF_ALL=refs/meta/config
 REF_USERS=refs/users/self
 
-RESULT=0
-
 mkdir -p "$OUT"
 q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS" --initial-commit
@@ -164,8 +189,6 @@ mkdir -p "$ALL_TASKS" "$USER_TASKS"
 CHANGES=($(gssh query "status:open limit:2" | grep 'number:' | awk '{print $2}'))
 replace_change_properties "$DOC_STATES" "1" "${CHANGES[0]}"
 replace_change_properties "$DOC_STATES" "2" "${CHANGES[1]}"
-replace_change_properties "$MYDIR/all" "1" "${CHANGES[0]}"
-replace_change_properties "$MYDIR/all" "2" "${CHANGES[1]}"
 replace_change_properties "$MYDIR/preview" "1" "${CHANGES[0]}"
 replace_change_properties "$MYDIR/preview" "2" "${CHANGES[1]}"
 replace_change_properties "$MYDIR/preview.invalid" "1" "${CHANGES[0]}"
@@ -183,16 +206,27 @@ example 4 > "$USER_SPECIAL_CFG"
 q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
-example 5 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
+example 5 | tail -n +3 | sed -e'/^   \.\.\.,/d; s/^   \.\.\./}/; s/^   ],/   ]/' \
+    > "$EXPECTED".all
 
 change3_id=$(gen_change_id)
 change3_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$change3_id")
-replace_change_properties "$EXPECTED" "3" "$change3_number" "$change3_id" "$PROJECT" "refs\/heads\/$BRANCH" "NEW" ""
-replace_change_properties "$MYDIR/all" "3" "$change3_number" "$change3_id" "$PROJECT" "refs\/heads\/$BRANCH" "NEW" ""
 
+replace_change_properties "$EXPECTED".all "3" \
+    "$change3_number" \
+    "$change3_id" \
+    "$PROJECT" \
+    "refs\/heads\/$BRANCH" \
+    "NEW" \
+    ""
+
+"$MYDIR"/strip_non_applicable.py < "$EXPECTED".all | \
+    grep -v "\"applicable\" :" > "$EXPECTED".applicable
+
+RESULT=0
 query="change:$change3_number status:open"
-test_tasks statuses "$EXPECTED" --task--applicable "$query"
-test_file all --task--all "$query"
+test_generated applicable --task--applicable "$query"
+test_generated all --task--all "$query"
 
 replace_user < "$MYDIR"/root.change > "$ROOT_CFG"
 cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
