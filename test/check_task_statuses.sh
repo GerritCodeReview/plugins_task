@@ -29,6 +29,20 @@ result() { # test [error_message]
     fi
 }
 
+# -------- Pre JSON --------
+#
+# pre_json is a "templated json" used in the test docs to express test results. It looks
+# like json but has some extra comments to express when a certain output should be used.
+# These comments look like: "# Only Test Suite: <suite>"
+#
+
+remove_suite() { # suite < pre_json > json
+    grep -v "# Only Test Suite: $1" | \
+    sed -e's/# Only Test Suite:.*$//; s/ *$//'
+}
+
+remove_not_suite() { remove_suite !"$1" ; } # suite < pre_json > json
+
 # --------
 gssh() { ssh -x -p "$PORT" "$SERVER" gerrit "$@" ; } # cmd [args]...
 
@@ -43,18 +57,29 @@ q_setup() { # cmd [args...]
   local out ; out=$("$@" 2>&1) || { echo "$out" ; exit ; }
 }
 
-replace_change_properties() { # file change_token change_number change_id project branch status topic
+# change_token change_number change_id project branch status topic < templated_txt > change_txt
+replace_change_properties() {
+    sed -e "s/_change$1_number/$2/g" \
+        -e "s/_change$1_id/$3/g" \
+        -e "s/_change$1_project/$4/g" \
+        -e "s/_change$1_branch/$5/g" \
+        -e "s/_change$1_status/$6/g" \
+        -e "s/_change$1_topic/$7/g"
+}
 
-    sed -i -e "s/_change$2_number/$3/g" \
-              -e "s/_change$2_id/$4/g" \
-              -e "s/_change$2_project/$5/g" \
-              -e "s/_change$2_branch/$6/g" \
-              -e "s/_change$2_status/$7/g" \
-              -e "s/_change$2_topic/$8/g" "$1"
+replace_default_changes() { # file
+    local out=$(replace_change_properties "1" "${CHANGES[0]}" < "$1")
+    echo "$out" | replace_change_properties "2" "${CHANGES[1]}" > "$1"
 }
 
 replace_user() { # < text_with_testuser > text_with_$USER
     sed -e"s/testuser/$USER/"
+}
+
+json_pp() {
+    python -c "import sys, json; \
+            print json.dumps(json.loads(sys.stdin.read()), indent=3, \
+            separators=(',', ' : '), sort_keys=True)"
 }
 
 example() { # example_num
@@ -186,16 +211,9 @@ q_setup setup_repo "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH"
 mkdir -p "$ALL_TASKS" "$USER_TASKS"
 
 CHANGES=($(gssh query "status:open limit:2" | grep 'number:' | awk '{print $2}'))
-replace_change_properties "$DOC_STATES" "1" "${CHANGES[0]}"
-replace_change_properties "$DOC_STATES" "2" "${CHANGES[1]}"
-replace_change_properties "$MYDIR/preview" "1" "${CHANGES[0]}"
-replace_change_properties "$MYDIR/preview" "2" "${CHANGES[1]}"
-replace_change_properties "$MYDIR/preview.invalid" "1" "${CHANGES[0]}"
-replace_change_properties "$MYDIR/preview.invalid" "2" "${CHANGES[1]}"
-replace_change_properties "$MYDIR/invalid" "1" "${CHANGES[0]}"
-replace_change_properties "$MYDIR/invalid" "2" "${CHANGES[1]}"
-replace_change_properties "$MYDIR/invalid-applicable" "1" "${CHANGES[0]}"
-replace_change_properties "$MYDIR/invalid-applicable" "2" "${CHANGES[1]}"
+replace_default_changes "$DOC_STATES"
+replace_default_changes "$MYDIR/preview"
+replace_default_changes "$MYDIR/preview.invalid"
 
 example 1 |sed -e"s/current-user/$USER/" > "$ROOT_CFG"
 example 2 > "$COMMON_CFG"
@@ -205,22 +223,31 @@ example 4 > "$USER_SPECIAL_CFG"
 q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
-example 5 | tail -n +3 | sed -e'/^   \.\.\.,/d; s/^   \.\.\./}/; s/^   ],/   ]/' \
-    > "$EXPECTED".all
-
 change3_id=$(gen_change_id)
 change3_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$change3_id")
 
-replace_change_properties "$EXPECTED".all "3" \
-    "$change3_number" \
-    "$change3_id" \
-    "$PROJECT" \
-    "refs\/heads\/$BRANCH" \
-    "NEW" \
-    ""
+all_pjson=$(example 5 | tail -n +3 | sed -e'/^   \.\.\.,/d; s/^   \.\.\./}/; s/^   ],/   ]/')
 
-"$MYDIR"/strip_non_applicable.py < "$EXPECTED".all | \
+all_pjson=$(echo "$all_pjson" | \
+    replace_change_properties \
+        "3" \
+        "$change3_number" \
+        "$change3_id" \
+        "$PROJECT" \
+        "refs\/heads\/$BRANCH" \
+        "NEW" \
+        "")
+
+no_all_json=$(echo "$all_pjson" | remove_suite all)
+
+echo "$no_all_json" | "$MYDIR"/strip_non_applicable.py | \
     grep -v "\"applicable\" :" > "$EXPECTED".applicable
+
+echo "$all_pjson" | remove_not_suite all | json_pp > "$EXPECTED".all
+
+echo "$no_all_json" | "$MYDIR"/strip_non_invalid.py > "$EXPECTED".invalid
+
+"$MYDIR"/strip_non_invalid.py < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
 
 RESULT=0
 query="change:$change3_number status:open"
@@ -232,7 +259,6 @@ cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
 test_file preview --task--preview "$cnum,1" --task--all "$query"
 test_file preview.invalid --task--preview "$cnum,1" --task--invalid "$query"
 
-test_file invalid --task--invalid "$query"
-test_file invalid-applicable --task--applicable --task--invalid "$query"
-
+test_generated invalid --task--invalid "$query"
+test_generated invalid-applicable --task--applicable --task--invalid "$query"
 exit $RESULT

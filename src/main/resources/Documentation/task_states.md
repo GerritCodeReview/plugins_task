@@ -1177,7 +1177,8 @@ The expected output for the above task config looks like:
                      "applicable" : false,
                      "hasPass" : true,
                      "name" : "NA Bad PASS query",
-                     "status" : "FAIL"
+                     "status" : "FAIL"      # Only Test Suite: all
+                     "status" : "INVALID"   # Only Test Suite: !all
                   },
                   {
                      "applicable" : false,
@@ -1189,7 +1190,8 @@ The expected output for the above task config looks like:
                      "applicable" : false,
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
-                     "status" : "FAIL"
+                     "status" : "FAIL"      # Only Test Suite: all
+                     "status" : "INVALID"   # Only Test Suite: !all
                   },
                   {
                      "applicable" : true,
@@ -1447,7 +1449,8 @@ The expected output for the above task config looks like:
                      "applicable" : false,
                      "hasPass" : true,
                      "name" : "NA Bad PASS query",
-                     "status" : "FAIL"
+                     "status" : "FAIL"      # Only Test Suite: all
+                     "status" : "INVALID"   # Only Test Suite: !all
                   },
                   {
                      "applicable" : false,
@@ -1459,7 +1462,8 @@ The expected output for the above task config looks like:
                      "applicable" : false,
                      "hasPass" : true,
                      "name" : "NA Bad INPROGRESS query",
-                     "status" : "FAIL"
+                     "status" : "FAIL"      # Only Test Suite: all
+                     "status" : "INVALID"   # Only Test Suite: !all
                   },
                   {
                      "applicable" : true,
