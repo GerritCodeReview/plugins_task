@@ -16,17 +16,8 @@ create_change() { # subject project
     touch readme.txt && echo "$(date)" >> readme.txt
     git add . && git commit -m "$1"
     git push ssh://"$GERRIT_HOST":"$PORT"/"$2" HEAD:refs/for/master
-    commitRevision=$(git rev-parse HEAD)
-}
-
-submit_change() { # commit_revision
-    gssh review --code-review +2 --submit "$1"
 }
 
 create_project 'test'
 create_change 'Change 1' 'test'
-commit1Revision=$commitRevision
 create_change 'Change 2' 'test'
-#sleep to avoid race conditions
-sleep 60
-submit_change "$commit1Revision"

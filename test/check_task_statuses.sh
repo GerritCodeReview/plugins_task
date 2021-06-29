@@ -16,12 +16,27 @@ result() { # test [error_message]
 }
 
 # --------
+gssh() { ssh -x -p "$PORT" "$SERVER" gerrit "$@" ; } # cmd [args]...
 
 q() { "$@" > /dev/null 2>&1 ; } # cmd [args...]  # quiet a command
+
+gen_change_id() { echo "I$(uuidgen | openssl dgst -sha1 -binary | xxd -p)"; } # > change_id
+
+commit_message() { printf "$1 \n\nChange-Id: $2" ; } # message change-id > commit_msg
 
 # Run a test setup command quietly, exit on failure
 q_setup() { # cmd [args...]
   local out ; out=$("$@" 2>&1) || { echo "$out" ; exit ; }
+}
+
+replace_change_properties() { # file change_token change_number change_id project branch status topic
+
+    sed -i -e "s/_change$2_number/$3/g" \
+              -e "s/_change$2_id/$4/g" \
+              -e "s/_change$2_project/$5/g" \
+              -e "s/_change$2_branch/$6/g" \
+              -e "s/_change$2_status/$7/g" \
+              -e "s/_change$2_topic/$8/g" "$1"
 }
 
 replace_user() { # < text_with_testuser > text_with_$USER
@@ -68,21 +83,23 @@ update_repo() { # repo remote ref
     )
 }
 
-create_repo_change() { # repo remote ref > change_num
-    local repo=$1 remote=$2 ref=$3
+create_repo_change() { # repo remote ref [change_id] > change_num
+    local repo=$1 remote=$2 ref=$3 change_id=$4 msg="Test change"
     (
         q cd "$repo"
+        date > file
         q git add .
-        q git commit -m 'Testing task plugin'
+        [ -n "$change_id" ] && msg=$(commit_message "$msg" "$change_id")
+        q git commit -m "$msg"
         git push "$remote" HEAD:"refs/for/$ref" 2>&1 | get_change_num
     )
 }
 
 query() { # query
-    ssh -x -p "$PORT" "$SERVER" gerrit query "$@" \
-            --format json | head -1 | python -c "import sys, json; \
-            print json.dumps(json.loads(sys.stdin.read()), indent=3, \
-            separators=(',', ' : '), sort_keys=True)"
+    gssh query "$@" \
+        --format json | head -1 | python -c "import sys, json; \
+        print json.dumps(json.loads(sys.stdin.read()), indent=3, \
+        separators=(',', ' : '), sort_keys=True)"
 }
 
 query_plugins() { query "$@" | awk '$0=="   \"plugins\" : [",$0=="   ],"' ; }
@@ -125,8 +142,11 @@ SERVER=$1
 [ -z "$SERVER" ] && { echo "You must specify a server" ; exit ; }
 
 PORT=29418
+PROJECT=test
+BRANCH=master
 REMOTE_ALL=ssh://$SERVER:$PORT/All-Projects
 REMOTE_USERS=ssh://$SERVER:$PORT/All-Users
+REMOTE_TEST=ssh://$SERVER:$PORT/$PROJECT
 
 REF_ALL=refs/meta/config
 REF_USERS=refs/users/self
@@ -136,8 +156,23 @@ RESULT=0
 mkdir -p "$OUT"
 q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS" --initial-commit
+q_setup setup_repo "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH"
 
 mkdir -p "$ALL_TASKS" "$USER_TASKS"
+
+CHANGES=($(gssh query "status:open limit:2" | grep 'number:' | awk '{print $2}'))
+replace_change_properties "$DOC_STATES" "1" "${CHANGES[0]}"
+replace_change_properties "$DOC_STATES" "2" "${CHANGES[1]}"
+replace_change_properties "$MYDIR/all" "1" "${CHANGES[0]}"
+replace_change_properties "$MYDIR/all" "2" "${CHANGES[1]}"
+replace_change_properties "$MYDIR/preview" "1" "${CHANGES[0]}"
+replace_change_properties "$MYDIR/preview" "2" "${CHANGES[1]}"
+replace_change_properties "$MYDIR/preview.invalid" "1" "${CHANGES[0]}"
+replace_change_properties "$MYDIR/preview.invalid" "2" "${CHANGES[1]}"
+replace_change_properties "$MYDIR/invalid" "1" "${CHANGES[0]}"
+replace_change_properties "$MYDIR/invalid" "2" "${CHANGES[1]}"
+replace_change_properties "$MYDIR/invalid-applicable" "1" "${CHANGES[0]}"
+replace_change_properties "$MYDIR/invalid-applicable" "2" "${CHANGES[1]}"
 
 example 1 |sed -e"s/current-user/$USER/" > "$ROOT_CFG"
 example 2 > "$COMMON_CFG"
@@ -149,7 +184,12 @@ q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
 example 5 |tail -n +5| awk 'NR>1{print P};{P=$0}' > "$EXPECTED"
 
-query="status:open limit:1"
+change3_id=$(gen_change_id)
+change3_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$change3_id")
+replace_change_properties "$EXPECTED" "3" "$change3_number" "$change3_id" "$PROJECT" "refs\/heads\/$BRANCH" "NEW" ""
+replace_change_properties "$MYDIR/all" "3" "$change3_number" "$change3_id" "$PROJECT" "refs\/heads\/$BRANCH" "NEW" ""
+
+query="change:$change3_number status:open"
 test_tasks statuses "$EXPECTED" --task--applicable "$query"
 test_file all --task--all "$query"
 

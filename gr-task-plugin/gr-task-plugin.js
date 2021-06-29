@@ -147,7 +147,7 @@ class GrTaskPlugin extends Polymer.Element {
     return icon;
   }
 
-  _computeShowOnNeedsAndBlockedFilter(task) {
+  _isFailOrReadyOrInvalid(task) {
     switch (task.status) {
       case 'FAIL':
       case 'READY':
@@ -155,6 +155,12 @@ class GrTaskPlugin extends Polymer.Element {
         return true;
     }
     return false;
+  }
+
+  _computeShowOnNeedsAndBlockedFilter(task) {
+    return this._isFailOrReadyOrInvalid(task) ||
+      (task.sub_tasks && task.sub_tasks.some(t =>
+        this._computeShowOnNeedsAndBlockedFilter(t)));
   }
 
   _compute_counts(task) {
