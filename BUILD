@@ -8,13 +8,13 @@ gerrit_plugin(
     srcs = glob(["src/main/java/**/*.java"]),
     manifest_entries = [
         "Gerrit-PluginName: " + plugin_name,
-        "Gerrit-ApiVersion: 3.4.0",
         "Implementation-Title: Task Plugin",
         "Implementation-URL: https://gerrit-review.googlesource.com/#/admin/projects/plugins/" + plugin_name,
         "Gerrit-Module: com.googlesource.gerrit.plugins.task.Modules$Module",
     ],
     resource_jars = [":gr-task-plugin"],
     resources = glob(["src/main/resources/**/*"]),
+    javacopts = [ "-Werror", "-Xlint:all", "-Xlint:-classfile", "-Xlint:-processing"],
 )
 
 gerrit_js_bundle(

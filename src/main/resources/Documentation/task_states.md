@@ -38,6 +38,21 @@ states are affected by their own criteria and their subtasks' states.
   applicable = is:open
   fail = is:open
 
+[root "Root PASS-waiting-fail"]
+  applicable = is:open
+  fail = NOT is:open
+  subtask = Subtask PASS
+
+[root "Root pass-WAITING-fail"]
+  applicable = is:open
+  fail = NOT is:open
+  subtask = Subtask FAIL
+
+[root "Root pass-waiting-FAIL"]
+  applicable = is:open
+  fail = is:open
+  subtask = Subtask PASS
+
 [root "Root grouping PASS (subtask PASS)"]
   subtask = Subtask PASS
 
@@ -105,9 +120,11 @@ states are affected by their own criteria and their subtasks' states.
 
 [root "Root tasks-factory"]
   subtasks-factory = tasks-factory static
+  subtasks-factory = tasks-factory change
 
 [root "Root tasks-factory static (empty name)"]
   subtasks-factory = tasks-factory static (empty name)
+# Grouping task since it has no pass criteria, not output since it has no subtasks
 
 [root "Root tasks-factory static (empty name PASS)"]
   pass = True
@@ -117,12 +134,15 @@ states are affected by their own criteria and their subtasks' states.
   set-root-property = root-value
   export-root = ${_name}
   fail = True
-  fail-hint = Name(${_name})
+  fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   subtask = Subtask Properties
 
 [root "Root Preload"]
    preload-task = Subtask FAIL
    subtask = Subtask Preload
+
+[root "Root INVALID Preload"]
+  preload-task = missing
 
 [root "INVALIDS"]
   subtasks-file = invalids.config
@@ -145,6 +165,10 @@ states are affected by their own criteria and their subtasks' states.
 
 [tasks-factory "tasks-factory static (empty name)"]
   names-factory = names-factory static (empty name list)
+  fail = True
+
+[tasks-factory "tasks-factory change"]
+  names-factory = names-factory change list
   fail = True
 
 [task "Subtask APPLICABLE"]
@@ -179,6 +203,7 @@ states are affected by their own criteria and their subtasks' states.
   subtask = Subtask Properties Hints
   subtask = Chained ${_name}
   subtask = Subtask Properties Reset
+  subtasks-factory = TaskFactory Properties Hints
 
 [task "Subtask Properties Hints"]
   set-first-property = first-value
@@ -194,6 +219,15 @@ states are affected by their own criteria and their subtasks' states.
   pass = True
   set-first-property = reset-first-value
   fail-hint = first-property(${first-property})
+
+[tasks-factory "TaskFactory Properties Hints"]
+  names-factory = NamesFactory Properties
+  fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  fail = True
+
+[names-factory "NamesFactory Properties"]
+  type = change
+  changes = change:_change1_number OR change:${_change_number} project:${_change_project} branch:${_change_branch}
 
 [task "Subtask Preload"]
   preload-task = Subtask READY
@@ -260,10 +294,15 @@ states are affected by their own criteria and their subtasks' states.
   name = my a task
   name = my b task
   name = my c task
+  name = my d task Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   type = static
 
 [names-factory "names-factory static (empty name list)"]
   type = static
+
+[names-factory "names-factory change list"]
+  changes = change:_change1_number OR change:_change2_number
+  type = change
 
 ```
 
@@ -341,19 +380,74 @@ states are affected by their own criteria and their subtasks' states.
 [task "task (names-factory type INVALID)"]
   subtasks-factory = tasks-factory (names-factory type INVALID)
 
+[task "task (names-factory duplicate)"]
+  subtasks-factory = tasks-factory (names-factory duplicate)
+
+[task "task (names-factory changes type missing)"]
+  subtasks-factory = tasks-factory change (names-factory type missing)
+
+[task "task (names-factory changes missing)"]
+  subtasks-factory = tasks-factory change (names-factory changes missing)
+
+[task "task (names-factory changes invalid)"]
+  subtasks-factory = tasks-factory change (names-factory changes invalid)
+
+[task "task (tasks-factory changes loop)"]
+  subtasks-factory = tasks-factory change loop
+
 [tasks-factory "tasks-factory (names-factory type missing)"]
   names-factory = names-factory (type missing)
   fail = True
 
+[tasks-factory "tasks-factory (names-factory type INVALID)"]
+  names-factory = name-factory (type INVALID)
+
+[tasks-factory "tasks-factory (names-factory duplicate)"]
+  names-factory = names-factory duplicate
+  fail = True
+
+[tasks-factory "tasks-factory change (names-factory type missing)"]
+  names-factory = names-factory change list (type missing)
+  fail = True
+
+[tasks-factory "tasks-factory change (names-factory changes missing)"]
+  names-factory = names-factory change list (changes missing)
+  fail = True
+
+[tasks-factory "tasks-factory change (names-factory changes invalid)"]
+  names-factory = names-factory change list (changes invalid)
+  fail = True
+
+[tasks-factory "tasks-factory change loop"]
+  names-factory = names-factory change constant
+  subtask = task (tasks-factory changes loop)
+  fail = true
+
 [names-factory "names-factory (type missing)"]
   name = no type test
 
-[tasks-factory "tasks-factory (names-factory type INVALID)"]
-  names-factory = name-factory (type INVALID)
+[names-factory "names-factory change list (type missing)"]
+  changes = change:_change1_number OR change:_change2_number
 
 [names-factory "names-factory (type INVALID)"]
   name = invalid type test
   type = invalid
+
+[names-factory "names-factory duplicate"]
+  name = duplicate
+  name = duplicate
+  type = static
+
+[names-factory "names-factory change list (changes missing)"]
+  type = change
+
+[names-factory "names-factory change list (changes invalid)"]
+  change = change:invalidChange
+  type = change
+
+[names-factory "names-factory change constant"]
+  changes = change:_change1_number OR change:_change2_number
+  type = change
 
 ```
 
@@ -421,6 +515,42 @@ The expected output for the above task config looks like:
                "hasPass" : true,
                "name" : "Root pass-FAIL",
                "status" : "FAIL"
+            },
+            {
+               "hasPass" : true,
+               "name" : "Root PASS-waiting-fail",
+               "status" : "PASS",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "hasPass" : true,
+               "name" : "Root pass-WAITING-fail",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "name" : "Subtask FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "hasPass" : true,
+               "name" : "Root pass-waiting-FAIL",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
             },
             {
                "hasPass" : false,
@@ -686,6 +816,21 @@ The expected output for the above task config looks like:
                      "hasPass" : true,
                      "name" : "my c task",
                      "status" : "FAIL"
+                  },
+                  {
+                     "hasPass" : true,
+                     "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "hasPass" : true,
+                     "name" : "_change1_number",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "hasPass" : true,
+                     "name" : "_change2_number",
+                     "status" : "FAIL"
                   }
                ]
             },
@@ -699,7 +844,7 @@ The expected output for the above task config looks like:
                   "root" : "Root Properties"
                },
                "hasPass" : true,
-               "hint" : "Name(Root Properties)",
+               "hint" : "Name(Root Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
                "name" : "Root Properties",
                "status" : "FAIL",
                "subTasks" : [
@@ -726,6 +871,18 @@ The expected output for the above task config looks like:
                            "hasPass" : true,
                            "name" : "Subtask Properties Reset",
                            "status" : "PASS"
+                        },
+                        {
+                           "hasPass" : true,
+                           "hint" : "Name(_change3_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+                           "name" : "_change3_number",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "hasPass" : true,
+                           "hint" : "Name(_change1_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+                           "name" : "_change1_number",
+                           "status" : "FAIL"
                         }
                      ]
                   }
@@ -804,6 +961,10 @@ The expected output for the above task config looks like:
                      ]
                   }
                ]
+            },
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
             },
             {
                "hasPass" : false,
@@ -938,6 +1099,84 @@ The expected output for the above task config looks like:
                         {
                            "name" : "UNKNOWN",
                            "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : true,
+                           "name" : "duplicate",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes invalid)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        },
+                        {
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
                         }
                      ]
                   }

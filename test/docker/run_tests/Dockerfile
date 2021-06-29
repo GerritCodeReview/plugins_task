@@ -7,7 +7,7 @@ ENV USER_HOME /home/$USER
 ENV RUN_TESTS_DIR task/test/docker/run_tests
 ENV WORKSPACE $USER_HOME/workspace
 
-RUN apk --update add --no-cache openssh bash git python2 shadow
+RUN apk --update add --no-cache openssh bash git python2 shadow util-linux openssl xxd
 RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
 RUN groupadd -f -g $GID users2

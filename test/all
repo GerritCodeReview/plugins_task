@@ -60,6 +60,48 @@
             },
             {
                "applicable" : true,
+               "hasPass" : true,
+               "name" : "Root PASS-waiting-fail",
+               "status" : "PASS",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Root pass-WAITING-fail",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask FAIL",
+                     "status" : "FAIL"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Root pass-waiting-FAIL",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
                "hasPass" : false,
                "name" : "Root grouping PASS (subtask PASS)",
                "status" : "PASS",
@@ -380,6 +422,24 @@
                      "hasPass" : true,
                      "name" : "my c task",
                      "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "_change1_number",
+                     "status" : "FAIL"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "_change2_number",
+                     "status" : "FAIL"
                   }
                ]
             },
@@ -400,7 +460,7 @@
                   "root" : "Root Properties"
                },
                "hasPass" : true,
-               "hint" : "Name(Root Properties)",
+               "hint" : "Name(Root Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
                "name" : "Root Properties",
                "status" : "FAIL",
                "subTasks" : [
@@ -431,6 +491,20 @@
                            "hasPass" : true,
                            "name" : "Subtask Properties Reset",
                            "status" : "PASS"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "Name(_change3_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+                           "name" : "_change3_number",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "Name(_change1_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+                           "name" : "_change1_number",
+                           "status" : "FAIL"
                         }
                      ]
                   }
@@ -522,6 +596,10 @@
                      ]
                   }
                ]
+            },
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
             },
             {
                "applicable" : true,
@@ -690,6 +768,92 @@
                         {
                            "name" : "UNKNOWN",
                            "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "duplicate",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes invalid)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
                         }
                      ]
                   }
@@ -874,6 +1038,92 @@
                         {
                            "name" : "UNKNOWN",
                            "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory duplicate)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "duplicate",
+                           "status" : "FAIL"
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes type missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes missing)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (names-factory changes invalid)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "name" : "UNKNOWN",
+                                 "status" : "INVALID"
+                              }
+                           ]
                         }
                      ]
                   }

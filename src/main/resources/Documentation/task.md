@@ -119,6 +119,12 @@ defined subtasks are valid, but they are only applicable when at least
 one subtask is applicable. Setting this to "True" is useful for defining
 informational tasks that are not really expected to execute.
 
+A task with a `fail` key but no pass key has an implied `pass` key which is
+the opposite of the `fail` key as if the fail had a `NOT` in front of it.
+Such tasks can only pass, fail, or be waiting for their subtasks, they
+can never be ready! If they have not failed, and their subtasks have
+passed, they have passed also.
+
 Example:
 ```
     pass = label:verified+1
@@ -331,6 +337,16 @@ this:
 
 The following keys may be defined in any names-factory section:
 
+`changes`
+
+: This key defines a query that is used to fetch change numbers which will be used
+as the names of the task(s).
+
+Example:
+```
+    changes = change:1 OR change:2
+```
+
 `name`
 
 : This key defines the name of the tasks.  This key may be used several times
@@ -345,12 +361,15 @@ Example:
 
 `type`
 
-: This key defines the type of the names-factory section.  The only
-accepted value is `static`.
+: This key defines the type of the names-factory section.  The type
+can be either `static` or `change`. For names-factory of type `static`,
+`name` key(s) should be defined where as names-factory of type `change`
+needs a `change` key to be defined.
 
 Example:
 ```
     type = static
+    type = change
 ```
 
 External Entries
@@ -385,12 +404,25 @@ Example:
 
 Properties
 ----------
-The task plugin supplies the `${_name}` property which may be used anywhere in
-a task definition as a token representing the name of the current task.
+The task plugin supplies the following properties which may be used anywhere in
+a task, tasks-factory, or names-factory definition.
 
-Example:
+```
+    ${_name}            represents the name of the current task
+    ${_change_number}   represents the change number of the current change
+    ${_change_id}       represents the change id of the current change
+    ${_change_project}  represents the project of the current change
+    ${_change_branch}   represents the branch of the current change
+    ${_change_status}   represents the status of the current change
+    ${_change_topic}    represents the topic of the current change
+```
+
+Examples:
 ```
     fail-hint = {$_name} needs to be fixed
+    fail-hint = {$_change_number} with {$_change_status} needs to be fixed
+    fail-hint = {$_change_id} on {$_change_project} and {$_change_branch} needs to be fixed
+    changes = parentof:${_change_number} project:${_change_project} branch:${_change_branch}
 ```
 
 Custom properties may be defined on a task using the following syntax:
