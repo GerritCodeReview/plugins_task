@@ -371,40 +371,113 @@ The config below is expected to be in the `task.config` file in project
    "status" : "READY"
 }
 
-[root "Root Optional subtasks"]
+[root "Root OPTIONAL MISSING"]
    subtask = OPTIONAL MISSING |
-   subtask = Subtask Optional |
+   pass = True
 
-[task "Subtask Optional"]
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root OPTIONAL MISSING",
+   "status" : "PASS"
+}
+
+[root "Root Optional subtask EXISTS"]
+   subtask = Subtask Optional EXISTS |
+
+[task "Subtask Optional EXISTS"]
    subtask = Subtask PASS |
-   subtask = OPTIONAL MISSING | Subtask FAIL
-   subtask = OPTIONAL MISSING | OPTIONAL MISSING |
-   subtask = OPTIONAL MISSING | OPTIONAL MISSING | Subtask READY
 
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root Optional subtasks",
-   "status" : "WAITING",
+   "name" : "Root Optional subtask EXISTS",
+   "status" : "PASS",
    "subTasks" : [
       {
          "applicable" : true,
          "hasPass" : false,
-         "name" : "Subtask Optional",
-         "status" : "WAITING",
+         "name" : "Subtask Optional EXISTS",
+         "status" : "PASS",
          "subTasks" : [
             {
                "applicable" : true,
                "hasPass" : true,
                "name" : "Subtask PASS",
                "status" : "PASS"
-            },
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root Optional subtask MISSING then EXISTS"]
+   subtask = Subtask Optional MISSING then EXISTS |
+
+[task "Subtask Optional MISSING then EXISTS"]
+   subtask = OPTIONAL MISSING | Subtask FAIL
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Optional subtask MISSING then EXISTS",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Optional MISSING then EXISTS",
+         "status" : "WAITING",
+         "subTasks" : [
             {
                "applicable" : true,
                "hasPass" : true,
                "name" : "Subtask FAIL",
                "status" : "FAIL"
-            },
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root Optional subtask MISSING then MISSING"]
+   subtask = Subtask Optional MISSING then MISSING |
+
+[task "Subtask Optional MISSING then MISSING"]
+   subtask = OPTIONAL MISSING | OPTIONAL MISSING |
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Optional subtask MISSING then MISSING",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Optional MISSING then MISSING"
+      }
+   ]
+}
+
+[root "Root Optional subtask MISSING then MISSING then EXISTS"]
+   subtask = Subtask Optional MISSING then MISSING then EXISTS |
+
+[task "Subtask Optional MISSING then MISSING then EXISTS"]
+   subtask = OPTIONAL MISSING | OPTIONAL MISSING | Subtask READY
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Optional subtask MISSING then MISSING then EXISTS",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Optional MISSING then MISSING then EXISTS",
+         "status" : "WAITING",
+         "subTasks" : [
             {
                "applicable" : true,
                "hasPass" : true,
