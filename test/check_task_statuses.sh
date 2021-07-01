@@ -29,6 +29,30 @@ result() { # test [error_message]
     fi
 }
 
+# output must match expected to pass
+result_out() { # test expected actual
+    local name=$1 expected=$2 actual=$3
+
+    [ "$expected" = "$actual" ]
+    result "$name" "$(diff <(echo "$expected") <(echo "$actual"))"
+}
+
+result_root() { # group root expected_file actual_file
+    local name="$1 - $(echo "$2" | sed -es'/Root //')"
+    result_out "$name" "$(get_root "$2" < "$3")" "$(get_root "$2" < "$4")"
+}
+
+# -------- Git Config
+
+config() { git config -f "$CONFIG" "$@" ; } # [args]...
+config_section_keys() { # section > keys ...
+    # handlers.handler-filter filter.sh -> handler-filter
+    config -l --name-only |\
+        grep "^$1\." | \
+        sed -es"/^$1\.//;s/\..*$//" |\
+        awk '$0 != prev ; {prev = $0}'
+}
+
 # -------- Pre JSON --------
 #
 # pre_json is a "templated json" used in the test docs to express test results. It looks
@@ -160,6 +184,16 @@ replace_user() { # < text_with_testuser > text_with_$USER
     sed -e"s/testuser/$USER/"
 }
 
+get_root() { # root < task_plugin_ouptut > root_json
+    python -c "if True: # NOP to start indent
+        import sys, json
+
+        roots=json.loads(sys.stdin.read())['plugins'][0]['roots']
+        for root in roots:
+            if 'name' in root.keys() and root['name']=='$1':
+                print json.dumps(root, indent=3, separators=(',', ' : '), sort_keys=True)"
+}
+
 example() { # example_num
     echo "$DOC_STATES" | awk '/```/{Q++;E=(Q+1)/2};E=='"$1" | grep -v '```' | replace_user
 }
@@ -220,11 +254,15 @@ query_plugins() { # query
 
 test_tasks() { # name expected_file task_args...
     local name=$1 expected=$2 ; shift 2
-    local output=$STATUSES.$name
+    local output=$STATUSES.$name out root
 
     query_plugins "$@" > "$output"
-    out=$(diff "$expected" "$output")
-    result "$name" "$out"
+    echo "$ROOTS" | while read root ; do
+        result_root "$name" "$root" "$expected" "$output"
+    done
+    out=$(diff "$expected" "$output" | head -15)
+    [ -z "$out" ]
+    result "$name - Full Test Suite" "$out"
 }
 
 test_generated() { # name task_args...
@@ -275,12 +313,13 @@ REMOTE_TEST=ssh://$SERVER:$PORT/$PROJECT
 REF_ALL=refs/meta/config
 REF_USERS=refs/users/self
 
-mkdir -p "$OUT"
+CONFIG=$ROOT_CFG
+
+mkdir -p "$OUT" "$ALL_TASKS" "$USER_TASKS"
+
 q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS" --initial-commit
 q_setup setup_repo "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH"
-
-mkdir -p "$ALL_TASKS" "$USER_TASKS"
 
 changes=$(gssh query "status:open limit:2" --format json)
 set_change "$(echo "$changes" | awk 'NR==1')" ; CHANGE1=("${CHANGE[@]}")
@@ -291,6 +330,8 @@ example 2 | replace_user | testdoc_2_cfg > "$ROOT_CFG"
 example 3 > "$COMMON_CFG"
 example 4 > "$INVALIDS_CFG"
 example 5 > "$USER_SPECIAL_CFG"
+
+ROOTS=$(config_section_keys "root")
 
 q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
@@ -320,22 +361,25 @@ echo "$no_all_json" | "$MYDIR"/strip_non_invalid.py > "$EXPECTED".invalid
 "$MYDIR"/strip_non_invalid.py < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
 
 
-testdoc_2_cfg < "$DOC_PREVIEW" | replace_user > "$ROOT_CFG"
-
 preview_pjson=$(testdoc_2_pjson < "$DOC_PREVIEW" | replace_default_changes)
 echo "$preview_pjson" | remove_suite invalid | json_pp > "$EXPECTED".preview
 echo "$preview_pjson" | remove_not_suite invalid | \
     "$MYDIR"/strip_non_invalid.py > "$EXPECTED".preview-invalid
+
+testdoc_2_cfg < "$DOC_PREVIEW" | replace_user > "$ROOT_CFG"
+cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
+PREVIEW_ROOTS=$(config_section_keys "root")
+
 
 RESULT=0
 query="change:$change3_number status:open"
 test_generated applicable --task--applicable "$query"
 test_generated all --task--all "$query"
 
-cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
-test_generated preview --task--preview "$cnum,1" --task--all "$query"
-test_generated preview-invalid --task--preview "$cnum,1" --task--invalid "$query"
-
 test_generated invalid --task--invalid "$query"
 test_generated invalid-applicable --task--applicable --task--invalid "$query"
+
+ROOTS=$PREVIEW_ROOTS
+test_generated preview --task--preview "$cnum,1" --task--all "$query"
+test_generated preview-invalid --task--preview "$cnum,1" --task--invalid "$query"
 exit $RESULT
