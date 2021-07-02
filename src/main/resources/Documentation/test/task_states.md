@@ -665,9 +665,8 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
-[root "Root tasks-factory"]
+[root "Root tasks-factory STATIC"]
   subtasks-factory = tasks-factory static
-  subtasks-factory = tasks-factory change
 
 [tasks-factory "tasks-factory static"]
   names-factory = names-factory static list
@@ -680,18 +679,10 @@ The config below is expected to be in the `task.config` file in project
   name = my d task Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   type = static
 
-[tasks-factory "tasks-factory change"]
-  names-factory = names-factory change list
-  fail = True
-
-[names-factory "names-factory change list"]
-  changes = change:_change1_number OR change:_change2_number
-  type = change
-
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root tasks-factory",
+   "name" : "Root tasks-factory STATIC",
    "status" : "WAITING",
    "subTasks" : [
       {
@@ -717,7 +708,27 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
          "status" : "FAIL"
-      },
+      }
+   ]
+}
+
+[root "Root tasks-factory CHANGE"]
+  subtasks-factory = tasks-factory change
+
+[tasks-factory "tasks-factory change"]
+  names-factory = names-factory change list
+  fail = True
+
+[names-factory "names-factory change list"]
+  changes = change:_change1_number OR change:_change2_number
+  type = change
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory CHANGE",
+   "status" : "WAITING",
+   "subTasks" : [
       {
          "applicable" : true,
          "hasPass" : true,
