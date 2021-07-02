@@ -774,13 +774,11 @@ The config below is expected to be in the `task.config` file in project
 
 [root "Root Properties"]
   set-root-property = root-value
-  export-root = ${_name}
   fail = True
   fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   subtask = Subtask Properties
 
 [task "Subtask Properties"]
-  export-subtask = ${_name}
   subtask = Subtask Properties Hints
   subtask = Chained ${_name}
   subtask = Subtask Properties Reset
@@ -791,7 +789,7 @@ The config below is expected to be in the `task.config` file in project
   set-second-property = ${first-property} second-extra ${third-property}
   set-third-property = third-value
   fail = True
-  fail-hint = Name(${_name}) root-property(${root-property}) first-property(${first-property}) second-property(${second-property}) root(${root})
+  fail-hint = Name(${_name}) root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
 
 [task "Chained Subtask Properties"]
   pass = True
@@ -812,9 +810,6 @@ The config below is expected to be in the `task.config` file in project
 
 {
    "applicable" : true,
-   "exported" : {
-      "root" : "Root Properties"
-   },
    "hasPass" : true,
    "hint" : "Name(Root Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
    "name" : "Root Properties",
@@ -822,9 +817,6 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
-         "exported" : {
-            "subtask" : "Subtask Properties"
-         },
          "hasPass" : false,
          "name" : "Subtask Properties",
          "status" : "WAITING",
@@ -832,7 +824,7 @@ The config below is expected to be in the `task.config` file in project
             {
                "applicable" : true,
                "hasPass" : true,
-               "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
+               "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
                "name" : "Subtask Properties Hints",
                "status" : "FAIL"
             },
@@ -863,6 +855,40 @@ The config below is expected to be in the `task.config` file in project
                "status" : "FAIL"
             }
          ]
+      }
+   ]
+}
+
+[root "Root Properties Exports"]
+  export-root-exported = ${_name}
+  subtask = Subtask Properties Exports
+  fail = True
+  fail-hint = root-exported(${root-exported})
+
+[task "Subtask Properties Exports"]
+  export-subtask-exported = ${_name}
+  fail = True
+  fail-hint = root-exported(${root-exported}) subtask-exported(${subtask-exported})
+
+{
+   "applicable" : true,
+   "exported" : {
+      "root-exported" : "Root Properties Exports"
+   },
+   "hasPass" : true,
+   "hint" : "root-exported(Root Properties Exports)",
+   "name" : "Root Properties Exports",
+   "status" : "FAIL",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "exported" : {
+            "subtask-exported" : "Subtask Properties Exports"
+         },
+         "hasPass" : true,
+         "hint" : "root-exported(Root Properties Exports) subtask-exported(Subtask Properties Exports)",
+         "name" : "Subtask Properties Exports",
+         "status" : "FAIL"
       }
    ]
 }
