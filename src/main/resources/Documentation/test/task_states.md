@@ -774,8 +774,6 @@ The config below is expected to be in the `task.config` file in project
 
 [root "Root Properties"]
   set-root-property = root-value
-  fail = True
-  fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   subtask = Subtask Properties
 
 [task "Subtask Properties"]
@@ -789,7 +787,7 @@ The config below is expected to be in the `task.config` file in project
   set-second-property = ${first-property} second-extra ${third-property}
   set-third-property = third-value
   fail = True
-  fail-hint = Name(${_name}) root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
+  fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
 
 [task "Chained Subtask Properties"]
   pass = True
@@ -810,10 +808,9 @@ The config below is expected to be in the `task.config` file in project
 
 {
    "applicable" : true,
-   "hasPass" : true,
-   "hint" : "Name(Root Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+   "hasPass" : false,
    "name" : "Root Properties",
-   "status" : "FAIL",
+   "status" : "WAITING",
    "subTasks" : [
       {
          "applicable" : true,
@@ -824,7 +821,7 @@ The config below is expected to be in the `task.config` file in project
             {
                "applicable" : true,
                "hasPass" : true,
-               "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
+               "hint" : "root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
                "name" : "Subtask Properties Hints",
                "status" : "FAIL"
             },
@@ -888,6 +885,37 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "hint" : "root-exported(Root Properties Exports) subtask-exported(Subtask Properties Exports)",
          "name" : "Subtask Properties Exports",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Internal Properties"]
+  export-root = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  set-root-internals = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  fail = True
+  fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  subtask = Subtask Internal Properties
+
+[task "Subtask Internal Properties"]
+  fail = True
+  fail-hint = root-internals(${root-internals}) Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+
+{
+   "applicable" : true,
+   "exported" : {
+      "root" : "Name(Root Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)"
+   },
+   "hasPass" : true,
+   "hint" : "Name(Root Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+   "name" : "Root Internal Properties",
+   "status" : "FAIL",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "root-internals(Name(Root Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)) Name(Subtask Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+         "name" : "Subtask Internal Properties",
          "status" : "FAIL"
       }
    ]
