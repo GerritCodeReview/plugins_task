@@ -779,7 +779,6 @@ The config below is expected to be in the `task.config` file in project
 [task "Subtask Properties"]
   subtask = Subtask Properties Hints
   subtask = Subtask Properties Reset
-  subtasks-factory = TaskFactory Properties Hints
 
 [task "Subtask Properties Hints"]
   set-first-property = first-value
@@ -792,15 +791,6 @@ The config below is expected to be in the `task.config` file in project
   pass = True
   set-first-property = reset-first-value
   fail-hint = first-property(${first-property})
-
-[tasks-factory "TaskFactory Properties Hints"]
-  names-factory = NamesFactory Properties
-  fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
-  fail = True
-
-[names-factory "NamesFactory Properties"]
-  type = change
-  changes = change:_change1_number OR change:${_change_number} project:${_change_project} branch:${_change_branch}
 
 {
    "applicable" : true,
@@ -826,20 +816,6 @@ The config below is expected to be in the `task.config` file in project
                "hasPass" : true,
                "name" : "Subtask Properties Reset",
                "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "Name(_change3_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-               "name" : "_change3_number",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "Name(_change1_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-               "name" : "_change1_number",
-               "status" : "FAIL"
             }
          ]
       }
@@ -940,6 +916,67 @@ The config below is expected to be in the `task.config` file in project
                "status" : "FAIL"
             }
          ]
+      }
+   ]
+}
+
+[root "Root TaskFactory Properties"]
+  subtasks-factory = TaskFactory Properties
+
+[tasks-factory "TaskFactory Properties"]
+  set-welcome-message = Welcome to the pleasuredome
+  names-factory = names-factory my change
+  fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  fail = True
+
+[names-factory "names-factory my change"]
+  type = change
+  changes = change:${_change_number}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root TaskFactory Properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Welcome to the pleasuredome Name(_change3_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+         "name" : "_change3_number",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root NamesFactory Properties"]
+  subtasks-factory = TaskFactory NamesFactory Properties
+
+[tasks-factory "TaskFactory NamesFactory Properties"]
+  names-factory = NamesFactory Properties
+  fail = True
+
+[names-factory "NamesFactory Properties"]
+  type = change
+  changes = change:_change1_number OR change:${_change_number} project:${_change_project} branch:${_change_branch}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root NamesFactory Properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "_change3_number",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "_change1_number",
+         "status" : "FAIL"
       }
    ]
 }
