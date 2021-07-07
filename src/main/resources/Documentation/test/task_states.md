@@ -1059,12 +1059,6 @@ The config below is expected to be in the `task.config` file in project
 
 [task "Subtask Preload"]
   preload-task = Subtask READY
-  subtask = Subtask Preload Properties
-
-[task "Subtask Preload Properties"]
-  preload-task = Subtask Properties Hints
-  set-fourth-property = fourth-value
-  fail-hint = second-property(${second-property}) fourth-property(${fourth-property})
 
 {
    "applicable" : true,
@@ -1076,20 +1070,13 @@ The config below is expected to be in the `task.config` file in project
          "applicable" : true,
          "hasPass" : true,
          "name" : "Subtask Preload",
-         "status" : "WAITING",
+         "status" : "READY",
          "subTasks" : [
             {
                "applicable" : true,
                "hasPass" : true,
                "name" : "Subtask PASS",
                "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "second-property(first-value second-extra third-value) fourth-property(fourth-value)",
-               "name" : "Subtask Preload Properties",
-               "status" : "FAIL"
             }
          ]
       }
@@ -1266,6 +1253,30 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "Subtask Preload Optional",
          "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Preload Properties"]
+  subtask = Subtask Preload Properties
+
+[task "Subtask Preload Properties"]
+  preload-task = Subtask Properties Hints
+  set-fourth-property = fourth-value
+  fail-hint = second-property(${second-property}) fourth-property(${fourth-property})
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Preload Properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "second-property(first-value second-extra third-value) fourth-property(fourth-value)",
+         "name" : "Subtask Preload Properties",
+         "status" : "FAIL"
       }
    ]
 }
