@@ -1059,25 +1059,11 @@ The config below is expected to be in the `task.config` file in project
 
 [task "Subtask Preload"]
   preload-task = Subtask READY
-  subtask = Subtask Preload Hints PASS
-  subtask = Subtask Preload Hints FAIL
   subtask = Subtask Preload Override Pass
   subtask = Subtask Preload Override Fail
   subtask = Subtask Preload Extend Subtasks
   subtask = Subtask Preload Optional
   subtask = Subtask Preload Properties
-
-[task "Subtask Preload Hints PASS"]
-  preload-task = Subtask Hints
-  pass = False
-
-[task "Subtask Hints"] # meant to be preloaded, not a test case in itself
-  ready-hint = Task is ready
-  fail-hint = Task failed
-
-[task "Subtask Preload Hints FAIL"]
-  preload-task = Subtask Hints
-  fail = True
 
 [task "Subtask Preload Override Pass"]
   preload-task = Subtask PASS
@@ -1116,20 +1102,6 @@ The config below is expected to be in the `task.config` file in project
                "hasPass" : true,
                "name" : "Subtask PASS",
                "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "Task is ready",
-               "name" : "Subtask Preload Hints PASS",
-               "status" : "READY"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "Task failed",
-               "name" : "Subtask Preload Hints FAIL",
-               "status" : "FAIL"
             },
             {
                "applicable" : true,
@@ -1201,6 +1173,56 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "Subtask Preload Preload",
          "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Preload Hints PASS"]
+  subtask = Subtask Preload Hints PASS
+
+[task "Subtask Preload Hints PASS"]
+  preload-task = Subtask Hints
+  pass = False
+
+[task "Subtask Hints"] # meant to be preloaded, not a test case in itself
+  ready-hint = Task is ready
+  fail-hint = Task failed
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Preload Hints PASS",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Task is ready",
+         "name" : "Subtask Preload Hints PASS",
+         "status" : "READY"
+      }
+   ]
+}
+
+[root "Root Preload Hints FAIL"]
+  subtask = Subtask Preload Hints FAIL
+
+[task "Subtask Preload Hints FAIL"]
+  preload-task = Subtask Hints
+  fail = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Preload Hints FAIL",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Task failed",
+         "name" : "Subtask Preload Hints FAIL",
+         "status" : "FAIL"
       }
    ]
 }
