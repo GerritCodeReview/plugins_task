@@ -1059,19 +1059,9 @@ The config below is expected to be in the `task.config` file in project
 
 [task "Subtask Preload"]
   preload-task = Subtask READY
-  subtask = Subtask Preload Override Pass
-  subtask = Subtask Preload Override Fail
   subtask = Subtask Preload Extend Subtasks
   subtask = Subtask Preload Optional
   subtask = Subtask Preload Properties
-
-[task "Subtask Preload Override Pass"]
-  preload-task = Subtask PASS
-  pass = False
-
-[task "Subtask Preload Override Fail"]
-  preload-task = Subtask FAIL
-  fail = False
 
 [task "Subtask Preload Extend Subtasks"]
   preload-task = Subtask READY
@@ -1101,18 +1091,6 @@ The config below is expected to be in the `task.config` file in project
                "applicable" : true,
                "hasPass" : true,
                "name" : "Subtask PASS",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Subtask Preload Override Pass",
-               "status" : "READY"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Subtask Preload Override Fail",
                "status" : "PASS"
             },
             {
@@ -1223,6 +1201,50 @@ The config below is expected to be in the `task.config` file in project
          "hint" : "Task failed",
          "name" : "Subtask Preload Hints FAIL",
          "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Override Preload Pass"]
+  subtask = Subtask Override Preload Pass
+
+[task "Subtask Override Preload Pass"]
+  preload-task = Subtask PASS
+  pass = False
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Override Preload Pass",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Override Preload Pass",
+         "status" : "READY"
+      }
+   ]
+}
+
+[root "Root Override Preload Fail"]
+  subtask = Subtask Override Preload Fail
+
+[task "Subtask Override Preload Fail"]
+  preload-task = Subtask FAIL
+  fail = False
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Override Preload Fail",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Override Preload Fail",
+         "status" : "PASS"
       }
    ]
 }
