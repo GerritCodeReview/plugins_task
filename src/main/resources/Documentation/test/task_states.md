@@ -1059,7 +1059,6 @@ The config below is expected to be in the `task.config` file in project
 
 [task "Subtask Preload"]
   preload-task = Subtask READY
-  subtask = Subtask Preload Preload
   subtask = Subtask Preload Hints PASS
   subtask = Subtask Preload Hints FAIL
   subtask = Subtask Preload Override Pass
@@ -1067,12 +1066,6 @@ The config below is expected to be in the `task.config` file in project
   subtask = Subtask Preload Extend Subtasks
   subtask = Subtask Preload Optional
   subtask = Subtask Preload Properties
-
-[task "Subtask Preload Preload"]
-  preload-task = Subtask Preload with Preload
-
-[task "Subtask Preload with Preload"]
-  preload-task = Subtask PASS
 
 [task "Subtask Preload Hints PASS"]
   preload-task = Subtask Hints
@@ -1122,12 +1115,6 @@ The config below is expected to be in the `task.config` file in project
                "applicable" : true,
                "hasPass" : true,
                "name" : "Subtask PASS",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Subtask Preload Preload",
                "status" : "PASS"
             },
             {
@@ -1190,6 +1177,30 @@ The config below is expected to be in the `task.config` file in project
                "status" : "FAIL"
             }
          ]
+      }
+   ]
+}
+
+[root "Root Preload Preload"]
+  subtask = Subtask Preload Preload
+
+[task "Subtask Preload Preload"]
+  preload-task = Subtask Preload with Preload
+
+[task "Subtask Preload with Preload"]
+  preload-task = Subtask PASS
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Preload Preload",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Preload Preload",
+         "status" : "PASS"
       }
    ]
 }
