@@ -1059,13 +1059,8 @@ The config below is expected to be in the `task.config` file in project
 
 [task "Subtask Preload"]
   preload-task = Subtask READY
-  subtask = Subtask Preload Extend Subtasks
   subtask = Subtask Preload Optional
   subtask = Subtask Preload Properties
-
-[task "Subtask Preload Extend Subtasks"]
-  preload-task = Subtask READY
-  subtask = Subtask APPLICABLE
 
 [task "Subtask Preload Optional"]
   preload-task = Missing | Subtask PASS
@@ -1092,26 +1087,6 @@ The config below is expected to be in the `task.config` file in project
                "hasPass" : true,
                "name" : "Subtask PASS",
                "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Subtask Preload Extend Subtasks",
-               "status" : "READY",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask PASS",
-                     "status" : "PASS"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask APPLICABLE",
-                     "status" : "PASS"
-                  }
-               ]
             },
             {
                "applicable" : true,
@@ -1245,6 +1220,42 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "Subtask Override Preload Fail",
          "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Append Preloaded Subtasks"]
+  subtask = Subtask Append Preloaded Subtasks
+
+[task "Subtask Append Preloaded Subtasks"]
+  preload-task = Subtask READY
+  subtask = Subtask APPLICABLE
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Append Preloaded Subtasks",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Append Preloaded Subtasks",
+         "status" : "READY",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask PASS",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask APPLICABLE",
+               "status" : "PASS"
+            }
+         ]
       }
    ]
 }
