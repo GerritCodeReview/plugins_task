@@ -1059,11 +1059,7 @@ The config below is expected to be in the `task.config` file in project
 
 [task "Subtask Preload"]
   preload-task = Subtask READY
-  subtask = Subtask Preload Optional
   subtask = Subtask Preload Properties
-
-[task "Subtask Preload Optional"]
-  preload-task = Missing | Subtask PASS
 
 [task "Subtask Preload Properties"]
   preload-task = Subtask Properties Hints
@@ -1086,12 +1082,6 @@ The config below is expected to be in the `task.config` file in project
                "applicable" : true,
                "hasPass" : true,
                "name" : "Subtask PASS",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Subtask Preload Optional",
                "status" : "PASS"
             },
             {
@@ -1256,6 +1246,26 @@ The config below is expected to be in the `task.config` file in project
                "status" : "PASS"
             }
          ]
+      }
+   ]
+}
+
+[root "Root Preload Optional"]
+  subtask = Subtask Preload Optional
+[task "Subtask Preload Optional"]
+  preload-task = Missing | Subtask PASS
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Preload Optional",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Preload Optional",
+         "status" : "PASS"
       }
    ]
 }
