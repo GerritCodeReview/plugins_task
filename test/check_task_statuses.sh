@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 # Copyright (C) 2021 The Android Open Source Project
 #
@@ -43,6 +43,69 @@ remove_suite() { # suite < pre_json > json
 
 remove_not_suite() { remove_suite !"$1" ; } # suite < pre_json > json
 
+# -------- Test Doc Format --------
+#
+# Test Doc Format has intermixed git config task definitions with json roots. This
+# makes it easy to define tests close to their outputs. Be aware that all of the
+# config will get consolidated into a single file, so non root config will be shared
+# amongst all the roots.
+#
+
+# Sample Test Doc for 2 roots:
+#
+# [root "Root PASS"]
+#   pass = True
+#
+# {
+#    "applicable" : true,
+#    "hasPass" : true,
+#    "name" : "Root PASS",
+#    "status" : "PASS"
+# }
+#
+# [root "Root FAIL"]
+#   fail = True
+#
+# {
+#    <other root>
+# }
+
+# Strip the json from Test Doc formatted text. For the sample above, the output would be:
+#
+# [root "Root PASS"]
+#   pass = True
+#
+# [root "Root FAIL"]
+#   fail = True
+# ...
+#
+testdoc_2_cfg() { awk '/^\{/,/^$/ { next } ; 1' ; } # testdoc_format > task_config
+
+# Strip the git config from Test Doc formatted text. For the sample above, the output would be:
+#
+# { "plugins" : [
+#     { "name" : "task",
+#       "roots" : [
+#         {
+#           "applicable" : true,
+#           "hasPass" : true,
+#           "name" : "Root PASS",
+#           "status" : "PASS"
+#        },
+#        {
+#           <other root>
+#        },
+#    ...
+# }
+testdoc_2_pjson() { # < testdoc_format > pjson_task_roots
+    awk 'BEGIN { print "{ \"plugins\" : [ { \"name\" : \"task\", \"roots\" : [" }; \
+         end { print "}," ; end=0 }; \
+         /^\{/  { open=1 }; \
+         /^\}/  { open=0 ; end=1 }; \
+         open; \
+         END   { print "}]}]}" }'
+}
+
 # --------
 gssh() { ssh -x -p "$PORT" "$SERVER" gerrit "$@" ; } # cmd [args]...
 
@@ -67,9 +130,9 @@ replace_change_properties() {
         -e "s/_change$1_topic/$7/g"
 }
 
-replace_default_changes() { # file
-    local out=$(replace_change_properties "1" "${CHANGES[0]}" < "$1")
-    echo "$out" | replace_change_properties "2" "${CHANGES[1]}" > "$1"
+replace_default_changes() {
+    replace_change_properties "1" "${CHANGES[0]}" | \
+        replace_change_properties "2" "${CHANGES[1]}"
 }
 
 replace_user() { # < text_with_testuser > text_with_$USER
@@ -83,7 +146,7 @@ json_pp() {
 }
 
 example() { # example_num
-    awk '/```/{Q++;E=(Q+1)/2};E=='"$1" < "$DOC_STATES" | grep -v '```' | replace_user
+    echo "$DOC_STATES" | awk '/```/{Q++;E=(Q+1)/2};E=='"$1" | grep -v '```' | replace_user
 }
 
 get_change_num() { # < gerrit_push_response > changenum
@@ -134,13 +197,6 @@ create_repo_change() { # repo remote ref [change_id] > change_num
     )
 }
 
-query() { # query
-    gssh query "$@" \
-        --format json | head -1 | python -c "import sys, json; \
-        print json.dumps(json.loads(sys.stdin.read()), indent=3, \
-        separators=(',', ' : '), sort_keys=True)"
-}
-
 query_plugins() { # query
     gssh query "$@" --format json | head -1 | python -c "import sys, json; \
         plugins={}; plugins['plugins']=json.loads(sys.stdin.read())['plugins']; \
@@ -172,7 +228,7 @@ test_file() { # name task_args...
 
 readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
 MYDIR=$(dirname -- "$(readlink -f -- "$0")")
-DOCS=$MYDIR/.././src/main/resources/Documentation
+DOCS=$MYDIR/.././src/main/resources/Documentation/test
 OUT=$MYDIR/../target/tests
 
 ALL=$OUT/All-Projects
@@ -181,7 +237,7 @@ ALL_TASKS=$ALL/task
 USERS=$OUT/All-Users
 USER_TASKS=$USERS/task
 
-DOC_STATES=$DOCS/task_states.md
+DOC_PREVIEW=$DOCS/preview.md
 EXPECTED=$OUT/expected
 STATUSES=$OUT/statuses
 
@@ -212,9 +268,7 @@ q_setup setup_repo "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH"
 mkdir -p "$ALL_TASKS" "$USER_TASKS"
 
 CHANGES=($(gssh query "status:open limit:2" | grep 'number:' | awk '{print $2}'))
-replace_default_changes "$DOC_STATES"
-replace_default_changes "$MYDIR/preview"
-replace_default_changes "$MYDIR/preview.invalid"
+DOC_STATES=$(replace_default_changes < "$DOCS/task_states.md")
 
 example 1 |sed -e"s/current-user/$USER/" > "$ROOT_CFG"
 example 2 > "$COMMON_CFG"
@@ -250,15 +304,22 @@ echo "$no_all_json" | "$MYDIR"/strip_non_invalid.py > "$EXPECTED".invalid
 
 "$MYDIR"/strip_non_invalid.py < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
 
+
+testdoc_2_cfg < "$DOC_PREVIEW" | replace_user > "$ROOT_CFG"
+
+preview_pjson=$(testdoc_2_pjson < "$DOC_PREVIEW" | replace_default_changes)
+echo "$preview_pjson" | remove_suite invalid | json_pp > "$EXPECTED".preview
+echo "$preview_pjson" | remove_not_suite invalid | \
+    "$MYDIR"/strip_non_invalid.py > "$EXPECTED".preview-invalid
+
 RESULT=0
 query="change:$change3_number status:open"
 test_generated applicable --task--applicable "$query"
 test_generated all --task--all "$query"
 
-replace_user < "$MYDIR"/root.change > "$ROOT_CFG"
 cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
-test_file preview --task--preview "$cnum,1" --task--all "$query"
-test_file preview.invalid --task--preview "$cnum,1" --task--invalid "$query"
+test_generated preview --task--preview "$cnum,1" --task--all "$query"
+test_generated preview-invalid --task--preview "$cnum,1" --task--invalid "$query"
 
 test_generated invalid --task--invalid "$query"
 test_generated invalid-applicable --task--applicable --task--invalid "$query"

@@ -530,5 +530,8 @@ the plugins section like below:
 
 Examples
 --------
-See [task_states](task_states.html) for a comprehensive list of examples
+See [task_states](test/task_states.html) for a comprehensive list of examples
 of task configs and their states.
+
+See what the results will look when [previewing](test/preview.html) a change
+to those states.
