@@ -778,7 +778,6 @@ The config below is expected to be in the `task.config` file in project
 
 [task "Subtask Properties"]
   subtask = Subtask Properties Hints
-  subtask = Chained ${_name}
   subtask = Subtask Properties Reset
   subtasks-factory = TaskFactory Properties Hints
 
@@ -788,9 +787,6 @@ The config below is expected to be in the `task.config` file in project
   set-third-property = third-value
   fail = True
   fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
-
-[task "Chained Subtask Properties"]
-  pass = True
 
 [task "Subtask Properties Reset"]
   pass = True
@@ -824,12 +820,6 @@ The config below is expected to be in the `task.config` file in project
                "hint" : "root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
                "name" : "Subtask Properties Hints",
                "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Chained Subtask Properties",
-               "status" : "PASS"
             },
             {
                "applicable" : true,
@@ -917,6 +907,39 @@ The config below is expected to be in the `task.config` file in project
          "hint" : "root-internals(Name(Root Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)) Name(Subtask Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
          "name" : "Subtask Internal Properties",
          "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Subtask Via Property"]
+  set-subtask = Subtask
+  subtask = ${subtask} Via Property
+
+[task "Subtask Via Property"]
+  subtask = Second ${_name}
+
+[task "Second Subtask Via Property"]
+  fail = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Subtask Via Property",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Via Property",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Second Subtask Via Property",
+               "status" : "FAIL"
+            }
+         ]
       }
    ]
 }
