@@ -774,12 +774,10 @@ The config below is expected to be in the `task.config` file in project
 
 [root "Root Properties"]
   set-root-property = root-value
-  set-root-to-reset-by-subtask = reset-my-root-value
   subtask = Subtask Properties
 
 [task "Subtask Properties"]
   subtask = Subtask Properties Hints
-  subtask = Subtask Properties Reset By Subtask
 
 [task "Subtask Properties Hints"]
   set-first-property = first-value
@@ -787,11 +785,6 @@ The config below is expected to be in the `task.config` file in project
   set-third-property = third-value
   fail = True
   fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
-
-[task "Subtask Properties Reset By Subtask"]
-  fail = True
-  set-root-to-reset-by-subtask = reset-by-subtask-root-value
-  fail-hint = root-to-reset-by-subtask:(${root-to-reset-by-subtask})
 
 {
    "applicable" : true,
@@ -811,15 +804,34 @@ The config below is expected to be in the `task.config` file in project
                "hint" : "root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
                "name" : "Subtask Properties Hints",
                "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "root-to-reset-by-subtask:(reset-by-subtask-root-value)",
-               "name" : "Subtask Properties Reset By Subtask",
-               "status" : "FAIL"
             }
          ]
+      }
+   ]
+}
+
+
+[root "Root Properties Reset By Subtask"]
+  set-root-to-reset-by-subtask = reset-my-root-value
+  subtask = Subtask Properties Reset
+
+[task "Subtask Properties Reset"]
+  fail = True
+  set-root-to-reset-by-subtask = reset-by-subtask-root-value
+  fail-hint = root-to-reset-by-subtask:(${root-to-reset-by-subtask})
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties Reset By Subtask",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "root-to-reset-by-subtask:(reset-by-subtask-root-value)",
+         "name" : "Subtask Properties Reset",
+         "status" : "FAIL"
       }
    ]
 }
