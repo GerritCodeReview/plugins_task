@@ -50,7 +50,9 @@ export const htmlTemplate = Polymer.html`
       [[task.message]]
     </li>
   </template>
-  <gr-task-plugin-tasks
-      tasks="[[task.sub_tasks]]"
-      show_all$="[[show_all]]"> </gr-task-plugin-tasks>
+  <ul style="list-style-type:none; margin: 0 0 0 0; padding: 0 0 0 2em;">
+    <gr-task-plugin-tasks
+        tasks="[[task.sub_tasks]]"
+        show_all$="[[show_all]]"> </gr-task-plugin-tasks>
+  </ul>
 </template>`;

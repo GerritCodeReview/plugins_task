@@ -38,6 +38,7 @@ export const htmlTemplate = Polymer.html`
     display: flex;
     padding: 6px 1rem;
   }
+  .no-margins { margin: 0 0 0 0; }
 </style>
 
 <div id="tasks" hidden$="[[!_tasks.length]]">
@@ -53,16 +54,16 @@ export const htmlTemplate = Polymer.html`
         on-tap="_switch_expand"
         class="cursor"> </iron-icon>
     <div style="display: flex; align-items: center; column-gap: 1em;">
-    <h3 on-tap="_switch_expand" class="cursor"> Tasks </h3>
+    <h3 class="no-margins" on-tap="_switch_expand" class="cursor"> Tasks </h3>
     <template is="dom-if" if="[[_is_show_all(_show_all)]]">
-      <p>All ([[_all_count]]) |&nbsp;
+      <p class="no-margins" >All ([[_all_count]]) |&nbsp;
         <span
             on-click="_needs_and_blocked_tap"
             class="links">Needs + Blocked ([[_ready_count]], [[_fail_count]])</span>
       <p>
     </template>
     <template is="dom-if" if="[[!_is_show_all(_show_all)]]">
-      <p> <span
+      <p class="no-margins" > <span
             class="links"
             on-click="_show_all_tap">All ([[_all_count]])</span>
         &nbsp;| Needs + Blocked ([[_ready_count]], [[_fail_count]])</p>
