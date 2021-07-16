@@ -152,10 +152,12 @@ gen_change_id() { echo "I$(uuidgen | openssl dgst -sha1 -binary | xxd -p)"; } # 
 
 commit_message() { printf "$1 \n\nChange-Id: $2" ; } # message change-id > commit_msg
 
+err() { echo "ERROR: $1" >&2 ; exit 1 ; }
+
 # Run a test setup command quietly, exit on failure
-q_setup() { # cmd [args...]
-  local out ; out=$("$@" 2>&1) || { echo "$out" ; exit ; }
-}
+q_setup() { local out ; out=$("$@" 2>&1) || err "$out" ; } # cmd [args...]
+
+ensure() { "$@" || err "$1 results are not valid" ; } # cmd [args]... < data > data
 
 set_change() { # change_json
     { CHANGE=("$(json_val_by_key "$1" number)" \
@@ -183,6 +185,9 @@ replace_default_changes() {
 replace_user() { # < text_with_testuser > text_with_$USER
     sed -e"s/testuser/$USER/"
 }
+
+strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json
+strip_non_invalid() { ensure "$MYDIR"/strip_non_invalid.py ; } # < json > json
 
 get_root() { # root < task_plugin_ouptut > root_json
     python -c "if True: # NOP to start indent
@@ -321,7 +326,7 @@ example 3 > "$COMMON_CFG"
 example 4 > "$INVALIDS_CFG"
 example 5 > "$USER_SPECIAL_CFG"
 
-ROOTS=$(config_section_keys "root")
+ROOTS=$(config_section_keys "root") || err "Invalid ROOTS"
 
 q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
@@ -341,20 +346,19 @@ all_pjson=$(example 2 | testdoc_2_pjson | \
 
 no_all_json=$(echo "$all_pjson" | remove_suite all)
 
-echo "$no_all_json" | "$MYDIR"/strip_non_applicable.py | \
+echo "$no_all_json" | strip_non_applicable | \
     grep -v "\"applicable\" :" > "$EXPECTED".applicable
 
-echo "$all_pjson" | remove_not_suite all | json_pp > "$EXPECTED".all
+echo "$all_pjson" | remove_not_suite all | ensure json_pp > "$EXPECTED".all
 
-echo "$no_all_json" | "$MYDIR"/strip_non_invalid.py > "$EXPECTED".invalid
+echo "$no_all_json" | strip_non_invalid > "$EXPECTED".invalid
 
-"$MYDIR"/strip_non_invalid.py < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
+strip_non_invalid < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
 
 
 preview_pjson=$(testdoc_2_pjson < "$DOC_PREVIEW" | replace_default_changes)
-echo "$preview_pjson" | remove_suite invalid | json_pp > "$EXPECTED".preview
-echo "$preview_pjson" | remove_not_suite invalid | \
-    "$MYDIR"/strip_non_invalid.py > "$EXPECTED".preview-invalid
+echo "$preview_pjson" | remove_suite invalid | ensure json_pp > "$EXPECTED".preview
+echo "$preview_pjson" | remove_not_suite invalid | strip_non_invalid > "$EXPECTED".preview-invalid
 
 testdoc_2_cfg < "$DOC_PREVIEW" | replace_user > "$ROOT_CFG"
 cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
