@@ -927,10 +927,49 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
-[root "Root TaskFactory Properties"]
-  subtasks-factory = TaskFactory Properties
+[root "Root Properties tasks-factory STATIC"]
+  subtasks-factory = tasks-factory STATIC Properties
 
-[tasks-factory "TaskFactory Properties"]
+[tasks-factory "tasks-factory STATIC Properties"]
+  set-welcome-message = Welcome to the jungle
+  names-factory = names-factory static list
+  fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  fail = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties tasks-factory STATIC",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Welcome to the jungle Name(my a task) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
+         "name" : "my a task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Welcome to the jungle Name(my b task) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
+         "name" : "my b task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Welcome to the jungle Name(my c task) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
+         "name" : "my c task",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Properties tasks-factory CHANGE"]
+  subtasks-factory = tasks-factory CHANGE Properties
+
+[tasks-factory "tasks-factory CHANGE Properties"]
   set-welcome-message = Welcome to the pleasuredome
   names-factory = names-factory my change
   fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
@@ -943,7 +982,7 @@ The config below is expected to be in the `task.config` file in project
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root TaskFactory Properties",
+   "name" : "Root Properties tasks-factory CHANGE",
    "status" : "WAITING",
    "subTasks" : [
       {
