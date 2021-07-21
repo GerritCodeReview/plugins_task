@@ -673,11 +673,10 @@ The config below is expected to be in the `task.config` file in project
   fail = True
 
 [names-factory "names-factory static list"]
+  type = static
   name = my a task
   name = my b task
   name = my c task
-  name = my d task Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
-  type = static
 
 {
    "applicable" : true,
@@ -701,12 +700,6 @@ The config below is expected to be in the `task.config` file in project
          "applicable" : true,
          "hasPass" : true,
          "name" : "my c task",
-         "status" : "FAIL"
-      },
-      {
-         "applicable" : true,
-         "hasPass" : true,
-         "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
          "status" : "FAIL"
       }
    ]
@@ -884,17 +877,17 @@ The config below is expected to be in the `task.config` file in project
 {
    "applicable" : true,
    "exported" : {
-      "root" : "Name(Root Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)"
+      "root" : "Name(Root Internal Properties) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)"
    },
    "hasPass" : true,
-   "hint" : "Name(Root Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+   "hint" : "Name(Root Internal Properties) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
    "name" : "Root Internal Properties",
    "status" : "FAIL",
    "subTasks" : [
       {
          "applicable" : true,
          "hasPass" : true,
-         "hint" : "root-internals(Name(Root Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)) Name(Subtask Internal Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+         "hint" : "root-internals(Name(Root Internal Properties) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)) Name(Subtask Internal Properties) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
          "name" : "Subtask Internal Properties",
          "status" : "FAIL"
       }
@@ -956,34 +949,95 @@ The config below is expected to be in the `task.config` file in project
       {
          "applicable" : true,
          "hasPass" : true,
-         "hint" : "Welcome to the pleasuredome Name(_change3_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-         "name" : "_change3_number",
+         "hint" : "Welcome to the pleasuredome Name(_change_number) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
+         "name" : "_change_number",
          "status" : "FAIL"
       }
    ]
 }
 
-[root "Root NamesFactory Properties"]
-  subtasks-factory = TaskFactory NamesFactory Properties
+[root "Root Properties names-factory STATIC"]
+  subtasks-factory = tasks-factory Properties names-factory STATIC
 
-[tasks-factory "TaskFactory NamesFactory Properties"]
-  names-factory = NamesFactory Properties
+[tasks-factory "tasks-factory Properties names-factory STATIC"]
+  names-factory = Properties names-factory STATIC
   fail = True
 
-[names-factory "NamesFactory Properties"]
+[names-factory "Properties names-factory STATIC"]
+  type = static
+  name = Change Number(${_change_number})
+  name = Change Id(${_change_id})
+  name = Change Project(${_change_project})
+  name = Change Branch(${_change_branch})
+  name = Change Status(${_change_status})
+  name = Change Topic(${_change_topic})
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties names-factory STATIC",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Change Number(_change_number)",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Change Id(_change_id)",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Change Project(_change_project)",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Change Branch(_change_branch)",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Change Status(_change_status)",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Change Topic(_change_topic)",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Properties names-factory CHANGE"]
+  subtasks-factory = tasks-factory Properties names-factory CHANGE
+
+[tasks-factory "tasks-factory Properties names-factory CHANGE"]
+  names-factory = Properties names-factory CHANGE
+  fail = True
+
+[names-factory "Properties names-factory CHANGE"]
   type = change
   changes = change:_change1_number OR change:${_change_number} project:${_change_project} branch:${_change_branch}
 
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root NamesFactory Properties",
+   "name" : "Root Properties names-factory CHANGE",
    "status" : "WAITING",
    "subTasks" : [
       {
          "applicable" : true,
          "hasPass" : true,
-         "name" : "_change3_number",
+         "name" : "_change_number",
          "status" : "FAIL"
       },
       {
@@ -1039,13 +1093,6 @@ The config below is expected to be in the `task.config` file in project
                "hasPass" : true,
                "hint" : "first-property my c task",
                "name" : "my c task",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "first-property my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-               "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
                "status" : "FAIL"
             }
          ]

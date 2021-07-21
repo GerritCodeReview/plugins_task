@@ -336,7 +336,7 @@ change3_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$c
 
 all_pjson=$(example 2 | testdoc_2_pjson | \
     replace_change_properties \
-        "3" \
+        "" \
         "$change3_number" \
         "$change3_id" \
         "$PROJECT" \
