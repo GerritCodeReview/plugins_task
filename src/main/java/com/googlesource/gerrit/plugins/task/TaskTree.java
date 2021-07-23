@@ -92,6 +92,7 @@ public class TaskTree {
   }
 
   protected class NodeList {
+    protected NodeList parent = null;
     protected LinkedList<String> path = new LinkedList<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
@@ -108,7 +109,7 @@ public class TaskTree {
         // path check above detects looping definitions
         // names check above detects duplicate subtasks
         try {
-          node = new Node(def, path, getProperties());
+          node = new Node(this, def);
         } catch (Exception e) {
         } // bad definition, handled with null
       }
@@ -142,13 +143,13 @@ public class TaskTree {
     public final Task task;
     protected final Properties.Task properties;
 
-    public Node(Task definition, List<String> path, Properties.Task parentProperties)
-        throws ConfigInvalidException, OrmException {
+    public Node(NodeList parent, Task definition) throws ConfigInvalidException, OrmException {
+      this.parent = parent;
       this.task = definition;
-      this.path.addAll(path);
+      this.path.addAll(parent.path);
       this.path.add(definition.name);
       Preloader.preload(definition);
-      properties = new Properties.Task(getChangeData(), definition, parentProperties);
+      properties = new Properties.Task(getChangeData(), definition, parent.getProperties());
     }
 
     public List<Node> getSubNodes() throws OrmException {
