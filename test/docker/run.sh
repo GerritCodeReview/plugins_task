@@ -2,6 +2,8 @@
 
 readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
 MYDIR=$(dirname -- "$(readlink -f -- "$0")")
+MYPROG=$(basename -- "$0")
+source "$MYDIR/lib_options.sh"
 ARTIFACTS=$MYDIR/gerrit/artifacts
 
 die() { echo -e "\nERROR: $@" ; kill $$ ; exit 1 ; } # error_message
@@ -20,11 +22,9 @@ progress() { # message cmd [args]...
 }
 
 usage() { # [error_message]
-    local prog=$(basename -- "$0")
-
     cat <<-EOF
 Usage:
-    $prog [--task-plugin-jar|-t <FILE_PATH>] [--gerrit-war|-g <FILE_PATH>]
+    $MYPROG [--task-plugin-jar|-t <FILE_PATH>] [--gerrit-war|-g <FILE_PATH>]
 
     This tool runs the plugin functional tests in a Docker environment built
     from the gerritcodereview/gerrit base Docker image.
@@ -61,6 +61,13 @@ run_task_plugin_tests() {
         '/task/test/docker/run_tests/start.sh'
 }
 
+retest() {
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=gerrit_admin \
+        run_tests task/test/docker/run_tests/start.sh retest
+    RESULT=$?
+    cleanup
+}
+
 get_run_test_container() {
     docker-compose "${COMPOSE_ARGS[@]}" ps | grep run_tests | awk '{ print $1 }'
 }
@@ -73,6 +80,10 @@ cleanup() {
         echo "To exec into runtests container, use following command:"
         echo "docker exec -it $(get_run_test_container) /bin/bash"
         echo ""
+        options_prefix "COMPOSE_ARGS" "--compose-arg"
+        echo "Use command below to re run tests after making changes to test scripts"
+        echo " $MYDIR/$MYPROG --retest --preserve ${COMPOSE_ARGS[@]}"
+        echo ""
         echo "Run the following command to bring down the setup:"
         echo "docker-compose ${COMPOSE_ARGS[@]} down -v --rmi local"
     else
@@ -81,16 +92,23 @@ cleanup() {
 }
 
 PRESERVE="false"
+RETEST="false"
+COMPOSE_ARGS=()
 while (( "$#" )) ; do
     case "$1" in
         --help|-h)                usage ;;
         --gerrit-war|-g)          shift ; GERRIT_WAR=$1 ;;
         --task-plugin-jar|-t)     shift ; TASK_PLUGIN_JAR=$1 ;;
         --preserve)               PRESERVE="true" ;;
+        --retest)                 RETEST="true" ;;
+        --compose-arg)            shift ; COMPOSE_ARGS+=("$1") ;;
         *)                        usage "invalid argument $1" ;;
     esac
     shift
 done
+
+[ "$RETEST" = "true" ] && { retest ; exit "$RESULT" ; }
+
 PROJECT_NAME="task_$$"
 COMPOSE_YAML="$MYDIR/docker-compose.yaml"
 COMPOSE_ARGS=(--project-name "$PROJECT_NAME" -f "$COMPOSE_YAML")
