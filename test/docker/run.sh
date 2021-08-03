@@ -80,12 +80,12 @@ cleanup() {
         echo "To exec into runtests container, use following command:"
         echo "docker exec -it $(get_run_test_container) /bin/bash"
         echo ""
+        echo "Run the following command to bring down the setup:"
+        echo "docker-compose ${COMPOSE_ARGS[@]} down -v --rmi local"
+        echo ""
         options_prefix "COMPOSE_ARGS" "--compose-arg"
         echo "Use command below to re run tests after making changes to test scripts"
         echo " $MYDIR/$MYPROG --retest --preserve ${COMPOSE_ARGS[@]}"
-        echo ""
-        echo "Run the following command to bring down the setup:"
-        echo "docker-compose ${COMPOSE_ARGS[@]} down -v --rmi local"
     else
         docker-compose "${COMPOSE_ARGS[@]}" down -v --rmi local 2>/dev/null
     fi
