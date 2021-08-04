@@ -118,7 +118,8 @@ test_file() { # name task_args...
     test_tasks "$name" "$MYDIR/$name" "$@"
 }
 
-MYDIR=$(dirname "$0")
+readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
+MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 DOCS=$MYDIR/.././src/main/resources/Documentation
 OUT=$MYDIR/../target/tests
 

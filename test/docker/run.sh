@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-readlink --canonicalize / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
+readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
 MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 ARTIFACTS=$MYDIR/gerrit/artifacts
 
