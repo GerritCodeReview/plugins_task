@@ -275,7 +275,8 @@ test_generated() { # name task_args...
     test_tasks "$name" "$EXPECTED.$name" "$@"
 }
 
-MYDIR=$(dirname "$0")
+readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
+MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 DOCS=$MYDIR/.././src/main/resources/Documentation/test
 OUT=$MYDIR/../target/tests
 
