@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-readlink --canonicalize / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
-MYDIR="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
+MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 ARTIFACTS=$MYDIR/gerrit/artifacts
 
 die() { echo -e "\nERROR: $@" ; kill $$ ; exit 1 ; } # error_message
