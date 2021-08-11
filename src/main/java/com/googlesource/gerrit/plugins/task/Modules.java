@@ -20,6 +20,7 @@ import com.google.gerrit.extensions.webui.JavaScriptPlugin;
 import com.google.gerrit.extensions.webui.WebUiPlugin;
 import com.google.gerrit.server.DynamicOptions.DynamicBean;
 import com.google.gerrit.server.change.ChangePluginDefinedInfoFactory;
+import com.google.gerrit.server.restapi.change.GetChange;
 import com.google.gerrit.server.restapi.change.QueryChanges;
 import com.google.gerrit.sshd.commands.Query;
 import com.google.inject.AbstractModule;
@@ -37,6 +38,7 @@ public class Modules {
           .annotatedWith(Exports.named("task"))
           .to(TaskAttributeFactory.class);
 
+      bind(DynamicBean.class).annotatedWith(Exports.named(GetChange.class)).to(MyOptions.class);
       bind(DynamicBean.class).annotatedWith(Exports.named(Query.class)).to(MyOptions.class);
       bind(DynamicBean.class).annotatedWith(Exports.named(QueryChanges.class)).to(MyOptions.class);
       DynamicSet.bind(binder(), WebUiPlugin.class)
