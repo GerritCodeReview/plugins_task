@@ -64,19 +64,7 @@ fetch_artifacts() {
 }
 
 build_images() {
-    local build_args=()
-    if [ -n "$GERRIT_DOCKER_IMAGE" ] ; then
-        build_args+=(--build-arg GERRIT_DOCKER_IMAGE="$GERRIT_DOCKER_IMAGE")
-        COMPOSE_ARGS+=(-f "$MYDIR/docker-compose-override.yaml")
-    else
-       build_args+=(--build-arg GERRIT_WAR="/artifacts/gerrit.war" \
-           --build-arg TASK_PLUGIN_JAR="/artifacts/task.jar")
-    fi
-    if [ -n "$RESULT_CALLBACK" ] && [ -n "$RESULTS_DIR" ] ; then
-        build_args+=(--build-arg UID="$(id -u)" --build-arg GID="$(id -g)")
-        COMPOSE_ARGS+=(-f "$MYDIR/docker-compose-result-callback-override.yaml")
-    fi
-    docker-compose "${COMPOSE_ARGS[@]}" build "${build_args[@]}" --quiet
+    docker-compose "${COMPOSE_ARGS[@]}" build "${BUILD_ARGS[@]}" --quiet
     rm -rf "$ARTIFACTS"
 }
 
@@ -145,6 +133,19 @@ fi
 PROJECT_NAME=task_$$
 COMPOSE_YAML=$MYDIR/docker-compose.yaml
 COMPOSE_ARGS=(--project-name "$PROJECT_NAME" -f "$COMPOSE_YAML")
+BUILD_ARGS=()
+if [ -n "$GERRIT_DOCKER_IMAGE" ] ; then
+    BUILD_ARGS+=(--build-arg GERRIT_DOCKER_IMAGE="$GERRIT_DOCKER_IMAGE")
+    COMPOSE_ARGS+=(-f "$MYDIR/docker-compose-override.yaml")
+else
+   BUILD_ARGS+=(--build-arg GERRIT_WAR="/artifacts/gerrit.war" \
+       --build-arg TASK_PLUGIN_JAR="/artifacts/task.jar")
+fi
+if [ -n "$RESULT_CALLBACK" ] && [ -n "$RESULTS_DIR" ] ; then
+    BUILD_ARGS+=(--build-arg UID="$(id -u)" --build-arg GID="$(id -g)")
+    COMPOSE_ARGS+=(-f "$MYDIR/docker-compose-result-callback-override.yaml")
+fi
+
 check_prerequisite
 [ -n "$GERRIT_DOCKER_IMAGE" ] || progress "Fetching artifacts" fetch_artifacts
 progress "Building docker images" build_images
