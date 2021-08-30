@@ -1,9 +1,14 @@
-workspace(name = "task")
+workspace(
+    name = "task",
+    managed_directories = {
+        "@npm": ["node_modules"],
+    },
+)
 
 load("//:bazlets.bzl", "load_bazlets")
 
 load_bazlets(
-    commit = "f96f4bce9ffafeaa200fc009a378921c512fcb0a",
+    commit = "1dd03e38f46e56defc91b6ab4a4d9879f6083de1",
     #local_path = "/home/<user>/projects/bazlets",
 )
 
@@ -14,6 +19,15 @@ load(
 )
 
 gerrit_polymer()
+
+load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
+
+yarn_install(
+    name = "npm",
+    frozen_lockfile = False,
+    package_json = "//:package.json",
+    yarn_lock = "//:yarn.lock",
+)
 
 # Load closure compiler with transitive dependencies
 load("@io_bazel_rules_closure//closure:repositories.bzl", "rules_closure_dependencies", "rules_closure_toolchains")
