@@ -6,7 +6,9 @@
   "devDependencies": {
     "eslint": "^6.6.0",
     "eslint-config-google": "^0.13.0",
-    "eslint-plugin-html": "^6.0.0"
+    "eslint-plugin-html": "^6.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsdoc": "^19.2.0"
   },
   "scripts": {
     "eslint": "./node_modules/eslint/bin/eslint.js --ext .html,.js gr-task-plugin || exit 0",
