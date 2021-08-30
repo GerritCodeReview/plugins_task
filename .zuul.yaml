@@ -3,6 +3,9 @@
     parent: gerrit-plugin-build
     pre-run:
         tools/playbooks/install_docker.yaml
+    vars:
+        bazelisk_test_targets: "lint_test //..."
+        zuul_work_dir: "{{ ansible_user_dir }}/src/gerrit.googlesource.com/gerrit/plugins/task" 
 
 - project:
     check:

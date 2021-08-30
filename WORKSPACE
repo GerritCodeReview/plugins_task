@@ -3,7 +3,7 @@ workspace(name = "task")
 load("//:bazlets.bzl", "load_bazlets")
 
 load_bazlets(
-    commit = "f96f4bce9ffafeaa200fc009a378921c512fcb0a",
+    commit = "2cf5fc973e193b4abedc3cfbbe50eae1fa8edfa6",
     #local_path = "/home/<user>/projects/bazlets",
 )
 
@@ -14,6 +14,15 @@ load(
 )
 
 gerrit_polymer()
+
+load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
+
+yarn_install(
+    name = "npm",
+    frozen_lockfile = False,
+    package_json = "//:package.json",
+    yarn_lock = "//:yarn.lock",
+)
 
 # Load closure compiler with transitive dependencies
 load("@io_bazel_rules_closure//closure:repositories.bzl", "rules_closure_dependencies", "rules_closure_toolchains")

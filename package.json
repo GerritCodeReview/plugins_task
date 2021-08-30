@@ -6,11 +6,14 @@
   "devDependencies": {
     "eslint": "^6.6.0",
     "eslint-config-google": "^0.13.0",
-    "eslint-plugin-html": "^6.0.0"
+    "eslint-plugin-html": "^6.0.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-jsdoc": "^19.2.0"
   },
   "scripts": {
-    "eslint": "./node_modules/eslint/bin/eslint.js --ext .html,.js gr-task-plugin || exit 0",
-    "eslintfix": "./node_modules/eslint/bin/eslint.js --fix --ext .html,.js gr-task-plugin || exit 0"
+    "safe_bazelisk": "if which bazelisk >/dev/null; then bazel_bin=bazelisk; else bazel_bin=bazel; fi && $bazel_bin",
+    "eslint": "npm run safe_bazelisk test :lint_test",
+    "eslintfix": "npm run safe_bazelisk run :lint_bin -- -- --fix $(pwd)"
   },
   "repository": {
     "type": "git",
