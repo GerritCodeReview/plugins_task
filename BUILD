@@ -29,9 +29,9 @@ genrule2(
     srcs = [":gr-task-plugin"],
     outs = ["gr-task-plugin-static.jar"],
     cmd = " && ".join([
-        "mkdir $$TMP/static",
-        "cp -r $(locations :gr-task-plugin) $$TMP/static",
-        "cd $$TMP",
+        "mkdir -- $$TMP/static",
+        "cp -r -- $(locations :gr-task-plugin) $$TMP/static",
+        "cd -- $$TMP",
         "zip -Drq $$ROOT/$@ -g .",
     ]),
 )

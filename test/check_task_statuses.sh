@@ -60,7 +60,7 @@ install_changeid_hook() { # repo
 
 setup_repo() { # repo remote ref [--initial-commit]
     local repo=$1 remote=$2 ref=$3 init=$4
-    git init "$repo"
+    git init -- "$repo"
     (
         cd "$repo"
         install_changeid_hook "$repo"
@@ -109,7 +109,7 @@ test_tasks() { # name expected_file task_args...
     local output=$STATUSES.$name
 
     query_plugins "$@" > "$output"
-    out=$(diff "$expected" "$output")
+    out=$(diff -- "$expected" "$output")
     result "$name" "$out"
 }
 
@@ -118,7 +118,7 @@ test_file() { # name task_args...
     test_tasks "$name" "$MYDIR/$name" "$@"
 }
 
-MYDIR=$(dirname "$0")
+MYDIR=$(dirname -- "$0")
 DOCS=$MYDIR/.././src/main/resources/Documentation
 OUT=$MYDIR/../target/tests
 
@@ -153,12 +153,12 @@ REF_USERS=refs/users/self
 
 RESULT=0
 
-mkdir -p "$OUT"
+mkdir -p -- "$OUT"
 q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS" --initial-commit
 q_setup setup_repo "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH"
 
-mkdir -p "$ALL_TASKS" "$USER_TASKS"
+mkdir -p -- "$ALL_TASKS" "$USER_TASKS"
 
 CHANGES=($(gssh query "status:open limit:2" | grep 'number:' | awk '{print $2}'))
 replace_change_properties "$DOC_STATES" "1" "${CHANGES[0]}"
