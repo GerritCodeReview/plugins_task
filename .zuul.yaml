@@ -3,6 +3,9 @@
     parent: gerrit-plugin-build
     pre-run:
         tools/playbooks/install_docker.yaml
+    vars:
+        bazelisk_test_targets: "plugins/task/lint_test"
+        bazelisk_test_targets: "plugins/task/.."
 
 - project:
     check:
