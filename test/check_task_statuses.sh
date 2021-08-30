@@ -34,7 +34,7 @@ result_out() { # test expected actual
     local name=$1 expected=$2 actual=$3
 
     [ "$expected" = "$actual" ]
-    result "$name" "$(diff <(echo "$expected") <(echo "$actual"))"
+    result "$name" "$(diff -- <(echo "$expected") <(echo "$actual"))"
 }
 
 result_root() { # group root expected_file actual_file
@@ -216,7 +216,7 @@ install_changeid_hook() { # repo
 
 setup_repo() { # repo remote ref [--initial-commit]
     local repo=$1 remote=$2 ref=$3 init=$4
-    git init "$repo"
+    git init -- "$repo"
     (
         cd "$repo"
         install_changeid_hook "$repo"
@@ -265,7 +265,7 @@ test_tasks() { # name expected_file task_args...
     echo "$ROOTS" | while read root ; do
         result_root "$name" "$root" "$expected" "$output"
     done
-    out=$(diff "$expected" "$output" | head -15)
+    out=$(diff -- "$expected" "$output" | head -15)
     [ -z "$out" ]
     result "$name - Full Test Suite" "$out"
 }
@@ -280,7 +280,7 @@ test_file() { # name task_args...
     local expected=$MYDIR/$name output=$STATUSES.$name
 
     query "$@" | awk '$0=="   \"plugins\" : [",$0=="   ],"' > "$output"
-    out=$(diff "$expected" "$output")
+    out=$(diff -- "$expected" "$output")
     result "$name" "$out"
 }
 
@@ -320,7 +320,7 @@ REF_USERS=refs/users/self
 
 CONFIG=$ROOT_CFG
 
-mkdir -p "$OUT" "$ALL_TASKS" "$USER_TASKS"
+mkdir -p -- "$OUT" "$ALL_TASKS" "$USER_TASKS"
 
 q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS" --initial-commit
