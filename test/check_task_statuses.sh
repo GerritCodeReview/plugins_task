@@ -99,12 +99,25 @@ testdoc_2_cfg() { awk '/^\{/,/^$/ { next } ; 1' ; } # testdoc_format > task_conf
 # }
 testdoc_2_pjson() { # < testdoc_format > pjson_task_roots
     awk 'BEGIN { print "{ \"plugins\" : [ { \"name\" : \"task\", \"roots\" : [" }; \
-         end { print "}," ; end=0 }; \
          /^\{/  { open=1 }; \
+         open && end { print "}," ; end=0 }; \
          /^\}/  { open=0 ; end=1 }; \
          open; \
          END   { print "}]}]}" }'
 }
+
+# ---- JSON PARSING ----
+
+json_pp() { # < json > json
+    python -c "import sys, json; \
+            print json.dumps(json.loads(sys.stdin.read()), indent=3, \
+            separators=(',', ' : '), sort_keys=True)"
+}
+
+json_val_by() { # json index|'key' > value
+    echo "$1" | python -c "import json,sys;print json.load(sys.stdin)[$2]"
+}
+json_val_by_key() { json_val_by "$1" "'$2'" ; }  # json key > value
 
 # --------
 gssh() { ssh -x -p "$PORT" "$SERVER" gerrit "$@" ; } # cmd [args]...
@@ -120,29 +133,31 @@ q_setup() { # cmd [args...]
   local out ; out=$("$@" 2>&1) || { echo "$out" ; exit ; }
 }
 
+set_change() { # change_json
+    { CHANGE=("$(json_val_by_key "$1" number)" \
+        "$(json_val_by_key "$1" id)" \
+        "$(json_val_by_key "$1" project)" \
+        "refs/heads/$(json_val_by_key "$1" branch)" \
+        "$(json_val_by_key "$1" status)" \
+        "$(json_val_by_key "$1" topic)") ; } 2> /dev/null
+}
+
 # change_token change_number change_id project branch status topic < templated_txt > change_txt
 replace_change_properties() {
-    sed -e "s/_change$1_number/$2/g" \
-        -e "s/_change$1_id/$3/g" \
-        -e "s/_change$1_project/$4/g" \
-        -e "s/_change$1_branch/$5/g" \
-        -e "s/_change$1_status/$6/g" \
-        -e "s/_change$1_topic/$7/g"
+    sed -e "s|_change$1_number|$2|g" \
+        -e "s|_change$1_id|$3|g" \
+        -e "s|_change$1_project|$4|g" \
+        -e "s|_change$1_branch|$5|g" \
+        -e "s|_change$1_status|$6|g" \
+        -e "s|_change$1_topic|$7|g"
 }
 
 replace_default_changes() {
-    replace_change_properties "1" "${CHANGES[0]}" | \
-        replace_change_properties "2" "${CHANGES[1]}"
+    replace_change_properties "1" "${CHANGE1[@]}" | replace_change_properties "2" "${CHANGE2[@]}"
 }
 
 replace_user() { # < text_with_testuser > text_with_$USER
     sed -e"s/testuser/$USER/"
-}
-
-json_pp() {
-    python -c "import sys, json; \
-            print json.dumps(json.loads(sys.stdin.read()), indent=3, \
-            separators=(',', ' : '), sort_keys=True)"
 }
 
 example() { # example_num
@@ -257,13 +272,15 @@ q_setup setup_repo "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH"
 
 mkdir -p "$ALL_TASKS" "$USER_TASKS"
 
-CHANGES=($(gssh query "status:open limit:2" | grep 'number:' | awk '{print $2}'))
+changes=$(gssh query "status:open limit:2" --format json)
+set_change "$(echo "$changes" | awk 'NR==1')" ; CHANGE1=("${CHANGE[@]}")
+set_change "$(echo "$changes" | awk 'NR==2')" ; CHANGE2=("${CHANGE[@]}")
 DOC_STATES=$(replace_default_changes < "$DOCS/task_states.md")
 
-example 1 |sed -e"s/current-user/$USER/" > "$ROOT_CFG"
-example 2 > "$COMMON_CFG"
-example 3 > "$INVALIDS_CFG"
-example 4 > "$USER_SPECIAL_CFG"
+example 2 | replace_user | testdoc_2_cfg > "$ROOT_CFG"
+example 3 > "$COMMON_CFG"
+example 4 > "$INVALIDS_CFG"
+example 5 > "$USER_SPECIAL_CFG"
 
 q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
@@ -271,9 +288,7 @@ q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 change3_id=$(gen_change_id)
 change3_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$change3_id")
 
-all_pjson=$(example 5 | tail -n +3 | sed -e'/^   \.\.\.,/d; s/^   \.\.\./}/; s/^   ],/   ]/')
-
-all_pjson=$(echo "$all_pjson" | \
+all_pjson=$(example 2 | testdoc_2_pjson | \
     replace_change_properties \
         "3" \
         "$change3_number" \

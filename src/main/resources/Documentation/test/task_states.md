@@ -3,68 +3,272 @@
 
 Below are sample config files which illustrate many examples of how task
 states are affected by their own criteria and their subtasks' states.
+To better help visualize the output that each `root` example leads to,
+the json output for the root definition (and any definitions that it
+refers to) will be placed inline right after the root. Naturally, this
+json is not a part of the config, however it is part of the expected
+output for task config when running the following:
 
-`task.config` file in project `All-Project` on ref `refs/meta/config`.
+```
+ $  ssh -x -p 29418 review-example gerrit query is:open \
+     --task--all --format json|head -1 |json_pp
+```
+
+The config below is expected to be in the `task.config` file in project
+`All-Projects` on ref `refs/meta/config`.
 
 ```
 [root "Root N/A"]
   applicable = is:closed # Assumes test query is "is:open"
+
+{
+   "applicable" : false,
+   "hasPass" : false,
+   "name" : "Root N/A",
+   "status" : "INVALID"
+}
 
 [root "Root APPLICABLE"]
   applicable = is:open # Assumes test query is "is:open"
   pass = True
   subtask = Subtask APPLICABLE
 
+[task "Subtask APPLICABLE"]
+  applicable = is:open
+  pass = True
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root APPLICABLE",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask APPLICABLE",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root PASS"]
   pass = True
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root PASS",
+   "status" : "PASS"
+}
 
 [root "Root FAIL"]
   fail = True
 
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root FAIL",
+   "status" : "FAIL"
+}
+
 [root "Root straight PASS"]
   applicable = is:open
   pass = is:open
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root straight PASS",
+   "status" : "PASS"
+}
 
 [root "Root straight FAIL"]
   applicable = is:open
   fail = is:open
   pass = is:open
 
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root straight FAIL",
+   "status" : "FAIL"
+}
+
 [root "Root PASS-fail"]
   applicable = is:open
   fail = NOT is:open
 
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root PASS-fail",
+   "status" : "PASS"
+}
+
 [root "Root pass-FAIL"]
   applicable = is:open
   fail = is:open
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root pass-FAIL",
+   "status" : "FAIL"
+}
 
 [root "Root PASS-waiting-fail"]
   applicable = is:open
   fail = NOT is:open
   subtask = Subtask PASS
 
+[task "Subtask PASS"]
+  applicable = is:open
+  pass = is:open
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root PASS-waiting-fail",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask PASS",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root pass-WAITING-fail"]
   applicable = is:open
   fail = NOT is:open
   subtask = Subtask FAIL
+
+[task "Subtask FAIL"]
+  applicable = is:open
+  fail = is:open
+  pass = is:open
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root pass-WAITING-fail",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask FAIL",
+         "status" : "FAIL"
+      }
+   ]
+}
 
 [root "Root pass-waiting-FAIL"]
   applicable = is:open
   fail = is:open
   subtask = Subtask PASS
 
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root pass-waiting-FAIL",
+   "status" : "FAIL",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask PASS",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root grouping PASS (subtask PASS)"]
   subtask = Subtask PASS
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root grouping PASS (subtask PASS)",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask PASS",
+         "status" : "PASS"
+      }
+   ]
+}
 
 [root "Root grouping WAITING (subtask READY)"]
   subtask = Subtask READY
 
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root grouping WAITING (subtask READY)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask READY",
+         "status" : "READY",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask PASS",
+               "status" : "PASS"
+            }
+         ]
+      }
+   ]
+}
+
 [root "Root grouping WAITING (subtask FAIL)"]
   subtask = Subtask FAIL
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root grouping WAITING (subtask FAIL)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask FAIL",
+         "status" : "FAIL"
+      }
+   ]
+}
 
 [root "Root grouping NA (subtask NA)"]
   applicable = is:open # Assumes Subtask NA has "applicable = NOT is:open"
   subtask = Subtask NA
+
+[task "Subtask NA"]
+  applicable = NOT is:open # Assumes test query is "is:open"
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root grouping NA (subtask NA)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : false,
+         "hasPass" : false,
+         "name" : "Subtask NA",
+         "status" : "INVALID"
+      }
+   ]
+}
 
 [root "Root READY (subtask PASS)"]
   applicable = is:open
@@ -72,135 +276,104 @@ states are affected by their own criteria and their subtasks' states.
   subtask = Subtask PASS
   ready-hint = You must now run the ready task
 
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "hint" : "You must now run the ready task",
+   "name" : "Root READY (subtask PASS)",
+   "status" : "READY",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask PASS",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root WAITING (subtask READY)"]
   applicable = is:open
   pass = is:open
   subtask = Subtask READY
-
-[root "Root WAITING (subtask FAIL)"]
-  applicable = is:open
-  pass = is:open
-  subtask = Subtask FAIL
-
-[root "Root IN PROGRESS"]
-   applicable = is:open
-   in-progress = is:open
-   pass = NOT is:open
-
-[root "Root NOT IN PROGRESS"]
-   applicable = is:open
-   in-progress = NOT is:open
-   pass = NOT is:open
-
-[root "Root Optional subtasks"]
-   subtask = OPTIONAL MISSING |
-   subtask = Subtask Optional |
-
-[root "Subtasks File"]
-  subtasks-file = common.config
-
-[root "Subtasks File (Missing)"]
-  subtasks-file = common.config
-  subtasks-file = missing
-
-[root "Subtasks External"]
-  subtasks-external = user special
-
-[root "Subtasks External (Missing)"]
-  subtasks-external = user special
-  subtasks-external = missing
-
-[root "Subtasks External (User Missing)"]
-  subtasks-external = user special
-  subtasks-external = user missing
-
-[root "Subtasks External (File Missing)"]
-  subtasks-external = user special
-  subtasks-external = file missing
-
-[root "Root tasks-factory"]
-  subtasks-factory = tasks-factory static
-  subtasks-factory = tasks-factory change
-
-[root "Root tasks-factory static (empty name)"]
-  subtasks-factory = tasks-factory static (empty name)
-# Grouping task since it has no pass criteria, not output since it has no subtasks
-
-[root "Root tasks-factory static (empty name PASS)"]
-  pass = True
-  subtasks-factory = tasks-factory static (empty name)
-
-[root "Root Properties"]
-  set-root-property = root-value
-  export-root = ${_name}
-  fail = True
-  fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
-  subtask = Subtask Properties
-
-[root "Root Properties Expansion"]
-  applicable = status:open
-  subtask = Subtask Property Expansion fail-hint
-
-[task "Subtask Property Expansion fail-hint"]
-  subtasks-factory = tasks-factory Property Expansion fail-hint
-
-[tasks-factory "tasks-factory Property Expansion fail-hint"]
-  set-first-property = first-property ${_name}
-  fail-hint = ${first-property}
-  fail = true
-  names-factory = names-factory static list
-
-[root "Root Preload"]
-   preload-task = Subtask FAIL
-   subtask = Subtask Preload
-
-[root "Root INVALID Preload"]
-  preload-task = missing
-
-[root "INVALIDS"]
-  subtasks-file = invalids.config
-
-[root "Root NA Pass"]
-  applicable = NOT is:open # Assumes test query is "is:open"
-  pass = True
-
-[root "Root NA Fail"]
-  applicable = NOT is:open # Assumes test query is "is:open"
-  fail = True
-
-[root "NA INVALIDS"]
-  applicable = NOT is:open # Assumes test query is "is:open"
-  subtasks-file = invalids.config
-
-[tasks-factory "tasks-factory static"]
-  names-factory = names-factory static list
-  fail = True
-
-[tasks-factory "tasks-factory static (empty name)"]
-  names-factory = names-factory static (empty name list)
-  fail = True
-
-[tasks-factory "tasks-factory change"]
-  names-factory = names-factory change list
-  fail = True
-
-[task "Subtask APPLICABLE"]
-  applicable = is:open
-  pass = True
-
-[task "Subtask FAIL"]
-  applicable = is:open
-  fail = is:open
-  pass = is:open
 
 [task "Subtask READY"]
   applicable = is:open
   pass = NOT is:open
   subtask = Subtask PASS
 
-[task "Subtask PASS"]
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root WAITING (subtask READY)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask READY",
+         "status" : "READY",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask PASS",
+               "status" : "PASS"
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root WAITING (subtask FAIL)"]
   applicable = is:open
   pass = is:open
+  subtask = Subtask FAIL
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root WAITING (subtask FAIL)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask FAIL",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root IN PROGRESS"]
+   applicable = is:open
+   in-progress = is:open
+   pass = NOT is:open
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "inProgress" : true,
+   "name" : "Root IN PROGRESS",
+   "status" : "READY"
+}
+
+[root "Root NOT IN PROGRESS"]
+   applicable = is:open
+   in-progress = NOT is:open
+   pass = NOT is:open
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "inProgress" : false,
+   "name" : "Root NOT IN PROGRESS",
+   "status" : "READY"
+}
+
+[root "Root Optional subtasks"]
+   subtask = OPTIONAL MISSING |
+   subtask = Subtask Optional |
 
 [task "Subtask Optional"]
    subtask = Subtask PASS |
@@ -208,8 +381,319 @@ states are affected by their own criteria and their subtasks' states.
    subtask = OPTIONAL MISSING | OPTIONAL MISSING |
    subtask = OPTIONAL MISSING | OPTIONAL MISSING | Subtask READY
 
-[task "Subtask NA"]
-  applicable = NOT is:open # Assumes test query is "is:open"
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Optional subtasks",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Optional",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask PASS",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask FAIL",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask READY",
+               "status" : "READY",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
+[root "Subtasks File"]
+  subtasks-file = common.config
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Subtasks File",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config FAIL",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Subtasks File (Missing)"]
+  subtasks-file = common.config
+  subtasks-file = missing
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Subtasks File (Missing)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config FAIL",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Subtasks External"]
+  subtasks-external = user special
+
+[external "user special"]
+  user = testuser
+  file = special.config
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Subtasks External",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config FAIL",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Subtasks External (Missing)"]
+  subtasks-external = user special
+  subtasks-external = missing
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Subtasks External (Missing)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config FAIL",
+         "status" : "FAIL"
+      },
+      {
+         "name" : "UNKNOWN",
+         "status" : "INVALID"
+      }
+   ]
+}
+
+[root "Subtasks External (User Missing)"]
+  subtasks-external = user special
+  subtasks-external = user missing
+
+[external "user missing"]
+  user = missing
+  file = special.config
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Subtasks External (User Missing)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config FAIL",
+         "status" : "FAIL"
+      },
+      {
+         "name" : "UNKNOWN",
+         "status" : "INVALID"
+      }
+   ]
+}
+
+[root "Subtasks External (File Missing)"]
+  subtasks-external = user special
+  subtasks-external = file missing
+
+[external "file missing"]
+  user = testuser
+  file = missing
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Subtasks External (File Missing)",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config FAIL",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root tasks-factory"]
+  subtasks-factory = tasks-factory static
+  subtasks-factory = tasks-factory change
+
+[tasks-factory "tasks-factory static"]
+  names-factory = names-factory static list
+  fail = True
+
+[names-factory "names-factory static list"]
+  name = my a task
+  name = my b task
+  name = my c task
+  name = my d task Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  type = static
+
+[tasks-factory "tasks-factory change"]
+  names-factory = names-factory change list
+  fail = True
+
+[names-factory "names-factory change list"]
+  changes = change:_change1_number OR change:_change2_number
+  type = change
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my a task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my b task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my c task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "_change1_number",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "_change2_number",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root tasks-factory static (empty name)"]
+  subtasks-factory = tasks-factory static (empty name)
+# Grouping task since it has no pass criteria, not output since it has no subtasks
+
+[tasks-factory "tasks-factory static (empty name)"]
+  names-factory = names-factory static (empty name list)
+  fail = True
+
+[names-factory "names-factory static (empty name list)"]
+  type = static
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory static (empty name)"
+}
+
+[root "Root tasks-factory static (empty name PASS)"]
+  pass = True
+  subtasks-factory = tasks-factory static (empty name)
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root tasks-factory static (empty name PASS)",
+   "status" : "PASS"
+}
+
+[root "Root Properties"]
+  set-root-property = root-value
+  export-root = ${_name}
+  fail = True
+  fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  subtask = Subtask Properties
 
 [task "Subtask Properties"]
   export-subtask = ${_name}
@@ -242,6 +726,125 @@ states are affected by their own criteria and their subtasks' states.
   type = change
   changes = change:_change1_number OR change:${_change_number} project:${_change_project} branch:${_change_branch}
 
+{
+   "applicable" : true,
+   "exported" : {
+      "root" : "Root Properties"
+   },
+   "hasPass" : true,
+   "hint" : "Name(Root Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+   "name" : "Root Properties",
+   "status" : "FAIL",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "exported" : {
+            "subtask" : "Subtask Properties"
+         },
+         "hasPass" : false,
+         "name" : "Subtask Properties",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
+               "name" : "Subtask Properties Hints",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Chained Subtask Properties",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask Properties Reset",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "Name(_change3_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+               "name" : "_change3_number",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "Name(_change1_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+               "name" : "_change1_number",
+               "status" : "FAIL"
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root Properties Expansion"]
+  applicable = status:open
+  subtask = Subtask Property Expansion fail-hint
+
+[task "Subtask Property Expansion fail-hint"]
+  subtasks-factory = tasks-factory Property Expansion fail-hint
+
+[tasks-factory "tasks-factory Property Expansion fail-hint"]
+  set-first-property = first-property ${_name}
+  fail-hint = ${first-property}
+  fail = true
+  names-factory = names-factory static list
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties Expansion",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Property Expansion fail-hint",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "first-property my a task",
+               "name" : "my a task",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "first-property my b task",
+               "name" : "my b task",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "first-property my c task",
+               "name" : "my c task",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "first-property my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+               "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
+               "status" : "FAIL"
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root Preload"]
+   preload-task = Subtask FAIL
+   subtask = Subtask Preload
+
 [task "Subtask Preload"]
   preload-task = Subtask READY
   subtask = Subtask Preload Preload
@@ -262,6 +865,10 @@ states are affected by their own criteria and their subtasks' states.
 [task "Subtask Preload Hints PASS"]
   preload-task = Subtask Hints
   pass = False
+
+[task "Subtask Hints"] # meant to be preloaded, not a test case in itself
+  ready-hint = Task is ready
+  fail-hint = Task failed
 
 [task "Subtask Preload Hints FAIL"]
   preload-task = Subtask Hints
@@ -287,35 +894,652 @@ states are affected by their own criteria and their subtasks' states.
   set-fourth-property = fourth-value
   fail-hint = second-property(${second-property}) fourth-property(${fourth-property})
 
-[task "Subtask Hints"] # meant to be preloaded, not a test case in itself
-  ready-hint = Task is ready
-  fail-hint = Task failed
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload",
+   "status" : "FAIL",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Preload",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask PASS",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask Preload Preload",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "Task is ready",
+               "name" : "Subtask Preload Hints PASS",
+               "status" : "READY"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "Task failed",
+               "name" : "Subtask Preload Hints FAIL",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask Preload Override Pass",
+               "status" : "READY"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask Preload Override Fail",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask Preload Extend Subtasks",
+               "status" : "READY",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask PASS",
+                     "status" : "PASS"
+                  },
+                  {
+                     "applicable" : true,
+                     "hasPass" : true,
+                     "name" : "Subtask APPLICABLE",
+                     "status" : "PASS"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask Preload Optional",
+               "status" : "PASS"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "second-property(first-value second-extra third-value) fourth-property(fourth-value)",
+               "name" : "Subtask Preload Properties",
+               "status" : "FAIL"
+            }
+         ]
+      }
+   ]
+}
 
-[external "user special"]
-  user = testuser
-  file = special.config
+[root "Root INVALID Preload"]
+  preload-task = missing
 
-[external "user missing"]
-  user = missing
-  file = special.config
+{
+   "name" : "UNKNOWN",
+   "status" : "INVALID"
+}
 
-[external "file missing"]
-  user = testuser
-  file = missing
+[root "INVALIDS"]
+  subtasks-file = invalids.config
 
-[names-factory "names-factory static list"]
-  name = my a task
-  name = my b task
-  name = my c task
-  name = my d task Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
-  type = static
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "INVALIDS",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "No PASS criteria",
+         "status" : "INVALID"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "WAITING (subtask INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Subtask INVALID",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "WAITING (subtask duplicate)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Subtask INVALID",
+               "status" : "INVALID"
+            },
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "WAITING (subtask missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Grouping WAITING (subtask INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Subtask INVALID",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Grouping WAITING (subtask missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask INVALID",
+         "status" : "INVALID"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Optional",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : false,
+         "hasPass" : true,
+         "name" : "NA Bad PASS query",
+         "status" : "FAIL"      # Only Test Suite: all
+         "status" : "INVALID"   # Only Test Suite: !all
+      },
+      {
+         "applicable" : false,
+         "hasPass" : true,
+         "name" : "NA Bad FAIL query",
+         "status" : "INVALID"
+      },
+      {
+         "applicable" : false,
+         "hasPass" : true,
+         "name" : "NA Bad INPROGRESS query",
+         "status" : "FAIL"      # Only Test Suite: all
+         "status" : "INVALID"   # Only Test Suite: !all
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Looping",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "name" : "UNKNOWN",
+         "status" : "INVALID"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory type missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory type INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory duplicate)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "duplicate",
+               "status" : "FAIL"
+            },
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory changes type missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory changes missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory changes invalid)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory changes loop)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "_change1_number",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "_change2_number",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
 
-[names-factory "names-factory static (empty name list)"]
-  type = static
+[root "Root NA Pass"]
+  applicable = NOT is:open # Assumes test query is "is:open"
+  pass = True
 
-[names-factory "names-factory change list"]
-  changes = change:_change1_number OR change:_change2_number
-  type = change
+{
+   "applicable" : false,
+   "hasPass" : true,
+   "name" : "Root NA Pass",
+   "status" : "PASS"
+}
+
+[root "Root NA Fail"]
+  applicable = NOT is:open # Assumes test query is "is:open"
+  fail = True
+
+{
+   "applicable" : false,
+   "hasPass" : true,
+   "name" : "Root NA Fail",
+   "status" : "FAIL"
+}
+
+[root "NA INVALIDS"]
+  applicable = NOT is:open # Assumes test query is "is:open"
+  subtasks-file = invalids.config
+
+{
+   "applicable" : false,
+   "hasPass" : false,
+   "name" : "NA INVALIDS",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "No PASS criteria",
+         "status" : "INVALID"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "WAITING (subtask INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Subtask INVALID",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "WAITING (subtask duplicate)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Subtask INVALID",
+               "status" : "INVALID"
+            },
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "WAITING (subtask missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Grouping WAITING (subtask INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "name" : "Subtask INVALID",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Grouping WAITING (subtask missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask INVALID",
+         "status" : "INVALID"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Optional",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : false,
+         "hasPass" : true,
+         "name" : "NA Bad PASS query",
+         "status" : "FAIL"      # Only Test Suite: all
+         "status" : "INVALID"   # Only Test Suite: !all
+      },
+      {
+         "applicable" : false,
+         "hasPass" : true,
+         "name" : "NA Bad FAIL query",
+         "status" : "INVALID"
+      },
+      {
+         "applicable" : false,
+         "hasPass" : true,
+         "name" : "NA Bad INPROGRESS query",
+         "status" : "FAIL"      # Only Test Suite: all
+         "status" : "INVALID"   # Only Test Suite: !all
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Looping",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "name" : "UNKNOWN",
+         "status" : "INVALID"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory type missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory type INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory duplicate)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "duplicate",
+               "status" : "FAIL"
+            },
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory changes type missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory changes missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory changes invalid)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory changes loop)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "_change1_number",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "_change2_number",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "name" : "UNKNOWN",
+                     "status" : "INVALID"
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
 
 ```
 
@@ -353,7 +1577,7 @@ states are affected by their own criteria and their subtasks' states.
   subtask = Subtask INVALID
 
 [task "Grouping WAITING (subtask missing)"]
-  subtask = MISSING  # security bug: subtask name appears in output
+  subtask = MISSING # security bug: subtask name appears in output
 
 [task "Subtask INVALID"]
   fail-hint = Use when an INVALID subtask is needed, not meant as a test case in itself
@@ -434,7 +1658,7 @@ states are affected by their own criteria and their subtasks' states.
 [tasks-factory "tasks-factory change loop"]
   names-factory = names-factory change constant
   subtask = task (tasks-factory changes loop)
-  fail = true
+  fail = True
 
 [names-factory "names-factory (type missing)"]
   name = no type test
@@ -474,1196 +1698,4 @@ states are affected by their own criteria and their subtasks' states.
 [task "userfile task/special.config FAIL"]
   applicable = is:open
   fail = is:open
-```
-
-The expected output for the above task config looks like:
-
-```
- $  ssh -x -p 29418 review-example gerrit query is:open \
-     --task--all --format json|head -1 |json_pp
-{
-   ...,
-   "plugins" : [
-      {
-         "name" : "task",
-         "roots" : [
-            {
-               "applicable" : false,
-               "hasPass" : false,
-               "name" : "Root N/A",
-               "status" : "INVALID"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root APPLICABLE",
-               "status" : "PASS",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask APPLICABLE",
-                     "status" : "PASS"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root PASS",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root FAIL",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root straight PASS",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root straight FAIL",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root PASS-fail",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root pass-FAIL",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root PASS-waiting-fail",
-               "status" : "PASS",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask PASS",
-                     "status" : "PASS"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root pass-WAITING-fail",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask FAIL",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root pass-waiting-FAIL",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask PASS",
-                     "status" : "PASS"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Root grouping PASS (subtask PASS)",
-               "status" : "PASS",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask PASS",
-                     "status" : "PASS"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Root grouping WAITING (subtask READY)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask READY",
-                     "status" : "READY",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask PASS",
-                           "status" : "PASS"
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Root grouping WAITING (subtask FAIL)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask FAIL",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Root grouping NA (subtask NA)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : false,
-                     "hasPass" : false,
-                     "name" : "Subtask NA",
-                     "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "You must now run the ready task",
-               "name" : "Root READY (subtask PASS)",
-               "status" : "READY",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask PASS",
-                     "status" : "PASS"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root WAITING (subtask READY)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask READY",
-                     "status" : "READY",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask PASS",
-                           "status" : "PASS"
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root WAITING (subtask FAIL)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask FAIL",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "inProgress" : true,
-               "name" : "Root IN PROGRESS",
-               "status" : "READY"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "inProgress" : false,
-               "name" : "Root NOT IN PROGRESS",
-               "status" : "READY"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Root Optional subtasks",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Subtask Optional",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask PASS",
-                           "status" : "PASS"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask FAIL",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask READY",
-                           "status" : "READY",
-                           "subTasks" : [
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : true,
-                                 "name" : "Subtask PASS",
-                                 "status" : "PASS"
-                              }
-                           ]
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Subtasks File",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "file task/common.config PASS",
-                     "status" : "PASS"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "file task/common.config FAIL",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Subtasks File (Missing)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "file task/common.config PASS",
-                     "status" : "PASS"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "file task/common.config FAIL",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Subtasks External",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "userfile task/special.config PASS",
-                     "status" : "PASS"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "userfile task/special.config FAIL",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Subtasks External (Missing)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "userfile task/special.config PASS",
-                     "status" : "PASS"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "userfile task/special.config FAIL",
-                     "status" : "FAIL"
-                  },
-                  {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Subtasks External (User Missing)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "userfile task/special.config PASS",
-                     "status" : "PASS"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "userfile task/special.config FAIL",
-                     "status" : "FAIL"
-                  },
-                  {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Subtasks External (File Missing)",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "userfile task/special.config PASS",
-                     "status" : "PASS"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "userfile task/special.config FAIL",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Root tasks-factory",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "my a task",
-                     "status" : "FAIL"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "my b task",
-                     "status" : "FAIL"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "my c task",
-                     "status" : "FAIL"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-                     "status" : "FAIL"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "_change1_number",
-                     "status" : "FAIL"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "_change2_number",
-                     "status" : "FAIL"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Root tasks-factory static (empty name)"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root tasks-factory static (empty name PASS)",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : true,
-               "exported" : {
-                  "root" : "Root Properties"
-               },
-               "hasPass" : true,
-               "hint" : "Name(Root Properties) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-               "name" : "Root Properties",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "exported" : {
-                        "subtask" : "Subtask Properties"
-                     },
-                     "hasPass" : false,
-                     "name" : "Subtask Properties",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "Name(Subtask Properties Hints) root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value) root(Root Properties)",
-                           "name" : "Subtask Properties Hints",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Chained Subtask Properties",
-                           "status" : "PASS"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask Properties Reset",
-                           "status" : "PASS"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "Name(_change3_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-                           "name" : "_change3_number",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "Name(_change1_number) Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-                           "name" : "_change1_number",
-                           "status" : "FAIL"
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "Root Properties Expansion",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Subtask Property Expansion fail-hint",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "first-property my a task",
-                           "name" : "my a task",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "first-property my b task",
-                           "name" : "my b task",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "first-property my c task",
-                           "name" : "my c task",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "first-property my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-                           "name" : "my d task Change Number(_change3_number) Change Id(_change3_id) Change Project(_change3_project) Change Branch(_change3_branch) Change Status(_change3_status) Change Topic(_change3_topic)",
-                           "status" : "FAIL"
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "Root Preload",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "Subtask Preload",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask PASS",
-                           "status" : "PASS"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask Preload Preload",
-                           "status" : "PASS"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "Task is ready",
-                           "name" : "Subtask Preload Hints PASS",
-                           "status" : "READY"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "Task failed",
-                           "name" : "Subtask Preload Hints FAIL",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask Preload Override Pass",
-                           "status" : "READY"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask Preload Override Fail",
-                           "status" : "PASS"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask Preload Extend Subtasks",
-                           "status" : "READY",
-                           "subTasks" : [
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : true,
-                                 "name" : "Subtask PASS",
-                                 "status" : "PASS"
-                              },
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : true,
-                                 "name" : "Subtask APPLICABLE",
-                                 "status" : "PASS"
-                              }
-                           ]
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "Subtask Preload Optional",
-                           "status" : "PASS"
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "hint" : "second-property(first-value second-extra third-value) fourth-property(fourth-value)",
-                           "name" : "Subtask Preload Properties",
-                           "status" : "FAIL"
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "name" : "UNKNOWN",
-               "status" : "INVALID"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : false,
-               "name" : "INVALIDS",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "No PASS criteria",
-                     "status" : "INVALID"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "WAITING (subtask INVALID)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "Subtask INVALID",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "WAITING (subtask duplicate)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "Subtask INVALID",
-                           "status" : "INVALID"
-                        },
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "WAITING (subtask missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Grouping WAITING (subtask INVALID)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "Subtask INVALID",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Grouping WAITING (subtask missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Subtask INVALID",
-                     "status" : "INVALID"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Subtask Optional",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : false,
-                     "hasPass" : true,
-                     "name" : "NA Bad PASS query",
-                     "status" : "FAIL"      # Only Test Suite: all
-                     "status" : "INVALID"   # Only Test Suite: !all
-                  },
-                  {
-                     "applicable" : false,
-                     "hasPass" : true,
-                     "name" : "NA Bad FAIL query",
-                     "status" : "INVALID"
-                  },
-                  {
-                     "applicable" : false,
-                     "hasPass" : true,
-                     "name" : "NA Bad INPROGRESS query",
-                     "status" : "FAIL"      # Only Test Suite: all
-                     "status" : "INVALID"   # Only Test Suite: !all
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Looping",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory type missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory type INVALID)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory duplicate)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "duplicate",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory changes type missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory changes missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory changes invalid)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory changes loop)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "_change1_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "name" : "UNKNOWN",
-                                 "status" : "INVALID"
-                              }
-                           ]
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "_change2_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "name" : "UNKNOWN",
-                                 "status" : "INVALID"
-                              }
-                           ]
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : false,
-               "hasPass" : true,
-               "name" : "Root NA Pass",
-               "status" : "PASS"
-            },
-            {
-               "applicable" : false,
-               "hasPass" : true,
-               "name" : "Root NA Fail",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : false,
-               "hasPass" : false,
-               "name" : "NA INVALIDS",
-               "status" : "WAITING",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "No PASS criteria",
-                     "status" : "INVALID"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "WAITING (subtask INVALID)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "Subtask INVALID",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "WAITING (subtask duplicate)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "Subtask INVALID",
-                           "status" : "INVALID"
-                        },
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : true,
-                     "name" : "WAITING (subtask missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Grouping WAITING (subtask INVALID)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : false,
-                           "name" : "Subtask INVALID",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Grouping WAITING (subtask missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Subtask INVALID",
-                     "status" : "INVALID"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Subtask Optional",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : false,
-                     "hasPass" : true,
-                     "name" : "NA Bad PASS query",
-                     "status" : "FAIL"      # Only Test Suite: all
-                     "status" : "INVALID"   # Only Test Suite: !all
-                  },
-                  {
-                     "applicable" : false,
-                     "hasPass" : true,
-                     "name" : "NA Bad FAIL query",
-                     "status" : "INVALID"
-                  },
-                  {
-                     "applicable" : false,
-                     "hasPass" : true,
-                     "name" : "NA Bad INPROGRESS query",
-                     "status" : "FAIL"      # Only Test Suite: all
-                     "status" : "INVALID"   # Only Test Suite: !all
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "Looping",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory type missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory type INVALID)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory duplicate)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "duplicate",
-                           "status" : "FAIL"
-                        },
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory changes type missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory changes missing)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (names-factory changes invalid)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  },
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory changes loop)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "_change1_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "name" : "UNKNOWN",
-                                 "status" : "INVALID"
-                              }
-                           ]
-                        },
-                        {
-                           "applicable" : true,
-                           "hasPass" : true,
-                           "name" : "_change2_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "name" : "UNKNOWN",
-                                 "status" : "INVALID"
-                              }
-                           ]
-                        }
-                     ]
-                  }
-               ]
-            }
-         ]
-      }
-   ],
-   ...
 ```
