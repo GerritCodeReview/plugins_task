@@ -317,7 +317,7 @@ q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS" --initial-commit
 q_setup setup_repo "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH"
 
-changes=$(gssh query "status:open limit:2" --format json)
+changes=$(gssh query "status:merged limit:2" --format json)
 set_change "$(echo "$changes" | awk 'NR==1')" ; CHANGE1=("${CHANGE[@]}")
 set_change "$(echo "$changes" | awk 'NR==2')" ; CHANGE2=("${CHANGE[@]}")
 DOC_STATES=$(replace_default_changes < "$DOCS/task_states.md")

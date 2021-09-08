@@ -13,11 +13,21 @@ create_project() { # project
 }
 
 create_change() { # subject project
-    touch readme.txt && echo "$(date)" >> readme.txt
-    git add . && git commit -m "$1"
-    git push ssh://"$GERRIT_HOST":"$PORT"/"$2" HEAD:refs/for/master
+    echo "$(date)" >> readme.txt
+    git add . >&2 && git commit -m "$1" >&2
+    git push ssh://"$GERRIT_HOST":"$PORT"/"$2" HEAD:refs/for/master >&2
+    git rev-parse HEAD
+}
+
+submit_change() { # commit_revision
+    gssh review --code-review +2 --submit "$1"
 }
 
 create_project 'test'
-create_change 'Change 1' 'test'
-create_change 'Change 2' 'test'
+commit1Revision=$(create_change 'Change 1' 'test')
+commit2Revision=$(create_change 'Change 2' 'test')
+
+submit_change "$commit2Revision"
+#sleep to avoid race conditions
+sleep 60
+submit_change "$commit1Revision"
