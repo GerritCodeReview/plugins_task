@@ -22,6 +22,30 @@
       },
       "revId": "0cade533af2dd6cb67540cb57218064addf081a6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e8c83f8_9b9451e5",
+        "filename": ".zuul.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1087826
+      },
+      "writtenOn": "2021-09-08T21:51:07Z",
+      "side": 1,
+      "message": "I think Zuul may have a bug in detecting zuul.yaml config file changes as content in merge commits.  So basically Zuul isn\u0027t noticing the .zuul.yaml change (though the actual code changes should be present).  I believe the same will be true after the merge, so it won\u0027t even take effect until the *next* .zuul.yaml change on the stable-3.3 branch (that isn\u0027t a merge commit).  I don\u0027t have a workaround to suggest for this unfortunately -- except that after the merge happens we can manually tell Zuul to reload its config and it will pick it up then.\n\nI\u0027ll try to prioritize fixing the Zuul bug; it\u0027s obviously a pretty severe one for Gerrit\u0027s merge-up workflow.",
+      "parentUuid": "09892a8e_8f31e2e0",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 72
+      },
+      "revId": "0cade533af2dd6cb67540cb57218064addf081a6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
