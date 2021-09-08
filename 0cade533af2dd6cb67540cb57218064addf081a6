@@ -70,6 +70,30 @@
       },
       "revId": "0cade533af2dd6cb67540cb57218064addf081a6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "73708c94_64aa3c74",
+        "filename": ".zuul.yaml",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1087826
+      },
+      "writtenOn": "2021-09-08T22:41:44Z",
+      "side": 1,
+      "message": "It\u0027s not disruptive, and Gerrit Maintainers should have access to the k8s cluster to run the command to do it.  I just proposed a doc change about it here: https://gerrit-review.googlesource.com/c/zuul/ops/+/317502\n\nI just ran that since this change merged, so we should be all set now.\n\nAlso, I miss-spoke earlier, the bug happens when a .zuul.yaml change is not in the content of the merge commit (ie, it\u0027s in the branch that\u0027s being merged, but the merge commit itself doesn\u0027t have conflict resolution content for it).\n\nGerrit\u0027s SSH API (which is all that existed when Zuul was originally written) doesn\u0027t return non-content files in merge commits in its file listing.  The REST API does, if you add an extra parameter.  Zuul prefers the REST API by default, but I don\u0027t think we are taking advantage of that feature.  But it shouldn\u0027t be too hard to do.\n\nThat does suggest a workaround I didn\u0027t think of earlier: we could add content to .zuul.yaml in the merge commit.  But then we\u0027d be doing the opposite of what the merge commit is trying to do (we would be diverging the content of the branches instead of converging it).  So I don\u0027t think it\u0027s a good idea.",
+      "parentUuid": "30d998d3_aa8a2903",
+      "range": {
+        "startLine": 7,
+        "startChar": 8,
+        "endLine": 7,
+        "endChar": 72
+      },
+      "revId": "0cade533af2dd6cb67540cb57218064addf081a6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
