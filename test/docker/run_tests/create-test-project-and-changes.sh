@@ -20,7 +20,9 @@ create_change() { # subject project
 }
 
 submit_change() { # commit_revision
-    gssh review --code-review +2 --submit "$1"
+    gssh review --code-review +2 "$1"
+sleep 10
+    gssh review --submit "$1"
 }
 
 create_project 'test'
