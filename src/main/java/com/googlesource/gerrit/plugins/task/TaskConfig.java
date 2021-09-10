@@ -58,7 +58,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String fail;
     public String failHint;
     public String inProgress;
-    public String name;
     public String pass;
     public String preloadTask;
     public Map<String, String> properties;
@@ -79,7 +78,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
       fail = getString(s, KEY_FAIL, null);
       failHint = getString(s, KEY_FAIL_HINT, null);
       inProgress = getString(s, KEY_IN_PROGRESS, null);
-      name = s.subSection;
       pass = getString(s, KEY_PASS, null);
       preloadTask = getString(s, KEY_PRELOAD_TASK, null);
       properties = getProperties(s, KEY_PROPERTIES_PREFIX);
@@ -133,7 +131,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
     public Task(SubSection s, boolean isVisible, boolean isTrusted) {
       super(s, isVisible, isTrusted);
-      name = getString(s, KEY_NAME, s.subSection);
+      name = s.subSection;
     }
 
     protected Task(TaskBase base) {
