@@ -68,7 +68,7 @@ public class Modules {
     public boolean onlyInvalid = false;
 
     @Option(name = "--evaluation-time", usage = "Include elapsed evaluation time on each task")
-    boolean evaluationTime = false;
+    public boolean evaluationTime = false;
 
     @Option(
         name = "--preview",
