@@ -44,7 +44,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
   }
 
-  private class Section extends Container {
+  protected class Section extends Container {
     public TaskConfig config;
 
     public Section() {

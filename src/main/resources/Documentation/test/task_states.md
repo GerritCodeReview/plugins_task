@@ -739,7 +739,7 @@ The config below is expected to be in the `task.config` file in project
 
 [root "Root tasks-factory static (empty name)"]
   subtasks-factory = tasks-factory static (empty name)
-# Grouping task since it has no pass criteria, not output since it has no subtasks
+  # Grouping task since it has no pass criteria, not output since it has no subtasks
 
 [tasks-factory "tasks-factory static (empty name)"]
   names-factory = names-factory static (empty name list)
