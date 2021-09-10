@@ -59,7 +59,7 @@ public class PredicateCache {
     if ("true".equalsIgnoreCase(query)) {
       return true;
     }
-    return cqb.parse(query).asMatchable().match(c);
+    return getPredicate(query).asMatchable().match(c);
   }
 
   protected Predicate<ChangeData> getPredicate(String query) throws QueryParseException {
