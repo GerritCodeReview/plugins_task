@@ -5,7 +5,7 @@
         tools/playbooks/install_docker.yaml
     vars:
         bazelisk_test_targets: "plugins/task/lint_test plugins/task/..."
-        
+
 - project:
     check:
       jobs:
