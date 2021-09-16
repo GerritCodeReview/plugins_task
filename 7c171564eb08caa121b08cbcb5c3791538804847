@@ -22,6 +22,54 @@
       },
       "revId": "7c171564eb08caa121b08cbcb5c3791538804847",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4ef7c307_6154dacb",
+        "filename": ".zuul.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2021-09-16T08:40:10Z",
+      "side": 1,
+      "message": "You are right. Done",
+      "parentUuid": "fa878ff5_bd05b448",
+      "range": {
+        "startLine": 19,
+        "startChar": 16,
+        "endLine": 19,
+        "endChar": 35
+      },
+      "revId": "7c171564eb08caa121b08cbcb5c3791538804847",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "59b32137_87dfabe0",
+        "filename": ".zuul.yaml",
+        "patchSetId": 1
+      },
+      "lineNbr": 19,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2021-09-16T08:40:10Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fa878ff5_bd05b448",
+      "range": {
+        "startLine": 19,
+        "startChar": 16,
+        "endLine": 19,
+        "endChar": 35
+      },
+      "revId": "7c171564eb08caa121b08cbcb5c3791538804847",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
