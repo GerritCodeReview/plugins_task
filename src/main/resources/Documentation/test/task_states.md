@@ -739,7 +739,7 @@ The config below is expected to be in the `task.config` file in project
 
 [root "Root tasks-factory static (empty name)"]
   subtasks-factory = tasks-factory static (empty name)
-# Grouping task since it has no pass criteria, not output since it has no subtasks
+  # Grouping task since it has no pass criteria, not output since it has no subtasks
 
 [tasks-factory "tasks-factory static (empty name)"]
   names-factory = names-factory static (empty name list)
@@ -971,13 +971,13 @@ The config below is expected to be in the `task.config` file in project
 
 [tasks-factory "tasks-factory CHANGE Properties"]
   set-welcome-message = Welcome to the pleasuredome
-  names-factory = names-factory my change
+  names-factory = names-factory a change
   fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   fail = True
 
-[names-factory "names-factory my change"]
+[names-factory "names-factory a change"]
   type = change
-  changes = change:${_change_number}
+  changes = change:_change1_number OR change:_change2_number
 
 {
    "applicable" : true,
@@ -988,8 +988,15 @@ The config below is expected to be in the `task.config` file in project
       {
          "applicable" : true,
          "hasPass" : true,
-         "hint" : "Welcome to the pleasuredome Name(_change_number) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
-         "name" : "_change_number",
+         "hint" : "Welcome to the pleasuredome Name(_change1_number) Change Number(_change1_number) Change Id(_change1_id) Change Project(_change1_project) Change Branch(_change1_branch) Change Status(_change1_status) Change Topic(_change1_topic)",
+         "name" : "_change1_number",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Welcome to the pleasuredome Name(_change2_number) Change Number(_change2_number) Change Id(_change2_id) Change Project(_change2_project) Change Branch(_change2_branch) Change Status(_change2_status) Change Topic(_change2_topic)",
+         "name" : "_change2_number",
          "status" : "FAIL"
       }
    ]

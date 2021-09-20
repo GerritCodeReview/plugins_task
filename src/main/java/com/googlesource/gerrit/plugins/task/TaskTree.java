@@ -43,6 +43,7 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /**
@@ -91,6 +92,14 @@ public class TaskTree {
     return root.getRootNodes();
   }
 
+  public Node createNodeOrNull(NodeList parent, Task definition) {
+    try {
+      return new Node(parent, definition);
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
   protected class NodeList {
     protected NodeList parent = null;
     protected LinkedList<String> path = new LinkedList<>();
@@ -104,20 +113,21 @@ public class TaskTree {
     }
 
     protected void addSubDefinition(Task def) {
+      addSubDefinition(def, (d, c) -> createNodeOrNull(d, c));
+    }
+
+    protected void addSubDefinition(Task def, BiFunction<NodeList, Task, Node> nodeConstructor) {
       Node node = null;
       if (def != null && !path.contains(def.name) && names.add(def.name)) {
         // path check above detects looping definitions
         // names check above detects duplicate subtasks
-        try {
-          node = new Node(this, def);
-        } catch (Exception e) {
-        } // bad definition, handled with null
+        node = nodeConstructor.apply(this, def);
       }
       nodes.add(node);
     }
 
     public ChangeData getChangeData() {
-      return TaskTree.this.changeData;
+      return parent == null ? TaskTree.this.changeData : parent.getChangeData();
     }
 
     protected Properties.Task getProperties() {
@@ -244,7 +254,9 @@ public class TaskTree {
                   .query(changeQueryBuilderProvider.get().parse(namesFactory.changes))
                   .entities();
           for (ChangeData changeData : changeDataList) {
-            addSubDefinition(task.config.createTask(tasksFactory, changeData.getId().toString()));
+            addSubDefinition(
+                task.config.createTask(tasksFactory, changeData.getId().toString()),
+                new ChangeNodeFactory(changeData)::createChangeNodeOrNull);
           }
           return;
         }
@@ -293,6 +305,33 @@ public class TaskTree {
         throw new ConfigInvalidException("Cannot resolve user: " + user);
       }
       return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
+    }
+  }
+
+  public class ChangeNodeFactory {
+    public class ChangeNode extends Node {
+      public ChangeNode(NodeList parent, Task definition)
+          throws ConfigInvalidException, OrmException {
+        super(parent, definition);
+      }
+
+      public ChangeData getChangeData() {
+        return ChangeNodeFactory.this.changeData;
+      }
+    }
+
+    protected ChangeData changeData;
+
+    public ChangeNodeFactory(ChangeData changeData) {
+      this.changeData = changeData;
+    }
+
+    public ChangeNode createChangeNodeOrNull(NodeList parent, Task definition) {
+      try {
+        return new ChangeNode(parent, definition);
+      } catch (Exception e) {
+        return null;
+      }
     }
   }
 }
