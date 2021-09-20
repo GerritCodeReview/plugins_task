@@ -216,7 +216,6 @@ public class TaskTree {
     }
 
     protected void addSubTasksFactoryDefinitions() throws OrmException {
-      List<Task> taskList = new ArrayList<>();
       for (String taskFactoryName : task.subTasksFactories) {
         TasksFactory tasksFactory = task.config.getTasksFactory(taskFactoryName);
         if (tasksFactory != null) {
