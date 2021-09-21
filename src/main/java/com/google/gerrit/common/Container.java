@@ -55,4 +55,21 @@ public class Container {
     }
     return Objects.hash(values);
   }
+
+  @Override
+  public String toString() {
+    List<String> fieldStrings = new ArrayList<>();
+    try {
+      for (Field field : getClass().getDeclaredFields()) {
+        field.setAccessible(true);
+        fieldStrings.add(field.getName() + ": " + Objects.toString(field.get(this)));
+      }
+    } catch (IllegalArgumentException | IllegalAccessException e) {
+    }
+    String fields = String.join(", ", fieldStrings);
+    if (!"".equals(fields)) {
+      fields = "{" + fields + "}";
+    }
+    return getClass().toString() + fields;
+  }
 }
