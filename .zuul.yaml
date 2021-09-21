@@ -7,6 +7,15 @@
         bazelisk_test_targets: "plugins/task/lint_test plugins/task/..."
         
 - project:
+    description: |
+      Build the plugin in check, and also build and publish it after
+      every merged commit.
     check:
       jobs:
         - plugins-task-build
+    post:
+      jobs:
+        - plugins-task-build
+        - gerrit-plugin-publish:
+            dependencies:
+              - plugins-task-build
