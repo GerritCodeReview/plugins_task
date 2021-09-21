@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-readlink --canonicalize / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
+readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
 MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 ARTIFACTS=$MYDIR/gerrit/artifacts
 
@@ -85,8 +85,7 @@ if [ ! -e "$ARTIFACTS/task.jar" ] ; then
     usage "$MISSING, did you forget --task-plugin-jar?"
 fi
 [ -n "$GERRIT_WAR" ] && cp -f "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
-progress "Building docker images" build_images
-run_task_plugin_tests ; RESULT=$?
-cleanup
-
-exit "$RESULT"
+( trap cleanup EXIT SIGTERM
+    progress "Building docker images" build_images
+    run_task_plugin_tests
+)
