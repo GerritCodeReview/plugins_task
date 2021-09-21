@@ -40,12 +40,11 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
+import java.util.function.BiFunction;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /**
@@ -94,11 +93,19 @@ public class TaskTree {
     return root.getRootNodes();
   }
 
+  public Node createNodeOrNull(NodeList parent, Task definition) {
+    try {
+      return new Node(parent, definition);
+    } catch (Exception e) {
+      return null;
+    }
+  }
+
   protected class NodeList {
+    protected NodeList parent = null;
     protected LinkedList<String> path = new LinkedList<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
-    protected Map<String, String> properties;
 
     protected void addSubDefinitions(List<Task> defs) {
       for (Task def : defs) {
@@ -107,28 +114,29 @@ public class TaskTree {
     }
 
     protected void addSubDefinition(Task def) {
+      addSubDefinition(def, (d, c) -> createNodeOrNull(d, c));
+    }
+
+    protected void addSubDefinition(Task def, BiFunction<NodeList, Task, Node> nodeConstructor) {
       Node node = null;
       if (def != null && !path.contains(def.name) && names.add(def.name)) {
         // path check above detects looping definitions
         // names check above detects duplicate subtasks
-        try {
-          node = new Node(def, path, properties);
-        } catch (Exception e) {
-        } // bad definition, handled with null
+        node = nodeConstructor.apply(this, def);
       }
       nodes.add(node);
     }
 
     public ChangeData getChangeData() {
-      return TaskTree.this.changeData;
+      return parent == null ? TaskTree.this.changeData : parent.getChangeData();
+    }
+
+    protected Properties.Task getProperties() {
+      return Properties.Task.EMPTY_PARENT;
     }
   }
 
   protected class Root extends NodeList {
-    protected Root() {
-      properties = new HashMap<String, String>();
-    }
-
     public List<Node> getRootNodes() throws ConfigInvalidException, IOException {
       if (nodes == null) {
         nodes = new ArrayList<>();
@@ -144,15 +152,15 @@ public class TaskTree {
 
   public class Node extends NodeList {
     public final Task task;
+    protected final Properties.Task properties;
 
-    public Node(Task definition, List<String> path, Map<String, String> parentProperties)
-        throws ConfigInvalidException, StorageException {
+    public Node(NodeList parent, Task definition) throws ConfigInvalidException, StorageException {
+      this.parent = parent;
       this.task = definition;
-      this.path.addAll(path);
+      this.path.addAll(parent.path);
       this.path.add(definition.name);
       Preloader.preload(definition);
-      new Properties(getChangeData(), definition, parentProperties);
-      properties = definition.properties;
+      properties = new Properties.Task(getChangeData(), definition, parent.getProperties());
     }
 
     public List<Node> getSubNodes() {
@@ -209,13 +217,12 @@ public class TaskTree {
     }
 
     protected void addSubTasksFactoryDefinitions() throws StorageException {
-      List<Task> taskList = new ArrayList<>();
       for (String taskFactoryName : task.subTasksFactories) {
         TasksFactory tasksFactory = task.config.getTasksFactory(taskFactoryName);
         if (tasksFactory != null) {
           NamesFactory namesFactory = task.config.getNamesFactory(tasksFactory.namesFactory);
           if (namesFactory != null && namesFactory.type != null) {
-            new Properties(namesFactory, task.properties);
+            new Properties.NamesFactory(namesFactory, getProperties());
             switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
               case STATIC:
                 addStaticTypeTasksDefinitions(tasksFactory, namesFactory);
@@ -247,7 +254,9 @@ public class TaskTree {
                   .query(changeQueryBuilderProvider.get().parse(namesFactory.changes))
                   .entities();
           for (ChangeData changeData : changeDataList) {
-            addSubDefinition(task.config.createTask(tasksFactory, changeData.getId().toString()));
+            addSubDefinition(
+                task.config.createTask(tasksFactory, changeData.getId().toString()),
+                new ChangeNodeFactory(changeData)::createChangeNodeOrNull);
           }
           return;
         }
@@ -268,6 +277,11 @@ public class TaskTree {
       return taskFactory
           .getTaskConfig(branch, resolveTaskFileName(file), task.isTrusted)
           .getTasks();
+    }
+
+    @Override
+    protected Properties.Task getProperties() {
+      return properties;
     }
 
     protected String resolveTaskFileName(String file) throws ConfigInvalidException {
@@ -293,6 +307,32 @@ public class TaskTree {
         throw new ConfigInvalidException("Cannot resolve user: " + user);
       }
       return BranchNameKey.create(allUsers.get(), RefNames.refsUsers(acct));
+    }
+  }
+
+  public class ChangeNodeFactory {
+    public class ChangeNode extends Node {
+      public ChangeNode(NodeList parent, Task definition) throws ConfigInvalidException {
+        super(parent, definition);
+      }
+
+      public ChangeData getChangeData() {
+        return ChangeNodeFactory.this.changeData;
+      }
+    }
+
+    protected ChangeData changeData;
+
+    public ChangeNodeFactory(ChangeData changeData) {
+      this.changeData = changeData;
+    }
+
+    public ChangeNode createChangeNodeOrNull(NodeList parent, Task definition) {
+      try {
+        return new ChangeNode(parent, definition);
+      } catch (Exception e) {
+        return null;
+      }
     }
   }
 }
