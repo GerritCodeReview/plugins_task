@@ -48,6 +48,6 @@ sh_test(
     size = "medium",
     srcs = ["test/docker/run.sh"],
     args = ["--task-plugin-jar", "$(location :task)"],
-    data = [plugin_name] + glob(["test/**"]),
+    data = [plugin_name] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
     local = True,
 )

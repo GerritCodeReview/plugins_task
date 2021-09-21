@@ -32,30 +32,42 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** Use to expand properties like ${_name} for a Task Definition. */
+/** Use to expand properties like ${_name} in the text of various definitions. */
 public class Properties {
-  public Properties(ChangeData changeData, Task definition, Map<String, String> parentProperties)
-      throws StorageException {
-    Map<String, String> expanded = new HashMap<>(parentProperties);
-    expanded.putAll(getInternalProperties(definition, changeData));
-    Map<String, String> unexpanded = definition.properties;
-    unexpanded.putAll(definition.exported);
-    new RecursiveExpander(expanded).expand(unexpanded);
+  /** Use to expand properties specifically for Tasks. */
+  public static class Task extends Expander {
+    public static final Task EMPTY_PARENT = new Task();
 
-    definition.properties = expanded;
-    for (String property : definition.exported.keySet()) {
-      definition.exported.put(property, expanded.get(property));
+    public Task() {
+      super(Collections.emptyMap());
     }
 
-    new Expander(expanded).expandFieldValues(definition, Collections.emptySet());
+    public Task(ChangeData changeData, TaskConfig.Task definition, Task parentProperties)
+        throws StorageException {
+      super(parentProperties.forDescendants());
+      valueByName.putAll(getInternalProperties(definition, changeData));
+      new RecursiveExpander(valueByName).expand(definition.getAllProperties());
+
+      definition.setExpandedProperties(valueByName);
+
+      expandFieldValues(definition, Collections.emptySet());
+    }
+
+    protected Map<String, String> forDescendants() {
+      return new HashMap<>(valueByName);
+    }
   }
 
-  public Properties(NamesFactory namesFactory, Map<String, String> properties) {
-    new Expander(properties).expandFieldValues(namesFactory, Sets.newHashSet(TaskConfig.KEY_TYPE));
+  /** Use to expand properties specifically for NamesFactories. */
+  public static class NamesFactory extends Expander {
+    public NamesFactory(TaskConfig.NamesFactory namesFactory, Task properties) {
+      super(properties.valueByName);
+      expandFieldValues(namesFactory, Sets.newHashSet(TaskConfig.KEY_TYPE));
+    }
   }
 
-  protected static Map<String, String> getInternalProperties(Task definition, ChangeData changeData)
-      throws StorageException {
+  protected static Map<String, String> getInternalProperties(
+      TaskConfig.Task definition, ChangeData changeData) throws StorageException {
     Map<String, String> properties = new HashMap<>();
 
     properties.put("_name", definition.name);
