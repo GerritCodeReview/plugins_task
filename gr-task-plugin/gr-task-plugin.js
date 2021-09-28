@@ -27,7 +27,7 @@ const Defs = {};
  *  hint: ?string,
  *  name: string,
  *  status: string
- * }}
+ * }} Defs.Task
  */
 Defs.Task;
 
