@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "49cd7f67_a3a9c844",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-09-28T20:09:43Z",
+      "side": 1,
+      "message": "task plugin master branch currently maps to both stable-3.4 and master in Core. Is this change applicable to both or only to master? If only master, then we need to create a stable-3.4 branch for the task plugin.",
+      "range": {
+        "startLine": 16,
+        "startChar": 43,
+        "endLine": 16,
+        "endChar": 65
+      },
+      "revId": "3b73308746afc3725e625c2b35ea12587e01ba88",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
