@@ -46,6 +46,30 @@
       },
       "revId": "3b73308746afc3725e625c2b35ea12587e01ba88",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8ab67b8f_36c18092",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2021-09-29T15:36:18Z",
+      "side": 1,
+      "message": "Ok, since the new package versions also match stable-3.4 [1], that\u0027s fine with me.\n\n[1] https://gerrit.googlesource.com/gerrit/+/refs/heads/stable-3.4/package.json",
+      "parentUuid": "bde70f44_589c264b",
+      "range": {
+        "startLine": 16,
+        "startChar": 43,
+        "endLine": 16,
+        "endChar": 65
+      },
+      "revId": "3b73308746afc3725e625c2b35ea12587e01ba88",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
