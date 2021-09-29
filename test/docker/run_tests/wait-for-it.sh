@@ -2,7 +2,7 @@
 # https://github.com/vishnubob/wait-for-it/blob/master/wait-for-it.sh
 #   Use this script to test if a given TCP host/port are available
 
-cmdname=$(basename $0)
+cmdname=$(basename -- "$0")
 
 echoerr() { if [[ $QUIET -ne 1 ]]; then echo "$@" 1>&2; fi }
 
