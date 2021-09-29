@@ -22,6 +22,30 @@
       },
       "revId": "3b73308746afc3725e625c2b35ea12587e01ba88",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bde70f44_589c264b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1117824
+      },
+      "writtenOn": "2021-09-29T12:29:32Z",
+      "side": 1,
+      "message": "i have checked running following command on gerrit stable-3.4 branch and it \nworks :\n\n\nbazelisk test --java_toolchain\u003d//tools:error_prone_warnings_toolchain --test_output\u003derrors --test_summary\u003ddetailed  plugins/task/lint_test\n\nsince i am not seeing any error i think this change change works for both stable-3.4 and master branch in gerrit.",
+      "parentUuid": "49cd7f67_a3a9c844",
+      "range": {
+        "startLine": 16,
+        "startChar": 43,
+        "endLine": 16,
+        "endChar": 65
+      },
+      "revId": "3b73308746afc3725e625c2b35ea12587e01ba88",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
