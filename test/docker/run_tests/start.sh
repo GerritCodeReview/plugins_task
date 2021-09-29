@@ -3,6 +3,11 @@
 USER_RUN_TESTS_DIR="$USER_HOME"/"$RUN_TESTS_DIR"
 cp -r /task "$USER_HOME"/
 
+if [ "$1" = "retest" ] ; then
+    cd "$USER_RUN_TESTS_DIR"/../../ && ./check_task_statuses.sh "$GERRIT_HOST"
+    exit $?
+fi
+
 ./"$USER_RUN_TESTS_DIR"/wait-for-it.sh "$GERRIT_HOST":29418 -t 60 -- echo "gerrit is up"
 
 echo "Creating a default user account ..."
