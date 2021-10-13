@@ -1002,6 +1002,45 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Properties tasks-factory recursive"]
+  subtasks-factory = Properties tasks-factory recursive
+
+[tasks-factory "Properties tasks-factory recursive"]
+  set-first-property = first-property ${_name}
+  fail-hint = ${first-property}
+  fail = true
+  names-factory = names-factory static list
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties tasks-factory recursive",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "first-property my a task",
+         "name" : "my a task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "first-property my b task",
+         "name" : "my b task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "first-property my c task",
+         "name" : "my c task",
+         "status" : "FAIL"
+      }
+   ]
+}
+
 [root "Root Properties names-factory STATIC"]
   subtasks-factory = tasks-factory Properties names-factory STATIC
 
