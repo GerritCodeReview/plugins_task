@@ -224,7 +224,7 @@ public class TaskTree {
             new Properties.NamesFactory(namesFactory, getProperties());
             switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
               case STATIC:
-                addStaticTypeTasksDefinitions(tasksFactory, namesFactory);
+                addStaticTypeTaskDefinitions(tasksFactory, namesFactory);
                 continue;
               case CHANGE:
                 addChangesTypeTaskDefinitions(tasksFactory, namesFactory);
@@ -236,7 +236,7 @@ public class TaskTree {
       }
     }
 
-    protected void addStaticTypeTasksDefinitions(
+    protected void addStaticTypeTaskDefinitions(
         TasksFactory tasksFactory, NamesFactory namesFactory) {
       for (String name : namesFactory.names) {
         addSubDefinition(task.config.createTask(tasksFactory, name));
