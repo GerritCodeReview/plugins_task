@@ -257,7 +257,12 @@ public class TaskTree {
             addSubDefinition(
                 task.config.createTask(tasksFactory, changeData.getId().toString()),
                 (parent, definition) ->
-                    new ChangeNodeFactory(changeData).new ChangeNode(parent, definition));
+                    new Node(parent, definition) {
+                      @Override
+                      public ChangeData getChangeData() {
+                        return changeData;
+                      }
+                    });
           }
           return;
         }
@@ -306,25 +311,6 @@ public class TaskTree {
         throw new ConfigInvalidException("Cannot resolve user: " + user);
       }
       return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
-    }
-  }
-
-  public class ChangeNodeFactory {
-    public class ChangeNode extends Node {
-      public ChangeNode(NodeList parent, Task definition)
-          throws ConfigInvalidException, OrmException {
-        super(parent, definition);
-      }
-
-      public ChangeData getChangeData() {
-        return ChangeNodeFactory.this.changeData;
-      }
-    }
-
-    protected ChangeData changeData;
-
-    public ChangeNodeFactory(ChangeData changeData) {
-      this.changeData = changeData;
     }
   }
 }
