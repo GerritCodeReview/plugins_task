@@ -65,7 +65,7 @@ public class TaskTree {
   protected final AllUsersNameProvider allUsers;
   protected final CurrentUser user;
   protected final TaskConfigFactory taskFactory;
-  protected final Root root = new Root();
+  protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
 
@@ -98,14 +98,15 @@ public class TaskTree {
     return root.getSubNodes();
   }
 
-  protected abstract class NodeList {
+  protected class NodeList {
     protected NodeList parent = null;
     protected LinkedList<String> path = new LinkedList<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
 
-    protected abstract void addSubDefinitions()
-        throws ConfigInvalidException, IOException, OrmException;
+    protected void addSubDefinitions() throws ConfigInvalidException, IOException, OrmException {
+      addSubDefinitions(taskFactory.getRootConfig().getRootTasks());
+    }
 
     protected void addSubDefinitions(List<Task> defs) {
       for (Task def : defs) {
@@ -145,13 +146,6 @@ public class TaskTree {
 
     protected Properties.Task getProperties() {
       return Properties.Task.EMPTY_PARENT;
-    }
-  }
-
-  protected class Root extends NodeList {
-    @Override
-    protected void addSubDefinitions() throws ConfigInvalidException, IOException {
-      addSubDefinitions(getRootDefinitions());
     }
   }
 
