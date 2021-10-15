@@ -97,7 +97,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
           new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
         }
       }
-    } catch (ConfigInvalidException | IOException e) {
+    } catch (ConfigInvalidException | IOException | OrmException e) {
       a.roots.add(invalid());
     }
 
@@ -166,7 +166,11 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
             }
           }
         }
-      } catch (OrmException | QueryParseException | RuntimeException e) {
+      } catch (ConfigInvalidException
+          | IOException
+          | OrmException
+          | QueryParseException
+          | RuntimeException e) {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
@@ -241,7 +245,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       }
     }
 
-    protected List<TaskAttribute> getSubTasks() throws OrmException {
+    protected List<TaskAttribute> getSubTasks()
+        throws ConfigInvalidException, IOException, OrmException {
       List<TaskAttribute> subTasks = new ArrayList<>();
       for (Node subNode : node.getSubNodes()) {
         if (subNode == null) {

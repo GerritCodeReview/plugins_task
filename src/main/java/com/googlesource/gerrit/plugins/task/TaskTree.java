@@ -92,16 +92,20 @@ public class TaskTree {
     taskFactory.masquerade(psa);
   }
 
-  public List<Node> getRootNodes(ChangeData changeData) throws ConfigInvalidException, IOException {
+  public List<Node> getRootNodes(ChangeData changeData)
+      throws ConfigInvalidException, IOException, OrmException {
     this.changeData = changeData;
-    return root.getRootNodes();
+    return root.getSubNodes();
   }
 
-  protected class NodeList {
+  protected abstract class NodeList {
     protected NodeList parent = null;
     protected LinkedList<String> path = new LinkedList<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
+
+    protected abstract void addSubDefinitions()
+        throws ConfigInvalidException, IOException, OrmException;
 
     protected void addSubDefinitions(List<Task> defs) {
       for (Task def : defs) {
@@ -127,6 +131,14 @@ public class TaskTree {
       nodes.add(node);
     }
 
+    protected List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
+      if (nodes == null) {
+        nodes = new ArrayList<>();
+        addSubDefinitions();
+      }
+      return nodes;
+    }
+
     public ChangeData getChangeData() {
       return parent == null ? TaskTree.this.changeData : parent.getChangeData();
     }
@@ -137,12 +149,9 @@ public class TaskTree {
   }
 
   protected class Root extends NodeList {
-    public List<Node> getRootNodes() throws ConfigInvalidException, IOException {
-      if (nodes == null) {
-        nodes = new ArrayList<>();
-        addSubDefinitions(getRootDefinitions());
-      }
-      return nodes;
+    @Override
+    protected void addSubDefinitions() throws ConfigInvalidException, IOException {
+      addSubDefinitions(getRootDefinitions());
     }
   }
 
@@ -159,14 +168,7 @@ public class TaskTree {
       properties = new Properties.Task(getChangeData(), definition, parent.getProperties());
     }
 
-    public List<Node> getSubNodes() throws OrmException {
-      if (nodes == null) {
-        nodes = new ArrayList<>();
-        addSubDefinitions();
-      }
-      return nodes;
-    }
-
+    @Override
     protected void addSubDefinitions() throws OrmException {
       addSubTaskDefinitions();
       addSubTasksFactoryDefinitions();
