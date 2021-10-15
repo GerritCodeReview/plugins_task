@@ -144,10 +144,6 @@ public class TaskTree {
       }
       return nodes;
     }
-
-    protected List<Task> getRootDefinitions() throws ConfigInvalidException, IOException {
-      return taskFactory.getRootConfig().getRootTasks();
-    }
   }
 
   public class Node extends NodeList {
@@ -289,28 +285,32 @@ public class TaskTree {
     protected Properties.Task getProperties() {
       return properties;
     }
+  }
 
-    protected String resolveTaskFileName(String file) throws ConfigInvalidException {
-      if (file == null) {
-        throw new ConfigInvalidException("External file not defined");
-      }
-      Path p = Paths.get(TASK_DIR, file);
-      if (!p.startsWith(TASK_DIR)) {
-        throw new ConfigInvalidException("task file not under " + TASK_DIR + " directory: " + file);
-      }
-      return p.toString();
-    }
+  protected List<Task> getRootDefinitions() throws ConfigInvalidException, IOException {
+    return taskFactory.getRootConfig().getRootTasks();
+  }
 
-    protected Branch.NameKey resolveUserBranch(String user)
-        throws ConfigInvalidException, IOException, OrmException {
-      if (user == null) {
-        throw new ConfigInvalidException("External user not defined");
-      }
-      Account acct = accountResolver.find(user);
-      if (acct == null) {
-        throw new ConfigInvalidException("Cannot resolve user: " + user);
-      }
-      return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
+  protected String resolveTaskFileName(String file) throws ConfigInvalidException {
+    if (file == null) {
+      throw new ConfigInvalidException("External file not defined");
     }
+    Path p = Paths.get(TASK_DIR, file);
+    if (!p.startsWith(TASK_DIR)) {
+      throw new ConfigInvalidException("task file not under " + TASK_DIR + " directory: " + file);
+    }
+    return p.toString();
+  }
+
+  protected Branch.NameKey resolveUserBranch(String user)
+      throws ConfigInvalidException, IOException, OrmException {
+    if (user == null) {
+      throw new ConfigInvalidException("External user not defined");
+    }
+    Account acct = accountResolver.find(user);
+    if (acct == null) {
+      throw new ConfigInvalidException("Cannot resolve user: " + user);
+    }
+    return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
   }
 }
