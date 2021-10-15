@@ -43,7 +43,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
-import java.util.function.BiFunction;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /**
@@ -54,6 +53,12 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
  */
 public class TaskTree {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
+
+  @FunctionalInterface
+  public interface NodeFactory {
+    Node create(NodeList parent, Task definition) throws Exception;
+  }
+
   protected static final String TASK_DIR = "task";
 
   protected final AccountResolver accountResolver;
@@ -92,14 +97,6 @@ public class TaskTree {
     return root.getRootNodes();
   }
 
-  public Node createNodeOrNull(NodeList parent, Task definition) {
-    try {
-      return new Node(parent, definition);
-    } catch (Exception e) {
-      return null;
-    }
-  }
-
   protected class NodeList {
     protected NodeList parent = null;
     protected LinkedList<String> path = new LinkedList<>();
@@ -113,15 +110,19 @@ public class TaskTree {
     }
 
     protected void addSubDefinition(Task def) {
-      addSubDefinition(def, (d, c) -> createNodeOrNull(d, c));
+      addSubDefinition(def, (parent, definition) -> new Node(parent, definition));
     }
 
-    protected void addSubDefinition(Task def, BiFunction<NodeList, Task, Node> nodeConstructor) {
+    protected void addSubDefinition(Task def, NodeFactory nodeFactory) {
       Node node = null;
       if (def != null && !path.contains(def.name) && names.add(def.name)) {
         // path check above detects looping definitions
         // names check above detects duplicate subtasks
-        node = nodeConstructor.apply(this, def);
+        try {
+          node = nodeFactory.create(this, def);
+        } catch (Exception e) {
+          // null node indicates invalid
+        }
       }
       nodes.add(node);
     }
@@ -255,7 +256,8 @@ public class TaskTree {
           for (ChangeData changeData : changeDataList) {
             addSubDefinition(
                 task.config.createTask(tasksFactory, changeData.getId().toString()),
-                new ChangeNodeFactory(changeData)::createChangeNodeOrNull);
+                (parent, definition) ->
+                    new ChangeNodeFactory(changeData).new ChangeNode(parent, definition));
           }
           return;
         }
@@ -323,14 +325,6 @@ public class TaskTree {
 
     public ChangeNodeFactory(ChangeData changeData) {
       this.changeData = changeData;
-    }
-
-    public ChangeNode createChangeNodeOrNull(NodeList parent, Task definition) {
-      try {
-        return new ChangeNode(parent, definition);
-      } catch (Exception e) {
-        return null;
-      }
     }
   }
 }
