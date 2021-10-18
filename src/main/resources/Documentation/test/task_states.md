@@ -1085,19 +1085,19 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
-[root "Root Properties tasks-factory recursive"]
-  subtasks-factory = Properties tasks-factory recursive
+[root "Root tasks-factory _name Property Reference"]
+  subtasks-factory = Properties tasks-factory _name Property Reference
 
-[tasks-factory "Properties tasks-factory recursive"]
-  set-first-property = first-property ${_name}
-  fail-hint = ${first-property}
+[tasks-factory "Properties tasks-factory _name Property Reference"]
+  set-name-reference = first-property ${_name}
+  fail-hint = ${name-reference}
   fail = true
   names-factory = names-factory static list
 
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root Properties tasks-factory recursive",
+   "name" : "Root tasks-factory _name Property Reference",
    "status" : "WAITING",
    "subTasks" : [
       {
@@ -1213,57 +1213,6 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "_change1_number",
          "status" : "FAIL"
-      }
-   ]
-}
-
-[root "Root Properties Expansion"]
-  applicable = status:open
-  subtask = Subtask Property Expansion fail-hint
-
-[task "Subtask Property Expansion fail-hint"]
-  subtasks-factory = tasks-factory Property Expansion fail-hint
-
-[tasks-factory "tasks-factory Property Expansion fail-hint"]
-  set-first-property = first-property ${_name}
-  fail-hint = ${first-property}
-  fail = true
-  names-factory = names-factory static list
-
-{
-   "applicable" : true,
-   "hasPass" : false,
-   "name" : "Root Properties Expansion",
-   "status" : "WAITING",
-   "subTasks" : [
-      {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "Subtask Property Expansion fail-hint",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "first-property my a task",
-               "name" : "my a task",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "first-property my b task",
-               "name" : "my b task",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "first-property my c task",
-               "name" : "my c task",
-               "status" : "FAIL"
-            }
-         ]
       }
    ]
 }
