@@ -843,6 +843,46 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Inherited Property References"]
+  set-root-property = root-value
+  subtask = Subtask Parent Inherited Property References
+
+[task "Subtask Parent Inherited Property References"]
+  set-parent-property = parent-value
+  set-parent-inherited-root-reference = root-property(${root-property})
+  subtask = Subtask Inherited Property References
+
+[task "Subtask Inherited Property References"]
+  set-inherited-root-reference = root-[${root-property}]
+  set-inherited-parent-reference = parent-[${parent-property}]
+  set-inherited-root-deep-reference = parent-inherited-root-reference-[${parent-inherited-root-reference}]
+  fail = True
+  fail-hint = inherited-root-reference(${inherited-root-reference}) inherited-parent-reference(${inherited-parent-reference}) inherited-root-deep-reference(${inherited-root-deep-reference})
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Inherited Property References",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Parent Inherited Property References",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "inherited-root-reference(root-[root-value]) inherited-parent-reference(parent-[parent-value]) inherited-root-deep-reference(parent-inherited-root-reference-[root-property(root-value)])",
+               "name" : "Subtask Inherited Property References",
+               "status" : "FAIL"
+            }
+         ]
+      }
+   ]
+}
+
 [root "Root Properties Exports"]
   export-root-exported = ${_name}
   subtask = Subtask Properties Exports
