@@ -765,44 +765,56 @@ The config below is expected to be in the `task.config` file in project
    "status" : "PASS"
 }
 
-[root "Root Properties"]
-  set-root-property = root-value
-  subtask = Subtask Properties
-
-[task "Subtask Properties"]
-  subtask = Subtask Properties Hints
-
-[task "Subtask Properties Hints"]
+[root "Root Property References"]
   set-first-property = first-value
-  set-second-property = ${first-property} second-extra ${third-property}
-  set-third-property = third-value
+  set-backward-reference = first-[${first-property}]
+  set-forward-reference = last-[${last-property}]
+  set-last-property = last-value
   fail = True
-  fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
+  fail-hint = backward-reference(${backward-reference}) forward-reference(${forward-reference})
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "hint" : "backward-reference(first-[first-value]) forward-reference(last-[last-value])",
+   "name" : "Root Property References",
+   "status" : "FAIL"
+}
+
+[root "Root Inherited Properties"]
+  set-root-property = root-value
+  subtask = Subtask Inherited Properties
+
+[task "Subtask Inherited Properties"]
+  subtask = Subtask Inherited Properties Hints
+
+[task "Subtask Inherited Properties Hints"]
+  fail = True
+  fail-hint = root-property(${root-property})
 
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root Properties",
+   "name" : "Root Inherited Properties",
    "status" : "WAITING",
    "subTasks" : [
       {
          "applicable" : true,
          "hasPass" : false,
-         "name" : "Subtask Properties",
+         "name" : "Subtask Inherited Properties",
          "status" : "WAITING",
          "subTasks" : [
             {
                "applicable" : true,
                "hasPass" : true,
-               "hint" : "root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
-               "name" : "Subtask Properties Hints",
+               "hint" : "root-property(root-value)",
+               "name" : "Subtask Inherited Properties Hints",
                "status" : "FAIL"
             }
          ]
       }
    ]
 }
-
 
 [root "Root Properties Reset By Subtask"]
   set-root-to-reset-by-subtask = reset-my-root-value
@@ -1393,9 +1405,16 @@ The config below is expected to be in the `task.config` file in project
   subtask = Subtask Preload Properties
 
 [task "Subtask Preload Properties"]
-  preload-task = Subtask Properties Hints
+  preload-task = Subtask Preload Properties Hints
   set-fourth-property = fourth-value
   fail-hint = second-property(${second-property}) fourth-property(${fourth-property})
+
+[task "Subtask Preload Properties Hints"]
+  set-first-property = first-value
+  set-second-property = ${first-property} second-extra ${third-property}
+  set-third-property = third-value
+  fail = True
+  fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
 
 {
    "applicable" : true,
