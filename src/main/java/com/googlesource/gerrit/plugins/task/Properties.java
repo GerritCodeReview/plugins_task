@@ -132,6 +132,7 @@ public class Properties {
       if (value != null) {
         expander.valueByName.put(name, expander.expandText(value));
       }
+      expanding.remove(name);
     }
   }
 

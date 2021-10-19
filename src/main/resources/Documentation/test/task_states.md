@@ -796,6 +796,20 @@ The config below is expected to be in the `task.config` file in project
    "status" : "FAIL"
 }
 
+[root "Root Properties Referenced Twice"]
+  set-first-property = first-value
+  set-referenced-twice = first-[${first-property}] first-[${first-property}]
+  fail = True
+  fail-hint = first-[${first-property}] referenced-twice(${referenced-twice}) referenced-twice(${referenced-twice})
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "hint" : "first-[first-value] referenced-twice(first-[first-value] first-[first-value]) referenced-twice(first-[first-value] first-[first-value])",
+   "name" : "Root Properties Referenced Twice",
+   "status" : "FAIL"
+}
+
 [root "Root Inherited Properties"]
   set-root-property = root-value
   subtask = Subtask Parent Inherited Properties
