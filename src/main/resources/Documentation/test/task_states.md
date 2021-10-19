@@ -783,14 +783,16 @@ The config below is expected to be in the `task.config` file in project
 
 [root "Root Inherited Properties"]
   set-root-property = root-value
+  subtask = Subtask Parent Inherited Properties
+
+[task "Subtask Parent Inherited Properties"]
+  set-parent-property = parent-value
   subtask = Subtask Inherited Properties
 
 [task "Subtask Inherited Properties"]
-  subtask = Subtask Inherited Properties Hints
-
-[task "Subtask Inherited Properties Hints"]
+  set-my-property = my-value
   fail = True
-  fail-hint = root-property(${root-property})
+  fail-hint = root-property(${root-property}) parent-property(${parent-property}) my-property(${my-property})
 
 {
    "applicable" : true,
@@ -801,14 +803,14 @@ The config below is expected to be in the `task.config` file in project
       {
          "applicable" : true,
          "hasPass" : false,
-         "name" : "Subtask Inherited Properties",
+         "name" : "Subtask Parent Inherited Properties",
          "status" : "WAITING",
          "subTasks" : [
             {
                "applicable" : true,
                "hasPass" : true,
-               "hint" : "root-property(root-value)",
-               "name" : "Subtask Inherited Properties Hints",
+               "hint" : "root-property(root-value) parent-property(parent-value) my-property(my-value)",
+               "name" : "Subtask Inherited Properties",
                "status" : "FAIL"
             }
          ]
