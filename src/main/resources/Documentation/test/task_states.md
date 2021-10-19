@@ -781,6 +781,21 @@ The config below is expected to be in the `task.config` file in project
    "status" : "FAIL"
 }
 
+[root "Root Deep Property References"]
+  set-first-property = first-value
+  set-direct-reference = first-[${first-property}]
+  set-deep-reference = deep-{${direct-reference}}
+  fail = True
+  fail-hint = deep-reference(${deep-reference})
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "hint" : "deep-reference(deep-{first-[first-value]})",
+   "name" : "Root Deep Property References",
+   "status" : "FAIL"
+}
+
 [root "Root Inherited Properties"]
   set-root-property = root-value
   subtask = Subtask Parent Inherited Properties
