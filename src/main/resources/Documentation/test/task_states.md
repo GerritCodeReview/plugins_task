@@ -847,6 +847,42 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Inherited Distant Properties"]
+  set-root-property = root-value
+  set-root-change-property = ${_change_number}
+  subtask = Subtask Parent Inherited Distant Properties
+
+[task "Subtask Parent Inherited Distant Properties"]
+  subtask = Subtask Inherited Distant Properties
+
+[task "Subtask Inherited Distant Properties"]
+  fail = True
+  fail-hint = root-property(${root-property}) root-change-property(${root-change-property})
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Inherited Distant Properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Parent Inherited Distant Properties",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "root-property(root-value) root-change-property(_change_number)",
+               "name" : "Subtask Inherited Distant Properties",
+               "status" : "FAIL"
+            }
+         ]
+      }
+   ]
+}
+
 [root "Root Properties Reset By Subtask"]
   set-root-to-reset-by-subtask = reset-my-root-value
   subtask = Subtask Properties Reset
