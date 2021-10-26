@@ -252,7 +252,11 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         if (subNode == null) {
           subTasks.add(invalid());
         } else {
-          new AttributeFactory(subNode, matchCache).create().ifPresent(t -> subTasks.add(t));
+          MatchCache subMatchCache = matchCache;
+          if (!matchCache.changeData.getId().equals(subNode.getChangeData().getId())) {
+            subMatchCache = new MatchCache(predicateCache, subNode.getChangeData());
+          }
+          new AttributeFactory(subNode, subMatchCache).create().ifPresent(t -> subTasks.add(t));
         }
       }
       if (subTasks.isEmpty()) {

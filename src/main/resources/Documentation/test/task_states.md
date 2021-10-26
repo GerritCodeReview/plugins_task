@@ -1056,7 +1056,7 @@ The config below is expected to be in the `task.config` file in project
   set-welcome-message = Welcome to the pleasuredome
   names-factory = names-factory a change
   fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
-  fail = True
+  fail = change:_change1_number
 
 [names-factory "names-factory a change"]
   type = change
@@ -1078,9 +1078,8 @@ The config below is expected to be in the `task.config` file in project
       {
          "applicable" : true,
          "hasPass" : true,
-         "hint" : "Welcome to the pleasuredome Name(_change2_number) Change Number(_change2_number) Change Id(_change2_id) Change Project(_change2_project) Change Branch(_change2_branch) Change Status(_change2_status) Change Topic(_change2_topic)",
          "name" : "_change2_number",
-         "status" : "FAIL"
+         "status" : "PASS"
       }
    ]
 }
