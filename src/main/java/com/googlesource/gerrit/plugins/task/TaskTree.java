@@ -120,7 +120,7 @@ public class TaskTree {
 
     protected void addSubDefinition(Task def, NodeFactory nodeFactory) {
       Node node = null;
-      if (def != null && !path.contains(def.name) && names.add(def.name)) {
+      if (def != null && !path.contains(def.key()) && names.add(def.name)) {
         // path check above detects looping definitions
         // names check above detects duplicate subtasks
         try {
@@ -157,7 +157,7 @@ public class TaskTree {
       this.parent = parent;
       this.task = definition;
       this.path.addAll(parent.path);
-      this.path.add(definition.name);
+      this.path.add(definition.key());
       Preloader.preload(definition);
       properties = new Properties.Task(getChangeData(), definition, parent.getProperties());
     }
@@ -232,7 +232,7 @@ public class TaskTree {
     protected void addStaticTypeTaskDefinitions(
         TasksFactory tasksFactory, NamesFactory namesFactory) {
       for (String name : namesFactory.names) {
-        addSubDefinition(task.config.createTask(tasksFactory, name));
+        addSubDefinition(task.config.new Task(tasksFactory, name));
       }
     }
 
@@ -247,7 +247,7 @@ public class TaskTree {
                   .entities();
           for (ChangeData changeData : changeDataList) {
             addSubDefinition(
-                task.config.createTask(tasksFactory, changeData.getId().toString()),
+                task.config.new Task(tasksFactory, changeData.getId().toString()),
                 (parent, definition) ->
                     new Node(parent, definition) {
                       @Override

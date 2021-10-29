@@ -46,9 +46,15 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   protected class Section extends Container {
     public TaskConfig config;
+    public SubSection subSection;
 
-    public Section() {
+    public Section(SubSection s) {
       this.config = TaskConfig.this;
+      this.subSection = s;
+    }
+
+    public String key() {
+      return config.key() + SEP + subSection.key();
     }
   }
 
@@ -71,6 +77,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public boolean isTrusted;
 
     public TaskBase(SubSection s, boolean isVisible, boolean isTrusted) {
+      super(s);
       this.isVisible = isVisible;
       this.isTrusted = isTrusted;
       applicable = getString(s, KEY_APPLICABLE, null);
@@ -89,6 +96,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
 
     protected TaskBase(TaskBase base) {
+      super(base.subSection);
       copyDeclaredFields(TaskBase.class, base);
     }
 
@@ -134,8 +142,14 @@ public class TaskConfig extends AbstractVersionedMetaData {
       name = s.subSection;
     }
 
-    protected Task(TaskBase base) {
-      super(base);
+    public Task(Task task) {
+      super(task);
+      copyDeclaredFields(Task.class, task);
+    }
+
+    public Task(TasksFactory tasks, String name) {
+      super(tasks);
+      this.name = name;
     }
 
     protected Map<String, String> getAllProperties() {
@@ -150,6 +164,11 @@ public class TaskConfig extends AbstractVersionedMetaData {
       for (String property : exported.keySet()) {
         exported.put(property, properties.get(property));
       }
+    }
+
+    public String key() {
+      // name is needed to differentiate Tasks from the same TasksFactory
+      return super.key() + SEP + name;
     }
   }
 
@@ -168,6 +187,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String type;
 
     public NamesFactory(SubSection s) {
+      super(s);
       changes = getString(s, KEY_CHANGES, null);
       names = getStringList(s, KEY_NAME);
       type = getString(s, KEY_TYPE, null);
@@ -180,11 +200,14 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String user;
 
     public External(SubSection s) {
+      super(s);
       name = s.subSection;
       file = getString(s, KEY_FILE, null);
       user = getString(s, KEY_USER, null);
     }
   }
+
+  public static final String SEP = "\0";
 
   protected static final Pattern OPTIONAL_TASK_PATTERN =
       Pattern.compile("([^ |]*( *[^ |])*) *\\| *");
@@ -216,12 +239,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   public boolean isVisible;
   public boolean isTrusted;
-
-  public Task createTask(TasksFactory tasks, String name) {
-    Task task = new Task(tasks);
-    task.name = name;
-    return task;
-  }
 
   public TaskConfig(Branch.NameKey branch, String fileName, boolean isVisible, boolean isTrusted) {
     super(branch, fileName);
@@ -345,6 +362,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return Arrays.asList(cfg.getStringList(s.section, s.subSection, key));
   }
 
+  public String key() {
+    return branch.getParentKey() + SEP + branch.get() + SEP + fileName;
+  }
+
   protected static class SubSection {
     public final String section;
     public final String subSection;
@@ -352,6 +373,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
     protected SubSection(String section, String subSection) {
       this.section = section;
       this.subSection = subSection;
+    }
+
+    public String key() {
+      return section + SEP + subSection;
     }
   }
 }

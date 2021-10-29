@@ -765,6 +765,49 @@ The config below is expected to be in the `task.config` file in project
    "status" : "PASS"
 }
 
+[root "Root Same Name - Different Tasks-Factory"]
+  subtasks-factory = parent tasks-factory Same Name - Different Tasks-Factory
+
+[tasks-factory "parent tasks-factory Same Name - Different Tasks-Factory"]
+  names-factory = parent names-factory Same Name - Different Tasks-Factory
+  fail = True
+  subtasks-factory = child tasks-factory Same Name - Different Tasks-Factory
+
+[names-factory "parent names-factory Same Name - Different Tasks-Factory"]
+  type = static
+  name = Same Name
+
+[tasks-factory "child tasks-factory Same Name - Different Tasks-Factory"]
+  names-factory = child names-factory Same Name - Different Tasks-Factory
+  fail = False
+
+[names-factory "child names-factory Same Name - Different Tasks-Factory"]
+  type = static
+  name = Same Name
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Same Name - Different Tasks-Factory",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Same Name",
+         "status" : "FAIL",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Same Name",
+               "status" : "PASS"
+            }
+         ]
+      }
+   ]
+}
+
 [root "Root Property References"]
   set-first-property = first-value
   set-backward-reference = first-[${first-property}]
