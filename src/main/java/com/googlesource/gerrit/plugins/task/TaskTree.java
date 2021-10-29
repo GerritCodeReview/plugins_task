@@ -119,17 +119,19 @@ public class TaskTree {
     }
 
     protected void addSubDefinition(Task def, NodeFactory nodeFactory) {
-      Node node = null;
-      if (def != null && !path.contains(def.key()) && names.add(def.name)) {
-        // path check above detects looping definitions
-        // names check above detects duplicate subtasks
+      if (def != null) {
         try {
-          node = nodeFactory.create(this, def);
+          Node node = nodeFactory.create(this, def);
+          if (!path.contains(node.key()) && names.add(def.name)) {
+            // path check above detects looping definitions
+            // names check above detects duplicate subtasks
+            nodes.add(node);
+            return;
+          }
         } catch (Exception e) {
-          // null node indicates invalid
         }
       }
-      nodes.add(node);
+      nodes.add(null); // null node indicates invalid
     }
 
     protected List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
@@ -157,9 +159,13 @@ public class TaskTree {
       this.parent = parent;
       this.task = definition;
       this.path.addAll(parent.path);
-      this.path.add(definition.key());
+      this.path.add(key());
       Preloader.preload(definition);
       properties = new Properties.Task(getChangeData(), definition, parent.getProperties());
+    }
+
+    public String key() {
+      return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + task.key();
     }
 
     @Override

@@ -808,6 +808,72 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Same Name - Different Change"]
+  subtasks-factory = init tasks-factory Same Name - Different Change
+
+[tasks-factory "init tasks-factory Same Name - Different Change"]
+  names-factory = init names-factory Same Name - Different Change
+  subtask = Same Name - Different Change
+
+[names-factory "init names-factory Same Name - Different Change"]
+  type = change
+  changes = change:_change2_number
+
+[task "Same Name - Different Change"]
+  subtasks-factory = tasks-factory Same Name - Different Change
+  pass = False
+  ready-hint = continues on to change _change1_number
+  fail-hint = stops here since we are change _change1_number
+  fail = change:_change1_number
+
+[tasks-factory "tasks-factory Same Name - Different Change"]
+  names-factory = names-factory Same Name - Different Change
+  subtask = Same Name - Different Change
+
+[names-factory "names-factory Same Name - Different Change"]
+  type = change
+  changes = change:_change1_number NOT change:${_change_number}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Same Name - Different Change",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "_change2_number",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Same Name - Different Change",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "_change1_number",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "stops here since we are change _change1_number",
+                           "name" : "Same Name - Different Change",
+                           "status" : "FAIL"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
 [root "Root Property References"]
   set-first-property = first-value
   set-backward-reference = first-[${first-property}]
@@ -1780,8 +1846,40 @@ The config below is expected to be in the `task.config` file in project
                "status" : "FAIL",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "WAITING",
+                                 "subTasks" : [
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    },
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
                   }
                ]
             },
@@ -1792,8 +1890,40 @@ The config below is expected to be in the `task.config` file in project
                "status" : "FAIL",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "WAITING",
+                                 "subTasks" : [
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    },
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }
@@ -2067,8 +2197,40 @@ The config below is expected to be in the `task.config` file in project
                "status" : "FAIL",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "WAITING",
+                                 "subTasks" : [
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    },
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
                   }
                ]
             },
@@ -2079,8 +2241,40 @@ The config below is expected to be in the `task.config` file in project
                "status" : "FAIL",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "WAITING",
+                                 "subTasks" : [
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    },
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }

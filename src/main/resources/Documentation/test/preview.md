@@ -240,8 +240,40 @@
                "status" : "FAIL",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "WAITING",
+                                 "subTasks" : [
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    },
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
                   }
                ]
             },
@@ -252,8 +284,40 @@
                "status" : "FAIL",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "WAITING",
+                                 "subTasks" : [
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    },
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }
@@ -580,8 +644,40 @@
                "status" : "FAIL",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        },
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "WAITING",
+                                 "subTasks" : [
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    },
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
                   }
                ]
             },
@@ -592,8 +688,40 @@
                "status" : "FAIL",
                "subTasks" : [
                   {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "WAITING",
+                                 "subTasks" : [
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    },
+                                    {
+                                       "name" : "UNKNOWN",
+                                       "status" : "INVALID"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "name" : "UNKNOWN",
+                           "status" : "INVALID"
+                        }
+                     ]
                   }
                ]
             }
