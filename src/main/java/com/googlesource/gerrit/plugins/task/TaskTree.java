@@ -215,8 +215,8 @@ public class TaskTree {
     }
 
     protected void addSubTasksFactoryDefinitions() throws OrmException {
-      for (String taskFactoryName : task.subTasksFactories) {
-        TasksFactory tasksFactory = task.config.getTasksFactory(taskFactoryName);
+      for (String tasksFactoryName : task.subTasksFactories) {
+        TasksFactory tasksFactory = task.config.getTasksFactory(tasksFactoryName);
         if (tasksFactory != null) {
           NamesFactory namesFactory = task.config.getNamesFactory(tasksFactory.namesFactory);
           if (namesFactory != null && namesFactory.type != null) {
@@ -226,7 +226,7 @@ public class TaskTree {
                 addStaticTypeTaskDefinitions(tasksFactory, namesFactory);
                 continue;
               case CHANGE:
-                addChangesTypeTaskDefinitions(tasksFactory, namesFactory);
+                addChangeTypeTaskDefinitions(tasksFactory, namesFactory);
                 continue;
             }
           }
@@ -242,7 +242,7 @@ public class TaskTree {
       }
     }
 
-    protected void addChangesTypeTaskDefinitions(
+    protected void addChangeTypeTaskDefinitions(
         TasksFactory tasksFactory, NamesFactory namesFactory) {
       try {
         if (namesFactory.changes != null) {

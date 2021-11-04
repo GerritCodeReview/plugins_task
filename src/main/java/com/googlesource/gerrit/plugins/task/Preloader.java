@@ -89,28 +89,30 @@ public class Preloader {
   }
 
   protected static <T> List<T> preloadListFrom(List<T> list, List<T> preList) {
-    List<T> extended = list;
-    if (!preList.isEmpty()) {
-      extended = preList;
-      if (!list.isEmpty()) {
-        extended = new ArrayList<>(list.size() + preList.size());
-        extended.addAll(preList);
-        extended.addAll(list);
-      }
+    if (preList.isEmpty()) {
+      return list;
     }
+    if (list.isEmpty()) {
+      return preList;
+    }
+
+    List<T> extended = new ArrayList<>(list.size() + preList.size());
+    extended.addAll(preList);
+    extended.addAll(list);
     return extended;
   }
 
   protected static <K, V> Map<K, V> preloadMapFrom(Map<K, V> map, Map<K, V> preMap) {
-    Map<K, V> extended = map;
-    if (!preMap.isEmpty()) {
-      extended = preMap;
-      if (!map.isEmpty()) {
-        extended = new HashMap<>(map.size() + preMap.size());
-        extended.putAll(preMap);
-        extended.putAll(map);
-      }
+    if (preMap.isEmpty()) {
+      return map;
     }
+    if (map.isEmpty()) {
+      return preMap;
+    }
+
+    Map<K, V> extended = new HashMap<>(map.size() + preMap.size());
+    extended.putAll(preMap);
+    extended.putAll(map);
     return extended;
   }
 }
