@@ -19,6 +19,7 @@ import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -286,7 +287,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
       String name = e.getKey();
       valueByName.put(name.substring(prefix.length()), e.getValue());
     }
-    return valueByName;
+    return Collections.unmodifiableMap(valueByName);
   }
 
   protected Map<String, String> getStringByName(SubSection s, Iterable<String> names) {
@@ -321,7 +322,8 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   protected List<String> getStringList(SubSection s, String key) {
-    return Arrays.asList(cfg.getStringList(s.section, s.subSection, key));
+    return Collections.unmodifiableList(
+        Arrays.asList(cfg.getStringList(s.section, s.subSection, key)));
   }
 
   public String key() {
