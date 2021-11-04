@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -235,33 +236,53 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return externals;
   }
 
-  /* returs null only if optional and not found */
-  public Task getTaskOptional(String name) throws ConfigInvalidException {
+  /**
+   * Get a Task for this expression.
+   *
+   * @param expression A task expression represents a config string pointing to an expression which
+   *     includes zero or more task names separated by a '|', and potentially termintated by a '|'.
+   *     If the expression is not terminated by a '|' it indicates that task resolution of at least
+   *     one task is required. Task selection priority is from left to right. This can be expressed
+   *     as: <code>EXPR = [ TASK_NAME '|' ] TASK_NAME [ '|' ]</code>
+   *     <p>Example expressions to prioritized names and requirements:
+   *     <ul>
+   *       <li><code> "simple"        -> ("simple")         required</code>
+   *       <li><code> "world | peace" -> ("world", "peace") required</code>
+   *       <li><code> "shadenfreud |" -> ("shadenfreud")    optional</code>
+   *       <li><code> "foo | bar |"   -> ("foo", "bar")     optional</code>
+   *     </ul>
+   *
+   * @return Optional<Task> which is empty if the expression is optional and no tasks are resolved
+   * @throws ConfigInvalidException if the expression requires a task and no tasks are resolved
+   */
+  public Optional<Task> getOptionalTaskForExpression(String expression)
+      throws ConfigInvalidException {
     int end = 0;
-    Matcher m = OPTIONAL_TASK_PATTERN.matcher(name);
+    Matcher m = OPTIONAL_TASK_PATTERN.matcher(expression);
     while (m.find()) {
       end = m.end();
-      Task task = getTaskOrNull(m.group(1));
-      if (task != null) {
+      Optional<Task> task = getOptionalTask(m.group(1));
+      if (task.isPresent()) {
         return task;
       }
     }
 
-    String last = name.substring(end);
-    if (!"".equals(last)) { // Last entry was not optional
-      Task task = getTaskOrNull(last);
-      if (task != null) {
+    String last = expression.substring(end);
+    if (!"".equals(last)) { // expression was not optional
+      Optional<Task> task = getOptionalTask(last);
+      if (task.isPresent()) {
         return task;
       }
       throw new ConfigInvalidException("task not defined");
     }
-    return null;
+    return Optional.empty();
   }
 
-  /* returns null if not found */
-  protected Task getTaskOrNull(String name) {
+  protected Optional<Task> getOptionalTask(String name) {
     SubSection subSection = new SubSection(SECTION_TASK, name);
-    return getNames(subSection).isEmpty() ? null : new Task(subSection, isVisible, isTrusted);
+    return getNames(subSection).isEmpty()
+        ? Optional.empty()
+        : Optional.of(new Task(subSection, isVisible, isTrusted));
   }
 
   public TasksFactory getTasksFactory(String name) {

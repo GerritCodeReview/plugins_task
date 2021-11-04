@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
@@ -177,11 +178,11 @@ public class TaskTree {
     }
 
     protected void addSubTaskDefinitions() {
-      for (String name : task.subTasks) {
+      for (String expression : task.subTasks) {
         try {
-          Task def = task.config.getTaskOptional(name);
-          if (def != null) {
-            addSubDefinition(def);
+          Optional<Task> def = task.config.getOptionalTaskForExpression(expression);
+          if (def.isPresent()) {
+            addSubDefinition(def.get());
           }
         } catch (ConfigInvalidException e) {
           addSubDefinition(null);
