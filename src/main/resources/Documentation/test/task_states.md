@@ -2492,6 +2492,7 @@ The config below is expected to be in the `task.config` file in project
 [task "Looping Properties"]
   set-A = ${B}
   set-B = ${A}
+  fail-hint = ${A}
   fail = True
 
 [task "task (tasks-factory missing)"]
