@@ -1457,6 +1457,50 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Properties names-factory Reference Inherited"]
+  subtask = task Properties names-factory Reference Inherited
+  set-predicate = change:${_change_number} project:${_change_project} branch:${_change_branch}
+
+[task "task Properties names-factory Reference Inherited"]
+  subtasks-factory = tasks-factory Properties names-factory Reference Inherited
+
+[tasks-factory "tasks-factory Properties names-factory Reference Inherited"]
+  names-factory = Properties names-factory Reference Inherited
+  fail = True
+
+[names-factory "Properties names-factory Reference Inherited"]
+  type = change
+  changes = change:_change1_number OR ${predicate}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties names-factory Reference Inherited",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task Properties names-factory Reference Inherited",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "_change_number",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "_change1_number",
+               "status" : "FAIL"
+            }
+         ]
+      }
+   ]
+}
+
 [root "Root Preload Preload"]
   subtask = Subtask Preload Preload
 
