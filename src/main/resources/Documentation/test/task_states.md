@@ -1424,6 +1424,40 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Properties names-factory Deep Reference"]
+  subtasks-factory = tasks-factory Properties names-factory Deep Reference
+  set-predicate-reference = ${predicate}
+  set-predicate = change:_change1_number
+
+[tasks-factory "tasks-factory Properties names-factory Deep Reference"]
+  names-factory = Properties names-factory Deep Reference
+  fail = True
+
+[names-factory "Properties names-factory Deep Reference"]
+  type = change
+  changes = ${predicate-reference} OR change:${_change_number} project:${_change_project} branch:${_change_branch}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties names-factory Deep Reference",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "_change_number",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "_change1_number",
+         "status" : "FAIL"
+      }
+   ]
+}
+
 [root "Root Properties names-factory Reference Internal"]
   subtasks-factory = tasks-factory Properties names-factory Reference Internal
   set-predicate = change:${_change_number} project:${_change_project} branch:${_change_branch}
