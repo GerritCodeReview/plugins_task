@@ -1424,6 +1424,39 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Properties names-factory Reference Internal"]
+  subtasks-factory = tasks-factory Properties names-factory Reference Internal
+  set-predicate = change:${_change_number} project:${_change_project} branch:${_change_branch}
+
+[tasks-factory "tasks-factory Properties names-factory Reference Internal"]
+  names-factory = Properties names-factory Reference Internal
+  fail = True
+
+[names-factory "Properties names-factory Reference Internal"]
+  type = change
+  changes = change:_change1_number OR ${predicate}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties names-factory Reference Internal",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "_change_number",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "_change1_number",
+         "status" : "FAIL"
+      }
+   ]
+}
+
 [root "Root Preload Preload"]
   subtask = Subtask Preload Preload
 
