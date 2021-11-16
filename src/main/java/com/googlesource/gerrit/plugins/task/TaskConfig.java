@@ -96,8 +96,12 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
 
     protected TaskBase(TaskBase base) {
-      super(base.subSection);
+      this(base.subSection);
       Copier.deepCopyDeclaredFields(TaskBase.class, base, this, false);
+    }
+
+    protected TaskBase(SubSection s) {
+      super(s);
     }
   }
 
@@ -117,6 +121,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public Task(TasksFactory tasks, String name) {
       super(tasks);
       this.name = name;
+    }
+
+    public Task(SubSection s) {
+      super(s);
     }
 
     protected Map<String, String> getAllProperties() {
