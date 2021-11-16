@@ -158,8 +158,7 @@ public class TaskTree {
 
     public Node(NodeList parent, Task task) throws ConfigInvalidException, OrmException {
       this.parent = parent;
-      Preloader.preload(task);
-      properties = new Properties(task, parent.getProperties());
+      properties = new Properties(Preloader.preload(task), parent.getProperties());
       this.task = properties.getTask(getChangeData());
       this.path.addAll(parent.path);
       this.path.add(key());
