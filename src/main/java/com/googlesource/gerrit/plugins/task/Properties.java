@@ -37,22 +37,33 @@ import java.util.regex.Pattern;
 public class Properties {
   public static final Properties EMPTY_PARENT = new Properties();
 
+  protected final Properties parentProperties;
+  protected final Task origTask;
+  protected final CopyOnWrite<Task> task;
   protected Expander expander;
 
   public Properties() {
+    this(null, null);
     expander = new Expander();
   }
 
-  public Properties(ChangeData changeData, Task definition, Properties parentProperties)
-      throws OrmException {
+  public Properties(Task origTask, Properties parentProperties) {
+    this.origTask = origTask;
+    this.parentProperties = parentProperties;
+    task = new CopyOnWrite<>(origTask, t -> origTask.config.new Task(t));
+  }
+
+  public Task getTask(ChangeData changeData) throws OrmException {
     expander = new Expander();
     expander.putAll(parentProperties.expander.getAll());
-    expander.putAll(getInternalProperties(definition, changeData));
-    expander.putAll(definition.getAllProperties());
+    expander.putAll(getInternalProperties(origTask, changeData));
+    expander.putAll(origTask.getAllProperties());
 
-    definition.setExpandedProperties(expander.getAll());
-
-    expander.expandFieldValues(definition, Collections.emptySet());
+    Map<String, String> exported = expander.expand(origTask.exported);
+    if (exported != origTask.exported) {
+      task.getForWrite().exported = exported;
+    }
+    return expander.expand(task, Collections.emptySet());
   }
 
   /** Use to expand properties specifically for NamesFactories. */
@@ -63,11 +74,11 @@ public class Properties {
         Sets.newHashSet(TaskConfig.KEY_TYPE));
   }
 
-  protected static Map<String, String> getInternalProperties(Task definition, ChangeData changeData)
+  protected static Map<String, String> getInternalProperties(Task task, ChangeData changeData)
       throws OrmException {
     Map<String, String> properties = new HashMap<>();
 
-    properties.put("_name", definition.name);
+    properties.put("_name", task.name);
 
     Change c = changeData.change();
     properties.put("_change_number", String.valueOf(c.getId().get()));
@@ -114,6 +125,26 @@ public class Properties {
       return Collections.unmodifiableMap(valueByName);
     }
 
+    /**
+     * Expand all properties (${property_name} -> property_value) in the given text. Returns same
+     * object if no expansions occured.
+     */
+    public Map<String, String> expand(Map<String, String> map) {
+      if (map != null) {
+        boolean hasProperty = false;
+        Map<String, String> expandedMap = new HashMap<>(map.size());
+        for (Map.Entry<String, String> e : map.entrySet()) {
+          String name = e.getKey();
+          String value = e.getValue();
+          String expanded = getValueForName(name);
+          hasProperty = hasProperty || value != expanded;
+          expandedMap.put(name, expanded);
+        }
+        return hasProperty ? Collections.unmodifiableMap(expandedMap) : map;
+      }
+      return null;
+    }
+
     @Override
     public String getValueForName(String name) {
       if (!expanding.add(name)) {
@@ -156,12 +187,6 @@ public class Properties {
   protected abstract static class AbstractExpander {
     // "${_name}" -> group(1) = "_name"
     protected static final Pattern PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
-
-    /** Expand all properties in the Strings in the object's Fields (except the exclude ones) */
-    protected <T> T expandFieldValues(T object, Set<String> excludedFieldNames) {
-      // Fake the CopyOnWrite for backwards compatibility.
-      return expand(object, o -> o, excludedFieldNames);
-    }
 
     /**
      * Returns expanded object if property found in the Strings in the object's Fields (except the

@@ -155,13 +155,13 @@ public class TaskTree {
     public final Task task;
     protected final Properties properties;
 
-    public Node(NodeList parent, Task definition) throws ConfigInvalidException, OrmException {
+    public Node(NodeList parent, Task task) throws ConfigInvalidException, OrmException {
       this.parent = parent;
-      this.task = definition;
+      Preloader.preload(task);
+      properties = new Properties(task, parent.getProperties());
+      this.task = properties.getTask(getChangeData());
       this.path.addAll(parent.path);
       this.path.add(key());
-      Preloader.preload(definition);
-      properties = new Properties(getChangeData(), definition, parent.getProperties());
     }
 
     public String key() {
