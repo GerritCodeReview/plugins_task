@@ -123,14 +123,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
       return all;
     }
 
-    protected void setExpandedProperties(Map<String, String> expanded) {
-      properties.clear();
-      properties.putAll(expanded);
-      for (String property : exported.keySet()) {
-        exported.put(property, properties.get(property));
-      }
-    }
-
     public String key() {
       // name is needed to differentiate Tasks from the same TasksFactory
       return super.key() + SEP + name;
