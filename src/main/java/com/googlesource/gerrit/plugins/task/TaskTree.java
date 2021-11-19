@@ -218,10 +218,9 @@ public class TaskTree {
       for (String tasksFactoryName : task.subTasksFactories) {
         TasksFactory tasksFactory = task.config.getTasksFactory(tasksFactoryName);
         if (tasksFactory != null) {
-          NamesFactory namesFactory =
-              task.config.new NamesFactory(task.config.getNamesFactory(tasksFactory.namesFactory));
+          NamesFactory namesFactory = task.config.getNamesFactory(tasksFactory.namesFactory);
           if (namesFactory != null && namesFactory.type != null) {
-            new Properties.NamesFactory(namesFactory, getProperties());
+            namesFactory = getProperties().getNamesFactory(namesFactory);
             switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
               case STATIC:
                 addStaticTypeTaskDefinitions(tasksFactory, namesFactory);

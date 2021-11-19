@@ -18,15 +18,16 @@ import com.google.common.collect.Sets;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gwtorm.server.OrmException;
+import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -48,13 +49,13 @@ public class Properties {
 
       expandFieldValues(definition, Collections.emptySet());
     }
-  }
 
-  /** Use to expand properties specifically for NamesFactories. */
-  public static class NamesFactory extends Expander {
-    public NamesFactory(TaskConfig.NamesFactory namesFactory, Task properties) {
-      putAll(properties.getAll());
-      expandFieldValues(namesFactory, Sets.newHashSet(TaskConfig.KEY_TYPE));
+    /** Use to expand properties specifically for NamesFactories. */
+    public NamesFactory getNamesFactory(NamesFactory namesFactory) {
+      return expand(
+          namesFactory,
+          nf -> namesFactory.config.new NamesFactory(nf),
+          Sets.newHashSet(TaskConfig.KEY_TYPE));
     }
   }
 
@@ -153,45 +154,84 @@ public class Properties {
     protected static final Pattern PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
 
     /** Expand all properties in the Strings in the object's Fields (except the exclude ones) */
-    protected void expandFieldValues(Object object, Set<String> excludedFieldNames) {
-      for (Field field : object.getClass().getFields()) {
+    protected <T> T expandFieldValues(T object, Set<String> excludedFieldNames) {
+      // Fake the CopyOnWrite for backwards compatibility.
+      return expand(object, o -> o, excludedFieldNames);
+    }
+
+    /**
+     * Returns expanded object if property found in the Strings in the object's Fields (except the
+     * excluded ones). Returns same object if no expansions occured.
+     */
+    public <T> T expand(T object, Function<T, T> copier, Set<String> excludedFieldNames) {
+      return expand(new CopyOnWrite<>(object, copier), excludedFieldNames);
+    }
+
+    /**
+     * Returns expanded object if property found in the Strings in the object's Fields (except the
+     * excluded ones). Returns same object if no expansions occured.
+     */
+    public <T> T expand(CopyOnWrite<T> cow, Set<String> excludedFieldNames) {
+      for (Field field : cow.getOriginal().getClass().getFields()) {
         try {
           if (!excludedFieldNames.contains(field.getName())) {
             field.setAccessible(true);
-            Object o = field.get(object);
+            Object o = field.get(cow.getOriginal());
             if (o instanceof String) {
-              field.set(object, expandText((String) o));
+              String expanded = expandText((String) o);
+              if (expanded != o) {
+                field.set(cow.getForWrite(), expanded);
+              }
             } else if (o instanceof List) {
               @SuppressWarnings("unchecked")
               List<String> forceCheck = List.class.cast(o);
-              expandElements(forceCheck);
+              List<String> expanded = expand(forceCheck);
+              if (expanded != o) {
+                field.set(cow.getForWrite(), expanded);
+              }
             }
           }
         } catch (IllegalAccessException e) {
           throw new RuntimeException(e);
         }
       }
+      return cow.getForRead();
     }
 
-    /** Expand all properties in the Strings in the List */
-    public void expandElements(List<String> list) {
+    /**
+     * Returns expanded unmodifiable List if property found. Returns same object if no expansions
+     * occured.
+     */
+    public List<String> expand(List<String> list) {
       if (list != null) {
-        for (ListIterator<String> it = list.listIterator(); it.hasNext(); ) {
-          it.set(expandText(it.next()));
+        boolean hasProperty = false;
+        List<String> expandedList = new ArrayList<>(list.size());
+        for (String value : list) {
+          String expanded = expandText(value);
+          hasProperty = hasProperty || value != expanded;
+          expandedList.add(expanded);
         }
+        return hasProperty ? Collections.unmodifiableList(expandedList) : list;
       }
+      return null;
     }
 
-    /** Expand all properties (${property_name} -> property_value) in the given text */
+    /**
+     * Expand all properties (${property_name} -> property_value) in the given text . Returns same
+     * object if no expansions occured.
+     */
     public String expandText(String text) {
       if (text == null) {
         return null;
       }
       StringBuffer out = new StringBuffer();
       Matcher m = PATTERN.matcher(text);
-      while (m.find()) {
-        m.appendReplacement(out, Matcher.quoteReplacement(getValueForName(m.group(1))));
+      if (!m.find()) {
+        return text;
       }
+      do {
+        m.appendReplacement(out, Matcher.quoteReplacement(getValueForName(m.group(1))));
+      } while (m.find());
       m.appendTail(out);
       return out.toString();
     }
