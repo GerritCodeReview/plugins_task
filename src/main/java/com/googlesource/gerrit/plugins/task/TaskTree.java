@@ -146,14 +146,14 @@ public class TaskTree {
       return parent == null ? TaskTree.this.changeData : parent.getChangeData();
     }
 
-    protected Properties.Task getProperties() {
-      return Properties.Task.EMPTY_PARENT;
+    protected Properties getProperties() {
+      return Properties.EMPTY_PARENT;
     }
   }
 
   public class Node extends NodeList {
     public final Task task;
-    protected final Properties.Task properties;
+    protected final Properties properties;
 
     public Node(NodeList parent, Task definition) throws ConfigInvalidException, OrmException {
       this.parent = parent;
@@ -161,7 +161,7 @@ public class TaskTree {
       this.path.addAll(parent.path);
       this.path.add(key());
       Preloader.preload(definition);
-      properties = new Properties.Task(getChangeData(), definition, parent.getProperties());
+      properties = new Properties(getChangeData(), definition, parent.getProperties());
     }
 
     public String key() {
@@ -284,7 +284,7 @@ public class TaskTree {
     }
 
     @Override
-    protected Properties.Task getProperties() {
+    protected Properties getProperties() {
       return properties;
     }
   }

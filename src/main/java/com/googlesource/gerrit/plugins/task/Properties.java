@@ -19,6 +19,7 @@ import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gwtorm.server.OrmException;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
+import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,35 +33,38 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** Use to expand properties like ${_name} in the text of various definitions. */
+/** Use to expand properties specifically for Tasks. */
 public class Properties {
-  /** Use to expand properties specifically for Tasks. */
-  public static class Task extends Expander {
-    public static final Task EMPTY_PARENT = new Task();
+  public static final Properties EMPTY_PARENT = new Properties();
 
-    public Task() {}
+  protected Expander expander;
 
-    public Task(ChangeData changeData, TaskConfig.Task definition, Task parentProperties)
-        throws OrmException {
-      putAll(parentProperties.getAll());
-      putAll(getInternalProperties(definition, changeData));
-      putAll(definition.getAllProperties());
-
-      definition.setExpandedProperties(getAll());
-
-      expandFieldValues(definition, Collections.emptySet());
-    }
-
-    /** Use to expand properties specifically for NamesFactories. */
-    public NamesFactory getNamesFactory(NamesFactory namesFactory) {
-      return expand(
-          namesFactory,
-          nf -> namesFactory.config.new NamesFactory(nf),
-          Sets.newHashSet(TaskConfig.KEY_TYPE));
-    }
+  public Properties() {
+    expander = new Expander();
   }
 
-  protected static Map<String, String> getInternalProperties(
-      TaskConfig.Task definition, ChangeData changeData) throws OrmException {
+  public Properties(ChangeData changeData, Task definition, Properties parentProperties)
+      throws OrmException {
+    expander = new Expander();
+    expander.putAll(parentProperties.expander.getAll());
+    expander.putAll(getInternalProperties(definition, changeData));
+    expander.putAll(definition.getAllProperties());
+
+    definition.setExpandedProperties(expander.getAll());
+
+    expander.expandFieldValues(definition, Collections.emptySet());
+  }
+
+  /** Use to expand properties specifically for NamesFactories. */
+  public NamesFactory getNamesFactory(NamesFactory namesFactory) {
+    return expander.expand(
+        namesFactory,
+        nf -> namesFactory.config.new NamesFactory(nf),
+        Sets.newHashSet(TaskConfig.KEY_TYPE));
+  }
+
+  protected static Map<String, String> getInternalProperties(Task definition, ChangeData changeData)
+      throws OrmException {
     Map<String, String> properties = new HashMap<>();
 
     properties.put("_name", definition.name);
