@@ -40,6 +40,8 @@ public class Properties {
   protected final Task origTask;
   protected final CopyOnWrite<Task> task;
   protected Expander expander;
+  protected boolean init = true;
+  protected boolean isTaskRefreshNeeded;
 
   public Properties() {
     this(null, null);
@@ -57,11 +59,20 @@ public class Properties {
     Loader loader = new Loader(changeData);
     expander = new Expander(n -> loader.load(n));
 
-    Map<String, String> exported = expander.expand(origTask.exported);
-    if (exported != origTask.exported) {
-      task.getForWrite().exported = exported;
+    if (isTaskRefreshNeeded || init) {
+      Map<String, String> exported = expander.expand(origTask.exported);
+      if (exported != origTask.exported) {
+        task.getForWrite().exported = exported;
+      }
+
+      expander.expand(task, Collections.emptySet());
+
+      if (init) {
+        init = false;
+        isTaskRefreshNeeded = loader.isNonTaskDefinedPropertyLoaded();
+      }
     }
-    return expander.expand(task, Collections.emptySet());
+    return task.getForRead();
   }
 
   /** Use to expand properties specifically for NamesFactories. */
@@ -75,7 +86,8 @@ public class Properties {
   protected class Loader {
     protected final ChangeData changeData;
     protected final Function<String, String> inheritedMapper;
-    public Change change;
+    protected Change change;
+    protected boolean isInheritedPropertyLoaded;
 
     public Loader(ChangeData changeData) {
       this.changeData = changeData;
@@ -84,6 +96,10 @@ public class Properties {
       } else {
         inheritedMapper = n -> parentProperties.expander.getValueForName(n);
       }
+    }
+
+    public boolean isNonTaskDefinedPropertyLoaded() {
+      return change != null || isInheritedPropertyLoaded;
     }
 
     public String load(String name) {
@@ -95,6 +111,9 @@ public class Properties {
         value = origTask.properties.get(name);
         if (value == null) {
           value = inheritedMapper.apply(name);
+          if (!value.isEmpty()) {
+            isInheritedPropertyLoaded = true;
+          }
         }
       }
       return value;
