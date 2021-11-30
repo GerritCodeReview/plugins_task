@@ -33,7 +33,6 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** Use to expand properties like ${_name} in the text of various definitions. */
-/** Use to expand properties specifically for Tasks. */
 public class Properties {
   public static final Properties EMPTY_PARENT = new Properties();
 
@@ -44,7 +43,7 @@ public class Properties {
 
   public Properties() {
     this(null, null);
-    expander = new Expander();
+    expander = new Expander(n -> "");
   }
 
   public Properties(Task origTask, Properties parentProperties) {
@@ -53,11 +52,10 @@ public class Properties {
     task = new CopyOnWrite<>(origTask, t -> origTask.config.new Task(t));
   }
 
+  /** Use to expand properties specifically for Tasks. */
   public Task getTask(ChangeData changeData) throws OrmException {
-    expander = new Expander();
-    expander.putAll(parentProperties.expander.getAll());
-    expander.putAll(getInternalProperties(origTask, changeData));
-    expander.putAll(origTask.getAllProperties());
+    Loader loader = new Loader(changeData);
+    expander = new Expander(n -> loader.load(n));
 
     Map<String, String> exported = expander.expand(origTask.exported);
     if (exported != origTask.exported) {
@@ -74,21 +72,78 @@ public class Properties {
         Sets.newHashSet(TaskConfig.KEY_TYPE));
   }
 
-  protected static Map<String, String> getInternalProperties(Task task, ChangeData changeData)
-      throws OrmException {
-    Map<String, String> properties = new HashMap<>();
+  protected class Loader {
+    protected final ChangeData changeData;
+    protected final Function<String, String> inheritedMapper;
+    public Change change;
 
-    properties.put("_name", task.name);
+    public Loader(ChangeData changeData) {
+      this.changeData = changeData;
+      if (parentProperties == null || parentProperties.expander == null) {
+        inheritedMapper = n -> "";
+      } else {
+        inheritedMapper = n -> parentProperties.expander.getValueForName(n);
+      }
+    }
 
-    Change c = changeData.change();
-    properties.put("_change_number", String.valueOf(c.getId().get()));
-    properties.put("_change_id", c.getKey().get());
-    properties.put("_change_project", c.getProject().get());
-    properties.put("_change_branch", c.getDest().get());
-    properties.put("_change_status", c.getStatus().toString());
-    properties.put("_change_topic", c.getTopic());
+    public String load(String name) {
+      if (name.startsWith("_")) {
+        return internal(name);
+      }
+      String value = origTask.exported.get(name);
+      if (value == null) {
+        value = origTask.properties.get(name);
+        if (value == null) {
+          value = inheritedMapper.apply(name);
+        }
+      }
+      return value;
+    }
 
-    return properties;
+    protected String internal(String name) {
+      if ("_name".equals(name)) {
+        return origTask.name;
+      }
+      String changeProp = name.replace("_change_", "");
+      if (changeProp != name) {
+        try {
+          return change(changeProp);
+        } catch (OrmException e) {
+          throw new RuntimeException(e);
+        }
+      }
+      return "";
+    }
+
+    protected String change(String changeProp) throws OrmException {
+      switch (changeProp) {
+        case "number":
+          return String.valueOf(change().getId().get());
+        case "id":
+          return change().getKey().get();
+        case "project":
+          return change().getProject().get();
+        case "branch":
+          return change().getDest().get();
+        case "status":
+          return change().getStatus().toString();
+        case "topic":
+          return change().getTopic();
+        default:
+          return "";
+      }
+    }
+
+    protected Change change() {
+      if (change == null) {
+        try {
+          change = changeData.change();
+        } catch (OrmException e) {
+          throw new RuntimeException(e);
+        }
+      }
+      return change;
+    }
   }
 
   /**
@@ -109,20 +164,12 @@ public class Properties {
    * <p>will expand to: <code>"The brown fox jumped over the fence."</code>
    */
   protected static class Expander extends AbstractExpander {
+    protected final Function<String, String> loadingFunction;
     protected final Map<String, String> valueByName = new HashMap<>();
-    protected final Map<String, String> unexpandedByName = new HashMap<>();
     protected final Set<String> expanding = new HashSet<>();
 
-    public void putAll(Map<String, String> unexpandedByName) {
-      this.unexpandedByName.putAll(unexpandedByName);
-    }
-
-    public Map<String, String> getAll() {
-      // Copying keys enables out of order removals during iteration
-      for (String name : new ArrayList<>(unexpandedByName.keySet())) {
-        getValueForName(name);
-      }
-      return Collections.unmodifiableMap(valueByName);
+    public Expander(Function<String, String> loadingFunction) {
+      this.loadingFunction = loadingFunction;
     }
 
     /**
@@ -147,20 +194,19 @@ public class Properties {
 
     @Override
     public String getValueForName(String name) {
-      if (!expanding.add(name)) {
-        throw new RuntimeException("Looping property definitions.");
-      }
-      String value = unexpandedByName.remove(name);
+      String value = valueByName.get(name);
       if (value != null) {
+        return value;
+      }
+      value = loadingFunction.apply(name);
+      if (value == null) {
+        value = "";
+      } else if (!value.isEmpty()) {
+        if (!expanding.add(name)) {
+          throw new RuntimeException("Looping property definitions.");
+        }
         value = expandText(value);
         expanding.remove(name);
-      } else {
-        expanding.remove(name);
-        value = valueByName.get(name);
-        if (value != null) {
-          return value;
-        }
-        value = "";
       }
       valueByName.put(name, value);
       return value;
@@ -265,7 +311,14 @@ public class Properties {
       return out.toString();
     }
 
-    /** Get the replacement value for the property identified by name */
+    /**
+     * Get the replacement value for the property identified by name
+     *
+     * @param name of the property to get the replacement value for
+     * @return the replacement value. Since the expandText() method alwyas needs a String to replace
+     *     '${property-name}' reference with, even when the property does not exist, this will never
+     *     return null, instead it will returns the empty string if the property is not found.
+     */
     protected abstract String getValueForName(String name);
   }
 }
