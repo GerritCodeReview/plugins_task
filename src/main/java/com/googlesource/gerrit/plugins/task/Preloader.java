@@ -28,7 +28,8 @@ public class Preloader {
   public static Task preload(Task definition) throws ConfigInvalidException {
     String expression = definition.preloadTask;
     if (expression != null) {
-      Optional<Task> preloadFrom = definition.config.getOptionalTaskForExpression(expression);
+      Optional<Task> preloadFrom =
+          definition.config.getOptionalTask(new TaskExpression(expression));
       if (preloadFrom.isPresent()) {
         return preloadFrom(definition, preload(preloadFrom.get()));
       }
