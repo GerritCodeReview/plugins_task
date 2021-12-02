@@ -1740,6 +1740,40 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Preload tasks-factory"]
+  subtasks-factory = tasks-factory Preload tasks-factory
+
+[tasks-factory "tasks-factory Preload tasks-factory"]
+  names-factory = names-factory static list
+  preload-task = Subtask PASS
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Preload tasks-factory",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my a task",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my b task",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my c task",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root INVALID Preload"]
   preload-task = missing
 
