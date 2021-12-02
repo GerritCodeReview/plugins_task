@@ -179,7 +179,7 @@ public class TaskTree {
     protected void addSubTaskDefinitions() {
       for (String expression : task.subTasks) {
         try {
-          Optional<Task> def = task.config.getOptionalTaskForExpression(expression);
+          Optional<Task> def = task.config.getOptionalTask(new TaskExpression(expression));
           if (def.isPresent()) {
             addSubDefinition(def.get());
           }

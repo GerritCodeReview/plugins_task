@@ -24,10 +24,9 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Task Configuration file living in git */
@@ -181,9 +180,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   public static final String SEP = "\0";
 
-  protected static final Pattern OPTIONAL_TASK_PATTERN =
-      Pattern.compile("([^ |]*( *[^ |])*) *\\| *");
-
   protected static final String SECTION_EXTERNAL = "external";
   protected static final String SECTION_NAMES_FACTORY = "names-factory";
   protected static final String SECTION_ROOT = "root";
@@ -245,42 +241,22 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   /**
-   * Get a Task for this expression.
+   * Get a Task for this TaskExpression.
    *
-   * @param expression A task expression represents a config string pointing to an expression which
-   *     includes zero or more task names separated by a '|', and potentially termintated by a '|'.
-   *     If the expression is not terminated by a '|' it indicates that task resolution of at least
-   *     one task is required. Task selection priority is from left to right. This can be expressed
-   *     as: <code>EXPR = [ TASK_NAME '|' ] TASK_NAME [ '|' ]</code>
-   *     <p>Example expressions to prioritized names and requirements:
-   *     <ul>
-   *       <li><code> "simple"        -> ("simple")         required</code>
-   *       <li><code> "world | peace" -> ("world", "peace") required</code>
-   *       <li><code> "shadenfreud |" -> ("shadenfreud")    optional</code>
-   *       <li><code> "foo | bar |"   -> ("foo", "bar")     optional</code>
-   *     </ul>
-   *
+   * @param TaskExpression
    * @return Optional<Task> which is empty if the expression is optional and no tasks are resolved
    * @throws ConfigInvalidException if the expression requires a task and no tasks are resolved
    */
-  public Optional<Task> getOptionalTaskForExpression(String expression)
-      throws ConfigInvalidException {
-    int end = 0;
-    Matcher m = OPTIONAL_TASK_PATTERN.matcher(expression);
-    while (m.find()) {
-      end = m.end();
-      Optional<Task> task = getOptionalTask(m.group(1));
-      if (task.isPresent()) {
-        return task;
+  public Optional<Task> getOptionalTask(TaskExpression expression) throws ConfigInvalidException {
+    try {
+      for (String name : expression) {
+        Optional<Task> task = getOptionalTask(name);
+        if (task.isPresent()) {
+          return task;
+        }
       }
-    }
-
-    String last = expression.substring(end);
-    if (!"".equals(last)) { // expression was not optional
-      Optional<Task> task = getOptionalTask(last);
-      if (task.isPresent()) {
-        return task;
-      }
+    } catch (NoSuchElementException e) {
+      // expression was not optional but we ran out of names to try
       throw new ConfigInvalidException("task not defined");
     }
     return Optional.empty();
