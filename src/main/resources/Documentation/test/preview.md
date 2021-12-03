@@ -386,6 +386,12 @@
          "hasPass" : true,
          "name" : "userfile task/special.config FAIL",
          "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
       }
    ]
 }

@@ -570,6 +570,12 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "userfile task/special.config FAIL",
          "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
       }
    ]
 }
@@ -595,6 +601,12 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "userfile task/special.config FAIL",
          "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
       },
       {
          "name" : "UNKNOWN",
@@ -630,6 +642,12 @@ The config below is expected to be in the `task.config` file in project
          "status" : "FAIL"
       },
       {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
+      },
+      {
          "name" : "UNKNOWN",
          "status" : "INVALID"
       }
@@ -661,6 +679,12 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "userfile task/special.config FAIL",
          "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
       }
    ]
 }
@@ -2619,4 +2643,7 @@ The config below is expected to be in the `task.config` file in project
 [task "userfile task/special.config FAIL"]
   applicable = is:open
   fail = is:open
+
+[task "file task/common.config Preload PASS"]
+  preload-task = userfile task/special.config PASS
 ```
