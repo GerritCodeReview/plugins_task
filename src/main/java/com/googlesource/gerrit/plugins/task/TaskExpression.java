@@ -44,6 +44,10 @@ public class TaskExpression implements Iterable<String> {
     this.expression = expression;
   }
 
+  public String getKey() {
+    return expression;
+  }
+
   @Override
   public Iterator<String> iterator() {
     return new Iterator<String>() {

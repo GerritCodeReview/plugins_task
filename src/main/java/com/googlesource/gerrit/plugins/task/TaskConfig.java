@@ -208,18 +208,33 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public boolean isVisible;
   public boolean isTrusted;
 
+  protected final Preloader preloader;
+
   public TaskConfig(Branch.NameKey branch, String fileName, boolean isVisible, boolean isTrusted) {
     super(branch, fileName);
     this.isVisible = isVisible;
     this.isTrusted = isTrusted;
+    preloader = new Preloader(this);
   }
 
-  public List<Task> getRootTasks() {
-    return getTasks(SECTION_ROOT);
+  public List<Task> getPreloadedRootTasks() {
+    return getPreloadedTasks(SECTION_ROOT);
   }
 
-  public List<Task> getTasks() {
-    return getTasks(SECTION_TASK);
+  public List<Task> getPreloadedTasks() {
+    return getPreloadedTasks(SECTION_TASK);
+  }
+
+  protected List<Task> getPreloadedTasks(String type) {
+    List<Task> preloaded = new ArrayList<>();
+    for (Task task : getTasks(type)) {
+      try {
+        preloaded.add(preloader.preload(task));
+      } catch (ConfigInvalidException e) {
+        preloaded.add(null);
+      }
+    }
+    return preloaded;
   }
 
   protected List<Task> getTasks(String type) {
@@ -241,13 +256,19 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   /**
-   * Get a Task for this TaskExpression.
+   * Get a preloaded Task for this TaskExpression.
    *
    * @param TaskExpression
    * @return Optional<Task> which is empty if the expression is optional and no tasks are resolved
    * @throws ConfigInvalidException if the expression requires a task and no tasks are resolved
    */
-  public Optional<Task> getOptionalTask(TaskExpression expression) throws ConfigInvalidException {
+  public Optional<Task> getPreloadedOptionalTask(TaskExpression expression)
+      throws ConfigInvalidException {
+    return preloader.preloadOptional(expression);
+  }
+
+  protected Optional<Task> getOptionalTask(TaskExpression expression)
+      throws ConfigInvalidException {
     try {
       for (String name : expression) {
         Optional<Task> task = getOptionalTask(name);

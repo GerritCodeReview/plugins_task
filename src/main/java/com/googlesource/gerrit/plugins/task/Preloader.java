@@ -25,13 +25,33 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Use to pre-load a task definition with values from its preload-task definition. */
 public class Preloader {
-  public static Task preload(Task definition) throws ConfigInvalidException {
+  protected final TaskConfig config;
+  protected final Map<String, Optional<Task>> optionalTaskByName = new HashMap<>();
+
+  public Preloader(TaskConfig config) {
+    this.config = config;
+  }
+
+  public Optional<Task> preloadOptional(TaskExpression expression) throws ConfigInvalidException {
+    Optional<Task> task = optionalTaskByName.get(expression.getKey());
+    if (task == null) {
+      task = loadOptional(expression);
+      optionalTaskByName.put(expression.getKey(), task);
+    }
+    return task;
+  }
+
+  protected Optional<Task> loadOptional(TaskExpression expression) throws ConfigInvalidException {
+    Optional<Task> definition = config.getOptionalTask(expression);
+    return definition.isPresent() ? Optional.of(preload(definition.get())) : definition;
+  }
+
+  public Task preload(Task definition) throws ConfigInvalidException {
     String expression = definition.preloadTask;
     if (expression != null) {
-      Optional<Task> preloadFrom =
-          definition.config.getOptionalTask(new TaskExpression(expression));
+      Optional<Task> preloadFrom = preloadOptional(new TaskExpression(expression));
       if (preloadFrom.isPresent()) {
-        return preloadFrom(definition, preload(preloadFrom.get()));
+        return preloadFrom(definition, preloadFrom.get());
       }
     }
     return definition;
