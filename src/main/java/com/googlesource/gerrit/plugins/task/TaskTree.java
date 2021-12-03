@@ -106,20 +106,20 @@ public class TaskTree {
     protected Set<String> names = new HashSet<>();
 
     protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      addSubDefinitions(taskFactory.getRootConfig().getRootTasks());
+      addPreloaded(taskFactory.getRootConfig().getPreloadedRootTasks());
     }
 
-    protected void addSubDefinitions(List<Task> defs) {
+    protected void addPreloaded(List<Task> defs) {
       for (Task def : defs) {
-        addSubDefinition(def);
+        addPreloaded(def);
       }
     }
 
-    protected void addSubDefinition(Task def) {
-      addSubDefinition(def, (parent, definition) -> new Node(parent, definition));
+    protected void addPreloaded(Task def) {
+      addPreloaded(def, (parent, definition) -> new Node(parent, definition));
     }
 
-    protected void addSubDefinition(Task def, NodeFactory nodeFactory) {
+    protected void addPreloaded(Task def, NodeFactory nodeFactory) {
       if (def != null) {
         try {
           Node node = nodeFactory.create(this, def);
@@ -162,7 +162,7 @@ public class TaskTree {
 
     public Node(NodeList parent, Task task) throws ConfigInvalidException, OrmException {
       this.parent = parent;
-      properties = new Properties(Preloader.preload(task), parent.getProperties());
+      properties = new Properties(task, parent.getProperties());
       this.task = properties.getTask(getChangeData());
       this.path.addAll(parent.path);
       this.path.add(key());
@@ -173,19 +173,19 @@ public class TaskTree {
     }
 
     @Override
-    protected void addSubNodes() throws OrmException {
-      addSubTaskDefinitions();
-      addSubTasksFactoryDefinitions();
-      addSubFileDefinitions();
-      addExternalDefinitions();
+    protected void addSubNodes() throws ConfigInvalidException, OrmException {
+      addSubTasks();
+      addSubTasksFactoryTasks();
+      addSubTasksFiles();
+      addSubTasksExternals();
     }
 
-    protected void addSubTaskDefinitions() {
+    protected void addSubTasks() {
       for (String expression : task.subTasks) {
         try {
-          Optional<Task> def = task.config.getOptionalTask(new TaskExpression(expression));
+          Optional<Task> def = task.config.getPreloadedOptionalTask(new TaskExpression(expression));
           if (def.isPresent()) {
-            addSubDefinition(def.get());
+            addPreloaded(def.get());
           }
         } catch (ConfigInvalidException e) {
           addInvalidNode();
@@ -193,24 +193,24 @@ public class TaskTree {
       }
     }
 
-    protected void addSubFileDefinitions() {
+    protected void addSubTasksFiles() {
       for (String file : task.subTasksFiles) {
         try {
-          addSubDefinitions(getTaskDefinitions(task.config.getBranch(), file));
+          addPreloaded(getPreloadedTasks(task.config.getBranch(), file));
         } catch (ConfigInvalidException | IOException e) {
           addInvalidNode();
         }
       }
     }
 
-    protected void addExternalDefinitions() throws OrmException {
+    protected void addSubTasksExternals() throws OrmException {
       for (String external : task.subTasksExternals) {
         try {
           External ext = task.config.getExternal(external);
           if (ext == null) {
             addInvalidNode();
           } else {
-            addSubDefinitions(getTaskDefinitions(ext));
+            addPreloaded(getPreloadedTasks(ext));
           }
         } catch (ConfigInvalidException | IOException e) {
           addInvalidNode();
@@ -218,7 +218,7 @@ public class TaskTree {
       }
     }
 
-    protected void addSubTasksFactoryDefinitions() throws OrmException {
+    protected void addSubTasksFactoryTasks() throws ConfigInvalidException, OrmException {
       for (String tasksFactoryName : task.subTasksFactories) {
         TasksFactory tasksFactory = task.config.getTasksFactory(tasksFactoryName);
         if (tasksFactory != null) {
@@ -227,10 +227,10 @@ public class TaskTree {
             namesFactory = getProperties().getNamesFactory(namesFactory);
             switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
               case STATIC:
-                addStaticTypeTaskDefinitions(tasksFactory, namesFactory);
+                addStaticTypeTasks(tasksFactory, namesFactory);
                 continue;
               case CHANGE:
-                addChangeTypeTaskDefinitions(tasksFactory, namesFactory);
+                addChangeTypeTasks(tasksFactory, namesFactory);
                 continue;
             }
           }
@@ -239,15 +239,15 @@ public class TaskTree {
       }
     }
 
-    protected void addStaticTypeTaskDefinitions(
-        TasksFactory tasksFactory, NamesFactory namesFactory) {
+    protected void addStaticTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
+        throws ConfigInvalidException {
       for (String name : namesFactory.names) {
-        addSubDefinition(task.config.new Task(tasksFactory, name));
+        addPreloaded(preload(task.config.new Task(tasksFactory, name)));
       }
     }
 
-    protected void addChangeTypeTaskDefinitions(
-        TasksFactory tasksFactory, NamesFactory namesFactory) {
+    protected void addChangeTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
+        throws ConfigInvalidException {
       try {
         if (namesFactory.changes != null) {
           List<ChangeData> changeDataList =
@@ -256,8 +256,8 @@ public class TaskTree {
                   .query(changeQueryBuilderProvider.get().parse(namesFactory.changes))
                   .entities();
           for (ChangeData changeData : changeDataList) {
-            addSubDefinition(
-                task.config.new Task(tasksFactory, changeData.getId().toString()),
+            addPreloaded(
+                preload(task.config.new Task(tasksFactory, changeData.getId().toString())),
                 (parent, definition) ->
                     new Node(parent, definition) {
                       @Override
@@ -275,26 +275,22 @@ public class TaskTree {
       addInvalidNode();
     }
 
-    protected List<Task> getTaskDefinitions(External external)
+    protected List<Task> getPreloadedTasks(External external)
         throws ConfigInvalidException, IOException, OrmException {
-      return getTaskDefinitions(resolveUserBranch(external.user), external.file);
+      return getPreloadedTasks(resolveUserBranch(external.user), external.file);
     }
 
-    protected List<Task> getTaskDefinitions(Branch.NameKey branch, String file)
+    protected List<Task> getPreloadedTasks(Branch.NameKey branch, String file)
         throws ConfigInvalidException, IOException {
       return taskFactory
           .getTaskConfig(branch, resolveTaskFileName(file), task.isTrusted)
-          .getTasks();
+          .getPreloadedTasks();
     }
 
     @Override
     protected Properties getProperties() {
       return properties;
     }
-  }
-
-  protected List<Task> getRootDefinitions() throws ConfigInvalidException, IOException {
-    return taskFactory.getRootConfig().getRootTasks();
   }
 
   protected String resolveTaskFileName(String file) throws ConfigInvalidException {
@@ -318,5 +314,9 @@ public class TaskTree {
       throw new ConfigInvalidException("Cannot resolve user: " + user);
     }
     return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
+  }
+
+  protected static Task preload(Task task) throws ConfigInvalidException {
+    return task.config.preloader.preload(task);
   }
 }
