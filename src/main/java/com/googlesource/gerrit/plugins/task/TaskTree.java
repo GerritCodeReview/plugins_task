@@ -105,7 +105,7 @@ public class TaskTree {
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
 
-    protected void addSubDefinitions() throws ConfigInvalidException, IOException, OrmException {
+    protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
       addSubDefinitions(taskFactory.getRootConfig().getRootTasks());
     }
 
@@ -132,13 +132,17 @@ public class TaskTree {
         } catch (Exception e) {
         }
       }
+      addInvalidNode();
+    }
+
+    protected void addInvalidNode() {
       nodes.add(null); // null node indicates invalid
     }
 
     protected List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
       if (nodes == null) {
         nodes = new ArrayList<>();
-        addSubDefinitions();
+        addSubNodes();
       }
       return nodes;
     }
@@ -169,7 +173,7 @@ public class TaskTree {
     }
 
     @Override
-    protected void addSubDefinitions() throws OrmException {
+    protected void addSubNodes() throws OrmException {
       addSubTaskDefinitions();
       addSubTasksFactoryDefinitions();
       addSubFileDefinitions();
@@ -184,7 +188,7 @@ public class TaskTree {
             addSubDefinition(def.get());
           }
         } catch (ConfigInvalidException e) {
-          addSubDefinition(null);
+          addInvalidNode();
         }
       }
     }
@@ -194,7 +198,7 @@ public class TaskTree {
         try {
           addSubDefinitions(getTaskDefinitions(task.config.getBranch(), file));
         } catch (ConfigInvalidException | IOException e) {
-          addSubDefinition(null);
+          addInvalidNode();
         }
       }
     }
@@ -204,12 +208,12 @@ public class TaskTree {
         try {
           External ext = task.config.getExternal(external);
           if (ext == null) {
-            addSubDefinition(null);
+            addInvalidNode();
           } else {
             addSubDefinitions(getTaskDefinitions(ext));
           }
         } catch (ConfigInvalidException | IOException e) {
-          addSubDefinition(null);
+          addInvalidNode();
         }
       }
     }
@@ -231,7 +235,7 @@ public class TaskTree {
             }
           }
         }
-        addSubDefinition(null);
+        addInvalidNode();
       }
     }
 
@@ -268,7 +272,7 @@ public class TaskTree {
         log.atSevere().withCause(e).log("ERROR: running changes query: " + namesFactory.changes);
       } catch (QueryParseException e) {
       }
-      addSubDefinition(null);
+      addInvalidNode();
     }
 
     protected List<Task> getTaskDefinitions(External external)
