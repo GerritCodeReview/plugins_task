@@ -39,9 +39,13 @@ import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -96,12 +100,14 @@ public class TaskTree {
   public List<Node> getRootNodes(ChangeData changeData)
       throws ConfigInvalidException, IOException, OrmException {
     this.changeData = changeData;
+    root.path = Collections.emptyList();
     return root.getSubNodes();
   }
 
   protected class NodeList {
     protected NodeList parent = null;
-    protected LinkedList<String> path = new LinkedList<>();
+    protected Collection<String> path;
+    protected Map<String, Node> cachedNodeByTask = new HashMap<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
 
@@ -109,23 +115,32 @@ public class TaskTree {
       addPreloaded(taskFactory.getRootConfig().getPreloadedRootTasks());
     }
 
-    protected void addPreloaded(List<Task> defs) {
+    protected void addPreloaded(List<Task> defs) throws ConfigInvalidException, OrmException {
       for (Task def : defs) {
         addPreloaded(def);
       }
     }
 
-    protected void addPreloaded(Task def) {
+    protected void addPreloaded(Task def) throws ConfigInvalidException, OrmException {
       addPreloaded(def, (parent, definition) -> new Node(parent, definition));
     }
 
-    protected void addPreloaded(Task def, NodeFactory nodeFactory) {
+    protected void addPreloaded(Task def, NodeFactory nodeFactory)
+        throws ConfigInvalidException, OrmException {
       if (def != null) {
         try {
-          Node node = nodeFactory.create(this, def);
+          Node node = cachedNodeByTask.get(def.key());
+          boolean isRefreshNeeded = node != null;
+          if (node == null) {
+            node = nodeFactory.create(this, def);
+          }
+
           if (!path.contains(node.key()) && names.add(def.name)) {
             // path check above detects looping definitions
             // names check above detects duplicate subtasks
+            if (isRefreshNeeded) {
+              node.refreshTask();
+            }
             nodes.add(node);
             return;
           }
@@ -143,8 +158,20 @@ public class TaskTree {
       if (nodes == null) {
         nodes = new ArrayList<>();
         addSubNodes();
+      } else {
+        refreshSubNodes();
       }
       return nodes;
+    }
+
+    public void refreshSubNodes() throws ConfigInvalidException, OrmException {
+      if (nodes != null) {
+        for (Node node : nodes) {
+          if (node != null) {
+            node.refreshTask();
+          }
+        }
+      }
     }
 
     public ChangeData getChangeData() {
@@ -157,19 +184,37 @@ public class TaskTree {
   }
 
   public class Node extends NodeList {
-    public final Task task;
+    public Task task;
+
     protected final Properties properties;
+    protected final String taskKey;
 
     public Node(NodeList parent, Task task) throws ConfigInvalidException, OrmException {
       this.parent = parent;
+      taskKey = task.key();
       properties = new Properties(task, parent.getProperties());
-      this.task = properties.getTask(getChangeData());
-      this.path.addAll(parent.path);
-      this.path.add(key());
+      refreshTask();
     }
 
     public String key() {
-      return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + task.key();
+      return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + taskKey;
+    }
+
+    /* The task needs to be refreshed before a node is used, however
+    subNode refreshing can wait until they are fetched since they may
+    not be needed. */
+    public void refreshTask() throws ConfigInvalidException, OrmException {
+      this.path = new LinkedList<>(parent.path);
+      this.path.add(key());
+
+      this.task = properties.getTask(getChangeData());
+
+      if (nodes != null) {
+        cachedNodeByTask.clear();
+        nodes.stream().filter(n -> n != null).forEach(n -> cachedNodeByTask.put(n.task.key(), n));
+        names.clear();
+        nodes = null;
+      }
     }
 
     @Override
@@ -180,7 +225,7 @@ public class TaskTree {
       addSubTasksExternals();
     }
 
-    protected void addSubTasks() {
+    protected void addSubTasks() throws ConfigInvalidException, OrmException {
       for (String expression : task.subTasks) {
         try {
           Optional<Task> def = task.config.getPreloadedOptionalTask(new TaskExpression(expression));
@@ -193,7 +238,7 @@ public class TaskTree {
       }
     }
 
-    protected void addSubTasksFiles() {
+    protected void addSubTasksFiles() throws ConfigInvalidException, OrmException {
       for (String file : task.subTasksFiles) {
         try {
           addPreloaded(getPreloadedTasks(task.config.getBranch(), file));
@@ -203,7 +248,7 @@ public class TaskTree {
       }
     }
 
-    protected void addSubTasksExternals() throws OrmException {
+    protected void addSubTasksExternals() throws ConfigInvalidException, OrmException {
       for (String external : task.subTasksExternals) {
         try {
           External ext = task.config.getExternal(external);
@@ -240,14 +285,14 @@ public class TaskTree {
     }
 
     protected void addStaticTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
-        throws ConfigInvalidException {
+        throws ConfigInvalidException, OrmException {
       for (String name : namesFactory.names) {
         addPreloaded(preload(task.config.new Task(tasksFactory, name)));
       }
     }
 
     protected void addChangeTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
-        throws ConfigInvalidException {
+        throws ConfigInvalidException, OrmException {
       try {
         if (namesFactory.changes != null) {
           List<ChangeData> changeDataList =
