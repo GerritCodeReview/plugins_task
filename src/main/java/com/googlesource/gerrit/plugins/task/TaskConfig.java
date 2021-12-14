@@ -14,11 +14,13 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.common.collect.Sets;
 import com.google.gerrit.common.Container;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -43,21 +45,17 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
   }
 
-  protected class Section extends Container {
+  protected class SubSection extends Container {
     public TaskConfig config;
-    public SubSection subSection;
+    public final SubSectionKey subSection;
 
-    public Section(SubSection s) {
+    public SubSection(SubSectionKey s) {
       this.config = TaskConfig.this;
       this.subSection = s;
     }
-
-    public String key() {
-      return config.key() + SEP + subSection.key();
-    }
   }
 
-  public class TaskBase extends Section {
+  public class TaskBase extends SubSection {
     public String applicable;
     public Map<String, String> exported;
     public String fail;
@@ -75,7 +73,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public boolean isVisible;
     public boolean isTrusted;
 
-    public TaskBase(SubSection s, boolean isVisible, boolean isTrusted) {
+    public TaskBase(SubSectionKey s, boolean isVisible, boolean isTrusted) {
       super(s);
       this.isVisible = isVisible;
       this.isTrusted = isTrusted;
@@ -96,34 +94,38 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
     protected TaskBase(TaskBase base) {
       this(base.subSection);
-      Copier.deepCopyDeclaredFields(TaskBase.class, base, this, false);
+      Copier.deepCopyDeclaredFields(TaskBase.class, base, this, false, copyOnlyReferencesFor());
     }
 
-    protected TaskBase(SubSection s) {
+    protected TaskBase(SubSectionKey s) {
       super(s);
     }
   }
 
   public class Task extends TaskBase {
-    public String name;
+    public final TaskKey key;
 
-    public Task(SubSection s, boolean isVisible, boolean isTrusted) {
+    public Task(SubSectionKey s, boolean isVisible, boolean isTrusted) {
       super(s, isVisible, isTrusted);
-      name = s.subSection;
+      key = TaskKey.create(s);
     }
 
     public Task(Task task) {
       super(task);
-      Copier.deepCopyDeclaredFields(Task.class, task, this, false);
+      // Despite being copied in Copier.deepCopyDeclaredFields this
+      // is needed to avoid the final variable initialization warning.
+      this.key = task.key;
+      Copier.deepCopyDeclaredFields(Task.class, task, this, false, copyOnlyReferencesFor());
     }
 
     public Task(TasksFactory tasks, String name) {
       super(tasks);
-      this.name = name;
+      key = TaskKey.create(tasks.subSection, name);
     }
 
-    public Task(SubSection s) {
+    public Task(SubSectionKey s) {
       super(s);
+      key = TaskKey.create(s);
     }
 
     protected Map<String, String> getAllProperties() {
@@ -132,27 +134,30 @@ public class TaskConfig extends AbstractVersionedMetaData {
       return all;
     }
 
-    public String key() {
-      // name is needed to differentiate Tasks from the same TasksFactory
-      return super.key() + SEP + name;
+    public String name() {
+      return key.task();
+    }
+
+    public TaskKey key() {
+      return key;
     }
   }
 
   public class TasksFactory extends TaskBase {
     public String namesFactory;
 
-    public TasksFactory(SubSection s, boolean isVisible, boolean isTrusted) {
+    public TasksFactory(SubSectionKey s, boolean isVisible, boolean isTrusted) {
       super(s, isVisible, isTrusted);
       namesFactory = getString(s, KEY_NAMES_FACTORY, null);
     }
   }
 
-  public class NamesFactory extends Section {
+  public class NamesFactory extends SubSection {
     public String changes;
     public List<String> names;
     public String type;
 
-    public NamesFactory(SubSection s) {
+    public NamesFactory(SubSectionKey s) {
       super(s);
       changes = getString(s, KEY_CHANGES, null);
       names = getStringList(s, KEY_NAME);
@@ -161,18 +166,18 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
     public NamesFactory(NamesFactory n) {
       super(n.subSection);
-      Copier.deepCopyDeclaredFields(NamesFactory.class, n, this, false);
+      Copier.deepCopyDeclaredFields(NamesFactory.class, n, this, false, copyOnlyReferencesFor());
     }
   }
 
-  public class External extends Section {
+  public class External extends SubSection {
     public String name;
     public String file;
     public String user;
 
-    public External(SubSection s) {
+    public External(SubSectionKey s) {
       super(s);
-      name = s.subSection;
+      name = s.subSection();
       file = getString(s, KEY_FILE, null);
       user = getString(s, KEY_USER, null);
     }
@@ -205,13 +210,20 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String KEY_TYPE = "type";
   protected static final String KEY_USER = "user";
 
+  protected final FileKey file;
   public boolean isVisible;
   public boolean isTrusted;
 
   protected final Preloader preloader;
 
-  public TaskConfig(Branch.NameKey branch, String fileName, boolean isVisible, boolean isTrusted) {
-    super(branch, fileName);
+  public TaskConfig(FileKey file, boolean isVisible, boolean isTrusted) {
+    this(file.branch(), file, isVisible, isTrusted);
+  }
+
+  public TaskConfig(
+      Branch.NameKey masqueraded, FileKey file, boolean isVisible, boolean isTrusted) {
+    super(masqueraded, file.file());
+    this.file = file;
     this.isVisible = isVisible;
     this.isTrusted = isTrusted;
     preloader = new Preloader(this);
@@ -241,7 +253,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     List<Task> tasks = new ArrayList<>();
     // No need to get a task with no name (what would we call it?)
     for (String task : cfg.getSubsections(type)) {
-      tasks.add(new Task(new SubSection(type, task), isVisible, isTrusted));
+      tasks.add(new Task(subSectionKey(type, task), isVisible, isTrusted));
     }
     return tasks;
   }
@@ -284,29 +296,29 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   protected Optional<Task> getOptionalTask(String name) {
-    SubSection subSection = new SubSection(SECTION_TASK, name);
+    SubSectionKey subSection = subSectionKey(SECTION_TASK, name);
     return getNames(subSection).isEmpty()
         ? Optional.empty()
         : Optional.of(new Task(subSection, isVisible, isTrusted));
   }
 
   public TasksFactory getTasksFactory(String name) {
-    return new TasksFactory(new SubSection(SECTION_TASKS_FACTORY, name), isVisible, isTrusted);
+    return new TasksFactory(subSectionKey(SECTION_TASKS_FACTORY, name), isVisible, isTrusted);
   }
 
   public NamesFactory getNamesFactory(String name) {
-    return new NamesFactory(new SubSection(SECTION_NAMES_FACTORY, name));
+    return new NamesFactory(subSectionKey(SECTION_NAMES_FACTORY, name));
   }
 
   public External getExternal(String name) {
-    return getExternal(new SubSection(SECTION_EXTERNAL, name));
+    return getExternal(subSectionKey(SECTION_EXTERNAL, name));
   }
 
-  protected External getExternal(SubSection s) {
+  protected External getExternal(SubSectionKey s) {
     return new External(s);
   }
 
-  protected Map<String, String> getProperties(SubSection s, String prefix) {
+  protected Map<String, String> getProperties(SubSectionKey s, String prefix) {
     Map<String, String> valueByName = new HashMap<>();
     for (Map.Entry<String, String> e :
         getStringByName(s, getMatchingNames(s, prefix + ".+")).entrySet()) {
@@ -316,7 +328,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return Collections.unmodifiableMap(valueByName);
   }
 
-  protected Map<String, String> getStringByName(SubSection s, Iterable<String> names) {
+  protected Map<String, String> getStringByName(SubSectionKey s, Iterable<String> names) {
     Map<String, String> valueByName = new HashMap<>();
     for (String name : names) {
       valueByName.put(name, getString(s, name));
@@ -324,7 +336,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return valueByName;
   }
 
-  protected Set<String> getMatchingNames(SubSection s, String match) {
+  protected Set<String> getMatchingNames(SubSectionKey s, String match) {
     Set<String> matched = new HashSet<>();
     for (String name : getNames(s)) {
       if (name.matches(match)) {
@@ -334,39 +346,29 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return matched;
   }
 
-  protected Set<String> getNames(SubSection s) {
-    return cfg.getNames(s.section, s.subSection);
+  protected Set<String> getNames(SubSectionKey s) {
+    return cfg.getNames(s.section(), s.subSection());
   }
 
-  protected String getString(SubSection s, String key, String def) {
+  protected String getString(SubSectionKey s, String key, String def) {
     String v = getString(s, key);
     return v != null ? v : def;
   }
 
-  protected String getString(SubSection s, String key) {
-    return cfg.getString(s.section, s.subSection, key);
+  protected String getString(SubSectionKey s, String key) {
+    return cfg.getString(s.section(), s.subSection(), key);
   }
 
-  protected List<String> getStringList(SubSection s, String key) {
+  protected List<String> getStringList(SubSectionKey s, String key) {
     return Collections.unmodifiableList(
-        Arrays.asList(cfg.getStringList(s.section, s.subSection, key)));
+        Arrays.asList(cfg.getStringList(s.section(), s.subSection(), key)));
   }
 
-  public String key() {
-    return branch.getParentKey() + SEP + branch.get() + SEP + fileName;
+  protected SubSectionKey subSectionKey(String section, String subSection) {
+    return SubSectionKey.create(file, section, subSection);
   }
 
-  protected static class SubSection {
-    public final String section;
-    public final String subSection;
-
-    protected SubSection(String section, String subSection) {
-      this.section = section;
-      this.subSection = subSection;
-    }
-
-    public String key() {
-      return section + SEP + subSection;
-    }
+  protected Collection<Class<?>> copyOnlyReferencesFor() {
+    return Sets.newHashSet(TaskKey.class, SubSectionKey.class);
   }
 }

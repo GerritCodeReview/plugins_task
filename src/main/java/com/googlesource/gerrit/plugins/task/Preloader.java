@@ -61,7 +61,7 @@ public class Preloader {
     Task preloadTo = definition.config.new Task(definition.subSection);
     for (Field field : definition.getClass().getFields()) {
       String name = field.getName();
-      if ("config".equals(name) || "subSection".equals(name)) {
+      if ("config".equals(name)) {
         continue;
       }
 

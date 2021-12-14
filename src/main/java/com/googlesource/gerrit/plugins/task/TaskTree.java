@@ -107,7 +107,7 @@ public class TaskTree {
   protected class NodeList {
     protected NodeList parent = null;
     protected Collection<String> path;
-    protected Map<String, Node> cachedNodeByTask = new HashMap<>();
+    protected Map<TaskKey, Node> cachedNodeByTask = new HashMap<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
 
@@ -135,7 +135,7 @@ public class TaskTree {
             node = nodeFactory.create(this, def);
           }
 
-          if (!path.contains(node.key()) && names.add(def.name)) {
+          if (!path.contains(node.key()) && names.add(def.name())) {
             // path check above detects looping definitions
             // names check above detects duplicate subtasks
             if (isRefreshNeeded) {
@@ -187,7 +187,7 @@ public class TaskTree {
     public Task task;
 
     protected final Properties properties;
-    protected final String taskKey;
+    protected final TaskKey taskKey;
 
     public Node(NodeList parent, Task task) throws ConfigInvalidException, OrmException {
       this.parent = parent;
@@ -241,7 +241,8 @@ public class TaskTree {
     protected void addSubTasksFiles() throws ConfigInvalidException, OrmException {
       for (String file : task.subTasksFiles) {
         try {
-          addPreloaded(getPreloadedTasks(task.config.getBranch(), file));
+          addPreloaded(
+              getPreloadedTasks(FileKey.create(task.key().branch(), resolveTaskFileName(file))));
         } catch (ConfigInvalidException | IOException e) {
           addInvalidNode();
         }
@@ -322,14 +323,13 @@ public class TaskTree {
 
     protected List<Task> getPreloadedTasks(External external)
         throws ConfigInvalidException, IOException, OrmException {
-      return getPreloadedTasks(resolveUserBranch(external.user), external.file);
+      return getPreloadedTasks(
+          FileKey.create(resolveUserBranch(external.user), resolveTaskFileName(external.file)));
     }
 
-    protected List<Task> getPreloadedTasks(Branch.NameKey branch, String file)
+    protected List<Task> getPreloadedTasks(FileKey file)
         throws ConfigInvalidException, IOException {
-      return taskFactory
-          .getTaskConfig(branch, resolveTaskFileName(file), task.isTrusted)
-          .getPreloadedTasks();
+      return taskFactory.getTaskConfig(file, task.isTrusted).getPreloadedTasks();
     }
 
     @Override
