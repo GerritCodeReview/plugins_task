@@ -209,7 +209,7 @@ public class TaskTree {
 
       this.task = properties.getTask(getChangeData());
 
-      if (nodes != null) {
+      if (nodes != null && properties.isSubNodeReloadRequired()) {
         cachedNodeByTask.clear();
         nodes.stream().filter(n -> n != null).forEach(n -> cachedNodeByTask.put(n.task.key(), n));
         names.clear();

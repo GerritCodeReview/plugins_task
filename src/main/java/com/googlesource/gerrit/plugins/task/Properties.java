@@ -40,8 +40,10 @@ public class Properties {
   protected final Task origTask;
   protected final CopyOnWrite<Task> task;
   protected Expander expander;
+  protected Loader loader;
   protected boolean init = true;
   protected boolean isTaskRefreshNeeded;
+  protected boolean isSubNodeReloadRequired;
 
   public Properties() {
     this(null, null);
@@ -56,7 +58,15 @@ public class Properties {
 
   /** Use to expand properties specifically for Tasks. */
   public Task getTask(ChangeData changeData) throws OrmException {
-    Loader loader = new Loader(changeData);
+    if (loader != null && loader.isNonTaskDefinedPropertyLoaded()) {
+      // To detect NamesFactories dependent on non task defined properties, the checking must be
+      // done after subnodes are fully loaded, which unfortunately happens after getTask() is
+      // called. However, these non task property uses from the last change are still detectable
+      // here before we replace the old Loader with a new one.
+      isSubNodeReloadRequired = true;
+    }
+
+    loader = new Loader(changeData);
     expander = new Expander(n -> loader.load(n));
 
     if (isTaskRefreshNeeded || init) {
@@ -73,6 +83,10 @@ public class Properties {
       }
     }
     return task.getForRead();
+  }
+
+  public boolean isSubNodeReloadRequired() {
+    return isSubNodeReloadRequired;
   }
 
   /** Use to expand properties specifically for NamesFactories. */
