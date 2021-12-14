@@ -135,7 +135,7 @@ public class Properties {
 
     protected String internal(String name) {
       if ("_name".equals(name)) {
-        return origTask.name;
+        return origTask.name();
       }
       String changeProp = name.replace("_change_", "");
       if (changeProp != name) {

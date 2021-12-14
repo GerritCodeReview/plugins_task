@@ -121,7 +121,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       this.node = node;
       this.matchCache = matchCache;
       this.task = node.task;
-      this.attribute = new TaskAttribute(task.name);
+      this.attribute = new TaskAttribute(task.name());
     }
 
     public Optional<TaskAttribute> create() {

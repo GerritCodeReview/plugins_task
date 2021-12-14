@@ -5,8 +5,27 @@ load(
 )
 load("//tools/bzl:genrule2.bzl", "genrule2")
 load("//tools/bzl:js.bzl", "polygerrit_plugin")
+load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
 
 plugin_name = "task"
+
+java_plugin(
+    name = "auto-value-plugin",
+    processor_class = "com.google.auto.value.processor.AutoValueProcessor",
+    deps = [
+        "@auto-value-annotations//jar",
+        "@auto-value//jar",
+    ],
+)
+
+java_library(
+    name = "auto-value",
+    exported_plugins = [
+        ":auto-value-plugin",
+    ],
+    visibility = ["//visibility:public"],
+    exports = ["@auto-value//jar"],
+)
 
 gerrit_plugin(
     name = plugin_name,
@@ -21,6 +40,7 @@ gerrit_plugin(
     ],
     resource_jars = [":gr-task-plugin-static"],
     resources = glob(["src/main/resources/**/*"]),
+    deps = [":auto-value"],
     javacopts = [ "-Werror", "-Xlint:all", "-Xlint:-classfile", "-Xlint:-processing"],
 )
 
