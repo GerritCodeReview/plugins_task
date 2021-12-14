@@ -17,13 +17,18 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.common.primitives.Primitives;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Copier {
   protected static <T> void deepCopyDeclaredFields(
-      Class<T> cls, T from, T to, boolean includeInaccessible) {
+      Class<T> cls,
+      T from,
+      T to,
+      boolean includeInaccessible,
+      Collection<Class<?>> copyReferenceOnly) {
     for (Field field : cls.getDeclaredFields()) {
       try {
         if (includeInaccessible) {
@@ -34,7 +39,8 @@ public class Copier {
         if (field.getType().isPrimitive()
             || Primitives.isWrapperType(fieldCls)
             || (val instanceof String)
-            || val == null) {
+            || val == null
+            || copyReferenceOnly.contains(fieldCls)) {
           field.set(to, val);
         } else if (val instanceof List) {
           List<?> list = List.class.cast(val);
