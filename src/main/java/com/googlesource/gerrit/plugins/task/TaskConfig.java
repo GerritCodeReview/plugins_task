@@ -26,10 +26,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
-import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Task Configuration file living in git */
 public class TaskConfig extends AbstractVersionedMetaData {
@@ -138,6 +136,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
       return key.task();
     }
 
+    public FileKey file() {
+      return key.subSection().file();
+    }
+
     public TaskKey key() {
       return key;
     }
@@ -214,8 +216,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public boolean isVisible;
   public boolean isTrusted;
 
-  protected final Preloader preloader;
-
   public TaskConfig(FileKey file, boolean isVisible, boolean isTrusted) {
     this(file.branch(), file, isVisible, isTrusted);
   }
@@ -226,27 +226,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
     this.file = file;
     this.isVisible = isVisible;
     this.isTrusted = isTrusted;
-    preloader = new Preloader(this);
-  }
-
-  public List<Task> getPreloadedRootTasks() {
-    return getPreloadedTasks(SECTION_ROOT);
-  }
-
-  public List<Task> getPreloadedTasks() {
-    return getPreloadedTasks(SECTION_TASK);
-  }
-
-  protected List<Task> getPreloadedTasks(String type) {
-    List<Task> preloaded = new ArrayList<>();
-    for (Task task : getTasks(type)) {
-      try {
-        preloaded.add(preloader.preload(task));
-      } catch (ConfigInvalidException e) {
-        preloaded.add(null);
-      }
-    }
-    return preloaded;
   }
 
   protected List<Task> getTasks(String type) {
@@ -265,34 +244,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
       externals.add(getExternal(external));
     }
     return externals;
-  }
-
-  /**
-   * Get a preloaded Task for this TaskExpression.
-   *
-   * @param TaskExpression
-   * @return Optional<Task> which is empty if the expression is optional and no tasks are resolved
-   * @throws ConfigInvalidException if the expression requires a task and no tasks are resolved
-   */
-  public Optional<Task> getPreloadedOptionalTask(TaskExpression expression)
-      throws ConfigInvalidException {
-    return preloader.preloadOptional(expression);
-  }
-
-  protected Optional<Task> getOptionalTask(TaskExpression expression)
-      throws ConfigInvalidException {
-    try {
-      for (String name : expression) {
-        Optional<Task> task = getOptionalTask(name);
-        if (task.isPresent()) {
-          return task;
-        }
-      }
-    } catch (NoSuchElementException e) {
-      // expression was not optional but we ran out of names to try
-      throw new ConfigInvalidException("task not defined");
-    }
-    return Optional.empty();
   }
 
   protected Optional<Task> getOptionalTask(String name) {

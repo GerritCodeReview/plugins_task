@@ -20,41 +20,83 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Use to pre-load a task definition with values from its preload-task definition. */
 public class Preloader {
-  protected final TaskConfig config;
-  protected final Map<String, Optional<Task>> optionalTaskByExpression = new HashMap<>();
+  protected final Map<TaskExpressionKey, Optional<Task>> optionalTaskByExpression = new HashMap<>();
 
-  public Preloader(TaskConfig config) {
-    this.config = config;
+  public List<Task> getRootTasks(TaskConfig cfg) {
+    return getTasks(cfg, TaskConfig.SECTION_ROOT);
   }
 
-  public Optional<Task> preloadOptional(TaskExpression expression) throws ConfigInvalidException {
-    Optional<Task> task = optionalTaskByExpression.get(expression.getKey());
+  public List<Task> getTasks(TaskConfig cfg) {
+    return getTasks(cfg, TaskConfig.SECTION_TASK);
+  }
+
+  protected List<Task> getTasks(TaskConfig cfg, String type) {
+    List<Task> preloaded = new ArrayList<>();
+    for (Task task : cfg.getTasks(type)) {
+      try {
+        preloaded.add(preload(task));
+      } catch (ConfigInvalidException e) {
+        preloaded.add(null);
+      }
+    }
+    return preloaded;
+  }
+
+  /**
+   * Get a preloaded Task for this TaskExpression.
+   *
+   * @param expression
+   * @return Optional<Task> which is empty if the expression is optional and no tasks are resolved
+   * @throws ConfigInvalidException if the expression requires a task and no tasks are resolved
+   */
+  public Optional<Task> getOptionalTask(TaskConfig cfg, TaskExpression expression)
+      throws ConfigInvalidException {
+    Optional<Task> task = optionalTaskByExpression.get(expression.key);
     if (task == null) {
-      task = loadOptional(expression);
-      optionalTaskByExpression.put(expression.getKey(), task);
+      task = preloadOptionalTask(cfg, expression);
+      optionalTaskByExpression.put(expression.key, task);
     }
     return task;
   }
 
-  protected Optional<Task> loadOptional(TaskExpression expression) throws ConfigInvalidException {
-    Optional<Task> definition = config.getOptionalTask(expression);
+  protected Optional<Task> preloadOptionalTask(TaskConfig cfg, TaskExpression expression)
+      throws ConfigInvalidException {
+    Optional<Task> definition = loadOptionalTask(cfg, expression);
     return definition.isPresent() ? Optional.of(preload(definition.get())) : definition;
   }
 
   public Task preload(Task definition) throws ConfigInvalidException {
     String expression = definition.preloadTask;
     if (expression != null) {
-      Optional<Task> preloadFrom = preloadOptional(new TaskExpression(expression));
+      Optional<Task> preloadFrom =
+          getOptionalTask(definition.config, new TaskExpression(definition.file(), expression));
       if (preloadFrom.isPresent()) {
         return preloadFrom(definition, preloadFrom.get());
       }
     }
     return definition;
+  }
+
+  protected Optional<Task> loadOptionalTask(TaskConfig cfg, TaskExpression expression)
+      throws ConfigInvalidException {
+    try {
+      for (String name : expression) {
+        Optional<Task> task = cfg.getOptionalTask(name);
+        if (task.isPresent()) {
+          return task;
+        }
+      }
+    } catch (NoSuchElementException e) {
+      // expression was not optional but we ran out of names to try
+      throw new ConfigInvalidException("task not defined");
+    }
+    return Optional.empty();
   }
 
   protected static Task preloadFrom(Task definition, Task preloadFrom) {
