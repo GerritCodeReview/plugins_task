@@ -37,21 +37,16 @@ import java.util.regex.Pattern;
  */
 public class TaskExpression implements Iterable<String> {
   protected static final Pattern EXPRESSION_PATTERN = Pattern.compile("([^ |]+[^|]*)(\\|)?");
+  protected final TaskExpressionKey key;
 
-  protected final String expression;
-
-  public TaskExpression(String expression) {
-    this.expression = expression;
-  }
-
-  public String getKey() {
-    return expression;
+  public TaskExpression(FileKey key, String expression) {
+    this.key = TaskExpressionKey.create(key, expression);
   }
 
   @Override
   public Iterator<String> iterator() {
     return new Iterator<String>() {
-      Matcher m = EXPRESSION_PATTERN.matcher(expression);
+      Matcher m = EXPRESSION_PATTERN.matcher(key.expression());
       Boolean hasNext;
       boolean optional;
 

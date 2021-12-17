@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.gerrit.reviewdb.client.Branch;
+import com.google.gerrit.reviewdb.client.Project;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import junit.framework.TestCase;
@@ -30,16 +32,17 @@ public class TaskExpressionTest extends TestCase {
   public static String SIMPLE = "simple";
   public static String WORLD = "world";
   public static String PEACE = "peace";
+  public static FileKey file = createFileKey("foo", "bar", "baz");
 
   public void testBlank() {
-    TaskExpression exp = new TaskExpression("");
+    TaskExpression exp = getTaskExpression("");
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
 
   public void testRequiredSingleName() {
-    TaskExpression exp = new TaskExpression(SIMPLE);
+    TaskExpression exp = getTaskExpression(SIMPLE);
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), SIMPLE);
@@ -48,7 +51,7 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testOptionalSingleName() {
-    TaskExpression exp = new TaskExpression(SIMPLE + "|");
+    TaskExpression exp = getTaskExpression(SIMPLE + "|");
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), SIMPLE);
@@ -56,7 +59,7 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testRequiredTwoNames() {
-    TaskExpression exp = new TaskExpression(WORLD + "|" + PEACE);
+    TaskExpression exp = getTaskExpression(WORLD + "|" + PEACE);
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), WORLD);
@@ -67,7 +70,7 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testOptionalTwoNames() {
-    TaskExpression exp = new TaskExpression(WORLD + "|" + PEACE + "|");
+    TaskExpression exp = getTaskExpression(WORLD + "|" + PEACE + "|");
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), WORLD);
@@ -77,14 +80,14 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testBlankSpaces() {
-    TaskExpression exp = new TaskExpression("  ");
+    TaskExpression exp = getTaskExpression("  ");
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
 
   public void testRequiredSingleNameLeadingSpaces() {
-    TaskExpression exp = new TaskExpression("  " + SIMPLE);
+    TaskExpression exp = getTaskExpression("  " + SIMPLE);
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), SIMPLE);
@@ -93,7 +96,7 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testRequiredSingleNameTrailingSpaces() {
-    TaskExpression exp = new TaskExpression(SIMPLE + "  ");
+    TaskExpression exp = getTaskExpression(SIMPLE + "  ");
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), SIMPLE);
@@ -102,7 +105,7 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testOptionalSingleNameLeadingSpaces() {
-    TaskExpression exp = new TaskExpression("  " + SIMPLE + "|");
+    TaskExpression exp = getTaskExpression("  " + SIMPLE + "|");
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), SIMPLE);
@@ -110,7 +113,7 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testOptionalSingleNameTrailingSpaces() {
-    TaskExpression exp = new TaskExpression(SIMPLE + "|  ");
+    TaskExpression exp = getTaskExpression(SIMPLE + "|  ");
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), SIMPLE);
@@ -118,7 +121,7 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testOptionalSingleNameMiddleSpaces() {
-    TaskExpression exp = new TaskExpression(SIMPLE + "  |");
+    TaskExpression exp = getTaskExpression(SIMPLE + "  |");
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), SIMPLE);
@@ -126,7 +129,7 @@ public class TaskExpressionTest extends TestCase {
   }
 
   public void testRequiredTwoNamesMiddleSpaces() {
-    TaskExpression exp = new TaskExpression(WORLD + "  |  " + PEACE);
+    TaskExpression exp = getTaskExpression(WORLD + "  |  " + PEACE);
     Iterator<String> it = exp.iterator();
     assertTrue(it.hasNext());
     assertEquals(it.next(), WORLD);
@@ -136,6 +139,30 @@ public class TaskExpressionTest extends TestCase {
     assertNoSuchElementException(it);
   }
 
+  public void testDifferentKeyOnDifferentFile() {
+    TaskExpression exp = getTaskExpression(createFileKey("foo", "bar", "baz"), SIMPLE);
+    TaskExpression otherExp = getTaskExpression(createFileKey("foo", "bar", "other"), SIMPLE);
+    assertFalse(exp.key.equals(otherExp.key));
+  }
+
+  public void testDifferentKeyOnDifferentBranch() {
+    TaskExpression exp = getTaskExpression(createFileKey("foo", "bar", "baz"), SIMPLE);
+    TaskExpression otherExp = getTaskExpression(createFileKey("foo", "other", "baz"), SIMPLE);
+    assertFalse(exp.key.equals(otherExp.key));
+  }
+
+  public void testDifferentKeyOnDifferentProject() {
+    TaskExpression exp = getTaskExpression(createFileKey("foo", "bar", "baz"), SIMPLE);
+    TaskExpression otherExp = getTaskExpression(createFileKey("other", "bar", "baz"), SIMPLE);
+    assertFalse(exp.key.equals(otherExp.key));
+  }
+
+  public void testDifferentKeyOnDifferentExpression() {
+    TaskExpression exp = getTaskExpression(SIMPLE);
+    TaskExpression otherExp = getTaskExpression(PEACE);
+    assertFalse(exp.key.equals(otherExp.key));
+  }
+
   protected static void assertNoSuchElementException(Iterator<String> it) {
     try {
       it.next();
@@ -143,5 +170,17 @@ public class TaskExpressionTest extends TestCase {
     } catch (NoSuchElementException e) {
       assertTrue(true);
     }
+  }
+
+  protected TaskExpression getTaskExpression(String expression) {
+    return getTaskExpression(file, expression);
+  }
+
+  protected TaskExpression getTaskExpression(FileKey file, String expression) {
+    return new TaskExpression(file, expression);
+  }
+
+  protected static FileKey createFileKey(String project, String branch, String file) {
+    return FileKey.create(new Branch.NameKey(new Project.NameKey(project), branch), file);
   }
 }
