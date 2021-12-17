@@ -70,6 +70,7 @@ public class TaskTree {
   protected final AllUsersNameProvider allUsers;
   protected final CurrentUser user;
   protected final TaskConfigFactory taskFactory;
+  protected final Preloader preloader;
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
@@ -84,13 +85,15 @@ public class TaskTree {
       CurrentUser user,
       TaskConfigFactory taskFactory,
       Provider<ChangeQueryBuilder> changeQueryBuilderProvider,
-      Provider<ChangeQueryProcessor> changeQueryProcessorProvider) {
+      Provider<ChangeQueryProcessor> changeQueryProcessorProvider,
+      Preloader preloader) {
     this.accountResolver = accountResolver;
     this.allUsers = allUsers;
     this.user = user != null ? user : anonymousUser;
     this.taskFactory = taskFactory;
     this.changeQueryProcessorProvider = changeQueryProcessorProvider;
     this.changeQueryBuilderProvider = changeQueryBuilderProvider;
+    this.preloader = preloader;
   }
 
   public void masquerade(PatchSetArgument psa) {
@@ -112,7 +115,7 @@ public class TaskTree {
     protected Set<String> names = new HashSet<>();
 
     protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      addPreloaded(taskFactory.getRootConfig().getPreloadedRootTasks());
+      addPreloaded(preloader.getRootTasks(taskFactory.getRootConfig()));
     }
 
     protected void addPreloaded(List<Task> defs) throws ConfigInvalidException, OrmException {
@@ -228,7 +231,8 @@ public class TaskTree {
     protected void addSubTasks() throws ConfigInvalidException, OrmException {
       for (String expression : task.subTasks) {
         try {
-          Optional<Task> def = task.config.getPreloadedOptionalTask(new TaskExpression(expression));
+          Optional<Task> def =
+              preloader.getOptionalTask(task.config, new TaskExpression(task.file(), expression));
           if (def.isPresent()) {
             addPreloaded(def.get());
           }
@@ -288,7 +292,7 @@ public class TaskTree {
     protected void addStaticTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
         throws ConfigInvalidException, OrmException {
       for (String name : namesFactory.names) {
-        addPreloaded(preload(task.config.new Task(tasksFactory, name)));
+        addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
       }
     }
 
@@ -303,7 +307,8 @@ public class TaskTree {
                   .entities();
           for (ChangeData changeData : changeDataList) {
             addPreloaded(
-                preload(task.config.new Task(tasksFactory, changeData.getId().toString())),
+                preloader.preload(
+                    task.config.new Task(tasksFactory, changeData.getId().toString())),
                 (parent, definition) ->
                     new Node(parent, definition) {
                       @Override
@@ -329,7 +334,7 @@ public class TaskTree {
 
     protected List<Task> getPreloadedTasks(FileKey file)
         throws ConfigInvalidException, IOException {
-      return taskFactory.getTaskConfig(file, task.isTrusted).getPreloadedTasks();
+      return preloader.getTasks(taskFactory.getTaskConfig(file, task.isTrusted));
     }
 
     @Override
@@ -359,9 +364,5 @@ public class TaskTree {
       throw new ConfigInvalidException("Cannot resolve user: " + user);
     }
     return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
-  }
-
-  protected static Task preload(Task task) throws ConfigInvalidException {
-    return task.config.preloader.preload(task);
   }
 }

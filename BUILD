@@ -1,6 +1,7 @@
 load(
     "//tools/bzl:plugin.bzl",
     "PLUGIN_DEPS",
+    "PLUGIN_TEST_DEPS",
     "gerrit_plugin",
 )
 load("//tools/bzl:genrule2.bzl", "genrule2")
@@ -70,7 +71,7 @@ junit_tests(
     name = "junit-tests",
     size = "small",
     srcs = glob(["src/test/java/**/*Test.java"]),
-    deps = [plugin_name],
+    deps = PLUGIN_TEST_DEPS + [plugin_name],
 )
 
 sh_test(
