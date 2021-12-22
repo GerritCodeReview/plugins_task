@@ -45,6 +45,7 @@ public class TaskConfigFactory {
   protected final AllProjectsName allProjects;
 
   protected final Map<Branch.NameKey, PatchSetArgument> psaMasquerades = new HashMap<>();
+  protected final Map<FileKey, TaskConfig> taskCfgByFile = new HashMap<>();
 
   @Inject
   protected TaskConfigFactory(
@@ -70,7 +71,16 @@ public class TaskConfigFactory {
     return new Branch.NameKey(allProjects, "refs/meta/config");
   }
 
-  public TaskConfig getTaskConfig(FileKey file) throws ConfigInvalidException, IOException {
+  public TaskConfig getTaskConfig(FileKey key) throws ConfigInvalidException, IOException {
+    TaskConfig cfg = taskCfgByFile.get(key);
+    if (cfg == null) {
+      cfg = loadTaskConfig(key);
+      taskCfgByFile.put(key, cfg);
+    }
+    return cfg;
+  }
+
+  private TaskConfig loadTaskConfig(FileKey file) throws ConfigInvalidException, IOException {
     Branch.NameKey branch = file.branch();
     PatchSetArgument psa = psaMasquerades.get(branch);
     boolean visible = true; // invisible psas are filtered out by commandline

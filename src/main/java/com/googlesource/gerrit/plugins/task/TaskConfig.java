@@ -192,7 +192,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String SECTION_EXTERNAL = "external";
   protected static final String SECTION_NAMES_FACTORY = "names-factory";
   protected static final String SECTION_ROOT = "root";
-  protected static final String SECTION_TASK = "task";
+  protected static final String SECTION_TASK = TaskKey.CONFIG_SECTION;
   protected static final String SECTION_TASKS_FACTORY = "tasks-factory";
   protected static final String KEY_APPLICABLE = "applicable";
   protected static final String KEY_CHANGES = "changes";
