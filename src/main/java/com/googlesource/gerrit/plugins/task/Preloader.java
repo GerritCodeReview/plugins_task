@@ -26,17 +26,17 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 /** Use to pre-load a task definition with values from its preload-task definition. */
 public class Preloader {
   protected final TaskConfig config;
-  protected final Map<String, Optional<Task>> optionalTaskByName = new HashMap<>();
+  protected final Map<String, Optional<Task>> optionalTaskByExpression = new HashMap<>();
 
   public Preloader(TaskConfig config) {
     this.config = config;
   }
 
   public Optional<Task> preloadOptional(TaskExpression expression) throws ConfigInvalidException {
-    Optional<Task> task = optionalTaskByName.get(expression.getKey());
+    Optional<Task> task = optionalTaskByExpression.get(expression.getKey());
     if (task == null) {
       task = loadOptional(expression);
-      optionalTaskByName.put(expression.getKey(), task);
+      optionalTaskByExpression.put(expression.getKey(), task);
     }
     return task;
   }
