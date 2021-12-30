@@ -59,7 +59,7 @@ public class TaskConfigFactory {
   }
 
   public TaskConfig getRootConfig() throws ConfigInvalidException, IOException {
-    return getTaskConfig(FileKey.create(getRootBranch(), DEFAULT), true);
+    return getTaskConfig(FileKey.create(getRootBranch(), DEFAULT));
   }
 
   public void masquerade(PatchSetArgument psa) {
@@ -70,23 +70,23 @@ public class TaskConfigFactory {
     return new Branch.NameKey(allProjects, "refs/meta/config");
   }
 
-  public TaskConfig getTaskConfig(FileKey file, boolean isTrusted)
-      throws ConfigInvalidException, IOException {
+  public TaskConfig getTaskConfig(FileKey file) throws ConfigInvalidException, IOException {
     Branch.NameKey branch = file.branch();
     PatchSetArgument psa = psaMasquerades.get(branch);
     boolean visible = true; // invisible psas are filtered out by commandline
+    boolean isMasqueraded = false;
     if (psa == null) {
       visible = canRead(branch);
     } else {
-      isTrusted = false;
+      isMasqueraded = true;
       branch = new Branch.NameKey(psa.change.getProject(), psa.patchSet.getId().toRefName());
     }
 
     Project.NameKey project = file.branch().getParentKey();
     TaskConfig cfg =
-        psa == null
-            ? new TaskConfig(file, visible, isTrusted)
-            : new TaskConfig(branch, file, visible, isTrusted);
+        isMasqueraded
+            ? new TaskConfig(branch, file, visible, isMasqueraded)
+            : new TaskConfig(file, visible, isMasqueraded);
     try (Repository git = gitMgr.openRepository(project)) {
       cfg.load(project, git);
     } catch (IOException e) {

@@ -185,6 +185,10 @@ public class TaskTree {
     protected Properties getProperties() {
       return Properties.EMPTY_PARENT;
     }
+
+    protected boolean isTrusted() {
+      return true;
+    }
   }
 
   public class Node extends NodeList {
@@ -351,7 +355,7 @@ public class TaskTree {
 
     protected List<Task> getPreloadedTasks(FileKey file)
         throws ConfigInvalidException, IOException {
-      return preloader.getTasks(taskFactory.getTaskConfig(file, task.isTrusted));
+      return preloader.getTasks(taskFactory.getTaskConfig(file));
     }
 
     @Override
@@ -361,6 +365,11 @@ public class TaskTree {
 
     public boolean isChange() {
       return false;
+    }
+
+    @Override
+    protected boolean isTrusted() {
+      return parent.isTrusted() && !task.isMasqueraded;
     }
   }
 

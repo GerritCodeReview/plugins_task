@@ -133,7 +133,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
 
         boolean applicable = matchCache.match(task.applicable);
         if (!task.isVisible) {
-          if (!task.isTrusted || (!applicable && !options.onlyApplicable)) {
+          if (!node.isTrusted() || (!applicable && !options.onlyApplicable)) {
             return Optional.of(unknown());
           }
         }

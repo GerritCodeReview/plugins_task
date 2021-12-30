@@ -70,12 +70,12 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public List<String> subTasksFiles;
 
     public boolean isVisible;
-    public boolean isTrusted;
+    public boolean isMasqueraded;
 
-    public TaskBase(SubSectionKey s, boolean isVisible, boolean isTrusted) {
+    public TaskBase(SubSectionKey s, boolean isVisible, boolean isMasqueraded) {
       super(s);
       this.isVisible = isVisible;
-      this.isTrusted = isTrusted;
+      this.isMasqueraded = isMasqueraded;
       applicable = getString(s, KEY_APPLICABLE, null);
       duplicateKey = getString(s, KEY_DUPLICATE_KEY, null);
       exported = getProperties(s, KEY_EXPORT_PREFIX);
@@ -105,8 +105,8 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public class Task extends TaskBase {
     public final TaskKey key;
 
-    public Task(SubSectionKey s, boolean isVisible, boolean isTrusted) {
-      super(s, isVisible, isTrusted);
+    public Task(SubSectionKey s, boolean isVisible, boolean isMasqueraded) {
+      super(s, isVisible, isMasqueraded);
       key = TaskKey.create(s);
     }
 
@@ -150,8 +150,8 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public class TasksFactory extends TaskBase {
     public String namesFactory;
 
-    public TasksFactory(SubSectionKey s, boolean isVisible, boolean isTrusted) {
-      super(s, isVisible, isTrusted);
+    public TasksFactory(SubSectionKey s, boolean isVisible, boolean isMasqueraded) {
+      super(s, isVisible, isMasqueraded);
       namesFactory = getString(s, KEY_NAMES_FACTORY, null);
     }
   }
@@ -217,25 +217,25 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   protected final FileKey file;
   public boolean isVisible;
-  public boolean isTrusted;
+  public boolean isMasqueraded;
 
-  public TaskConfig(FileKey file, boolean isVisible, boolean isTrusted) {
-    this(file.branch(), file, isVisible, isTrusted);
+  public TaskConfig(FileKey file, boolean isVisible, boolean isMasqueraded) {
+    this(file.branch(), file, isVisible, isMasqueraded);
   }
 
   public TaskConfig(
-      Branch.NameKey masqueraded, FileKey file, boolean isVisible, boolean isTrusted) {
+      Branch.NameKey masqueraded, FileKey file, boolean isVisible, boolean isMasqueraded) {
     super(masqueraded, file.file());
     this.file = file;
     this.isVisible = isVisible;
-    this.isTrusted = isTrusted;
+    this.isMasqueraded = isMasqueraded;
   }
 
   protected List<Task> getTasks(String type) {
     List<Task> tasks = new ArrayList<>();
     // No need to get a task with no name (what would we call it?)
     for (String task : cfg.getSubsections(type)) {
-      tasks.add(new Task(subSectionKey(type, task), isVisible, isTrusted));
+      tasks.add(new Task(subSectionKey(type, task), isVisible, isMasqueraded));
     }
     return tasks;
   }
@@ -253,11 +253,11 @@ public class TaskConfig extends AbstractVersionedMetaData {
     SubSectionKey subSection = subSectionKey(SECTION_TASK, name);
     return getNames(subSection).isEmpty()
         ? Optional.empty()
-        : Optional.of(new Task(subSection, isVisible, isTrusted));
+        : Optional.of(new Task(subSection, isVisible, isMasqueraded));
   }
 
   public TasksFactory getTasksFactory(String name) {
-    return new TasksFactory(subSectionKey(SECTION_TASKS_FACTORY, name), isVisible, isTrusted);
+    return new TasksFactory(subSectionKey(SECTION_TASKS_FACTORY, name), isVisible, isMasqueraded);
   }
 
   public NamesFactory getNamesFactory(String name) {
