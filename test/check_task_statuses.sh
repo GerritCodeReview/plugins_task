@@ -37,9 +37,9 @@ result_out() { # test expected actual
     result "$name" "$(diff <(echo "$expected") <(echo "$actual"))"
 }
 
-result_root() { # group root expected_file actual_json
+result_root() { # group root
     local name="$1 - $(echo "$2" | sed -es'/Root //')"
-    result_out "$name" "$(get_root "$2" < "$3")" "$(echo "$4" | get_root "$2")"
+    result_out "$name" "${EXPECTED_ROOTS[$2]}" "${OUTPUT_ROOTS[$2]}"
 }
 
 # -------- Git Config
@@ -189,14 +189,27 @@ replace_user() { # < text_with_testuser > text_with_$USER
 strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json
 strip_non_invalid() { ensure "$MYDIR"/strip_non_invalid.py ; } # < json > json
 
-get_root() { # root < task_plugin_ouptut > root_json
-    python -c "if True: # NOP to start indent
+define_jsonByRoot() { # task_plugin_ouptut > jsonByRoot_array_definition
+    local record root=''
+    local -A jsonByRoot
+    while IFS= read -r -d '' record ; do
+        if [ -z "$root" ] ; then
+            root=$record
+        else
+            jsonByRoot[$root]=$record
+            root=''
+        fi
+    done < <(python -c "if True: # NOP to start indent
         import sys, json
 
         roots=json.loads(sys.stdin.read())['plugins'][0]['roots']
         for root in roots:
-            if 'name' in root.keys() and root['name']=='$1':
-                print json.dumps(root, indent=3, separators=(',', ' : '), sort_keys=True)"
+            root_json = json.dumps(root, indent=3, separators=(',', ' : '), sort_keys=True)
+            print root['name'] + '\x00' + root_json + '\x00',"
+    )
+
+    local def=$(declare -p jsonByRoot)
+    echo "${def#*=}" # declare -A jsonByRoot='(...)' > '(...)'
 }
 
 get_plugins() { # < change_json > plugins_json
@@ -264,10 +277,13 @@ change_plugins() { awk "NR==$1" | get_plugins | json_pp ; }
 
 results_suite() { # name expected_file plugins_json
     local name=$1 expected=$2 actual=$3
-    local out root
 
+    local -A EXPECTED_ROOTS=$(define_jsonByRoot < "$expected")
+    local -A OUTPUT_ROOTS=$(echo "$actual" | define_jsonByRoot)
+
+    local out root
     echo "$ROOTS" | while read root ; do
-        result_root "$name" "$root" "$expected" "$actual"
+        result_root "$name" "$root"
     done
     out=$(diff "$expected" <(echo "$actual") | head -15)
     [ -z "$out" ]
