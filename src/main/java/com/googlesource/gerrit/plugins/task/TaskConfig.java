@@ -14,20 +14,19 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.common.primitives.Primitives;
 import com.google.gerrit.common.Container;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Task Configuration file living in git */
@@ -46,9 +45,15 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   protected class Section extends Container {
     public TaskConfig config;
+    public SubSection subSection;
 
-    public Section() {
+    public Section(SubSection s) {
       this.config = TaskConfig.this;
+      this.subSection = s;
+    }
+
+    public String key() {
+      return config.key() + SEP + subSection.key();
     }
   }
 
@@ -71,6 +76,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public boolean isTrusted;
 
     public TaskBase(SubSection s, boolean isVisible, boolean isTrusted) {
+      super(s);
       this.isVisible = isVisible;
       this.isTrusted = isTrusted;
       applicable = getString(s, KEY_APPLICABLE, null);
@@ -89,40 +95,12 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
 
     protected TaskBase(TaskBase base) {
-      copyDeclaredFields(TaskBase.class, base);
+      this(base.subSection);
+      Copier.deepCopyDeclaredFields(TaskBase.class, base, this, false);
     }
 
-    protected <T> void copyDeclaredFields(Class<T> cls, T from) {
-      for (Field field : cls.getDeclaredFields()) {
-        try {
-          field.setAccessible(true);
-          Class<?> fieldCls = field.getType();
-          Object val = field.get(from);
-          if (field.getType().isPrimitive()
-              || Primitives.isWrapperType(fieldCls)
-              || (val instanceof String)
-              || val == null) {
-            field.set(this, val);
-          } else if (val instanceof List) {
-            List<?> list = List.class.cast(val);
-            field.set(this, new ArrayList<>(list));
-          } else if (val instanceof Map) {
-            Map<?, ?> map = Map.class.cast(val);
-            field.set(this, new HashMap<>(map));
-          } else if (field.getName().equals("this$0")) { // Don't copy internal final field
-          } else {
-            throw new RuntimeException(
-                "Don't know how to deep copy " + fieldValueToString(field, val));
-          }
-        } catch (IllegalAccessException e) {
-          throw new RuntimeException(
-              "Cannot access field to copy it " + fieldValueToString(field, "unknown"));
-        }
-      }
-    }
-
-    protected String fieldValueToString(Field field, Object val) {
-      return "field:" + field.getName() + " value:" + val + " type:" + field.getType();
+    protected TaskBase(SubSection s) {
+      super(s);
     }
   }
 
@@ -134,8 +112,18 @@ public class TaskConfig extends AbstractVersionedMetaData {
       name = s.subSection;
     }
 
-    protected Task(TaskBase base) {
-      super(base);
+    public Task(Task task) {
+      super(task);
+      Copier.deepCopyDeclaredFields(Task.class, task, this, false);
+    }
+
+    public Task(TasksFactory tasks, String name) {
+      super(tasks);
+      this.name = name;
+    }
+
+    public Task(SubSection s) {
+      super(s);
     }
 
     protected Map<String, String> getAllProperties() {
@@ -144,12 +132,9 @@ public class TaskConfig extends AbstractVersionedMetaData {
       return all;
     }
 
-    protected void setExpandedProperties(Map<String, String> expanded) {
-      properties.clear();
-      properties.putAll(expanded);
-      for (String property : exported.keySet()) {
-        exported.put(property, properties.get(property));
-      }
+    public String key() {
+      // name is needed to differentiate Tasks from the same TasksFactory
+      return super.key() + SEP + name;
     }
   }
 
@@ -168,9 +153,15 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String type;
 
     public NamesFactory(SubSection s) {
+      super(s);
       changes = getString(s, KEY_CHANGES, null);
       names = getStringList(s, KEY_NAME);
       type = getString(s, KEY_TYPE, null);
+    }
+
+    public NamesFactory(NamesFactory n) {
+      super(n.subSection);
+      Copier.deepCopyDeclaredFields(NamesFactory.class, n, this, false);
     }
   }
 
@@ -180,14 +171,14 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String user;
 
     public External(SubSection s) {
+      super(s);
       name = s.subSection;
       file = getString(s, KEY_FILE, null);
       user = getString(s, KEY_USER, null);
     }
   }
 
-  protected static final Pattern OPTIONAL_TASK_PATTERN =
-      Pattern.compile("([^ |]*( *[^ |])*) *\\| *");
+  public static final String SEP = "\0";
 
   protected static final String SECTION_EXTERNAL = "external";
   protected static final String SECTION_NAMES_FACTORY = "names-factory";
@@ -217,24 +208,33 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public boolean isVisible;
   public boolean isTrusted;
 
-  public Task createTask(TasksFactory tasks, String name) {
-    Task task = new Task(tasks);
-    task.name = name;
-    return task;
-  }
+  protected final Preloader preloader;
 
   public TaskConfig(Branch.NameKey branch, String fileName, boolean isVisible, boolean isTrusted) {
     super(branch, fileName);
     this.isVisible = isVisible;
     this.isTrusted = isTrusted;
+    preloader = new Preloader(this);
   }
 
-  public List<Task> getRootTasks() {
-    return getTasks(SECTION_ROOT);
+  public List<Task> getPreloadedRootTasks() {
+    return getPreloadedTasks(SECTION_ROOT);
   }
 
-  public List<Task> getTasks() {
-    return getTasks(SECTION_TASK);
+  public List<Task> getPreloadedTasks() {
+    return getPreloadedTasks(SECTION_TASK);
+  }
+
+  protected List<Task> getPreloadedTasks(String type) {
+    List<Task> preloaded = new ArrayList<>();
+    for (Task task : getTasks(type)) {
+      try {
+        preloaded.add(preloader.preload(task));
+      } catch (ConfigInvalidException e) {
+        preloaded.add(null);
+      }
+    }
+    return preloaded;
   }
 
   protected List<Task> getTasks(String type) {
@@ -255,33 +255,39 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return externals;
   }
 
-  /* returs null only if optional and not found */
-  public Task getTaskOptional(String name) throws ConfigInvalidException {
-    int end = 0;
-    Matcher m = OPTIONAL_TASK_PATTERN.matcher(name);
-    while (m.find()) {
-      end = m.end();
-      Task task = getTaskOrNull(m.group(1));
-      if (task != null) {
-        return task;
-      }
-    }
-
-    String last = name.substring(end);
-    if (!"".equals(last)) { // Last entry was not optional
-      Task task = getTaskOrNull(last);
-      if (task != null) {
-        return task;
-      }
-      throw new ConfigInvalidException("task not defined");
-    }
-    return null;
+  /**
+   * Get a preloaded Task for this TaskExpression.
+   *
+   * @param TaskExpression
+   * @return Optional<Task> which is empty if the expression is optional and no tasks are resolved
+   * @throws ConfigInvalidException if the expression requires a task and no tasks are resolved
+   */
+  public Optional<Task> getPreloadedOptionalTask(TaskExpression expression)
+      throws ConfigInvalidException {
+    return preloader.preloadOptional(expression);
   }
 
-  /* returns null if not found */
-  protected Task getTaskOrNull(String name) {
+  protected Optional<Task> getOptionalTask(TaskExpression expression)
+      throws ConfigInvalidException {
+    try {
+      for (String name : expression) {
+        Optional<Task> task = getOptionalTask(name);
+        if (task.isPresent()) {
+          return task;
+        }
+      }
+    } catch (NoSuchElementException e) {
+      // expression was not optional but we ran out of names to try
+      throw new ConfigInvalidException("task not defined");
+    }
+    return Optional.empty();
+  }
+
+  protected Optional<Task> getOptionalTask(String name) {
     SubSection subSection = new SubSection(SECTION_TASK, name);
-    return getNames(subSection).isEmpty() ? null : new Task(subSection, isVisible, isTrusted);
+    return getNames(subSection).isEmpty()
+        ? Optional.empty()
+        : Optional.of(new Task(subSection, isVisible, isTrusted));
   }
 
   public TasksFactory getTasksFactory(String name) {
@@ -307,7 +313,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
       String name = e.getKey();
       valueByName.put(name.substring(prefix.length()), e.getValue());
     }
-    return valueByName;
+    return Collections.unmodifiableMap(valueByName);
   }
 
   protected Map<String, String> getStringByName(SubSection s, Iterable<String> names) {
@@ -342,7 +348,12 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   protected List<String> getStringList(SubSection s, String key) {
-    return Arrays.asList(cfg.getStringList(s.section, s.subSection, key));
+    return Collections.unmodifiableList(
+        Arrays.asList(cfg.getStringList(s.section, s.subSection, key)));
+  }
+
+  public String key() {
+    return branch.getParentKey() + SEP + branch.get() + SEP + fileName;
   }
 
   protected static class SubSection {
@@ -352,6 +363,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
     protected SubSection(String section, String subSection) {
       this.section = section;
       this.subSection = subSection;
+    }
+
+    public String key() {
+      return section + SEP + subSection;
     }
   }
 }
