@@ -97,7 +97,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
           new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
         }
       }
-    } catch (ConfigInvalidException | IOException e) {
+    } catch (ConfigInvalidException | IOException | StorageException e) {
       a.roots.add(invalid());
     }
 
@@ -166,7 +166,10 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
             }
           }
         }
-      } catch (QueryParseException | RuntimeException e) {
+      } catch (ConfigInvalidException
+          | IOException
+          | QueryParseException
+          | RuntimeException e) {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
@@ -241,13 +244,18 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       }
     }
 
-    protected List<TaskAttribute> getSubTasks() throws StorageException {
+    protected List<TaskAttribute> getSubTasks()
+        throws ConfigInvalidException, IOException, StorageException {
       List<TaskAttribute> subTasks = new ArrayList<>();
       for (Node subNode : node.getSubNodes()) {
         if (subNode == null) {
           subTasks.add(invalid());
         } else {
-          new AttributeFactory(subNode, matchCache).create().ifPresent(t -> subTasks.add(t));
+          MatchCache subMatchCache = matchCache;
+          if (!matchCache.changeData.getId().equals(subNode.getChangeData().getId())) {
+            subMatchCache = new MatchCache(predicateCache, subNode.getChangeData());
+          }
+          new AttributeFactory(subNode, subMatchCache).create().ifPresent(t -> subTasks.add(t));
         }
       }
       if (subTasks.isEmpty()) {
