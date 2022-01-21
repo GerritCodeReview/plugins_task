@@ -748,12 +748,14 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "name" : "_change1_number",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
+         "change" : _change2_number,
          "hasPass" : true,
          "name" : "_change2_number",
          "status" : "FAIL"
@@ -866,6 +868,7 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change2_number,
          "hasPass" : false,
          "name" : "_change2_number",
          "status" : "WAITING",
@@ -878,6 +881,7 @@ The config below is expected to be in the `task.config` file in project
                "subTasks" : [
                   {
                      "applicable" : true,
+                     "change" : _change1_number,
                      "hasPass" : false,
                      "name" : "_change1_number",
                      "status" : "WAITING",
@@ -1239,6 +1243,7 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "hint" : "Welcome to the pleasuredome Name(_change1_number) Change Number(_change1_number) Change Id(_change1_id) Change Project(_change1_project) Change Branch(_change1_branch) Change Status(_change1_status) Change Topic(_change1_topic)",
          "name" : "_change1_number",
@@ -1246,6 +1251,7 @@ The config below is expected to be in the `task.config` file in project
       },
       {
          "applicable" : true,
+         "change" : _change2_number,
          "hasPass" : true,
          "name" : "_change2_number",
          "status" : "PASS"
@@ -1372,12 +1378,14 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change_number,
          "hasPass" : true,
          "name" : "_change_number",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "name" : "_change1_number",
          "status" : "FAIL"
@@ -1435,12 +1443,14 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change_number,
          "hasPass" : true,
          "name" : "_change_number",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "name" : "_change1_number",
          "status" : "FAIL"
@@ -1469,12 +1479,14 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change_number,
          "hasPass" : true,
          "name" : "_change_number",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "name" : "_change1_number",
          "status" : "FAIL"
@@ -1502,12 +1514,14 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change_number,
          "hasPass" : true,
          "name" : "_change_number",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "name" : "_change1_number",
          "status" : "FAIL"
@@ -1544,12 +1558,14 @@ The config below is expected to be in the `task.config` file in project
          "subTasks" : [
             {
                "applicable" : true,
+               "change" : _change_number,
                "hasPass" : true,
                "name" : "_change_number",
                "status" : "FAIL"
             },
             {
                "applicable" : true,
+               "change" : _change1_number,
                "hasPass" : true,
                "name" : "_change1_number",
                "status" : "FAIL"
@@ -2043,6 +2059,7 @@ The config below is expected to be in the `task.config` file in project
          "subTasks" : [
             {
                "applicable" : true,
+               "change" : _change1_number,
                "hasPass" : true,
                "name" : "_change1_number",
                "status" : "FAIL",
@@ -2059,6 +2076,7 @@ The config below is expected to be in the `task.config` file in project
                         },
                         {
                            "applicable" : true,
+                           "change" : _change2_number,
                            "hasPass" : true,
                            "name" : "_change2_number",
                            "status" : "FAIL",
@@ -2087,6 +2105,7 @@ The config below is expected to be in the `task.config` file in project
             },
             {
                "applicable" : true,
+               "change" : _change2_number,
                "hasPass" : true,
                "name" : "_change2_number",
                "status" : "FAIL",
@@ -2099,6 +2118,7 @@ The config below is expected to be in the `task.config` file in project
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "change" : _change1_number,
                            "hasPass" : true,
                            "name" : "_change1_number",
                            "status" : "FAIL",
@@ -2394,6 +2414,7 @@ The config below is expected to be in the `task.config` file in project
          "subTasks" : [
             {
                "applicable" : true,
+               "change" : _change1_number,
                "hasPass" : true,
                "name" : "_change1_number",
                "status" : "FAIL",
@@ -2410,6 +2431,7 @@ The config below is expected to be in the `task.config` file in project
                         },
                         {
                            "applicable" : true,
+                           "change" : _change2_number,
                            "hasPass" : true,
                            "name" : "_change2_number",
                            "status" : "FAIL",
@@ -2438,6 +2460,7 @@ The config below is expected to be in the `task.config` file in project
             },
             {
                "applicable" : true,
+               "change" : _change2_number,
                "hasPass" : true,
                "name" : "_change2_number",
                "status" : "FAIL",
@@ -2450,6 +2473,7 @@ The config below is expected to be in the `task.config` file in project
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "change" : _change1_number,
                            "hasPass" : true,
                            "name" : "_change1_number",
                            "status" : "FAIL",

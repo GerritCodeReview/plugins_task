@@ -235,6 +235,7 @@
          "subTasks" : [
             {
                "applicable" : true,
+               "change" : _change1_number,
                "hasPass" : true,
                "name" : "_change1_number",
                "status" : "FAIL",
@@ -251,6 +252,7 @@
                         },
                         {
                            "applicable" : true,
+                           "change" : _change2_number,
                            "hasPass" : true,
                            "name" : "_change2_number",
                            "status" : "FAIL",
@@ -279,6 +281,7 @@
             },
             {
                "applicable" : true,
+               "change" : _change2_number,
                "hasPass" : true,
                "name" : "_change2_number",
                "status" : "FAIL",
@@ -291,6 +294,7 @@
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "change" : _change1_number,
                            "hasPass" : true,
                            "name" : "_change1_number",
                            "status" : "FAIL",
@@ -645,6 +649,7 @@
          "subTasks" : [
             {
                "applicable" : true,
+               "change" : _change1_number,
                "hasPass" : true,
                "name" : "_change1_number",
                "status" : "FAIL",
@@ -661,6 +666,7 @@
                         },
                         {
                            "applicable" : true,
+                           "change" : _change2_number,
                            "hasPass" : true,
                            "name" : "_change2_number",
                            "status" : "FAIL",
@@ -689,6 +695,7 @@
             },
             {
                "applicable" : true,
+               "change" : _change2_number,
                "hasPass" : true,
                "name" : "_change2_number",
                "status" : "FAIL",
@@ -701,6 +708,7 @@
                      "subTasks" : [
                         {
                            "applicable" : true,
+                           "change" : _change1_number,
                            "hasPass" : true,
                            "name" : "_change1_number",
                            "status" : "FAIL",

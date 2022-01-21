@@ -315,6 +315,11 @@ public class TaskTree {
                       public ChangeData getChangeData() {
                         return changeData;
                       }
+
+                      @Override
+                      public boolean isChange() {
+                        return true;
+                      }
                     });
           }
           return;
@@ -340,6 +345,10 @@ public class TaskTree {
     @Override
     protected Properties getProperties() {
       return properties;
+    }
+
+    public boolean isChange() {
+      return false;
     }
   }
 

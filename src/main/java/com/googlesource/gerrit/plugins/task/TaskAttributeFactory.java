@@ -51,6 +51,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     public String hint;
     public Boolean inProgress;
     public String name;
+    public Integer change;
     public Status status;
     public List<TaskAttribute> subTasks;
     public Long evaluationMilliSeconds;
@@ -138,6 +139,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         }
 
         if (applicable || !options.onlyApplicable) {
+          if (node.isChange()) {
+            attribute.change = node.getChangeData().getId().get();
+          }
           attribute.hasPass = task.pass != null || task.fail != null;
           attribute.subTasks = getSubTasks();
           attribute.status = getStatus();
