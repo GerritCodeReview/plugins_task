@@ -22,10 +22,10 @@ import {htmlTemplate} from './gr-task-plugin_html.js';
 const Defs = {};
 /**
  * @typedef {{
- *  message: string,
  *  sub_tasks: Array<Defs.Task>,
  *  hint: ?string,
  *  name: string,
+ *  change: ?number,
  *  status: string
  * }}
  */
@@ -181,7 +181,6 @@ class GrTaskPlugin extends Polymer.Element {
   _addTasks(tasks) { // rename to process, remove DOM bits
     if (!tasks) return [];
     tasks.forEach(task => {
-      task.message = task.hint || task.name;
       task.icon = this._computeIcon(task);
       task.showOnFilter = this._computeShowOnNeedsAndBlockedFilter(task);
       this._compute_counts(task);
