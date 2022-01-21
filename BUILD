@@ -5,6 +5,7 @@ load(
 )
 load("//tools/bzl:genrule2.bzl", "genrule2")
 load("//tools/bzl:js.bzl", "polygerrit_plugin")
+load("//tools/bzl:junit.bzl", "junit_tests")
 load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
 
 plugin_name = "task"
@@ -63,6 +64,12 @@ polygerrit_plugin(
         "gr-task-plugin/*.js",
     ]),
     app = "plugin.html",
+)
+
+junit_tests(
+    name = "junit-tests",
+    srcs = glob(["src/test/java/**/*Test.java"]),
+    deps = [plugin_name],
 )
 
 sh_test(
