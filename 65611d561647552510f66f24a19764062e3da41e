@@ -34,6 +34,24 @@
       "parentUuid": "d0ba3e50_bf919bea",
       "revId": "65611d561647552510f66f24a19764062e3da41e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9850fc5a_2e7b643a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2022-01-21T01:47:07Z",
+      "side": 1,
+      "message": "FYI, we had Junit tests in the plugin before this, so unless there is something related to the new Junit tests in this change, we should probably just consider a separate fix for that.",
+      "parentUuid": "2bfd854d_884fcabc",
+      "revId": "65611d561647552510f66f24a19764062e3da41e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
