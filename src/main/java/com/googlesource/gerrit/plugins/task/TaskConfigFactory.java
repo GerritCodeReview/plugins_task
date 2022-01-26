@@ -59,7 +59,7 @@ public class TaskConfigFactory {
   }
 
   public TaskConfig getRootConfig() throws ConfigInvalidException, IOException {
-    return getTaskConfig(getRootBranch(), DEFAULT, true);
+    return getTaskConfig(FileKey.create(getRootBranch(), DEFAULT), true);
   }
 
   public void masquerade(PatchSetArgument psa) {
@@ -70,8 +70,9 @@ public class TaskConfigFactory {
     return BranchNameKey.create(allProjects, "refs/meta/config");
   }
 
-  public TaskConfig getTaskConfig(BranchNameKey branch, String fileName, boolean isTrusted)
+  public TaskConfig getTaskConfig(FileKey file, boolean isTrusted)
       throws ConfigInvalidException, IOException {
+    BranchNameKey branch = file.branch();
     PatchSetArgument psa = psaMasquerades.get(branch);
     boolean visible = true; // invisible psas are filtered out by commandline
     if (psa == null) {
@@ -81,12 +82,15 @@ public class TaskConfigFactory {
       branch = BranchNameKey.create(psa.change.getProject(), psa.patchSet.refName());
     }
 
-    Project.NameKey project = branch.project();
-    TaskConfig cfg = new TaskConfig(branch, fileName, visible, isTrusted);
+    Project.NameKey project = file.branch().project();
+    TaskConfig cfg =
+        psa == null
+            ? new TaskConfig(file, visible, isTrusted)
+            : new TaskConfig(branch, file, visible, isTrusted);
     try (Repository git = gitMgr.openRepository(project)) {
       cfg.load(project, git);
     } catch (IOException e) {
-      log.atWarning().withCause(e).log("Failed to load %s for %s", fileName, project);
+      log.atWarning().withCause(e).log("Failed to load %s for %s", file.file(), project);
       throw e;
     } catch (ConfigInvalidException e) {
       throw e;
