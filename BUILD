@@ -1,7 +1,34 @@
-load("//tools/bzl:plugin.bzl", "gerrit_plugin")
+load(
+    "//tools/bzl:plugin.bzl",
+    "PLUGIN_DEPS",
+    "PLUGIN_TEST_DEPS",
+    "gerrit_plugin",
+)
 load("//tools/bzl:js.bzl", "gerrit_js_bundle")
 load("//tools/js:eslint.bzl", "eslint")
+load("//tools/js:eslint.bzl", "eslint")
+load("//tools/bzl:junit.bzl", "junit_tests")
+load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
+
 plugin_name = "task"
+
+java_plugin(
+    name = "auto-value-plugin",
+    processor_class = "com.google.auto.value.processor.AutoValueProcessor",
+    deps = [
+        "@auto-value-annotations//jar",
+        "@auto-value//jar",
+    ],
+)
+
+java_library(
+    name = "auto-value",
+    exported_plugins = [
+        ":auto-value-plugin",
+    ],
+    visibility = ["//visibility:public"],
+    exports = ["@auto-value//jar"],
+)
 
 gerrit_plugin(
     name = plugin_name,
@@ -14,6 +41,7 @@ gerrit_plugin(
     ],
     resource_jars = [":gr-task-plugin"],
     resources = glob(["src/main/resources/**/*"]),
+    deps = [":auto-value"],
     javacopts = [ "-Werror", "-Xlint:all", "-Xlint:-classfile", "-Xlint:-processing"],
 )
 
@@ -21,6 +49,13 @@ gerrit_js_bundle(
     name = "gr-task-plugin",
     srcs = glob(["gr-task-plugin/*.js"]),
     entry_point = "gr-task-plugin/plugin.js",
+)
+
+junit_tests(
+    name = "junit-tests",
+    size = "small",
+    srcs = glob(["src/test/java/**/*Test.java"]),
+    deps = PLUGIN_TEST_DEPS + PLUGIN_DEPS + [plugin_name],
 )
 
 sh_test(
