@@ -51,6 +51,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     public String hint;
     public Boolean inProgress;
     public String name;
+    public Integer change;
     public Status status;
     public List<TaskAttribute> subTasks;
     public Long evaluationMilliSeconds;
@@ -97,7 +98,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
           new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
         }
       }
-    } catch (ConfigInvalidException | IOException e) {
+    } catch (ConfigInvalidException | IOException | StorageException e) {
       a.roots.add(invalid());
     }
 
@@ -121,7 +122,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       this.node = node;
       this.matchCache = matchCache;
       this.task = node.task;
-      this.attribute = new TaskAttribute(task.name);
+      this.attribute = new TaskAttribute(task.name());
     }
 
     public Optional<TaskAttribute> create() {
@@ -138,6 +139,9 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
         }
 
         if (applicable || !options.onlyApplicable) {
+          if (node.isChange()) {
+            attribute.change = node.getChangeData().getId().get();
+          }
           attribute.hasPass = task.pass != null || task.fail != null;
           attribute.subTasks = getSubTasks();
           attribute.status = getStatus();
@@ -166,7 +170,10 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
             }
           }
         }
-      } catch (QueryParseException | RuntimeException e) {
+      } catch (ConfigInvalidException
+          | IOException
+          | QueryParseException
+          | RuntimeException e) {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
@@ -241,13 +248,18 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       }
     }
 
-    protected List<TaskAttribute> getSubTasks() throws StorageException {
+    protected List<TaskAttribute> getSubTasks()
+        throws ConfigInvalidException, IOException, StorageException {
       List<TaskAttribute> subTasks = new ArrayList<>();
       for (Node subNode : node.getSubNodes()) {
         if (subNode == null) {
           subTasks.add(invalid());
         } else {
-          new AttributeFactory(subNode, matchCache).create().ifPresent(t -> subTasks.add(t));
+          MatchCache subMatchCache = matchCache;
+          if (!matchCache.changeData.getId().equals(subNode.getChangeData().getId())) {
+            subMatchCache = new MatchCache(predicateCache, subNode.getChangeData());
+          }
+          new AttributeFactory(subNode, subMatchCache).create().ifPresent(t -> subTasks.add(t));
         }
       }
       if (subTasks.isEmpty()) {

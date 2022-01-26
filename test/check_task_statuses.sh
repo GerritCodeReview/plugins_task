@@ -37,9 +37,9 @@ result_out() { # test expected actual
     result "$name" "$(diff <(echo "$expected") <(echo "$actual"))"
 }
 
-result_root() { # group root expected_file actual_file
+result_root() { # group root
     local name="$1 - $(echo "$2" | sed -es'/Root //')"
-    result_out "$name" "$(get_root "$2" < "$3")" "$(get_root "$2" < "$4")"
+    result_out "$name" "${EXPECTED_ROOTS[$2]}" "${OUTPUT_ROOTS[$2]}"
 }
 
 # -------- Git Config
@@ -189,17 +189,36 @@ replace_user() { # < text_with_testuser > text_with_$USER
 strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json
 strip_non_invalid() { ensure "$MYDIR"/strip_non_invalid.py ; } # < json > json
 
-get_root() { # root < task_plugin_ouptut > root_json
-    python -c "if True: # NOP to start indent
+define_jsonByRoot() { # task_plugin_ouptut > jsonByRoot_array_definition
+    local record root=''
+    local -A jsonByRoot
+    while IFS= read -r -d '' record ; do
+        if [ -z "$root" ] ; then
+            root=$record
+        else
+            jsonByRoot[$root]=$record
+            root=''
+        fi
+    done < <(python -c "if True: # NOP to start indent
         import sys, json
 
         roots=json.loads(sys.stdin.read())['plugins'][0]['roots']
         for root in roots:
-            if 'name' in root.keys() and root['name']=='$1':
-                print json.dumps(root, indent=3, separators=(',', ' : '), sort_keys=True)"
+            root_json = json.dumps(root, indent=3, separators=(',', ' : '), sort_keys=True)
+            print root['name'] + '\x00' + root_json + '\x00',"
+    )
+
+    local def=$(declare -p jsonByRoot)
+    echo "${def#*=}" # declare -A jsonByRoot='(...)' > '(...)'
 }
 
-example() { # example_num
+get_plugins() { # < change_json > plugins_json
+    python -c "import sys, json; \
+        plugins={}; plugins['plugins']=json.loads(sys.stdin.read())['plugins']; \
+        print json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True)"
+}
+
+example() { # example_num > text_for_example_num
     echo "$DOC_STATES" | awk '/```/{Q++;E=(Q+1)/2};E=='"$1" | grep -v '```' | replace_user
 }
 
@@ -243,7 +262,7 @@ create_repo_change() { # repo remote ref [change_id] > change_num
     local repo=$1 remote=$2 ref=$3 change_id=$4 msg="Test change"
     (
         q cd "$repo"
-        date > file
+        uuidgen > file
         q git add .
         [ -n "$change_id" ] && msg=$(commit_message "$msg" "$change_id")
         q git commit -m "$msg"
@@ -251,28 +270,37 @@ create_repo_change() { # repo remote ref [change_id] > change_num
     )
 }
 
-query_plugins() { # query
-    gssh query "$@" --format json | head -1 | python -c "import sys, json; \
-        plugins={}; plugins['plugins']=json.loads(sys.stdin.read())['plugins']; \
-        print json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True)"
-}
+query() { gssh query "$@" --format json ; } # query > json lines
 
-test_tasks() { # name expected_file task_args...
-    local name=$1 expected=$2 ; shift 2
-    local output=$STATUSES.$name out root
+# N < json lines > changeN_json
+change_plugins() { awk "NR==$1" | get_plugins | json_pp ; }
 
-    query_plugins "$@" > "$output"
+results_suite() { # name expected_file plugins_json
+    local name=$1 expected=$2 actual=$3
+
+    local -A EXPECTED_ROOTS=$(define_jsonByRoot < "$expected")
+    local -A OUTPUT_ROOTS=$(echo "$actual" | define_jsonByRoot)
+
+    local out root
     echo "$ROOTS" | while read root ; do
-        result_root "$name" "$root" "$expected" "$output"
+        result_root "$name" "$root"
     done
-    out=$(diff "$expected" "$output" | head -15)
+    out=$(diff "$expected" <(echo "$actual") | head -15)
     [ -z "$out" ]
     result "$name - Full Test Suite" "$out"
 }
 
+test_2generated() { # name task_args...
+    local name=$1 ; shift
+    local out=$(query "$@")
+    results_suite "$name" "$EXPECTED.$name" "$(echo "$out" | change_plugins 1)"
+    results_suite "$name 2nd change" "$EXPECTED.$name"2 "$(echo "$out" | change_plugins 2)"
+}
+
 test_generated() { # name task_args...
     local name=$1 ; shift
-    test_tasks "$name" "$EXPECTED.$name" "$@"
+    query "$@" | change_plugins 1 > "$ACTUAL.$name"
+    results_suite "$name" "$EXPECTED.$name" "$( < "$ACTUAL.$name")"
 }
 
 test_file() { # name task_args...
@@ -297,7 +325,7 @@ USER_TASKS=$USERS/task
 
 DOC_PREVIEW=$DOCS/preview.md
 EXPECTED=$OUT/expected
-STATUSES=$OUT/statuses
+ACTUAL=$OUT/actual
 
 ROOT_CFG=$ALL/task.config
 COMMON_CFG=$ALL_TASKS/common.config
@@ -342,9 +370,12 @@ q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup update_repo "$USERS" "$REMOTE_USERS" "$REF_USERS"
 
 change3_id=$(gen_change_id)
+change4_id=$(gen_change_id)
+change4_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$change4_id")
 change3_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$change3_id")
 
-all_pjson=$(example 2 | testdoc_2_pjson | \
+ex2_pjson=$(example 2 | testdoc_2_pjson)
+all_pjson=$(echo "$ex2_pjson" | \
     replace_change_properties \
         "" \
         "$change3_number" \
@@ -354,10 +385,23 @@ all_pjson=$(example 2 | testdoc_2_pjson | \
         "NEW" \
         "")
 
+all2_pjson=$(echo "$ex2_pjson" | \
+    replace_change_properties \
+        "" \
+        "$change4_number" \
+        "$change4_id" \
+        "$PROJECT" \
+        "refs\/heads\/$BRANCH" \
+        "NEW" \
+        "")
+
 no_all_json=$(echo "$all_pjson" | remove_suite all)
+no_all2_json=$(echo "$all2_pjson" | remove_suite all)
 
 echo "$no_all_json" | strip_non_applicable | \
     grep -v "\"applicable\" :" > "$EXPECTED".applicable
+echo "$no_all2_json" | strip_non_applicable | \
+    grep -v "\"applicable\" :" > "$EXPECTED".applicable2
 
 echo "$all_pjson" | remove_not_suite all | ensure json_pp > "$EXPECTED".all
 
@@ -376,8 +420,8 @@ PREVIEW_ROOTS=$(config_section_keys "root")
 
 
 RESULT=0
-query="change:$change3_number status:open"
-test_generated applicable --task--applicable "$query"
+query="(change:$change3_number OR change:$change4_number) status:open"
+test_2generated applicable --task--applicable "$query"
 test_generated all --task--all "$query"
 
 test_generated invalid --task--invalid "$query"
