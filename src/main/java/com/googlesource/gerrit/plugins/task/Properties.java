@@ -26,61 +26,157 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
-import java.util.ListIterator;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 /** Use to expand properties like ${_name} in the text of various definitions. */
 public class Properties {
+  public static final Properties EMPTY_PARENT = new Properties();
+
+  protected final Properties parentProperties;
+  protected final Task origTask;
+  protected final CopyOnWrite<Task> task;
+  protected Expander expander;
+  protected Loader loader;
+  protected boolean init = true;
+  protected boolean isTaskRefreshNeeded;
+  protected boolean isSubNodeReloadRequired;
+
+  public Properties() {
+    this(null, null);
+    expander = new Expander(n -> "");
+  }
+
+  public Properties(Task origTask, Properties parentProperties) {
+    this.origTask = origTask;
+    this.parentProperties = parentProperties;
+    task = new CopyOnWrite<>(origTask, t -> origTask.config.new Task(t));
+  }
+
   /** Use to expand properties specifically for Tasks. */
-  public static class Task extends Expander {
-    public static final Task EMPTY_PARENT = new Task();
-
-    public Task() {
-      super(Collections.emptyMap());
+  public Task getTask(ChangeData changeData) throws StorageException {
+    if (loader != null && loader.isNonTaskDefinedPropertyLoaded()) {
+      // To detect NamesFactories dependent on non task defined properties, the checking must be
+      // done after subnodes are fully loaded, which unfortunately happens after getTask() is
+      // called. However, these non task property uses from the last change are still detectable
+      // here before we replace the old Loader with a new one.
+      isSubNodeReloadRequired = true;
     }
 
-    public Task(ChangeData changeData, TaskConfig.Task definition, Task parentProperties)
-        throws StorageException {
-      super(parentProperties.forDescendants());
-      valueByName.putAll(getInternalProperties(definition, changeData));
-      new RecursiveExpander(valueByName).expand(definition.getAllProperties());
+    loader = new Loader(changeData);
+    expander = new Expander(n -> loader.load(n));
 
-      definition.setExpandedProperties(valueByName);
+    if (isTaskRefreshNeeded || init) {
+      Map<String, String> exported = expander.expand(origTask.exported);
+      if (exported != origTask.exported) {
+        task.getForWrite().exported = exported;
+      }
 
-      expandFieldValues(definition, Collections.emptySet());
+      expander.expand(task, Collections.emptySet());
+
+      if (init) {
+        init = false;
+        isTaskRefreshNeeded = loader.isNonTaskDefinedPropertyLoaded();
+      }
     }
+    return task.getForRead();
+  }
 
-    protected Map<String, String> forDescendants() {
-      return new HashMap<>(valueByName);
-    }
+  public boolean isSubNodeReloadRequired() {
+    return isSubNodeReloadRequired;
   }
 
   /** Use to expand properties specifically for NamesFactories. */
-  public static class NamesFactory extends Expander {
-    public NamesFactory(TaskConfig.NamesFactory namesFactory, Task properties) {
-      super(properties.valueByName);
-      expandFieldValues(namesFactory, Sets.newHashSet(TaskConfig.KEY_TYPE));
-    }
+  public NamesFactory getNamesFactory(NamesFactory namesFactory) {
+    return expander.expand(
+        namesFactory,
+        nf -> namesFactory.config.new NamesFactory(nf),
+        Sets.newHashSet(TaskConfig.KEY_TYPE));
   }
 
-  protected static Map<String, String> getInternalProperties(
-      TaskConfig.Task definition, ChangeData changeData) throws StorageException {
-    Map<String, String> properties = new HashMap<>();
+  protected class Loader {
+    protected final ChangeData changeData;
+    protected final Function<String, String> inheritedMapper;
+    protected Change change;
+    protected boolean isInheritedPropertyLoaded;
 
-    properties.put("_name", definition.name);
+    public Loader(ChangeData changeData) {
+      this.changeData = changeData;
+      if (parentProperties == null || parentProperties.expander == null) {
+        inheritedMapper = n -> "";
+      } else {
+        inheritedMapper = n -> parentProperties.expander.getValueForName(n);
+      }
+    }
 
-    Change c = changeData.change();
-    properties.put("_change_number", String.valueOf(c.getId().get()));
-    properties.put("_change_id", c.getKey().get());
-    properties.put("_change_project", c.getProject().get());
-    properties.put("_change_branch", c.getDest().get());
-    properties.put("_change_status", c.getStatus().toString());
-    properties.put("_change_topic", c.getTopic());
+    public boolean isNonTaskDefinedPropertyLoaded() {
+      return change != null || isInheritedPropertyLoaded;
+    }
 
-    return properties;
+    public String load(String name) {
+      if (name.startsWith("_")) {
+        return internal(name);
+      }
+      String value = origTask.exported.get(name);
+      if (value == null) {
+        value = origTask.properties.get(name);
+        if (value == null) {
+          value = inheritedMapper.apply(name);
+          if (!value.isEmpty()) {
+            isInheritedPropertyLoaded = true;
+          }
+        }
+      }
+      return value;
+    }
+
+    protected String internal(String name) {
+      if ("_name".equals(name)) {
+        return origTask.name();
+      }
+      String changeProp = name.replace("_change_", "");
+      if (changeProp != name) {
+        try {
+          return change(changeProp);
+        } catch (StorageException e) {
+          throw new RuntimeException(e);
+        }
+      }
+      return "";
+    }
+
+    protected String change(String changeProp) throws StorageException {
+      switch (changeProp) {
+        case "number":
+          return String.valueOf(change().getId().get());
+        case "id":
+          return change().getKey().get();
+        case "project":
+          return change().getProject().get();
+        case "branch":
+          return change().getDest().get();
+        case "status":
+          return change().getStatus().toString();
+        case "topic":
+          return change().getTopic();
+        default:
+          return "";
+      }
+    }
+
+    protected Change change() {
+      if (change == null) {
+        try {
+          change = changeData.change();
+        } catch (StorageException e) {
+          throw new RuntimeException(e);
+        }
+      }
+      return change;
+    }
   }
 
   /**
@@ -100,116 +196,162 @@ public class Properties {
    *
    * <p>will expand to: <code>"The brown fox jumped over the fence."</code>
    */
-  protected static class RecursiveExpander {
-    protected final Expander expander;
-    protected Map<String, String> unexpandedByName;
-    protected Set<String> expanding;
+  protected static class Expander extends AbstractExpander {
+    protected final Function<String, String> loadingFunction;
+    protected final Map<String, String> valueByName = new HashMap<>();
+    protected final Set<String> expanding = new HashSet<>();
 
-    public RecursiveExpander(Map<String, String> valueByName) {
-      expander =
-          new Expander(valueByName) {
-            @Override
-            protected String getValueForName(String name) {
-              expandUnexpanded(name); // recursive call
-              return super.getValueForName(name);
-            }
-          };
+    public Expander(Function<String, String> loadingFunction) {
+      this.loadingFunction = loadingFunction;
     }
 
-    public void expand(Map<String, String> unexpandedByName) {
-      this.unexpandedByName = unexpandedByName;
-
-      // Copy keys to allow out of order removals during iteration
-      for (String unexpanedName : new ArrayList<>(unexpandedByName.keySet())) {
-        expanding = new HashSet<>();
-        expandUnexpanded(unexpanedName);
+    /**
+     * Expand all properties (${property_name} -> property_value) in the given text. Returns same
+     * object if no expansions occured.
+     */
+    public Map<String, String> expand(Map<String, String> map) {
+      if (map != null) {
+        boolean hasProperty = false;
+        Map<String, String> expandedMap = new HashMap<>(map.size());
+        for (Map.Entry<String, String> e : map.entrySet()) {
+          String name = e.getKey();
+          String value = e.getValue();
+          String expanded = getValueForName(name);
+          hasProperty = hasProperty || value != expanded;
+          expandedMap.put(name, expanded);
+        }
+        return hasProperty ? Collections.unmodifiableMap(expandedMap) : map;
       }
+      return null;
     }
 
-    protected void expandUnexpanded(String name) {
-      if (!expanding.add(name)) {
-        throw new RuntimeException("Looping property definitions.");
-      }
-      String value = unexpandedByName.remove(name);
+    @Override
+    public String getValueForName(String name) {
+      String value = valueByName.get(name);
       if (value != null) {
-        expander.valueByName.put(name, expander.expandText(value));
+        return value;
       }
+      value = loadingFunction.apply(name);
+      if (value == null) {
+        value = "";
+      } else if (!value.isEmpty()) {
+        if (!expanding.add(name)) {
+          throw new RuntimeException("Looping property definitions.");
+        }
+        value = expandText(value);
+        expanding.remove(name);
+      }
+      valueByName.put(name, value);
+      return value;
     }
   }
 
   /**
    * Use to expand properties like ${property} in Strings into their values.
    *
-   * <p>Given some property name/value asssociations defined like this:
+   * <p>Given some property name/value associations like this:
    *
    * <p><code>
-   * valueByName.put("animal", "fox");
-   * valueByName.put("bar", "foo");
-   * valueByName.put("obstacle", "fence");
+   * "animal" -> "fox"
+   * "bar" -> "foo"
+   * "obstacle" -> "fence"
    * </code>
    *
    * <p>a String like: <code>"The brown ${animal} jumped over the ${obstacle}."</code>
    *
-   * <p>will expand to: <code>"The brown fox jumped over the fence."</code>
+   * <p>will expand to: <code>"The brown fox jumped over the fence."</code> This class is meant to
+   * be used as a building block for other full featured expanders and thus must be overriden to
+   * provide the name/value associations via the getValueForName() method.
    */
-  protected static class Expander {
+  protected abstract static class AbstractExpander {
     // "${_name}" -> group(1) = "_name"
     protected static final Pattern PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
 
-    public final Map<String, String> valueByName;
-
-    public Expander(Map<String, String> valueByName) {
-      this.valueByName = valueByName;
+    /**
+     * Returns expanded object if property found in the Strings in the object's Fields (except the
+     * excluded ones). Returns same object if no expansions occured.
+     */
+    public <T> T expand(T object, Function<T, T> copier, Set<String> excludedFieldNames) {
+      return expand(new CopyOnWrite<>(object, copier), excludedFieldNames);
     }
 
-    /** Expand all properties in the Strings in the object's Fields (except the exclude ones) */
-    protected void expandFieldValues(Object object, Set<String> excludedFieldNames) {
-      for (Field field : object.getClass().getFields()) {
+    /**
+     * Returns expanded object if property found in the Strings in the object's Fields (except the
+     * excluded ones). Returns same object if no expansions occured.
+     */
+    public <T> T expand(CopyOnWrite<T> cow, Set<String> excludedFieldNames) {
+      for (Field field : cow.getOriginal().getClass().getFields()) {
         try {
           if (!excludedFieldNames.contains(field.getName())) {
             field.setAccessible(true);
-            Object o = field.get(object);
+            Object o = field.get(cow.getOriginal());
             if (o instanceof String) {
-              field.set(object, expandText((String) o));
+              String expanded = expandText((String) o);
+              if (expanded != o) {
+                field.set(cow.getForWrite(), expanded);
+              }
             } else if (o instanceof List) {
               @SuppressWarnings("unchecked")
               List<String> forceCheck = List.class.cast(o);
-              expandElements(forceCheck);
+              List<String> expanded = expand(forceCheck);
+              if (expanded != o) {
+                field.set(cow.getForWrite(), expanded);
+              }
             }
           }
         } catch (IllegalAccessException e) {
           throw new RuntimeException(e);
         }
       }
+      return cow.getForRead();
     }
 
-    /** Expand all properties in the Strings in the List */
-    public void expandElements(List<String> list) {
+    /**
+     * Returns expanded unmodifiable List if property found. Returns same object if no expansions
+     * occured.
+     */
+    public List<String> expand(List<String> list) {
       if (list != null) {
-        for (ListIterator<String> it = list.listIterator(); it.hasNext(); ) {
-          it.set(expandText(it.next()));
+        boolean hasProperty = false;
+        List<String> expandedList = new ArrayList<>(list.size());
+        for (String value : list) {
+          String expanded = expandText(value);
+          hasProperty = hasProperty || value != expanded;
+          expandedList.add(expanded);
         }
+        return hasProperty ? Collections.unmodifiableList(expandedList) : list;
       }
+      return null;
     }
 
-    /** Expand all properties (${property_name} -> property_value) in the given text */
+    /**
+     * Expand all properties (${property_name} -> property_value) in the given text . Returns same
+     * object if no expansions occured.
+     */
     public String expandText(String text) {
       if (text == null) {
         return null;
       }
       StringBuffer out = new StringBuffer();
       Matcher m = PATTERN.matcher(text);
-      while (m.find()) {
-        m.appendReplacement(out, Matcher.quoteReplacement(getValueForName(m.group(1))));
+      if (!m.find()) {
+        return text;
       }
+      do {
+        m.appendReplacement(out, Matcher.quoteReplacement(getValueForName(m.group(1))));
+      } while (m.find());
       m.appendTail(out);
       return out.toString();
     }
 
-    /** Get the replacement value for the property identified by name */
-    protected String getValueForName(String name) {
-      String value = valueByName.get(name);
-      return value == null ? "" : value;
-    }
+    /**
+     * Get the replacement value for the property identified by name
+     *
+     * @param name of the property to get the replacement value for
+     * @return the replacement value. Since the expandText() method alwyas needs a String to replace
+     *     '${property-name}' reference with, even when the property does not exist, this will never
+     *     return null, instead it will returns the empty string if the property is not found.
+     */
+    protected abstract String getValueForName(String name);
   }
 }

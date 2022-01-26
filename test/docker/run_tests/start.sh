@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 USER_RUN_TESTS_DIR="$USER_HOME"/"$RUN_TESTS_DIR"
-cp -r /task "$USER_HOME"/
+mkdir "$USER_HOME"/task && cp -r /task/{src,test} "$USER_HOME"/task
 
 if [ "$1" = "retest" ] ; then
     cd "$USER_RUN_TESTS_DIR"/../../ && ./check_task_statuses.sh "$GERRIT_HOST"
