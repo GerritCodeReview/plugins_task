@@ -66,7 +66,8 @@ public class TaskExpression implements Iterable<String> {
 
       @Override
       public String next() {
-        hasNext(); // in case next() was (re)called w/o calling hasNext()
+        // Can't use @SuppressWarnings("ReturnValueIgnored") on method call
+        boolean ignored = hasNext(); // in case next() was (re)called w/o calling hasNext()
         if (!hasNext) {
           throw new NoSuchElementException("No more names, yet expression was not optional");
         }
