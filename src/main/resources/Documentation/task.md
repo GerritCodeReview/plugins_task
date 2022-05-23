@@ -51,10 +51,16 @@ their subtasks complete, and then from `READY` to `PASS` once the task itself
 completes.
 
 A task with a `WAITING` status is not yet ready to execute. A task in this
-state is blocked by its subtasks which are not yet in the `PASS` state.
+state is blocked by its subtasks which are not yet in the `PASS` or `DUPLICATE`
+state.
 
 A task with a `READY` status is ready to be executed. All of its subtasks are
 in the `PASS` state.
+
+A task with a `DUPLICATE` status has the same task key as one of its ancestors.
+Task keys are generally made up of the canonical task name and the change to
+which it applies. To avoid infinite loops, subtasks are ignored on duplicate
+tasks.
 
 A task with a `PASS` status meets all the criteria for `READY`, and has
 executed and was successful.

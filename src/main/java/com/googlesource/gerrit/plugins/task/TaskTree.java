@@ -138,8 +138,7 @@ public class TaskTree {
             node = nodeFactory.create(this, def);
           }
 
-          if (!path.contains(node.key()) && names.add(def.name())) {
-            // path check above detects looping definitions
+          if (names.add(def.name())) {
             // names check above detects duplicate subtasks
             if (isRefreshNeeded) {
               node.refreshTask();
@@ -188,6 +187,7 @@ public class TaskTree {
 
   public class Node extends NodeList {
     public Task task;
+    public boolean isDuplicate;
 
     protected final Properties properties;
     protected final TaskKey taskKey;
@@ -208,7 +208,9 @@ public class TaskTree {
     not be needed. */
     public void refreshTask() throws ConfigInvalidException, OrmException {
       this.path = new LinkedList<>(parent.path);
-      this.path.add(key());
+      String key = key();
+      isDuplicate = path.contains(key);
+      path.add(key);
 
       this.task = properties.getTask(getChangeData());
 

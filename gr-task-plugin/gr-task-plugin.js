@@ -121,6 +121,11 @@
           icon.color = 'red';
           icon.tooltip = 'Waiting';
           break;
+        case 'DUPLICATE':
+          icon.id = 'gr-icons:check';
+          icon.color = 'green';
+          icon.tooltip = 'Duplicate';
+          break;
         case 'PASS':
           icon.id = 'gr-icons:check-circle';
           icon.color = 'green';
