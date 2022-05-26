@@ -237,6 +237,48 @@ Example:
     subtasks-file = common.config  # references the file named task/common.config
 ```
 
+`duplicate-key`
+
+: This key defines an identifier to help identify tasks which should be
+considered duplicates even if they are not exact duplicates. When the task
+plugin encounters a task with the same duplicate-key as one of its
+ancestors, it will be considered a duplicate of that ancestor. Tasks such as
+a starting task and a looping tasks-factory that preload the same base task
+are not exact duplicates, yet they may logically represent duplicates. In
+this case, defining a `duplicate-key` on the base task which is preloaded
+from two different places (usually a root and a change tasks-factory), will
+ensure that any loops are halted once the original change is reached. Without
+a duplicate-key, the walking would generally walk one task further than
+desired.
+
+Outlined below is a simple way to walk a change's git dependencies in the
+task plugin. While Git does not allow loops in commit histories, sometimes
+in Gerrit when changes get rebased, it can cause loops (because Gerrit
+sometimes tracks outdated dependencies). The use of the duplicate-key
+below results in the loop being detected when you would expect it to be.
+
+Example:
+
+```
+[root "git dependencies"]
+    applicable = status:new
+    preload-task = git dependencies
+
+[task "git dependencies"]
+    fail = -status:new
+    fail-hint = [${_change_status}] dependency needs to be OPEN
+    subtasks-factory = git dependencies
+    duplicate-key = git dependencies ${_change_number}
+
+[tasks-factory "git dependencies"]
+    names-factory = git dependencies
+    preload-task = git dependencies
+
+[names-factory "git dependencies"]
+    type = change
+    changes = -status:merged parentof:${_change_number} project:${_change_project} branch:${_change_branch}
+```
+
 Root Tasks
 ----------
 Root tasks typically define the "final verification" tasks for changes. Each

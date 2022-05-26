@@ -104,12 +104,14 @@ public class TaskTree {
       throws ConfigInvalidException, IOException, OrmException {
     this.changeData = changeData;
     root.path = Collections.emptyList();
+    root.duplicateKeys = Collections.emptyList();
     return root.getSubNodes();
   }
 
   protected class NodeList {
     protected NodeList parent = null;
     protected Collection<String> path;
+    protected Collection<String> duplicateKeys;
     protected Map<TaskKey, Node> cachedNodeByTask = new HashMap<>();
     protected List<Node> nodes;
     protected Set<String> names = new HashSet<>();
@@ -213,6 +215,12 @@ public class TaskTree {
       path.add(key);
 
       this.task = properties.getTask(getChangeData());
+
+      this.duplicateKeys = new LinkedList<>(parent.duplicateKeys);
+      if (task.duplicateKey != null) {
+        isDuplicate |= duplicateKeys.contains(task.duplicateKey);
+        duplicateKeys.add(task.duplicateKey);
+      }
 
       if (nodes != null && properties.isSubNodeReloadRequired()) {
         cachedNodeByTask.clear();

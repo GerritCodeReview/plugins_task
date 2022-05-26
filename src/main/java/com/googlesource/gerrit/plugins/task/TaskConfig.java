@@ -55,6 +55,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   public class TaskBase extends SubSection {
     public String applicable;
+    public String duplicateKey;
     public Map<String, String> exported;
     public String fail;
     public String failHint;
@@ -76,6 +77,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
       this.isVisible = isVisible;
       this.isTrusted = isTrusted;
       applicable = getString(s, KEY_APPLICABLE, null);
+      duplicateKey = getString(s, KEY_DUPLICATE_KEY, null);
       exported = getProperties(s, KEY_EXPORT_PREFIX);
       fail = getString(s, KEY_FAIL, null);
       failHint = getString(s, KEY_FAIL_HINT, null);
@@ -194,6 +196,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   protected static final String SECTION_TASKS_FACTORY = "tasks-factory";
   protected static final String KEY_APPLICABLE = "applicable";
   protected static final String KEY_CHANGES = "changes";
+  protected static final String KEY_DUPLICATE_KEY = "duplicate-key";
   protected static final String KEY_EXPORT_PREFIX = "export-";
   protected static final String KEY_FAIL = "fail";
   protected static final String KEY_FAIL_HINT = "fail-hint";

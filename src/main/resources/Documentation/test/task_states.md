@@ -1845,6 +1845,34 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Looping DuplicateKey"]
+  preload-task = DuplicateKey
+
+[task "Looping DuplicateKey"]
+  preload-task = DuplicateKey
+  pass = True
+
+[task "DuplicateKey"]
+  duplicate-key = 1234
+  subtask = Looping DuplicateKey
+
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Looping DuplicateKey",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "hint" : "Duplicate task is non blocking and empty to break the loop",
+         "name" : "Looping DuplicateKey",
+         "status" : "DUPLICATE"
+      }
+   ]
+}
+
 [root "Root changes loop"]
   subtask = task (tasks-factory changes loop)
 
