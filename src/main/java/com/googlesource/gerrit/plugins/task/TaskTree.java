@@ -224,7 +224,9 @@ public class TaskTree {
 
       if (nodes != null && properties.isSubNodeReloadRequired()) {
         cachedNodeByTask.clear();
-        nodes.stream().filter(n -> n != null).forEach(n -> cachedNodeByTask.put(n.task.key(), n));
+        nodes.stream()
+            .filter(n -> n != null && !n.isChange())
+            .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
         names.clear();
         nodes = null;
       }
