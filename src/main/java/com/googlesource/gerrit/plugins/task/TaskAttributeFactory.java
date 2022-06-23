@@ -92,13 +92,14 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   }
 
   protected PluginDefinedInfo createWithExceptions(ChangeData c) {
+    MatchCache matchCache = new MatchCache(predicateCache, c);
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
       for (Node node : definitions.getRootNodes(c)) {
         if (node == null) {
           a.roots.add(invalid());
         } else {
-          new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
+          new AttributeFactory(node, matchCache).create().ifPresent(t -> a.roots.add(t));
         }
       }
     } catch (ConfigInvalidException | IOException | OrmException e) {
@@ -116,10 +117,6 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     public MatchCache matchCache;
     protected Task task;
     protected TaskAttribute attribute;
-
-    protected AttributeFactory(Node node) {
-      this(node, new MatchCache(predicateCache, node.getChangeData()));
-    }
 
     protected AttributeFactory(Node node, MatchCache matchCache) {
       this.node = node;
