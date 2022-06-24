@@ -159,15 +159,13 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
               if (!options.onlyApplicable) {
                 attribute.applicable = applicable;
               }
-              if (node.isDuplicate) {
-                attribute.hint = "Duplicate task is non blocking and empty to break the loop";
-              } else {
+              if (!node.isDuplicate) {
                 if (task.inProgress != null) {
                   attribute.inProgress = matchCache.matchOrNull(task.inProgress);
                 }
-                attribute.hint = getHint(attribute.status, task);
                 attribute.exported = task.exported.isEmpty() ? null : task.exported;
               }
+              attribute.hint = getHint(attribute.status, task);
 
               if (options.evaluationTime) {
                 attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
@@ -310,10 +308,16 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
   }
 
   protected String getHint(Status status, Task def) {
-    if (status == Status.READY) {
-      return def.readyHint;
-    } else if (status == Status.FAIL) {
-      return def.failHint;
+    if (status != null) {
+      switch (status) {
+        case READY:
+          return def.readyHint;
+        case FAIL:
+          return def.failHint;
+        case DUPLICATE:
+          return "Duplicate task is non blocking and empty to break the loop";
+        default:
+      }
     }
     return null;
   }
