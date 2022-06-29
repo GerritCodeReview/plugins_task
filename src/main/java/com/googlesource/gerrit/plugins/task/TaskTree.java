@@ -114,15 +114,14 @@ public class TaskTree {
 
     public List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
       if (cachedNodes == null) {
-        cachedNodes = createAdder().getSubNodes();
-      } else {
-        refreshSubNodes();
+        return loadSubNodes();
       }
+      refreshSubNodes();
       return cachedNodes;
     }
 
-    protected SubNodeAdder createAdder() {
-      return new SubNodeAdder();
+    protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
+      return cachedNodes = new SubNodeAdder().getSubNodes();
     }
 
     public void refreshSubNodes() throws ConfigInvalidException, OrmException {
@@ -219,8 +218,10 @@ public class TaskTree {
     }
 
     @Override
-    protected SubNodeAdder createAdder() {
-      return new SubNodeAdder();
+    protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
+      cachedNodes = new SubNodeAdder().getSubNodes();
+      properties.expansionComplete();
+      return cachedNodes;
     }
 
     /* The task needs to be refreshed before a node is used, however
