@@ -110,64 +110,24 @@ public class TaskTree {
     protected Collection<String> path;
     protected Collection<String> duplicateKeys;
     protected Map<TaskKey, Node> cachedNodeByTask = new HashMap<>();
-    protected List<Node> nodes;
-    protected Set<String> names = new HashSet<>();
+    protected List<Node> cachedNodes;
 
-    protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      addPreloaded(preloader.getRootTasks());
-    }
-
-    protected void addPreloaded(List<Task> defs) throws ConfigInvalidException, OrmException {
-      for (Task def : defs) {
-        addPreloaded(def);
-      }
-    }
-
-    protected void addPreloaded(Task def) throws ConfigInvalidException, OrmException {
-      addPreloaded(def, (parent, definition) -> new Node(parent, definition));
-    }
-
-    protected void addPreloaded(Task def, NodeFactory nodeFactory)
-        throws ConfigInvalidException, OrmException {
-      if (def != null) {
-        try {
-          Node node = cachedNodeByTask.get(def.key());
-          boolean isRefreshNeeded = node != null;
-          if (node == null) {
-            node = nodeFactory.create(this, def);
-          }
-
-          if (names.add(def.name())) {
-            // names check above detects duplicate subtasks
-            if (isRefreshNeeded) {
-              node.refreshTask();
-            }
-            nodes.add(node);
-            return;
-          }
-        } catch (Exception e) {
-        }
-      }
-      addInvalidNode();
-    }
-
-    protected void addInvalidNode() {
-      nodes.add(null); // null node indicates invalid
-    }
-
-    protected List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      if (nodes == null) {
-        nodes = new ArrayList<>();
-        addSubNodes();
+    public List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
+      if (cachedNodes == null) {
+        cachedNodes = createAdder().getSubNodes();
       } else {
         refreshSubNodes();
       }
-      return nodes;
+      return cachedNodes;
+    }
+
+    protected SubNodeAdder createAdder() {
+      return new SubNodeAdder();
     }
 
     public void refreshSubNodes() throws ConfigInvalidException, OrmException {
-      if (nodes != null) {
-        for (Node node : nodes) {
+      if (cachedNodes != null) {
+        for (Node node : cachedNodes) {
           if (node != null) {
             node.refreshTask();
           }
@@ -185,6 +145,58 @@ public class TaskTree {
 
     protected boolean isTrusted() {
       return true;
+    }
+
+    protected class SubNodeAdder {
+      protected List<Node> nodes = new ArrayList<>();
+      protected Set<String> names = new HashSet<>();
+
+      public List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
+        addSubNodes();
+        return nodes;
+      }
+
+      protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
+        addPreloaded(preloader.getRootTasks());
+      }
+
+      protected void addPreloaded(List<Task> defs) throws ConfigInvalidException, OrmException {
+        for (Task def : defs) {
+          addPreloaded(def);
+        }
+      }
+
+      protected void addPreloaded(Task def) throws ConfigInvalidException, OrmException {
+        addPreloaded(def, (parent, definition) -> new Node(parent, definition));
+      }
+
+      protected void addPreloaded(Task def, NodeFactory nodeFactory)
+          throws ConfigInvalidException, OrmException {
+        if (def != null) {
+          try {
+            Node node = cachedNodeByTask.get(def.key());
+            boolean isRefreshNeeded = node != null;
+            if (node == null) {
+              node = nodeFactory.create(NodeList.this, def);
+            }
+
+            if (names.add(def.name())) {
+              // names check above detects duplicate subtasks
+              if (isRefreshNeeded) {
+                node.refreshTask();
+              }
+              nodes.add(node);
+              return;
+            }
+          } catch (Exception e) {
+          }
+        }
+        addInvalidNode();
+      }
+
+      protected void addInvalidNode() {
+        nodes.add(null); // null node indicates invalid
+      }
     }
   }
 
@@ -206,6 +218,11 @@ public class TaskTree {
       return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + taskKey;
     }
 
+    @Override
+    protected SubNodeAdder createAdder() {
+      return new SubNodeAdder();
+    }
+
     /* The task needs to be refreshed before a node is used, however
     subNode refreshing can wait until they are fetched since they may
     not be needed. */
@@ -223,132 +240,13 @@ public class TaskTree {
         duplicateKeys.add(task.duplicateKey);
       }
 
-      if (nodes != null && properties.isSubNodeReloadRequired()) {
+      if (cachedNodes != null && properties.isSubNodeReloadRequired()) {
         cachedNodeByTask.clear();
-        nodes.stream()
+        cachedNodes.stream()
             .filter(n -> n != null && !n.isChange())
             .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
-        names.clear();
-        nodes = null;
+        cachedNodes = null;
       }
-    }
-
-    @Override
-    protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      addSubTasks();
-      addSubTasksFactoryTasks();
-      addSubTasksFiles();
-      addSubTasksExternals();
-    }
-
-    protected void addSubTasks() throws ConfigInvalidException, IOException, OrmException {
-      for (String expression : task.subTasks) {
-        try {
-          Optional<Task> def =
-              preloader.getOptionalTask(new TaskExpression(task.file(), expression));
-          if (def.isPresent()) {
-            addPreloaded(def.get());
-          }
-        } catch (ConfigInvalidException e) {
-          addInvalidNode();
-        }
-      }
-    }
-
-    protected void addSubTasksFiles() throws ConfigInvalidException, OrmException {
-      for (String file : task.subTasksFiles) {
-        try {
-          addPreloaded(
-              preloader.getTasks(FileKey.create(task.key().branch(), resolveTaskFileName(file))));
-        } catch (ConfigInvalidException | IOException e) {
-          addInvalidNode();
-        }
-      }
-    }
-
-    protected void addSubTasksExternals() throws ConfigInvalidException, OrmException {
-      for (String external : task.subTasksExternals) {
-        try {
-          External ext = task.config.getExternal(external);
-          if (ext == null) {
-            addInvalidNode();
-          } else {
-            addPreloaded(getPreloadedTasks(ext));
-          }
-        } catch (ConfigInvalidException | IOException e) {
-          addInvalidNode();
-        }
-      }
-    }
-
-    protected void addSubTasksFactoryTasks()
-        throws ConfigInvalidException, IOException, OrmException {
-      for (String tasksFactoryName : task.subTasksFactories) {
-        TasksFactory tasksFactory = task.config.getTasksFactory(tasksFactoryName);
-        if (tasksFactory != null) {
-          NamesFactory namesFactory = task.config.getNamesFactory(tasksFactory.namesFactory);
-          if (namesFactory != null && namesFactory.type != null) {
-            namesFactory = getProperties().getNamesFactory(namesFactory);
-            switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
-              case STATIC:
-                addStaticTypeTasks(tasksFactory, namesFactory);
-                continue;
-              case CHANGE:
-                addChangeTypeTasks(tasksFactory, namesFactory);
-                continue;
-            }
-          }
-        }
-        addInvalidNode();
-      }
-    }
-
-    protected void addStaticTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
-        throws ConfigInvalidException, IOException, OrmException {
-      for (String name : namesFactory.names) {
-        addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
-      }
-    }
-
-    protected void addChangeTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
-        throws ConfigInvalidException, IOException, OrmException {
-      try {
-        if (namesFactory.changes != null) {
-          List<ChangeData> changeDataList =
-              changeQueryProcessorProvider
-                  .get()
-                  .query(changeQueryBuilderProvider.get().parse(namesFactory.changes))
-                  .entities();
-          for (ChangeData changeData : changeDataList) {
-            addPreloaded(
-                preloader.preload(
-                    task.config.new Task(tasksFactory, changeData.getId().toString())),
-                (parent, definition) ->
-                    new Node(parent, definition) {
-                      @Override
-                      public ChangeData getChangeData() {
-                        return changeData;
-                      }
-
-                      @Override
-                      public boolean isChange() {
-                        return true;
-                      }
-                    });
-          }
-          return;
-        }
-      } catch (OrmException e) {
-        log.atSevere().withCause(e).log("ERROR: running changes query: " + namesFactory.changes);
-      } catch (QueryParseException e) {
-      }
-      addInvalidNode();
-    }
-
-    protected List<Task> getPreloadedTasks(External external)
-        throws ConfigInvalidException, IOException, OrmException {
-      return preloader.getTasks(
-          FileKey.create(resolveUserBranch(external.user), resolveTaskFileName(external.file)));
     }
 
     @Override
@@ -356,13 +254,133 @@ public class TaskTree {
       return properties;
     }
 
+    @Override
+    protected boolean isTrusted() {
+      return parent.isTrusted() && !task.isMasqueraded;
+    }
+
     public boolean isChange() {
       return false;
     }
 
-    @Override
-    protected boolean isTrusted() {
-      return parent.isTrusted() && !task.isMasqueraded;
+    protected class SubNodeAdder extends NodeList.SubNodeAdder {
+      @Override
+      protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
+        addSubTasks();
+        addSubTasksFactoryTasks();
+        addSubTasksFiles();
+        addSubTasksExternals();
+      }
+
+      protected void addSubTasks() throws ConfigInvalidException, IOException, OrmException {
+        for (String expression : task.subTasks) {
+          try {
+            Optional<Task> def =
+                preloader.getOptionalTask(new TaskExpression(task.file(), expression));
+            if (def.isPresent()) {
+              addPreloaded(def.get());
+            }
+          } catch (ConfigInvalidException e) {
+            addInvalidNode();
+          }
+        }
+      }
+
+      protected void addSubTasksFiles() throws ConfigInvalidException, OrmException {
+        for (String file : task.subTasksFiles) {
+          try {
+            addPreloaded(
+                preloader.getTasks(FileKey.create(task.key().branch(), resolveTaskFileName(file))));
+          } catch (ConfigInvalidException | IOException e) {
+            addInvalidNode();
+          }
+        }
+      }
+
+      protected void addSubTasksExternals() throws ConfigInvalidException, OrmException {
+        for (String external : task.subTasksExternals) {
+          try {
+            External ext = task.config.getExternal(external);
+            if (ext == null) {
+              addInvalidNode();
+            } else {
+              addPreloaded(getPreloadedTasks(ext));
+            }
+          } catch (ConfigInvalidException | IOException e) {
+            addInvalidNode();
+          }
+        }
+      }
+
+      protected void addSubTasksFactoryTasks()
+          throws ConfigInvalidException, IOException, OrmException {
+        for (String tasksFactoryName : task.subTasksFactories) {
+          TasksFactory tasksFactory = task.config.getTasksFactory(tasksFactoryName);
+          if (tasksFactory != null) {
+            NamesFactory namesFactory = task.config.getNamesFactory(tasksFactory.namesFactory);
+            if (namesFactory != null && namesFactory.type != null) {
+              namesFactory = getProperties().getNamesFactory(namesFactory);
+              switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
+                case STATIC:
+                  addStaticTypeTasks(tasksFactory, namesFactory);
+                  continue;
+                case CHANGE:
+                  addChangeTypeTasks(tasksFactory, namesFactory);
+                  continue;
+              }
+            }
+          }
+          addInvalidNode();
+        }
+      }
+
+      protected void addStaticTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
+          throws ConfigInvalidException, IOException, OrmException {
+        for (String name : namesFactory.names) {
+          addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
+        }
+      }
+
+      protected void addChangeTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
+          throws ConfigInvalidException, IOException, OrmException {
+        try {
+          if (namesFactory.changes != null) {
+            List<ChangeData> changeDataList =
+                changeQueryProcessorProvider
+                    .get()
+                    .query(changeQueryBuilderProvider.get().parse(namesFactory.changes))
+                    .entities();
+            for (ChangeData changeData : changeDataList) {
+              addPreloaded(
+                  preloader.preload(
+                      task.config.new Task(tasksFactory, changeData.getId().toString())),
+                  (parent, definition) ->
+                      new Node(parent, definition) {
+                        @Override
+                        public ChangeData getChangeData() {
+                          return changeData;
+                        }
+
+                        @Override
+                        public boolean isChange() {
+                          return true;
+                        }
+                      });
+            }
+            return;
+          }
+        } catch (OrmException e) {
+          log.atSevere().withCause(e).log("ERROR: running changes query: " + namesFactory.changes);
+        } catch (QueryParseException e) {
+        }
+        addInvalidNode();
+      }
+
+      protected List<Task> getPreloadedTasks(External external)
+          throws ConfigInvalidException, IOException, OrmException {
+        return preloader.getTasks(
+            FileKey.create(resolveUserBranch(external.user), resolveTaskFileName(external.file)));
+      }
     }
   }
 
