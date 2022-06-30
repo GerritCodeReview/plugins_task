@@ -219,9 +219,17 @@ public class TaskTree {
 
     @Override
     protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      cachedNodes = new SubNodeAdder().getSubNodes();
+      List<Node> nodes = new SubNodeAdder().getSubNodes();
       properties.expansionComplete();
-      return cachedNodes;
+      if (!properties.isSubNodeReloadRequired()) {
+        cachedNodes = nodes;
+      } else {
+        cachedNodeByTask.clear();
+        nodes.stream()
+            .filter(n -> n != null && !n.isChange())
+            .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
+      }
+      return nodes;
     }
 
     /* The task needs to be refreshed before a node is used, however
@@ -239,14 +247,6 @@ public class TaskTree {
       if (task.duplicateKey != null) {
         isDuplicate |= duplicateKeys.contains(task.duplicateKey);
         duplicateKeys.add(task.duplicateKey);
-      }
-
-      if (cachedNodes != null && properties.isSubNodeReloadRequired()) {
-        cachedNodeByTask.clear();
-        cachedNodes.stream()
-            .filter(n -> n != null && !n.isChange())
-            .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
-        cachedNodes = null;
       }
     }
 
