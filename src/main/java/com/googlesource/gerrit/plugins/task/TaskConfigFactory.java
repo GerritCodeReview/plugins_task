@@ -20,6 +20,7 @@ import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Project;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.AllProjectsName;
+import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
@@ -49,11 +50,11 @@ public class TaskConfigFactory {
 
   @Inject
   protected TaskConfigFactory(
-      AllProjectsName allProjects,
+      AllProjectsNameProvider allProjectsNameProvider,
       GitRepositoryManager gitMgr,
       PermissionBackend permissionBackend,
       CurrentUser user) {
-    this.allProjects = allProjects;
+    this.allProjects = allProjectsNameProvider.get();
     this.gitMgr = gitMgr;
     this.permissionBackend = permissionBackend;
     this.user = user;
