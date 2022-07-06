@@ -18,6 +18,7 @@ import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllProjectsNameProvider;
@@ -69,7 +70,7 @@ public class TaskConfigFactory {
   }
 
   protected Branch.NameKey getRootBranch() {
-    return new Branch.NameKey(allProjects, "refs/meta/config");
+    return new Branch.NameKey(allProjects, RefNames.REFS_CONFIG);
   }
 
   public TaskConfig getTaskConfig(FileKey key) throws ConfigInvalidException, IOException {
