@@ -323,18 +323,18 @@ public class Properties {
     }
 
     /**
-     * Expand all properties (${property_name} -> property_value) in the given text . Returns same
+     * Expand all properties (${property_name} -> property_value) in the given text. Returns same
      * object if no expansions occured.
      */
     public String expandText(String text) {
       if (text == null) {
         return null;
       }
-      StringBuffer out = new StringBuffer();
       Matcher m = PATTERN.matcher(text);
       if (!m.find()) {
         return text;
       }
+      StringBuffer out = new StringBuffer();
       do {
         m.appendReplacement(out, Matcher.quoteReplacement(getValueForName(m.group(1))));
       } while (m.find());
