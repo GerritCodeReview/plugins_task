@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.reviewdb.client.Change;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gwtorm.server.OrmException;
@@ -43,6 +43,7 @@ public class Properties {
   protected Loader loader;
   protected boolean init = true;
   protected boolean isTaskRefreshNeeded;
+  protected boolean isApplicableRefreshRequired;
   protected boolean isSubNodeReloadRequired;
 
   public Properties() {
@@ -61,12 +62,15 @@ public class Properties {
     loader = new Loader(changeData);
     expander = new Expander(n -> loader.load(n));
     if (isTaskRefreshNeeded || init) {
+      expander.expand(task, TaskConfig.KEY_APPLICABLE);
+      isApplicableRefreshRequired = loader.isNonTaskDefinedPropertyLoaded();
+
+      expander.expand(task, ImmutableSet.of(TaskConfig.KEY_APPLICABLE, TaskConfig.KEY_NAME));
+
       Map<String, String> exported = expander.expand(origTask.exported);
       if (exported != origTask.exported) {
         task.getForWrite().exported = exported;
       }
-
-      expander.expand(task, Collections.emptySet());
 
       if (init) {
         init = false;
@@ -83,6 +87,10 @@ public class Properties {
     isSubNodeReloadRequired = loader.isNonTaskDefinedPropertyLoaded();
   }
 
+  public boolean isApplicableRefreshRequired() {
+    return isApplicableRefreshRequired;
+  }
+
   public boolean isSubNodeReloadRequired() {
     return isSubNodeReloadRequired;
   }
@@ -92,7 +100,7 @@ public class Properties {
     return expander.expand(
         namesFactory,
         nf -> namesFactory.config.new NamesFactory(nf),
-        Sets.newHashSet(TaskConfig.KEY_TYPE));
+        ImmutableSet.of(TaskConfig.KEY_TYPE));
   }
 
   protected class Loader {
@@ -284,6 +292,18 @@ public class Properties {
         }
       }
       return cow.getForRead();
+    }
+
+    /**
+     * Returns expanded object if property found in the fieldName Field if it is a String, or in the
+     * List's Strings if it is a List. Returns same object if no expansions occurred.
+     */
+    public <T> T expand(CopyOnWrite<T> cow, String fieldName) {
+      try {
+        return expand(cow, cow.getOriginal().getClass().getField(fieldName));
+      } catch (NoSuchFieldException e) {
+        throw new RuntimeException(e);
+      }
     }
 
     /**
