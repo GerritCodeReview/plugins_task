@@ -205,7 +205,7 @@ public class Properties {
 
     /**
      * Expand all properties (${property_name} -> property_value) in the given text. Returns same
-     * object if no expansions occured.
+     * object if no expansions occurred.
      */
     public Map<String, String> expand(Map<String, String> map) {
       if (map != null) {
@@ -267,7 +267,7 @@ public class Properties {
 
     /**
      * Returns expanded object if property found in the Strings in the object's Fields (except the
-     * excluded ones). Returns same object if no expansions occured.
+     * excluded ones). Returns same object if no expansions occurred.
      */
     public <T> T expand(T object, Function<T, T> copier, Set<String> excludedFieldNames) {
       return expand(new CopyOnWrite<>(object, copier), excludedFieldNames);
@@ -275,38 +275,47 @@ public class Properties {
 
     /**
      * Returns expanded object if property found in the Strings in the object's Fields (except the
-     * excluded ones). Returns same object if no expansions occured.
+     * excluded ones). Returns same object if no expansions occurred.
      */
     public <T> T expand(CopyOnWrite<T> cow, Set<String> excludedFieldNames) {
       for (Field field : cow.getOriginal().getClass().getFields()) {
-        try {
-          if (!excludedFieldNames.contains(field.getName())) {
-            field.setAccessible(true);
-            Object o = field.get(cow.getOriginal());
-            if (o instanceof String) {
-              String expanded = expandText((String) o);
-              if (expanded != o) {
-                field.set(cow.getForWrite(), expanded);
-              }
-            } else if (o instanceof List) {
-              @SuppressWarnings("unchecked")
-              List<String> forceCheck = List.class.cast(o);
-              List<String> expanded = expand(forceCheck);
-              if (expanded != o) {
-                field.set(cow.getForWrite(), expanded);
-              }
-            }
-          }
-        } catch (IllegalAccessException e) {
-          throw new RuntimeException(e);
+        if (!excludedFieldNames.contains(field.getName())) {
+          expand(cow, field);
         }
       }
       return cow.getForRead();
     }
 
     /**
+     * Returns expanded object if property found in the Field if it is a String, or in the List's
+     * Strings if it is a List. Returns same object if no expansions occurred.
+     */
+    public <T> T expand(CopyOnWrite<T> cow, Field field) {
+      try {
+        field.setAccessible(true);
+        Object o = field.get(cow.getOriginal());
+        if (o instanceof String) {
+          String expanded = expandText((String) o);
+          if (expanded != o) {
+            field.set(cow.getForWrite(), expanded);
+          }
+        } else if (o instanceof List) {
+          @SuppressWarnings("unchecked")
+          List<String> forceCheck = List.class.cast(o);
+          List<String> expanded = expand(forceCheck);
+          if (expanded != o) {
+            field.set(cow.getForWrite(), expanded);
+          }
+        }
+      } catch (IllegalAccessException e) {
+        throw new RuntimeException(e);
+      }
+      return cow.getForRead();
+    }
+
+    /**
      * Returns expanded unmodifiable List if property found. Returns same object if no expansions
-     * occured.
+     * occurred.
      */
     public List<String> expand(List<String> list) {
       if (list != null) {
@@ -324,7 +333,7 @@ public class Properties {
 
     /**
      * Expand all properties (${property_name} -> property_value) in the given text. Returns same
-     * object if no expansions occured.
+     * object if no expansions occurred.
      */
     public String expandText(String text) {
       if (text == null) {
