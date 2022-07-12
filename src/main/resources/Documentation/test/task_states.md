@@ -1183,6 +1183,99 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root applicable Property"]
+  subtask = Subtask applicable Property
+  subtasks-factory = tasks-factory branch NOT applicable Property
+
+[tasks-factory "tasks-factory branch NOT applicable Property"]
+  names-factory = names-factory branch NOT applicable Property
+  applicable = branch:dev
+  fail = True
+
+[names-factory "names-factory branch NOT applicable Property"]
+  type = static
+  name = NOT Applicable 1
+  name = NOT Applicable 2
+  name = NOT Applicable 3
+
+[task "Subtask applicable Property"]
+  applicable = change:${_change_number}
+  fail = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root applicable Property",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask applicable Property",
+         "status" : "FAIL"
+      },                              # Only Test Suite: all
+      {                               # Only Test Suite: all
+         "applicable" : false,        # Only Test Suite: all
+         "hasPass" : true,            # Only Test Suite: all
+         "name" : "NOT Applicable 1", # Only Test Suite: all
+         "status" : "FAIL"            # Only Test Suite: all
+      },                              # Only Test Suite: all
+      {                               # Only Test Suite: all
+         "applicable" : false,        # Only Test Suite: all
+         "hasPass" : true,            # Only Test Suite: all
+         "name" : "NOT Applicable 2", # Only Test Suite: all
+         "status" : "FAIL"            # Only Test Suite: all
+      },                              # Only Test Suite: all
+      {                               # Only Test Suite: all
+         "applicable" : false,        # Only Test Suite: all
+         "hasPass" : true,            # Only Test Suite: all
+         "name" : "NOT Applicable 3", # Only Test Suite: all
+         "status" : "FAIL"            # Only Test Suite: all
+      }
+   ]
+}
+
+[root "Root branch applicable Property"]
+  subtasks-factory = tasks-factory branch applicable Property
+
+[tasks-factory "tasks-factory branch applicable Property"]
+  names-factory = names-factory branch applicable Property
+  applicable = branch:master
+  fail = True
+
+[names-factory "names-factory branch applicable Property"]
+  type = static
+  name = Applicable 1
+  name = Applicable 2
+  name = Applicable 3
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root branch applicable Property",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Applicable 1",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Applicable 2",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Applicable 3",
+         "status" : "FAIL"
+      }
+   ]
+}
+
 [root "Root Properties tasks-factory STATIC"]
   subtasks-factory = tasks-factory STATIC Properties
 

@@ -260,7 +260,8 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     protected List<TaskAttribute> getSubTasks()
         throws ConfigInvalidException, IOException, OrmException {
       List<TaskAttribute> subTasks = new ArrayList<>();
-      for (Node subNode : node.getSubNodes()) {
+      for (Node subNode :
+          options.onlyApplicable ? node.getSubNodes(matchCache) : node.getSubNodes()) {
         if (subNode == null) {
           subTasks.add(invalid());
         } else {

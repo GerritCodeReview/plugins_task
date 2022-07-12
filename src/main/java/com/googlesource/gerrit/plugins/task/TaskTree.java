@@ -116,22 +116,11 @@ public class TaskTree {
       if (cachedNodes == null) {
         return loadSubNodes();
       }
-      refreshSubNodes();
-      return cachedNodes;
+      return refresh(cachedNodes);
     }
 
     protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
       return cachedNodes = new SubNodeAdder().getSubNodes();
-    }
-
-    public void refreshSubNodes() throws ConfigInvalidException, OrmException {
-      if (cachedNodes != null) {
-        for (Node node : cachedNodes) {
-          if (node != null) {
-            node.refreshTask();
-          }
-        }
-      }
     }
 
     public ChangeData getChangeData() {
@@ -205,6 +194,8 @@ public class TaskTree {
 
     protected final Properties properties;
     protected final TaskKey taskKey;
+    protected Map<Branch.NameKey, List<Node>> nodesByBranch;
+    protected boolean hasUnfilterableSubNodes = false;
 
     public Node(NodeList parent, Task task) throws ConfigInvalidException, OrmException {
       this.parent = parent;
@@ -217,6 +208,14 @@ public class TaskTree {
       return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + taskKey;
     }
 
+    public List<Node> getSubNodes(MatchCache matchCache)
+        throws ConfigInvalidException, IOException, OrmException {
+      if (hasUnfilterableSubNodes) {
+        return getSubNodes();
+      }
+      return new ApplicableNodeFilter(matchCache).getSubNodes();
+    }
+
     @Override
     protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
       List<Node> nodes = new SubNodeAdder().getSubNodes();
@@ -224,6 +223,7 @@ public class TaskTree {
       if (!properties.isSubNodeReloadRequired()) {
         cachedNodes = nodes;
       } else {
+        hasUnfilterableSubNodes = true;
         cachedNodeByTask.clear();
         nodes.stream()
             .filter(n -> n != null && !n.isChange())
@@ -383,6 +383,79 @@ public class TaskTree {
             FileKey.create(resolveUserBranch(external.user), resolveTaskFileName(external.file)));
       }
     }
+
+    public class ApplicableNodeFilter {
+      protected MatchCache matchCache;
+      protected PredicateCache pcache;
+      protected Branch.NameKey branch = getChangeData().change().getDest();
+
+      public ApplicableNodeFilter(MatchCache matchCache)
+          throws ConfigInvalidException, IOException, OrmException {
+        this.matchCache = matchCache;
+        this.pcache = matchCache.predicateCache;
+      }
+
+      public List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
+        if (nodesByBranch != null) {
+          List<Node> nodes = nodesByBranch.get(branch);
+          if (nodes != null) {
+            return refresh(nodes);
+          }
+        }
+
+        List<Node> nodes = Node.this.getSubNodes();
+        if (!hasUnfilterableSubNodes && !nodes.isEmpty()) {
+          Optional<List<Node>> filterable = getOptionalApplicableForBranch(nodes);
+          if (filterable.isPresent()) {
+            if (nodesByBranch == null) {
+              nodesByBranch = new HashMap<>();
+            }
+            nodesByBranch.put(branch, filterable.get());
+            return filterable.get();
+          }
+          hasUnfilterableSubNodes = true;
+        }
+        return nodes;
+      }
+
+      protected Optional<List<Node>> getOptionalApplicableForBranch(List<Node> nodes)
+          throws ConfigInvalidException, IOException, OrmException {
+        int filterable = 0;
+        List<Node> applicableNodes = new ArrayList<>();
+        for (Node node : nodes) {
+          if (node != null && isApplicableCacheableByBranch(node)) {
+            filterable++;
+            try {
+              if (!matchCache.match(node.task.applicable)) {
+                // Correctness will not be affected if more nodes are added than necessary
+                // (i.e. if isApplicableCacheableByBranch() does not realize a Node is cacheable
+                // based on its Branch), but it is incorrect to filter out a Node now that could
+                // later be applicable when a property, other than its Change's destination, is
+                // altered.
+                continue;
+              }
+            } catch (QueryParseException e) {
+            }
+          }
+          applicableNodes.add(node);
+        }
+        // Simple heuristic to determine whether storing the filtered nodes is worth it. There
+        // is minor evidence to suggest that storing a large list actually hurts performance.
+        return (filterable > nodes.size() / 2) ? Optional.of(applicableNodes) : Optional.empty();
+      }
+
+      protected boolean isApplicableCacheableByBranch(Node node) {
+        String applicable = node.task.applicable;
+        if (node.properties.isApplicableRefreshRequired()) {
+          return false;
+        }
+        try {
+          return pcache.isCacheableByBranch(applicable);
+        } catch (QueryParseException e) {
+          return false;
+        }
+      }
+    }
   }
 
   protected String resolveTaskFileName(String file) throws ConfigInvalidException {
@@ -406,5 +479,15 @@ public class TaskTree {
       throw new ConfigInvalidException("Cannot resolve user: " + user);
     }
     return new Branch.NameKey(allUsers.get(), RefNames.refsUsers(acct.getId()));
+  }
+
+  protected static List<Node> refresh(List<Node> nodes)
+      throws ConfigInvalidException, OrmException {
+    for (Node node : nodes) {
+      if (node != null) {
+        node.refreshTask();
+      }
+    }
+    return nodes;
   }
 }
