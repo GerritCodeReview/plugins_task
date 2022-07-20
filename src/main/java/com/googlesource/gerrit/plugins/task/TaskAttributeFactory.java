@@ -96,7 +96,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
       for (Node node : definitions.getRootNodes(c)) {
-        if (node == null) {
+        if (node instanceof Node.Invalid) {
           a.roots.add(invalid());
         } else {
           new AttributeFactory(node, matchCache).create().ifPresent(t -> a.roots.add(t));
@@ -262,7 +262,7 @@ public class TaskAttributeFactory implements ChangeAttributeFactory {
       List<TaskAttribute> subTasks = new ArrayList<>();
       for (Node subNode :
           options.onlyApplicable ? node.getSubNodes(matchCache) : node.getSubNodes()) {
-        if (subNode == null) {
+        if (subNode instanceof Node.Invalid) {
           subTasks.add(invalid());
         } else {
           MatchCache subMatchCache = matchCache;

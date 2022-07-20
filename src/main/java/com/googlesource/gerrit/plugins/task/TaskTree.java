@@ -179,12 +179,17 @@ public class TaskTree {
       }
 
       protected void addInvalidNode() {
-        nodes.add(null); // null node indicates invalid
+        nodes.add(new Node().new Invalid());
       }
     }
   }
 
   public class Node extends NodeList {
+    public class Invalid extends Node {
+      @Override
+      public void refreshTask() throws ConfigInvalidException, OrmException {}
+    }
+
     public Task task;
     public boolean isDuplicate;
 
@@ -192,6 +197,11 @@ public class TaskTree {
     protected final TaskKey taskKey;
     protected Map<Branch.NameKey, List<Node>> nodesByBranch;
     protected boolean hasUnfilterableSubNodes = false;
+
+    protected Node() { // Only for Invalid
+      taskKey = null;
+      properties = null;
+    }
 
     public Node(NodeList parent, Task task) throws ConfigInvalidException, OrmException {
       this.parent = parent;
@@ -222,7 +232,7 @@ public class TaskTree {
         hasUnfilterableSubNodes = true;
         cachedNodeByTask.clear();
         nodes.stream()
-            .filter(n -> n != null && !n.isChange())
+            .filter(n -> !(n instanceof Invalid) && !n.isChange())
             .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
       }
       return nodes;
@@ -423,7 +433,9 @@ public class TaskTree {
         int filterable = 0;
         List<Node> applicableNodes = new ArrayList<>();
         for (Node node : nodes) {
-          if (node != null && isApplicableCacheableByBranch(node)) {
+          if (node instanceof Invalid) {
+            filterable++;
+          } else if (isApplicableCacheableByBranch(node)) {
             filterable++;
             try {
               if (!matchCache.match(node.task.applicable)) {
@@ -484,9 +496,7 @@ public class TaskTree {
   protected static List<Node> refresh(List<Node> nodes)
       throws ConfigInvalidException, OrmException {
     for (Node node : nodes) {
-      if (node != null) {
-        node.refreshTask();
-      }
+      node.refreshTask();
     }
     return nodes;
   }
