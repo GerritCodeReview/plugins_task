@@ -124,11 +124,7 @@ public class TaskTree {
     }
 
     public ChangeData getChangeData() {
-      return parent == null ? TaskTree.this.changeData : parent.getChangeData();
-    }
-
-    protected Properties getProperties() {
-      return Properties.EMPTY_PARENT;
+      return TaskTree.this.changeData;
     }
 
     protected boolean isTrusted() {
@@ -200,7 +196,7 @@ public class TaskTree {
     public Node(NodeList parent, Task task) throws ConfigInvalidException, OrmException {
       this.parent = parent;
       taskKey = task.key();
-      properties = new Properties(task, parent.getProperties());
+      properties = new Properties(this, task);
       refreshTask();
     }
 
@@ -250,14 +246,18 @@ public class TaskTree {
       }
     }
 
-    @Override
-    protected Properties getProperties() {
-      return properties;
+    protected Properties getParentProperties() {
+      return (parent instanceof Node) ? ((Node) parent).properties : Properties.EMPTY;
     }
 
     @Override
     protected boolean isTrusted() {
       return parent.isTrusted() && !task.isMasqueraded;
+    }
+
+    @Override
+    public ChangeData getChangeData() {
+      return parent.getChangeData();
     }
 
     public boolean isChange() {
@@ -320,7 +320,7 @@ public class TaskTree {
           if (tasksFactory != null) {
             NamesFactory namesFactory = task.config.getNamesFactory(tasksFactory.namesFactory);
             if (namesFactory != null && namesFactory.type != null) {
-              namesFactory = getProperties().getNamesFactory(namesFactory);
+              namesFactory = properties.getNamesFactory(namesFactory);
               switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
                 case STATIC:
                   addStaticTypeTasks(tasksFactory, namesFactory);

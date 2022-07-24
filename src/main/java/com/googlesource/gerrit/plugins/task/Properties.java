@@ -34,9 +34,15 @@ import java.util.regex.Pattern;
 
 /** Use to expand properties like ${_name} in the text of various definitions. */
 public class Properties {
-  public static final Properties EMPTY_PARENT = new Properties();
+  public static final Properties EMPTY =
+      new Properties() {
+        @Override
+        protected Function<String, String> getParentMapper() {
+          return n -> "";
+        }
+      };
 
-  protected final Properties parentProperties;
+  protected final TaskTree.Node node;
   protected final Task origTask;
   protected final CopyOnWrite<Task> task;
   protected Expander expander;
@@ -51,9 +57,9 @@ public class Properties {
     expander = new Expander(n -> "");
   }
 
-  public Properties(Task origTask, Properties parentProperties) {
+  public Properties(TaskTree.Node node, Task origTask) {
+    this.node = node;
     this.origTask = origTask;
-    this.parentProperties = parentProperties;
     task = new CopyOnWrite<>(origTask, t -> origTask.config.new Task(t));
   }
 
@@ -103,19 +109,17 @@ public class Properties {
         ImmutableSet.of(TaskConfig.KEY_TYPE));
   }
 
+  protected Function<String, String> getParentMapper() {
+    return n -> node.getParentProperties().expander.getValueForName(n);
+  }
+
   protected class Loader {
     protected final ChangeData changeData;
-    protected final Function<String, String> inheritedMapper;
     protected Change change;
     protected boolean isInheritedPropertyLoaded;
 
     public Loader(ChangeData changeData) {
       this.changeData = changeData;
-      if (parentProperties == null || parentProperties.expander == null) {
-        inheritedMapper = n -> "";
-      } else {
-        inheritedMapper = n -> parentProperties.expander.getValueForName(n);
-      }
     }
 
     public boolean isNonTaskDefinedPropertyLoaded() {
@@ -130,7 +134,7 @@ public class Properties {
       if (value == null) {
         value = origTask.properties.get(name);
         if (value == null) {
-          value = inheritedMapper.apply(name);
+          value = getParentMapper().apply(name);
           if (!value.isEmpty()) {
             isInheritedPropertyLoaded = true;
           }
