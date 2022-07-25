@@ -113,14 +113,14 @@ public class TaskTree {
     protected List<Node> cachedNodes;
 
     public List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      if (cachedNodes == null) {
-        return loadSubNodes();
+      if (cachedNodes != null) {
+        return refresh(cachedNodes);
       }
-      return refresh(cachedNodes);
+      return cachedNodes = loadSubNodes();
     }
 
     protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      return cachedNodes = new SubNodeAdder().getSubNodes();
+      return new SubNodeAdder().getSubNodes();
     }
 
     public ChangeData getChangeData() {
@@ -214,6 +214,22 @@ public class TaskTree {
       return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + taskKey;
     }
 
+    public List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
+      if (cachedNodes != null) {
+        return refresh(cachedNodes);
+      }
+      List<Node> nodes = loadSubNodes();
+      if (!properties.isSubNodeReloadRequired()) {
+        return cachedNodes = nodes;
+      }
+      hasUnfilterableSubNodes = true;
+      cachedNodeByTask.clear();
+      nodes.stream()
+          .filter(n -> !(n instanceof Invalid) && !n.isChange())
+          .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
+      return nodes;
+    }
+
     public List<Node> getSubNodes(MatchCache matchCache)
         throws ConfigInvalidException, IOException, OrmException {
       if (hasUnfilterableSubNodes) {
@@ -226,15 +242,6 @@ public class TaskTree {
     protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
       List<Node> nodes = new SubNodeAdder().getSubNodes();
       properties.expansionComplete();
-      if (!properties.isSubNodeReloadRequired()) {
-        cachedNodes = nodes;
-      } else {
-        hasUnfilterableSubNodes = true;
-        cachedNodeByTask.clear();
-        nodes.stream()
-            .filter(n -> !(n instanceof Invalid) && !n.isChange())
-            .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
-      }
       return nodes;
     }
 
