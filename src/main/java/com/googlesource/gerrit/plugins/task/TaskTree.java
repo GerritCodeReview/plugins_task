@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import static java.util.stream.Collectors.toList;
+
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.reviewdb.client.Account;
@@ -73,6 +75,7 @@ public class TaskTree {
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
+  protected final Map<SubSectionKey, List<Task>> definitionsBySubSection = new HashMap<>();
 
   protected ChangeData changeData;
 
@@ -230,13 +233,18 @@ public class TaskTree {
       }
       List<Node> nodes = loadSubNodes();
       if (!properties.isSubNodeReloadRequired()) {
-        return cachedNodes = nodes;
+        if (!isChange()) {
+          return cachedNodes = nodes;
+        }
+        definitionsBySubSection.computeIfAbsent(
+            task.key().subSection(), k -> nodes.stream().map(n -> n.task).collect(toList()));
+      } else {
+        hasUnfilterableSubNodes = true;
+        cachedNodeByTask.clear();
+        nodes.stream()
+            .filter(n -> !(n instanceof Invalid) && !n.isChange())
+            .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
       }
-      hasUnfilterableSubNodes = true;
-      cachedNodeByTask.clear();
-      nodes.stream()
-          .filter(n -> !(n instanceof Invalid) && !n.isChange())
-          .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
       return nodes;
     }
 
@@ -250,6 +258,10 @@ public class TaskTree {
 
     @Override
     protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
+      List<Task> cachedDefinitions = definitionsBySubSection.get(task.key().subSection());
+      if (cachedDefinitions != null) {
+        return new SubNodeFactory().createFromPreloaded(cachedDefinitions);
+      }
       List<Node> nodes = new SubNodeAdder().getSubNodes();
       properties.expansionComplete();
       return nodes;
