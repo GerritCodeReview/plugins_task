@@ -120,7 +120,7 @@ public class TaskTree {
     }
 
     protected List<Node> loadSubNodes() throws ConfigInvalidException, IOException, OrmException {
-      return new SubNodeAdder().getSubNodes();
+      return new SubNodeFactory().createFromPreloaded(preloader.getRootTasks());
     }
 
     public ChangeData getChangeData() {
@@ -131,30 +131,41 @@ public class TaskTree {
       return true;
     }
 
-    protected class SubNodeAdder {
-      protected List<Node> nodes = new ArrayList<>();
+    protected class SubNodeFactory {
       protected Set<String> names = new HashSet<>();
 
-      public List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
-        addSubNodes();
+      public List<Node> createFromPreloaded(List<Task> defs)
+          throws ConfigInvalidException, OrmException {
+        List<Node> nodes = new ArrayList<>();
+        for (Task def : defs) {
+          nodes.add(createFromPreloaded(def));
+        }
         return nodes;
       }
 
-      protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
-        addPreloaded(preloader.getRootTasks());
+      public Node createFromPreloaded(Task def) throws ConfigInvalidException, OrmException {
+        return createFromPreloaded(def, (parent, definition) -> new Node(parent, definition));
       }
 
-      protected void addPreloaded(List<Task> defs) throws ConfigInvalidException, OrmException {
-        for (Task def : defs) {
-          addPreloaded(def);
-        }
+      public Node createFromPreloaded(Task def, ChangeData changeData)
+          throws ConfigInvalidException, OrmException {
+        return createFromPreloaded(
+            def,
+            (parent, definition) ->
+                new Node(parent, definition) {
+                  @Override
+                  public ChangeData getChangeData() {
+                    return changeData;
+                  }
+
+                  @Override
+                  public boolean isChange() {
+                    return true;
+                  }
+                });
       }
 
-      protected void addPreloaded(Task def) throws ConfigInvalidException, OrmException {
-        addPreloaded(def, (parent, definition) -> new Node(parent, definition));
-      }
-
-      protected void addPreloaded(Task def, NodeFactory nodeFactory)
+      protected Node createFromPreloaded(Task def, NodeFactory nodeFactory)
           throws ConfigInvalidException, OrmException {
         if (def != null) {
           try {
@@ -169,17 +180,16 @@ public class TaskTree {
               if (isRefreshNeeded) {
                 node.refreshTask();
               }
-              nodes.add(node);
-              return;
+              return node;
             }
           } catch (Exception e) {
           }
         }
-        addInvalidNode();
+        return createInvalid();
       }
 
-      protected void addInvalidNode() {
-        nodes.add(new Node().new Invalid());
+      protected Node createInvalid() {
+        return new Node().new Invalid();
       }
     }
   }
@@ -281,13 +291,16 @@ public class TaskTree {
       return false;
     }
 
-    protected class SubNodeAdder extends NodeList.SubNodeAdder {
-      @Override
-      protected void addSubNodes() throws ConfigInvalidException, IOException, OrmException {
+    protected class SubNodeAdder {
+      protected List<Node> nodes = new ArrayList<>();
+      protected SubNodeFactory factory = new SubNodeFactory();
+
+      public List<Node> getSubNodes() throws ConfigInvalidException, IOException, OrmException {
         addSubTasks();
         addSubTasksFactoryTasks();
         addSubTasksFiles();
         addSubTasksExternals();
+        return nodes;
       }
 
       protected void addSubTasks() throws ConfigInvalidException, IOException, OrmException {
@@ -372,18 +385,7 @@ public class TaskTree {
               addPreloaded(
                   preloader.preload(
                       task.config.new Task(tasksFactory, changeData.getId().toString())),
-                  (parent, definition) ->
-                      new Node(parent, definition) {
-                        @Override
-                        public ChangeData getChangeData() {
-                          return changeData;
-                        }
-
-                        @Override
-                        public boolean isChange() {
-                          return true;
-                        }
-                      });
+                  changeData);
             }
             return;
           }
@@ -392,6 +394,23 @@ public class TaskTree {
         } catch (QueryParseException e) {
         }
         addInvalidNode();
+      }
+
+      public void addPreloaded(List<Task> defs) throws ConfigInvalidException, OrmException {
+        nodes.addAll(factory.createFromPreloaded(defs));
+      }
+
+      public void addPreloaded(Task def, ChangeData changeData)
+          throws ConfigInvalidException, OrmException {
+        nodes.add(factory.createFromPreloaded(def, changeData));
+      }
+
+      public void addPreloaded(Task def) throws ConfigInvalidException, OrmException {
+        nodes.add(factory.createFromPreloaded(def));
+      }
+
+      public void addInvalidNode() {
+        nodes.add(factory.createInvalid());
       }
 
       protected List<Task> getPreloadedTasks(External external)
