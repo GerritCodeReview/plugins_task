@@ -50,6 +50,12 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     FAIL;
   }
 
+  public static class Statistics {
+    public long numberOfChanges;
+    public long numberOfNodes;
+    public long numberOfTaskPluginAttributes;
+  }
+
   public static class TaskAttribute {
     public Boolean applicable;
     public Map<String, String> exported;
@@ -69,12 +75,15 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
   public static class TaskPluginAttribute extends PluginDefinedInfo {
     public List<TaskAttribute> roots = new ArrayList<>();
+    public Statistics queryStatistics;
   }
 
   protected final TaskTree definitions;
   protected final PredicateCache predicateCache;
 
   protected Modules.MyOptions options;
+  protected TaskPluginAttribute lastTaskPluginAttribute;
+  protected Statistics statistics;
 
   @Inject
   public TaskAttributeFactory(TaskTree definitions, PredicateCache predicateCache) {
@@ -88,10 +97,14 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     Map<Change.Id, PluginDefinedInfo> pluginInfosByChange = new HashMap<>();
     options = (Modules.MyOptions) beanProvider.getDynamicBean(plugin);
     if (options.all || options.onlyApplicable || options.onlyInvalid) {
+      initStatistics();
       for (PatchSetArgument psa : options.patchSetArguments) {
         definitions.masquerade(psa);
       }
       cds.forEach(cd -> pluginInfosByChange.put(cd.getId(), createWithExceptions(cd)));
+      if (lastTaskPluginAttribute != null) {
+        lastTaskPluginAttribute.queryStatistics = getStatistics(pluginInfosByChange);
+      }
     }
     return pluginInfosByChange;
   }
@@ -114,6 +127,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     if (a.roots.isEmpty()) {
       return null;
     }
+    lastTaskPluginAttribute = a;
     return a;
   }
 
@@ -128,6 +142,9 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       this.matchCache = matchCache;
       this.task = node.task;
       this.attribute = new TaskAttribute(task.name());
+      if (options.includeStatistics) {
+        statistics.numberOfNodes++;
+      }
     }
 
     public Optional<TaskAttribute> create() {
@@ -295,7 +312,22 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     return System.nanoTime() / 1000000;
   }
 
-  protected TaskAttribute invalid() {
+  public void initStatistics() {
+    if (options.includeStatistics) {
+      statistics = new Statistics();
+    }
+  }
+
+  public Statistics getStatistics(Map<Change.Id, PluginDefinedInfo> pluginInfosByChange) {
+    if (statistics != null) {
+      statistics.numberOfChanges = pluginInfosByChange.size();
+      statistics.numberOfTaskPluginAttributes =
+          pluginInfosByChange.values().stream().filter(tpa -> tpa != null).count();
+    }
+    return statistics;
+  }
+
+  protected static TaskAttribute invalid() {
     // For security reasons, do not expose the task name without knowing
     // the visibility which is derived from its applicability.
     TaskAttribute a = unknown();
@@ -303,13 +335,13 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     return a;
   }
 
-  protected TaskAttribute unknown() {
+  protected static TaskAttribute unknown() {
     TaskAttribute a = new TaskAttribute("UNKNOWN");
     a.status = Status.UNKNOWN;
     return a;
   }
 
-  protected String getHint(Status status, Task def) {
+  protected static String getHint(Status status, Task def) {
     if (status != null) {
       switch (status) {
         case READY:
