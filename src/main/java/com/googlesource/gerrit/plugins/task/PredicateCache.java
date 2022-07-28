@@ -39,12 +39,19 @@ import java.util.Set;
 import org.eclipse.jgit.lib.Config;
 
 public class PredicateCache {
+  public static class Statistics {
+    protected long hits;
+    protected long misses;
+  }
+
   protected final ChangeQueryBuilder cqb;
   protected final Set<String> cacheableByBranchPredicateClassNames;
   protected final CurrentUser user;
 
   protected final Map<String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
       predicatesByQuery = new HashMap<>();
+
+  protected Statistics statistics;
 
   @Inject
   public PredicateCache(
@@ -60,6 +67,14 @@ public class PredicateCache {
                 config.getStringList(pluginName, "cacheable-predicates", "byBranch-className")));
   }
 
+  public void initStatistics() {
+    statistics = new Statistics();
+  }
+
+  public Statistics getStatistics() {
+    return statistics;
+  }
+
   public boolean matchWithExceptions(ChangeData c, String query)
       throws QueryParseException, StorageException {
     if ("true".equalsIgnoreCase(query)) {
@@ -72,7 +87,13 @@ public class PredicateCache {
     ThrowingProvider<Predicate<ChangeData>, QueryParseException> predProvider =
         predicatesByQuery.get(query);
     if (predProvider != null) {
+      if (statistics != null) {
+        statistics.hits++;
+      }
       return predProvider.get();
+    }
+    if (statistics != null) {
+      statistics.misses++;
     }
     // never seen 'query' before
     try {

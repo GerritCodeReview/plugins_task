@@ -54,6 +54,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     public long numberOfChanges;
     public long numberOfNodes;
     public long numberOfTaskPluginAttributes;
+    public PredicateCache.Statistics predicateCache;
   }
 
   public static class TaskAttribute {
@@ -315,6 +316,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   public void initStatistics() {
     if (options.includeStatistics) {
       statistics = new Statistics();
+      predicateCache.initStatistics();
     }
   }
 
@@ -323,6 +325,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       statistics.numberOfChanges = pluginInfosByChange.size();
       statistics.numberOfTaskPluginAttributes =
           pluginInfosByChange.values().stream().filter(tpa -> tpa != null).count();
+      statistics.predicateCache = predicateCache.getStatistics();
     }
     return statistics;
   }
