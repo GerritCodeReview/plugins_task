@@ -59,6 +59,12 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   }
 
   public static class TaskAttribute {
+    public static class Statistics {
+      public boolean isApplicableRefreshRequired;
+      public boolean isSubNodeReloadRequired;
+      public boolean isTaskRefreshNeeded;
+    }
+
     public Boolean applicable;
     public Map<String, String> exported;
     public Boolean hasPass;
@@ -69,6 +75,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     public Status status;
     public List<TaskAttribute> subTasks;
     public Long evaluationMilliSeconds;
+    public Statistics statistics;
 
     public TaskAttribute(String name) {
       this.name = name;
@@ -143,9 +150,10 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       this.node = node;
       this.matchCache = matchCache;
       this.task = node.task;
-      this.attribute = new TaskAttribute(task.name());
+      attribute = new TaskAttribute(task.name());
       if (options.includeStatistics) {
         statistics.numberOfNodes++;
+        attribute.statistics = new TaskAttribute.Statistics();
       }
     }
 
@@ -193,6 +201,13 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
               if (options.evaluationTime) {
                 attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
+              }
+              if (attribute.statistics != null) {
+                attribute.statistics.isApplicableRefreshRequired =
+                    node.properties.isApplicableRefreshRequired;
+                attribute.statistics.isSubNodeReloadRequired =
+                    node.properties.isSubNodeReloadRequired();
+                attribute.statistics.isTaskRefreshNeeded = node.properties.isTaskRefreshNeeded;
               }
               return Optional.of(attribute);
             }
