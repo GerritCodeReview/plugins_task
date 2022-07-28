@@ -54,7 +54,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     public long numberOfChanges;
     public long numberOfNodes;
     public long numberOfTaskPluginAttributes;
-    public PredicateCache.Statistics predicateCache;
+    public Object predicateCache;
     public Preloader.Statistics preloader;
     public TaskTree.Statistics treeCaches;
   }
