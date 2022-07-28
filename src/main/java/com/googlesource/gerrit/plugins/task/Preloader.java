@@ -29,8 +29,16 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Use to pre-load a task definition with values from its preload-task definition. */
 public class Preloader {
+  public static class Statistics {
+    protected long hits;
+    protected long misses;
+    protected long preloaded;
+  }
+
   protected final TaskConfigFactory taskConfigFactory;
   protected final Map<TaskExpressionKey, Optional<Task>> optionalTaskByExpression = new HashMap<>();
+
+  protected Statistics statistics;
 
   @Inject
   public Preloader(TaskConfigFactory taskConfigFactory) {
@@ -68,8 +76,14 @@ public class Preloader {
       throws ConfigInvalidException, IOException {
     Optional<Task> task = optionalTaskByExpression.get(expression.key);
     if (task == null) {
+      if (statistics != null) {
+        statistics.misses++;
+      }
       task = preloadOptionalTask(expression);
       optionalTaskByExpression.put(expression.key, task);
+    }
+    if (statistics != null) {
+      statistics.hits++;
     }
     return task;
   }
@@ -83,6 +97,9 @@ public class Preloader {
   public Task preload(Task definition) throws ConfigInvalidException, IOException {
     String expression = definition.preloadTask;
     if (expression != null) {
+      if (statistics != null) {
+        statistics.preloaded++;
+      }
       Optional<Task> preloadFrom =
           getOptionalTask(new TaskExpression(definition.file(), expression));
       if (preloadFrom.isPresent()) {
@@ -194,5 +211,13 @@ public class Preloader {
     extended.putAll(preMap);
     extended.putAll(map);
     return extended;
+  }
+
+  public void initStatistics() {
+    statistics = new Statistics();
+  }
+
+  public Statistics getStatistics() {
+    return statistics;
   }
 }
