@@ -32,24 +32,22 @@ import com.google.gerrit.server.query.change.RegexProjectPredicate;
 import com.google.gerrit.server.query.change.RegexRefPredicate;
 import com.google.inject.Inject;
 import java.util.Arrays;
-import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Map;
 import java.util.Set;
 import org.eclipse.jgit.lib.Config;
 
 public class PredicateCache {
   public static class Statistics {
-    protected long hits;
-    protected long misses;
+    protected Object predicatesByQueryCache;
+    protected long numberOfMatches;
   }
 
   protected final ChangeQueryBuilder cqb;
   protected final Set<String> cacheableByBranchPredicateClassNames;
   protected final CurrentUser user;
-
-  protected final Map<String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
-      predicatesByQuery = new HashMap<>();
+  protected final StatisticsMap<
+          String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
+      predicatesByQuery = new HitHashMap<>();
 
   protected Statistics statistics;
 
@@ -69,9 +67,13 @@ public class PredicateCache {
 
   public void initStatistics() {
     statistics = new Statistics();
+    predicatesByQuery.initStatistics();
   }
 
-  public Statistics getStatistics() {
+  public Object getStatistics() {
+    if (statistics != null) {
+      statistics.predicatesByQueryCache = predicatesByQuery.getStatistics();
+    }
     return statistics;
   }
 
@@ -80,6 +82,9 @@ public class PredicateCache {
     if ("true".equalsIgnoreCase(query)) {
       return true;
     }
+    if (statistics != null) {
+      statistics.numberOfMatches++;
+    }
     return getPredicate(query).asMatchable().match(c);
   }
 
@@ -87,13 +92,7 @@ public class PredicateCache {
     ThrowingProvider<Predicate<ChangeData>, QueryParseException> predProvider =
         predicatesByQuery.get(query);
     if (predProvider != null) {
-      if (statistics != null) {
-        statistics.hits++;
-      }
       return predProvider.get();
-    }
-    if (statistics != null) {
-      statistics.misses++;
     }
     // never seen 'query' before
     try {
