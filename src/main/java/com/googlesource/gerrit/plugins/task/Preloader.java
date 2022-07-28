@@ -30,13 +30,15 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 /** Use to pre-load a task definition with values from its preload-task definition. */
 public class Preloader {
   public static class Statistics {
-    protected long hits;
-    protected long misses;
+    protected Object optionalTaskByExpressionCache;
+    protected long loaded;
     protected long preloaded;
+    protected long preloadedFromDefinition;
   }
 
   protected final TaskConfigFactory taskConfigFactory;
-  protected final Map<TaskExpressionKey, Optional<Task>> optionalTaskByExpression = new HashMap<>();
+  protected final StatisticsMap<TaskExpressionKey, Optional<Task>> optionalTaskByExpression =
+      new HitHashMap<>();
 
   protected Statistics statistics;
 
@@ -65,6 +67,8 @@ public class Preloader {
     return preloaded;
   }
 
+  boolean inGetOptionalTask;
+
   /**
    * Get a preloaded Task for this TaskExpression.
    *
@@ -76,14 +80,13 @@ public class Preloader {
       throws ConfigInvalidException, IOException {
     Optional<Task> task = optionalTaskByExpression.get(expression.key);
     if (task == null) {
-      if (statistics != null) {
-        statistics.misses++;
-      }
+      boolean firstInGetOptionalTask = !inGetOptionalTask;
+      inGetOptionalTask = true;
       task = preloadOptionalTask(expression);
       optionalTaskByExpression.put(expression.key, task);
-    }
-    if (statistics != null) {
-      statistics.hits++;
+      if (firstInGetOptionalTask) {
+        inGetOptionalTask = false;
+      }
     }
     return task;
   }
@@ -95,6 +98,9 @@ public class Preloader {
   }
 
   public Task preload(Task definition) throws ConfigInvalidException, IOException {
+    if (statistics != null && !inGetOptionalTask) {
+      statistics.preloadedFromDefinition++;
+    }
     String expression = definition.preloadTask;
     if (expression != null) {
       if (statistics != null) {
@@ -111,6 +117,9 @@ public class Preloader {
 
   protected Optional<Task> loadOptionalTask(TaskExpression expression)
       throws ConfigInvalidException, IOException {
+    if (statistics != null) {
+      statistics.loaded++;
+    }
     try {
       for (TaskKey key : expression) {
         Optional<Task> task = getOptionalTask(key);
@@ -215,9 +224,11 @@ public class Preloader {
 
   public void initStatistics() {
     statistics = new Statistics();
+    optionalTaskByExpression.initStatistics();
   }
 
   public Statistics getStatistics() {
+    statistics.optionalTaskByExpressionCache = optionalTaskByExpression.getStatistics();
     return statistics;
   }
 }
