@@ -67,6 +67,10 @@ public class TaskTree {
     Node create(NodeList parent, Task definition) throws Exception;
   }
 
+  public static class Statistics {
+    public Object definitionsPerSubSectionCache;
+  }
+
   protected static final String TASK_DIR = "task";
 
   protected final AccountResolver accountResolver;
@@ -76,9 +80,11 @@ public class TaskTree {
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
-  protected final Map<SubSectionKey, List<Task>> definitionsBySubSection = new HashMap<>();
+  protected final StatisticsMap<SubSectionKey, List<Task>> definitionsBySubSection =
+      new HitHashMapOfCollection<>();
 
   protected ChangeData changeData;
+  protected Statistics statistics;
 
   @Inject
   public TaskTree(
@@ -545,6 +551,18 @@ public class TaskTree {
       throw new ConfigInvalidException("Cannot resolve user: " + user);
     }
     return BranchNameKey.create(allUsers.get(), RefNames.refsUsers(acct));
+  }
+
+  public void initStatistics() {
+    statistics = new Statistics();
+    definitionsBySubSection.initStatistics();
+  }
+
+  public Statistics getStatistics() {
+    if (statistics != null) {
+      statistics.definitionsPerSubSectionCache = definitionsBySubSection.getStatistics();
+    }
+    return statistics;
   }
 
   protected static List<Node> refresh(List<Node> nodes)
