@@ -70,6 +70,7 @@ public class TaskTree {
   public static class Statistics {
     public Object definitionsPerSubSectionCache;
     public Object definitionsByBranchBySubSectionCache;
+    public Object changesByNamesFactoryQueryCache;
   }
 
   protected static final String TASK_DIR = "task";
@@ -77,10 +78,13 @@ public class TaskTree {
   protected final AccountResolver accountResolver;
   protected final AllUsersNameProvider allUsers;
   protected final CurrentUser user;
+  protected final PredicateCache predicateCache;
   protected final Preloader preloader;
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
+  protected final StatisticsMap<String, List<ChangeData>> changesByNamesFactoryQuery =
+      new HitHashMap<>();
   protected final StatisticsMap<SubSectionKey, List<Task>> definitionsBySubSection =
       new HitHashMapOfCollection<>();
   protected final StatisticsMap<SubSectionKey, Map<BranchNameKey, List<Task>>>
@@ -97,12 +101,14 @@ public class TaskTree {
       CurrentUser user,
       Provider<ChangeQueryBuilder> changeQueryBuilderProvider,
       Provider<ChangeQueryProcessor> changeQueryProcessorProvider,
+      PredicateCache predicateCache,
       Preloader preloader) {
     this.accountResolver = accountResolver;
     this.allUsers = allUsers;
     this.user = user != null ? user : anonymousUser;
     this.changeQueryProcessorProvider = changeQueryProcessorProvider;
     this.changeQueryBuilderProvider = changeQueryBuilderProvider;
+    this.predicateCache = predicateCache;
     this.preloader = preloader;
   }
 
@@ -411,12 +417,7 @@ public class TaskTree {
           throws ConfigInvalidException, IOException, StorageException {
         try {
           if (namesFactory.changes != null) {
-            List<ChangeData> changeDataList =
-                changeQueryProcessorProvider
-                    .get()
-                    .query(changeQueryBuilderProvider.get().parse(namesFactory.changes))
-                    .entities();
-            for (ChangeData changeData : changeDataList) {
+            for (ChangeData changeData : query(namesFactory.changes)) {
               addPreloaded(
                   preloader.preload(
                       task.config.new Task(tasksFactory, changeData.getId().toString())),
@@ -583,10 +584,24 @@ public class TaskTree {
     return BranchNameKey.create(allUsers.get(), RefNames.refsUsers(acct));
   }
 
+  public List<ChangeData> query(String query) throws StorageException, QueryParseException {
+    List<ChangeData> changeDataList = changesByNamesFactoryQuery.get(query);
+    if (changeDataList == null) {
+      changeDataList =
+          changeQueryProcessorProvider
+              .get()
+              .query(changeQueryBuilderProvider.get().parse(query))
+              .entities();
+      changesByNamesFactoryQuery.put(query, changeDataList);
+    }
+    return changeDataList;
+  }
+
   public void initStatistics() {
     statistics = new Statistics();
     definitionsBySubSection.initStatistics();
     definitionsByBranchBySubSection.initStatistics();
+    changesByNamesFactoryQuery.initStatistics();
   }
 
   public Statistics getStatistics() {
@@ -594,6 +609,7 @@ public class TaskTree {
       statistics.definitionsPerSubSectionCache = definitionsBySubSection.getStatistics();
       statistics.definitionsByBranchBySubSectionCache =
           definitionsByBranchBySubSection.getStatistics();
+      statistics.changesByNamesFactoryQueryCache = changesByNamesFactoryQuery.getStatistics();
     }
     return statistics;
   }
