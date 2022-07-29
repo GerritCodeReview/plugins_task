@@ -124,7 +124,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   }
 
   protected PluginDefinedInfo createWithExceptions(ChangeData c) {
-    MatchCache matchCache = new MatchCache(predicateCache, c);
+    MatchCache matchCache = new MatchCache(definitions.predicateCache, c);
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
       for (Node node : definitions.getRootNodes(c)) {
@@ -321,7 +321,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
         } else {
           MatchCache subMatchCache = matchCache;
           if (!matchCache.changeData.getId().equals(subNode.getChangeData().getId())) {
-            subMatchCache = new MatchCache(predicateCache, subNode.getChangeData());
+            subMatchCache = new MatchCache(definitions.predicateCache, subNode.getChangeData());
           }
           new AttributeFactory(subNode, subMatchCache).create().ifPresent(t -> subTasks.add(t));
         }
@@ -351,7 +351,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   public void initStatistics() {
     if (options.includeStatistics) {
       statistics = new Statistics();
-      predicateCache.initStatistics();
+      definitions.predicateCache.initStatistics();
       definitions.preloader.initStatistics();
       definitions.initStatistics();
     }
@@ -362,7 +362,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       statistics.numberOfChanges = pluginInfosByChange.size();
       statistics.numberOfTaskPluginAttributes =
           pluginInfosByChange.values().stream().filter(tpa -> tpa != null).count();
-      statistics.predicateCache = predicateCache.getStatistics();
+      statistics.predicateCache = definitions.predicateCache.getStatistics();
       statistics.preloader = definitions.preloader.getStatistics();
       statistics.treeCaches = definitions.getStatistics();
     }
