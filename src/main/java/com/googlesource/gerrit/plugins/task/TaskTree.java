@@ -222,7 +222,7 @@ public class TaskTree {
 
     protected final Properties properties;
     protected final TaskKey taskKey;
-    protected Map<BranchNameKey, List<Node>> nodesByBranch;
+    protected StatisticsMap<BranchNameKey, List<Node>> nodesByBranch;
     protected boolean hasUnfilterableSubNodes = false;
 
     protected Node() { // Only for Invalid
@@ -476,7 +476,7 @@ public class TaskTree {
           Optional<List<Node>> filterable = getOptionalApplicableForBranch(nodes);
           if (filterable.isPresent()) {
             if (nodesByBranch == null) {
-              nodesByBranch = new HashMap<>();
+              nodesByBranch = new HitHashMapOfCollection<>(statistics != null);
             }
             nodesByBranch.put(branch, filterable.get());
             return filterable.get();

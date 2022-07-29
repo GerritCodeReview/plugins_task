@@ -52,6 +52,8 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
   public static class Statistics {
     public long numberOfChanges;
+    public long numberOfChangeNodes;
+    public long numberOfDuplicates;
     public long numberOfNodes;
     public long numberOfTaskPluginAttributes;
     public Object predicateCache;
@@ -64,6 +66,8 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       public boolean isApplicableRefreshRequired;
       public boolean isSubNodeReloadRequired;
       public boolean isTaskRefreshNeeded;
+      public Boolean hasUnfilterableSubNodes;
+      public Object nodesByBranchCache;
     }
 
     public Boolean applicable;
@@ -154,6 +158,12 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       attribute = new TaskAttribute(task.name());
       if (options.includeStatistics) {
         statistics.numberOfNodes++;
+        if (node.isChange()) {
+          statistics.numberOfChangeNodes++;
+        }
+        if (node.isDuplicate) {
+          statistics.numberOfDuplicates++;
+        }
         attribute.statistics = new TaskAttribute.Statistics();
       }
     }
@@ -203,13 +213,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
               if (options.evaluationTime) {
                 attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
               }
-              if (attribute.statistics != null) {
-                attribute.statistics.isApplicableRefreshRequired =
-                    node.properties.isApplicableRefreshRequired;
-                attribute.statistics.isSubNodeReloadRequired =
-                    node.properties.isSubNodeReloadRequired();
-                attribute.statistics.isTaskRefreshNeeded = node.properties.isTaskRefreshNeeded;
-              }
+              addStatistics(attribute.statistics);
               return Optional.of(attribute);
             }
           }
@@ -218,6 +222,20 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
+    }
+
+    public void addStatistics(TaskAttribute.Statistics statistics) {
+      if (statistics != null) {
+        statistics.isApplicableRefreshRequired = node.properties.isApplicableRefreshRequired;
+        statistics.isSubNodeReloadRequired = node.properties.isSubNodeReloadRequired();
+        statistics.isTaskRefreshNeeded = node.properties.isTaskRefreshNeeded;
+        if (!statistics.isSubNodeReloadRequired) {
+          statistics.hasUnfilterableSubNodes = node.hasUnfilterableSubNodes;
+        }
+        if (node.nodesByBranch != null) {
+          statistics.nodesByBranchCache = node.nodesByBranch.getStatistics();
+        }
+      }
     }
 
     protected Status getStatusWithExceptions() throws StorageException, QueryParseException {

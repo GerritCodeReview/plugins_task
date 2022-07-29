@@ -31,6 +31,14 @@ public class HitHashMapOfCollection<K, V extends Collection<?>> extends HitHashM
 
   protected Statistics statistics;
 
+  public HitHashMapOfCollection() {}
+
+  public HitHashMapOfCollection(boolean initStatistics) {
+    if (initStatistics) {
+      initStatistics();
+    }
+  }
+
   @Override
   public void initStatistics() {
     super.initStatistics();
