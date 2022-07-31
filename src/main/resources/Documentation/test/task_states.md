@@ -1486,6 +1486,46 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root CHANGE constant subtask list CHANGE Properties"]
+  subtasks-factory = tasks-factory Properties CHANGE names-factory CHANGE
+
+[tasks-factory "tasks-factory Properties CHANGE names-factory CHANGE"]
+  names-factory = Properties names-factory current CHANGE
+  subtask = Current CHANGE Property
+
+[task "Current CHANGE Property"]
+  fail = True
+  fail-hint = Current Change: ${_change_number}
+
+[names-factory "Properties names-factory current CHANGE"]
+  type = change
+  changes = change:${_change_number}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root CHANGE constant subtask list CHANGE Properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "change" : _change_number,
+         "hasPass" : false,
+         "name" : "_change_number",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "Current Change: _change_number",
+               "name" : "Current CHANGE Property",
+               "status" : "FAIL"
+            }
+         ]
+      }
+   ]
+}
+
 [root "Root Preload"]
    preload-task = Subtask FAIL
    subtask = Subtask Preload
@@ -2713,7 +2753,7 @@ The config below is expected to be in the `task.config` file in project
   type = change
 
 [names-factory "names-factory change list (changes invalid)"]
-  change = change:invalidChange
+  changes = change:invalidChange
   type = change
 
 ```

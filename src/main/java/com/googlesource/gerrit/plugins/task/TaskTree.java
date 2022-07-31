@@ -201,6 +201,11 @@ public class TaskTree {
     public class Invalid extends Node {
       @Override
       public void refreshTask() throws ConfigInvalidException, OrmException {}
+
+      @Override
+      public Task getDefinition() {
+        return null;
+      }
     }
 
     public Task task;
@@ -237,7 +242,8 @@ public class TaskTree {
           return cachedNodes = nodes;
         }
         definitionsBySubSection.computeIfAbsent(
-            task.key().subSection(), k -> nodes.stream().map(n -> n.task).collect(toList()));
+            task.key().subSection(),
+            k -> nodes.stream().map(n -> n.getDefinition()).collect(toList()));
       } else {
         hasUnfilterableSubNodes = true;
         cachedNodeByTask.clear();
@@ -297,6 +303,10 @@ public class TaskTree {
     @Override
     public ChangeData getChangeData() {
       return parent.getChangeData();
+    }
+
+    public Task getDefinition() {
+      return properties.origTask;
     }
 
     public boolean isChange() {
