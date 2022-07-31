@@ -69,6 +69,7 @@ public class TaskTree {
 
   public static class Statistics {
     public Object definitionsPerSubSectionCache;
+    public Object definitionsByBranchBySubSectionCache;
   }
 
   protected static final String TASK_DIR = "task";
@@ -82,6 +83,8 @@ public class TaskTree {
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
   protected final StatisticsMap<SubSectionKey, List<Task>> definitionsBySubSection =
       new HitHashMapOfCollection<>();
+  protected final StatisticsMap<SubSectionKey, Map<BranchNameKey, List<Task>>>
+      definitionsByBranchBySubSection = new HitHashMap<>();
 
   protected ChangeData changeData;
   protected Statistics statistics;
@@ -456,6 +459,9 @@ public class TaskTree {
       protected MatchCache matchCache;
       protected PredicateCache pcache;
       protected BranchNameKey branch = getChangeData().change().getDest();
+      protected SubSectionKey subSection = task.key.subSection();
+      protected Map<BranchNameKey, List<Task>> definitionsByBranch =
+          definitionsByBranchBySubSection.get(subSection);
 
       public ApplicableNodeFilter(MatchCache matchCache)
           throws ConfigInvalidException, IOException, StorageException {
@@ -470,18 +476,42 @@ public class TaskTree {
             return refresh(nodes);
           }
         }
-
+        if (definitionsByBranch != null) {
+          List<Task> branchDefinitions = definitionsByBranch.get(branch);
+          if (branchDefinitions != null) {
+            return new SubNodeFactory().createFromPreloaded(branchDefinitions);
+          }
+        }
         List<Node> nodes = Node.this.getSubNodes();
+        if (isChange()
+            && definitionsByBranch == null
+            && definitionsByBranchBySubSection.containsKey(subSection)) {
+          hasUnfilterableSubNodes = true;
+        }
+
         if (!hasUnfilterableSubNodes && !nodes.isEmpty()) {
           Optional<List<Node>> filterable = getOptionalApplicableForBranch(nodes);
           if (filterable.isPresent()) {
-            if (nodesByBranch == null) {
-              nodesByBranch = new HitHashMapOfCollection<>(statistics != null);
+            if (!isChange()) {
+              if (nodesByBranch == null) {
+                nodesByBranch = new HitHashMapOfCollection<>(statistics != null);
+              }
+              nodesByBranch.put(branch, filterable.get());
+            } else {
+              if (definitionsByBranch == null) {
+                definitionsByBranch = new HitHashMap<>(statistics != null);
+                definitionsByBranchBySubSection.put(subSection, definitionsByBranch);
+              }
+              definitionsByBranch.put(
+                  branch,
+                  filterable.get().stream().map(node -> node.getDefinition()).collect(toList()));
             }
-            nodesByBranch.put(branch, filterable.get());
             return filterable.get();
           }
           hasUnfilterableSubNodes = true;
+          if (isChange()) {
+            definitionsByBranchBySubSection.put(subSection, null);
+          }
         }
         return nodes;
       }
@@ -556,11 +586,14 @@ public class TaskTree {
   public void initStatistics() {
     statistics = new Statistics();
     definitionsBySubSection.initStatistics();
+    definitionsByBranchBySubSection.initStatistics();
   }
 
   public Statistics getStatistics() {
     if (statistics != null) {
       statistics.definitionsPerSubSectionCache = definitionsBySubSection.getStatistics();
+      statistics.definitionsByBranchBySubSectionCache =
+          definitionsByBranchBySubSection.getStatistics();
     }
     return statistics;
   }

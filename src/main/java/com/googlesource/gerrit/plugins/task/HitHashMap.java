@@ -14,7 +14,11 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import static java.util.stream.Collectors.toList;
+
 import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.function.BiFunction;
 import java.util.function.Function;
 
@@ -22,11 +26,20 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   public static class Statistics {
     public long hits;
     public int size;
+    public List<Object> elements;
   }
 
   public static final long serialVersionUID = 1;
 
   protected Statistics statistics;
+
+  public HitHashMap() {}
+
+  public HitHashMap(boolean initStatistics) {
+    if (initStatistics) {
+      initStatistics();
+    }
+  }
 
   @Override
   public V get(Object key) {
@@ -59,6 +72,28 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   }
 
   @Override
+  public V put(K key, V value) {
+    if (statistics != null && value instanceof TracksStatistics) {
+      ((TracksStatistics) value).ensureStatistics();
+    }
+    return super.put(key, value);
+  }
+
+  @Override
+  public void putAll(Map<? extends K, ? extends V> m) {
+    m.entrySet().stream().forEach(e -> put(e.getKey(), e.getValue()));
+  }
+
+  @Override
+  public V putIfAbsent(K key, V value) {
+    if (!containsKey(key)) {
+      put(key, value);
+      return null;
+    }
+    return get(key);
+  }
+
+  @Override
   public V computeIfPresent(
       K key, BiFunction<? super K, ? super V, ? extends V> remappingFunction) {
     throw new UnsupportedOperationException(); // Todo if needed
@@ -75,13 +110,43 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   }
 
   @Override
+  public V replace(K key, V value) {
+    throw new UnsupportedOperationException(); // Todo if needed
+  }
+
+  @Override
+  public boolean replace(K key, V oldValue, V newValue) {
+    throw new UnsupportedOperationException(); // Todo if needed
+  }
+
+  @Override
+  public void replaceAll(BiFunction<? super K, ? super V, ? extends V> function) {
+    throw new UnsupportedOperationException(); // Todo if needed
+  }
+
+  @Override
   public void initStatistics() {
     statistics = new Statistics();
   }
 
   @Override
+  public void ensureStatistics() {
+    if (statistics == null) {
+      initStatistics();
+    }
+  }
+
+  @Override
   public Object getStatistics() {
     statistics.size = size();
+    List<Object> elementStatistics =
+        values().stream()
+            .filter(e -> e instanceof TracksStatistics)
+            .map(e -> ((TracksStatistics) e).getStatistics())
+            .collect(toList());
+    if (!elementStatistics.isEmpty()) {
+      statistics.elements = elementStatistics;
+    }
     return statistics;
   }
 }

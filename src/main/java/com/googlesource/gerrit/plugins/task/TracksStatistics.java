@@ -14,6 +14,10 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import java.util.Map;
+public interface TracksStatistics {
+  void initStatistics();
 
-public interface StatisticsMap<K, V> extends Map<K, V>, TracksStatistics {}
+  void ensureStatistics();
+
+  Object getStatistics();
+}
