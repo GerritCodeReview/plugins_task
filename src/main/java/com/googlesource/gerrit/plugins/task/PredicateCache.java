@@ -60,24 +60,7 @@ public class PredicateCache {
                 config.getStringList(pluginName, "cacheable-predicates", "byBranch-className")));
   }
 
-  public boolean match(ChangeData c, String query) throws OrmException, QueryParseException {
-    if (query == null) {
-      return true;
-    }
-    return matchWithExceptions(c, query);
-  }
-
-  public Boolean matchOrNull(ChangeData c, String query) {
-    if (query != null) {
-      try {
-        return matchWithExceptions(c, query);
-      } catch (OrmException | QueryParseException | RuntimeException e) {
-      }
-    }
-    return null;
-  }
-
-  protected boolean matchWithExceptions(ChangeData c, String query)
+  public boolean matchWithExceptions(ChangeData c, String query)
       throws QueryParseException, OrmException {
     if ("true".equalsIgnoreCase(query)) {
       return true;
