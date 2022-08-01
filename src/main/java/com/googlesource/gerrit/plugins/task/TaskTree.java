@@ -72,6 +72,7 @@ public class TaskTree {
     public Object definitionsPerSubSectionCache;
     public Object definitionsByBranchBySubSectionCache;
     public Object changesByNamesFactoryQueryCache;
+    public Properties.Statistics properties;
   }
 
   protected static final String TASK_DIR = "task";
@@ -232,6 +233,7 @@ public class TaskTree {
     public Task task;
     public boolean isDuplicate;
 
+    protected Properties.Statistics propertiesStatistics;
     protected final Properties properties;
     protected final TaskKey taskKey;
     protected StatisticsMap<BranchNameKey, List<Node>> nodesByBranch;
@@ -277,10 +279,7 @@ public class TaskTree {
 
     public List<Node> getApplicableSubNodes()
         throws ConfigInvalidException, IOException, StorageException {
-      if (hasUnfilterableSubNodes) {
-        return getSubNodes();
-      }
-      return new ApplicableNodeFilter().getSubNodes();
+      return hasUnfilterableSubNodes ? getSubNodes() : new ApplicableNodeFilter().getSubNodes();
     }
 
     @Override
@@ -304,6 +303,10 @@ public class TaskTree {
       isDuplicate = path.contains(key);
       path.add(key);
 
+      if (statistics != null) {
+        properties.setStatisticsConsumer(
+            s -> statistics.properties = (propertiesStatistics = s).sum(statistics.properties));
+      }
       this.task = properties.getTask(getChangeData());
 
       this.duplicateKeys = new LinkedList<>(parent.duplicateKeys);

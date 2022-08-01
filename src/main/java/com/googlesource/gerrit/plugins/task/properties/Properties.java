@@ -17,15 +17,36 @@ package com.googlesource.gerrit.plugins.task.properties;
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.server.query.change.ChangeData;
+import com.googlesource.gerrit.plugins.task.StopWatch;
 import com.googlesource.gerrit.plugins.task.TaskConfig;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.TaskTree;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /** Use to expand properties like ${_name} in the text of various definitions. */
 public class Properties {
+  public static class Statistics {
+    public long getTaskNanoseconds;
+    public long copierNanoseconds;
+    public Matcher.Statistics matcher;
+
+    public Statistics sum(Statistics other) {
+      if (other == null) {
+        return this;
+      }
+      Statistics statistics = new Statistics();
+      statistics.getTaskNanoseconds = getTaskNanoseconds + other.getTaskNanoseconds;
+      statistics.copierNanoseconds = copierNanoseconds + other.copierNanoseconds;
+      statistics.matcher = matcher == null ? other.matcher : matcher.sum(other.matcher);
+      return statistics;
+    }
+
+    protected StopWatch getTask;
+  }
+
   public static final Properties EMPTY =
       new Properties() {
         @Override
@@ -37,6 +58,9 @@ public class Properties {
   public final Task origTask;
   protected final TaskTree.Node node;
   protected final CopyOnWrite<Task> task;
+  protected Statistics statistics;
+  protected Consumer<Statistics> statisticsConsumer;
+  protected Consumer<Matcher.Statistics> matcherStatisticsConsumer;
   protected Expander expander;
   protected Loader loader;
   protected boolean init = true;
@@ -57,8 +81,12 @@ public class Properties {
 
   /** Use to expand properties specifically for Tasks. */
   public Task getTask(ChangeData changeData) throws StorageException {
+    if (statistics != null) {
+      statistics.getTask = new StopWatch().enable().start();
+    }
     loader = new Loader(origTask, changeData, getParentMapper());
     expander = new Expander(n -> loader.load(n));
+    expander.setStatisticsConsumer(matcherStatisticsConsumer);
     if (isTaskRefreshRequired || init) {
       expander.expand(task, TaskConfig.KEY_APPLICABLE);
       isApplicableRefreshRequired = loader.isNonTaskDefinedPropertyLoaded();
@@ -75,7 +103,21 @@ public class Properties {
         isTaskRefreshRequired = loader.isNonTaskDefinedPropertyLoaded();
       }
     }
+    if (statisticsConsumer != null) {
+      statistics.getTaskNanoseconds = statistics.getTask.stop().get();
+      statistics.getTask = null;
+      statisticsConsumer.accept(statistics);
+    }
     return task.getForRead();
+  }
+
+  public void setStatisticsConsumer(Consumer<Statistics> statisticsConsumer) {
+    if (statisticsConsumer != null) {
+      this.statisticsConsumer = statisticsConsumer;
+      statistics = new Statistics();
+      matcherStatisticsConsumer = s -> statistics.matcher = s;
+      task.setNanosecondsConsumer(ns -> statistics.copierNanoseconds = ns);
+    }
   }
 
   // To detect NamesFactories dependent on non task defined properties, the checking must be

@@ -14,11 +14,13 @@
 
 package com.googlesource.gerrit.plugins.task.properties;
 
+import com.googlesource.gerrit.plugins.task.StopWatch;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Function;
+import java.util.function.LongConsumer;
 
 public class CopyOnWrite<T> {
   public static class CloneOnWrite<C extends Cloneable> extends CopyOnWrite<C> {
@@ -67,12 +69,17 @@ public class CopyOnWrite<T> {
   }
 
   protected Function<T, T> copier;
+  protected StopWatch stopWatch = new StopWatch();
   protected T original;
   protected T copy;
 
   public CopyOnWrite(T original, Function<T, T> copier) {
     this.original = original;
     this.copier = copier;
+  }
+
+  protected void setNanosecondsConsumer(LongConsumer nanosConsumer) {
+    stopWatch.setConsumer(nanosConsumer);
   }
 
   public T getOriginal() {
@@ -84,7 +91,10 @@ public class CopyOnWrite<T> {
   }
 
   public T getForWrite() {
-    return copy = isCopy() ? copy : copier.apply(original);
+    if (!isCopy()) {
+      stopWatch.run(() -> copy = copier.apply(original));
+    }
+    return copy;
   }
 
   public boolean isCopy() {
