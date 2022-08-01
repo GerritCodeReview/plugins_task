@@ -328,7 +328,7 @@ public class TaskTree {
     }
 
     public Task getDefinition() {
-      return properties.origTask;
+      return properties.isTaskRefreshRequired() ? properties.origTask : task;
     }
 
     public boolean isChange() {
