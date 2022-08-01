@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 import java.util.function.Function;
 
 /**
@@ -39,6 +40,12 @@ import java.util.function.Function;
  * the name/value associations via the getValueForName() method.
  */
 public abstract class AbstractExpander {
+  protected Consumer<Matcher.Statistics> statisticsConsumer;
+
+  public void setStatisticsConsumer(Consumer<Matcher.Statistics> statisticsConsumer) {
+    this.statisticsConsumer = statisticsConsumer;
+  }
+
   /**
    * Returns expanded object if property found in the Strings in the object's Fields (except the
    * excluded ones). Returns same object if no expansions occurred.
@@ -134,6 +141,7 @@ public abstract class AbstractExpander {
       return null;
     }
     Matcher m = new Matcher(text);
+    m.setStatisticsConsumer(statisticsConsumer);
     if (!m.find()) {
       return text;
     }

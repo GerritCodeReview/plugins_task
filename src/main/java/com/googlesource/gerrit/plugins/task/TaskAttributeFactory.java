@@ -69,6 +69,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       public boolean isTaskRefreshNeeded;
       public Boolean hasUnfilterableSubNodes;
       public Object nodesByBranchCache;
+      public Object properties;
     }
 
     public Boolean applicable;
@@ -163,6 +164,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
           statistics.numberOfDuplicates++;
         }
         attribute.statistics = new TaskAttribute.Statistics();
+        attribute.statistics.properties = node.propertiesStatistics;
       }
     }
 
