@@ -14,47 +14,53 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.gerrit.entities.Change;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.query.change.ChangeData;
-import java.util.HashMap;
-import java.util.Map;
 
 public class MatchCache {
+  protected final HitBooleanTable<String, Change.Id> resultByChangeByQuery =
+      new HitBooleanTable<>();
   protected final PredicateCache predicateCache;
-  protected final ChangeData changeData;
 
-  protected final Map<String, Boolean> matchResultByQuery = new HashMap<>();
-
-  public MatchCache(PredicateCache predicateCache, ChangeData changeData) {
+  public MatchCache(PredicateCache predicateCache) {
     this.predicateCache = predicateCache;
-    this.changeData = changeData;
   }
 
-  public boolean match(String query) throws StorageException, QueryParseException {
+  public boolean match(ChangeData changeData, String query)
+      throws StorageException, QueryParseException {
     if (query == null) {
       return true;
     }
-    Boolean isMatched = matchResultByQuery.get(query);
+    Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());
     if (isMatched == null) {
       isMatched = predicateCache.matchWithExceptions(changeData, query);
-      matchResultByQuery.put(query, isMatched);
+      resultByChangeByQuery.put(query, changeData.getId(), isMatched);
     }
     return isMatched;
   }
 
-  public Boolean matchOrNull(String query) {
+  public Boolean matchOrNull(ChangeData changeData, String query) {
     if (query == null) {
       return null;
     }
-    Boolean isMatched = matchResultByQuery.get(query);
+    Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());
     if (isMatched == null) {
       try {
         isMatched = predicateCache.matchWithExceptions(changeData, query);
       } catch (QueryParseException | RuntimeException e) {
       }
-      matchResultByQuery.put(query, isMatched);
+      resultByChangeByQuery.put(query, changeData.getId(), isMatched);
     }
     return isMatched;
+  }
+
+  public void initStatistics() {
+    resultByChangeByQuery.initStatistics();
+  }
+
+  public Object getStatistics() {
+    return resultByChangeByQuery.getStatistics();
   }
 }

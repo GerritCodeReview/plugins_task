@@ -79,6 +79,7 @@ public class TaskTree {
   protected final AllUsersNameProvider allUsers;
   protected final CurrentUser user;
   protected final PredicateCache predicateCache;
+  protected final MatchCache matchCache;
   protected final Preloader preloader;
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
@@ -109,6 +110,7 @@ public class TaskTree {
     this.changeQueryProcessorProvider = changeQueryProcessorProvider;
     this.changeQueryBuilderProvider = changeQueryBuilderProvider;
     this.predicateCache = predicateCache;
+    this.matchCache = new MatchCache(predicateCache);
     this.preloader = preloader;
   }
 
@@ -272,12 +274,12 @@ public class TaskTree {
       return nodes;
     }
 
-    public List<Node> getSubNodes(MatchCache matchCache)
+    public List<Node> getApplicableSubNodes()
         throws ConfigInvalidException, IOException, StorageException {
       if (hasUnfilterableSubNodes) {
         return getSubNodes();
       }
-      return new ApplicableNodeFilter(matchCache).getSubNodes();
+      return new ApplicableNodeFilter().getSubNodes();
     }
 
     @Override
@@ -330,6 +332,14 @@ public class TaskTree {
 
     public boolean isChange() {
       return false;
+    }
+
+    public boolean match(String query) throws StorageException, QueryParseException {
+      return matchCache.match(getChangeData(), query);
+    }
+
+    public Boolean matchOrNull(String query) {
+      return matchCache.matchOrNull(getChangeData(), query);
     }
 
     protected class SubNodeAdder {
@@ -457,18 +467,12 @@ public class TaskTree {
     }
 
     public class ApplicableNodeFilter {
-      protected MatchCache matchCache;
-      protected PredicateCache pcache;
       protected BranchNameKey branch = getChangeData().change().getDest();
       protected SubSectionKey subSection = task.key.subSection();
       protected Map<BranchNameKey, List<Task>> definitionsByBranch =
           definitionsByBranchBySubSection.get(subSection);
 
-      public ApplicableNodeFilter(MatchCache matchCache)
-          throws ConfigInvalidException, IOException, StorageException {
-        this.matchCache = matchCache;
-        this.pcache = matchCache.predicateCache;
-      }
+      public ApplicableNodeFilter() throws ConfigInvalidException, IOException, StorageException {}
 
       public List<Node> getSubNodes() throws ConfigInvalidException, IOException, StorageException {
         if (nodesByBranch != null) {
@@ -527,7 +531,7 @@ public class TaskTree {
           } else if (isApplicableCacheableByBranch(node)) {
             filterable++;
             try {
-              if (!matchCache.match(node.task.applicable)) {
+              if (!node.match(node.task.applicable)) {
                 // Correctness will not be affected if more nodes are added than necessary
                 // (i.e. if isApplicableCacheableByBranch() does not realize a Node is cacheable
                 // based on its Branch), but it is incorrect to filter out a Node now that could
@@ -551,7 +555,7 @@ public class TaskTree {
           return false;
         }
         try {
-          return pcache.isCacheableByBranch(applicable);
+          return predicateCache.isCacheableByBranch(applicable);
         } catch (QueryParseException e) {
           return false;
         }
