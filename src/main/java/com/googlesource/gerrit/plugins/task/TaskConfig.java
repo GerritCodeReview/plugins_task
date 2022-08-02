@@ -14,13 +14,11 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.common.collect.Sets;
 import com.google.gerrit.common.Container;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -94,7 +92,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
     protected TaskBase(TaskBase base) {
       this(base.subSection);
-      Copier.deepCopyDeclaredFields(TaskBase.class, base, this, false, copyOnlyReferencesFor());
+      Copier.shallowCopyDeclaredFields(TaskBase.class, base, this, false);
     }
 
     protected TaskBase(SubSectionKey s) {
@@ -102,20 +100,12 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
   }
 
-  public class Task extends TaskBase {
+  public class Task extends TaskBase implements Cloneable {
     public final TaskKey key;
 
     public Task(SubSectionKey s, boolean isVisible, boolean isMasqueraded) {
       super(s, isVisible, isMasqueraded);
       key = TaskKey.create(s);
-    }
-
-    public Task(Task task) {
-      super(task);
-      // Despite being copied in Copier.deepCopyDeclaredFields this
-      // is needed to avoid the final variable initialization warning.
-      this.key = task.key;
-      Copier.deepCopyDeclaredFields(Task.class, task, this, false, copyOnlyReferencesFor());
     }
 
     public Task(TasksFactory tasks, String name) {
@@ -156,7 +146,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
   }
 
-  public class NamesFactory extends SubSection {
+  public class NamesFactory extends SubSection implements Cloneable {
     public String changes;
     public List<String> names;
     public String type;
@@ -166,11 +156,6 @@ public class TaskConfig extends AbstractVersionedMetaData {
       changes = getString(s, KEY_CHANGES, null);
       names = getStringList(s, KEY_NAME);
       type = getString(s, KEY_TYPE, null);
-    }
-
-    public NamesFactory(NamesFactory n) {
-      super(n.subSection);
-      Copier.deepCopyDeclaredFields(NamesFactory.class, n, this, false, copyOnlyReferencesFor());
     }
   }
 
@@ -287,7 +272,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     for (String name : names) {
       valueByName.put(name, getString(s, name));
     }
-    return valueByName;
+    return Collections.unmodifiableMap(valueByName);
   }
 
   protected Set<String> getMatchingNames(SubSectionKey s, String match) {
@@ -297,7 +282,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
         matched.add(name);
       }
     }
-    return matched;
+    return Collections.unmodifiableSet(matched);
   }
 
   protected Set<String> getNames(SubSectionKey s) {
@@ -320,9 +305,5 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   protected SubSectionKey subSectionKey(String section, String subSection) {
     return SubSectionKey.create(file, section, subSection);
-  }
-
-  protected Collection<Class<?>> copyOnlyReferencesFor() {
-    return Sets.newHashSet(TaskKey.class, SubSectionKey.class);
   }
 }

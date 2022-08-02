@@ -14,44 +14,19 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.common.primitives.Primitives;
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 public class Copier {
-  protected static <T> void deepCopyDeclaredFields(
-      Class<T> cls,
-      T from,
-      T to,
-      boolean includeInaccessible,
-      Collection<Class<?>> copyReferenceOnly) {
+  protected static <T> void shallowCopyDeclaredFields(
+      Class<T> cls, T from, T to, boolean includeInaccessible) {
     for (Field field : cls.getDeclaredFields()) {
       try {
         if (includeInaccessible) {
           field.setAccessible(true);
         }
-        Class<?> fieldCls = field.getType();
         Object val = field.get(from);
-        if (field.getType().isPrimitive()
-            || Primitives.isWrapperType(fieldCls)
-            || (val instanceof String)
-            || val == null
-            || copyReferenceOnly.contains(fieldCls)) {
+        if (!field.getName().equals("this$0")) { // Can't copy internal final field
           field.set(to, val);
-        } else if (val instanceof List) {
-          List<?> list = List.class.cast(val);
-          field.set(to, new ArrayList<>(list));
-        } else if (val instanceof Map) {
-          Map<?, ?> map = Map.class.cast(val);
-          field.set(to, new HashMap<>(map));
-        } else if (field.getName().equals("this$0")) { // Can't copy internal final field
-        } else {
-          throw new RuntimeException(
-              "Don't know how to deep copy " + fieldValueToString(field, val));
         }
       } catch (IllegalAccessException e) {
         if (includeInaccessible) {

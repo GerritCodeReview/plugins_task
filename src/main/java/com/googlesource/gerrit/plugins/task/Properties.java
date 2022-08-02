@@ -60,7 +60,7 @@ public class Properties {
   public Properties(TaskTree.Node node, Task origTask) {
     this.node = node;
     this.origTask = origTask;
-    task = new CopyOnWrite<>(origTask, t -> origTask.config.new Task(t));
+    task = new CopyOnWrite.CloneOnWrite<>(origTask);
   }
 
   /** Use to expand properties specifically for Tasks. */
@@ -103,10 +103,7 @@ public class Properties {
 
   /** Use to expand properties specifically for NamesFactories. */
   public NamesFactory getNamesFactory(NamesFactory namesFactory) {
-    return expander.expand(
-        namesFactory,
-        nf -> namesFactory.config.new NamesFactory(nf),
-        ImmutableSet.of(TaskConfig.KEY_TYPE));
+    return expander.expand(namesFactory, ImmutableSet.of(TaskConfig.KEY_TYPE));
   }
 
   protected Function<String, String> getParentMapper() {
@@ -276,6 +273,14 @@ public class Properties {
   protected abstract static class AbstractExpander {
     // "${_name}" -> group(1) = "_name"
     protected static final Pattern PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
+
+    /**
+     * Returns expanded object if property found in the Strings in the object's Fields (except the
+     * excluded ones). Returns same object if no expansions occurred.
+     */
+    public <C extends Cloneable> C expand(C object, Set<String> excludedFieldNames) {
+      return expand(new CopyOnWrite.CloneOnWrite<>(object), excludedFieldNames);
+    }
 
     /**
      * Returns expanded object if property found in the Strings in the object's Fields (except the
