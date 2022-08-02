@@ -80,13 +80,14 @@ public class CopyOnWrite<T> {
   }
 
   public T getForRead() {
-    return copy != null ? copy : original;
+    return isCopy() ? copy : original;
   }
 
   public T getForWrite() {
-    if (copy == null) {
-      copy = copier.apply(original);
-    }
-    return copy;
+    return copy = isCopy() ? copy : copier.apply(original);
+  }
+
+  public boolean isCopy() {
+    return copy != null;
   }
 }
