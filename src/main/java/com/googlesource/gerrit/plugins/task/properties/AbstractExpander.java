@@ -20,8 +20,6 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Function;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Use to expand properties like ${property} in Strings into their values.
@@ -41,9 +39,6 @@ import java.util.regex.Pattern;
  * the name/value associations via the getValueForName() method.
  */
 public abstract class AbstractExpander {
-  // "${_name}" -> group(1) = "_name"
-  protected static final Pattern PATTERN = Pattern.compile("\\$\\{([^}]+)\\}");
-
   /**
    * Returns expanded object if property found in the Strings in the object's Fields (except the
    * excluded ones). Returns same object if no expansions occurred.
@@ -138,13 +133,13 @@ public abstract class AbstractExpander {
     if (text == null) {
       return null;
     }
-    Matcher m = PATTERN.matcher(text);
+    Matcher m = new Matcher(text);
     if (!m.find()) {
       return text;
     }
     StringBuffer out = new StringBuffer();
     do {
-      m.appendReplacement(out, Matcher.quoteReplacement(getValueForName(m.group(1))));
+      m.appendValue(out, getValueForName(m.getName()));
     } while (m.find());
     m.appendTail(out);
     return out.toString();
