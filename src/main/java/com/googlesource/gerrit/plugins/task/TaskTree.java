@@ -38,6 +38,7 @@ import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactoryType;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.TaskConfig.TasksFactory;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
+import com.googlesource.gerrit.plugins.task.properties.Properties;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -312,7 +313,7 @@ public class TaskTree {
       }
     }
 
-    protected Properties getParentProperties() {
+    public Properties getParentProperties() {
       return (parent instanceof Node) ? ((Node) parent).properties : Properties.EMPTY;
     }
 

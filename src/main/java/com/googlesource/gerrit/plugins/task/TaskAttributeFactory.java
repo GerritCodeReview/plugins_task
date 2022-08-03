@@ -224,9 +224,9 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
     public void addStatistics(TaskAttribute.Statistics statistics) {
       if (statistics != null) {
-        statistics.isApplicableRefreshRequired = node.properties.isApplicableRefreshRequired;
+        statistics.isApplicableRefreshRequired = node.properties.isApplicableRefreshRequired();
         statistics.isSubNodeReloadRequired = node.properties.isSubNodeReloadRequired();
-        statistics.isTaskRefreshNeeded = node.properties.isTaskRefreshNeeded;
+        statistics.isTaskRefreshNeeded = node.properties.isTaskRefreshRequired();
         if (!statistics.isSubNodeReloadRequired) {
           statistics.hasUnfilterableSubNodes = node.hasUnfilterableSubNodes;
         }
