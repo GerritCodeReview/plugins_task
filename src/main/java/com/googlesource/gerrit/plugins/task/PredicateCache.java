@@ -45,8 +45,7 @@ public class PredicateCache {
   protected final ChangeQueryBuilder cqb;
   protected final Set<String> cacheableByBranchPredicateClassNames;
   protected final CurrentUser user;
-  protected final StatisticsMap<
-          String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
+  protected final HitHashMap<String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
       predicatesByQuery = new HitHashMap<>();
 
   protected Statistics statistics;
@@ -90,7 +89,7 @@ public class PredicateCache {
 
   protected Predicate<ChangeData> getPredicate(String query) throws QueryParseException {
     ThrowingProvider<Predicate<ChangeData>, QueryParseException> predProvider =
-        predicatesByQuery.get(query);
+        predicatesByQuery.getOrStartLoad(query);
     if (predProvider != null) {
       return predProvider.get();
     }

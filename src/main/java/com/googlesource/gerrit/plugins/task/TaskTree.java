@@ -86,7 +86,7 @@ public class TaskTree {
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
-  protected final StatisticsMap<String, List<ChangeData>> changesByNamesFactoryQuery =
+  protected final HitHashMap<String, List<ChangeData>> changesByNamesFactoryQuery =
       new HitHashMap<>();
   protected final StatisticsMap<SubSectionKey, List<Task>> definitionsBySubSection =
       new HitHashMapOfCollection<>();
@@ -593,7 +593,7 @@ public class TaskTree {
   }
 
   public List<ChangeData> query(String query) throws StorageException, QueryParseException {
-    List<ChangeData> changeDataList = changesByNamesFactoryQuery.get(query);
+    List<ChangeData> changeDataList = changesByNamesFactoryQuery.getOrStartLoad(query);
     if (changeDataList == null) {
       changeDataList =
           changeQueryProcessorProvider
