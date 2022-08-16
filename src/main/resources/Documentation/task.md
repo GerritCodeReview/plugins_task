@@ -57,10 +57,12 @@ state.
 A task with a `READY` status is ready to be executed. All of its subtasks are
 in the `PASS` state.
 
-A task with a `DUPLICATE` status has the same task key as one of its ancestors.
-Task keys are generally made up of the canonical task name and the change to
-which it applies. To avoid infinite loops, subtasks are ignored on duplicate
-tasks.
+A task with a `DUPLICATE` status has the same task key as one of its ancestors,
+or another change task descendant of an ancestor tasksFactory with the same
+canonical name as the change's tasksFactory. Task keys are generally made up of
+the canonical task name and the change to which it applies. To avoid infinite
+loops, and to potentially reduce needless duplication, subtasks are ignored on
+duplicate tasks.
 
 A task with a `PASS` status meets all the criteria for `READY`, and has
 executed and was successful.
