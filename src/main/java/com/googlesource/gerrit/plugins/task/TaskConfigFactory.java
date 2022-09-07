@@ -18,8 +18,10 @@ import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.reviewdb.client.Branch;
 import com.google.gerrit.reviewdb.client.Project;
+import com.google.gerrit.reviewdb.client.RefNames;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.AllProjectsName;
+import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
@@ -45,21 +47,22 @@ public class TaskConfigFactory {
   protected final AllProjectsName allProjects;
 
   protected final Map<Branch.NameKey, PatchSetArgument> psaMasquerades = new HashMap<>();
+  protected final Map<FileKey, TaskConfig> taskCfgByFile = new HashMap<>();
 
   @Inject
   protected TaskConfigFactory(
-      AllProjectsName allProjects,
+      AllProjectsNameProvider allProjectsNameProvider,
       GitRepositoryManager gitMgr,
       PermissionBackend permissionBackend,
       CurrentUser user) {
-    this.allProjects = allProjects;
+    this.allProjects = allProjectsNameProvider.get();
     this.gitMgr = gitMgr;
     this.permissionBackend = permissionBackend;
     this.user = user;
   }
 
   public TaskConfig getRootConfig() throws ConfigInvalidException, IOException {
-    return getTaskConfig(FileKey.create(getRootBranch(), DEFAULT), true);
+    return getTaskConfig(FileKey.create(getRootBranch(), DEFAULT));
   }
 
   public void masquerade(PatchSetArgument psa) {
@@ -67,26 +70,35 @@ public class TaskConfigFactory {
   }
 
   protected Branch.NameKey getRootBranch() {
-    return new Branch.NameKey(allProjects, "refs/meta/config");
+    return new Branch.NameKey(allProjects, RefNames.REFS_CONFIG);
   }
 
-  public TaskConfig getTaskConfig(FileKey file, boolean isTrusted)
-      throws ConfigInvalidException, IOException {
+  public TaskConfig getTaskConfig(FileKey key) throws ConfigInvalidException, IOException {
+    TaskConfig cfg = taskCfgByFile.get(key);
+    if (cfg == null) {
+      cfg = loadTaskConfig(key);
+      taskCfgByFile.put(key, cfg);
+    }
+    return cfg;
+  }
+
+  private TaskConfig loadTaskConfig(FileKey file) throws ConfigInvalidException, IOException {
     Branch.NameKey branch = file.branch();
     PatchSetArgument psa = psaMasquerades.get(branch);
     boolean visible = true; // invisible psas are filtered out by commandline
+    boolean isMasqueraded = false;
     if (psa == null) {
       visible = canRead(branch);
     } else {
-      isTrusted = false;
+      isMasqueraded = true;
       branch = new Branch.NameKey(psa.change.getProject(), psa.patchSet.getId().toRefName());
     }
 
     Project.NameKey project = file.branch().getParentKey();
     TaskConfig cfg =
-        psa == null
-            ? new TaskConfig(file, visible, isTrusted)
-            : new TaskConfig(branch, file, visible, isTrusted);
+        isMasqueraded
+            ? new TaskConfig(branch, file, visible, isMasqueraded)
+            : new TaskConfig(file, visible, isMasqueraded);
     try (Repository git = gitMgr.openRepository(project)) {
       cfg.load(project, git);
     } catch (IOException e) {
