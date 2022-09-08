@@ -2,7 +2,7 @@
     name: plugins-task-build
     parent: gerrit-plugin-build
     pre-run:
-        tools/playbooks/install_docker.yaml
+        tools/playbooks/install_dependencies.yaml
 
 - project:
     description: |

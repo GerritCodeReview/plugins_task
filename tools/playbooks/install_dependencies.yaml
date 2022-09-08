@@ -1,8 +1,13 @@
 - hosts: all
   roles:
-    - name: ensure-docker
+    - name: ensure-dependencies
   tasks:
-    - name: Install compose
+    - name: Install docker compose
       shell: |
         sudo curl -L "https://github.com/docker/compose/releases/download/1.29.1/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
         sudo chmod +x /usr/local/bin/docker-compose
+    - name: Install python3-distutils
+      package:
+        name:
+          - python3-distutils
+        state: present
