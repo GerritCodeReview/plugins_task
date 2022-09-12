@@ -34,107 +34,111 @@ public class TaskExpressionTest extends TestCase {
   public static String PEACE = "peace";
   public static FileKey file = createFileKey("foo", "bar", "baz");
 
+  public static TaskKey SIMPLE_TASK = TaskKey.create(file, SIMPLE);
+  public static TaskKey WORLD_TASK = TaskKey.create(file, WORLD);
+  public static TaskKey PEACE_TASK = TaskKey.create(file, PEACE);
+
   public void testBlank() {
     TaskExpression exp = getTaskExpression("");
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
 
   public void testRequiredSingleName() {
     TaskExpression exp = getTaskExpression(SIMPLE);
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), SIMPLE);
+    assertEquals(it.next(), SIMPLE_TASK);
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
 
   public void testOptionalSingleName() {
     TaskExpression exp = getTaskExpression(SIMPLE + "|");
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), SIMPLE);
+    assertEquals(it.next(), SIMPLE_TASK);
     assertFalse(it.hasNext());
   }
 
   public void testRequiredTwoNames() {
     TaskExpression exp = getTaskExpression(WORLD + "|" + PEACE);
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), WORLD);
+    assertEquals(it.next(), WORLD_TASK);
     assertTrue(it.hasNext());
-    assertEquals(it.next(), PEACE);
+    assertEquals(it.next(), PEACE_TASK);
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
 
   public void testOptionalTwoNames() {
     TaskExpression exp = getTaskExpression(WORLD + "|" + PEACE + "|");
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), WORLD);
+    assertEquals(it.next(), WORLD_TASK);
     assertTrue(it.hasNext());
-    assertEquals(it.next(), PEACE);
+    assertEquals(it.next(), PEACE_TASK);
     assertFalse(it.hasNext());
   }
 
   public void testBlankSpaces() {
     TaskExpression exp = getTaskExpression("  ");
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
 
   public void testRequiredSingleNameLeadingSpaces() {
     TaskExpression exp = getTaskExpression("  " + SIMPLE);
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), SIMPLE);
+    assertEquals(it.next(), SIMPLE_TASK);
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
 
   public void testRequiredSingleNameTrailingSpaces() {
     TaskExpression exp = getTaskExpression(SIMPLE + "  ");
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), SIMPLE);
+    assertEquals(it.next(), SIMPLE_TASK);
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
 
   public void testOptionalSingleNameLeadingSpaces() {
     TaskExpression exp = getTaskExpression("  " + SIMPLE + "|");
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), SIMPLE);
+    assertEquals(it.next(), SIMPLE_TASK);
     assertFalse(it.hasNext());
   }
 
   public void testOptionalSingleNameTrailingSpaces() {
     TaskExpression exp = getTaskExpression(SIMPLE + "|  ");
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), SIMPLE);
+    assertEquals(it.next(), SIMPLE_TASK);
     assertFalse(it.hasNext());
   }
 
   public void testOptionalSingleNameMiddleSpaces() {
     TaskExpression exp = getTaskExpression(SIMPLE + "  |");
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), SIMPLE);
+    assertEquals(it.next(), SIMPLE_TASK);
     assertFalse(it.hasNext());
   }
 
   public void testRequiredTwoNamesMiddleSpaces() {
     TaskExpression exp = getTaskExpression(WORLD + "  |  " + PEACE);
-    Iterator<String> it = exp.iterator();
+    Iterator<TaskKey> it = exp.iterator();
     assertTrue(it.hasNext());
-    assertEquals(it.next(), WORLD);
+    assertEquals(it.next(), WORLD_TASK);
     assertTrue(it.hasNext());
-    assertEquals(it.next(), PEACE);
+    assertEquals(it.next(), PEACE_TASK);
     assertTrue(it.hasNext());
     assertNoSuchElementException(it);
   }
@@ -163,7 +167,7 @@ public class TaskExpressionTest extends TestCase {
     assertFalse(exp.key.equals(otherExp.key));
   }
 
-  protected static void assertNoSuchElementException(Iterator<String> it) {
+  protected static void assertNoSuchElementException(Iterator<TaskKey> it) {
     try {
       it.next();
       assertTrue(false);

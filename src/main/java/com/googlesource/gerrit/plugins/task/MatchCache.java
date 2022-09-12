@@ -31,25 +31,28 @@ public class MatchCache {
     this.changeData = changeData;
   }
 
-  protected boolean match(String query) throws StorageException, QueryParseException {
+  public boolean match(String query) throws StorageException, QueryParseException {
     if (query == null) {
       return true;
     }
     Boolean isMatched = matchResultByQuery.get(query);
     if (isMatched == null) {
-      isMatched = predicateCache.match(changeData, query);
+      isMatched = predicateCache.matchWithExceptions(changeData, query);
       matchResultByQuery.put(query, isMatched);
     }
     return isMatched;
   }
 
-  protected Boolean matchOrNull(String query) {
+  public Boolean matchOrNull(String query) {
     if (query == null) {
       return null;
     }
     Boolean isMatched = matchResultByQuery.get(query);
     if (isMatched == null) {
-      isMatched = predicateCache.matchOrNull(changeData, query);
+      try {
+        isMatched = predicateCache.matchWithExceptions(changeData, query);
+      } catch (QueryParseException | RuntimeException e) {
+      }
       matchResultByQuery.put(query, isMatched);
     }
     return isMatched;
