@@ -43,7 +43,7 @@ def del_non_applicable(tasks):
                     status=''
                     if STATUS in task.keys():
                         status = task[STATUS]
-                    if status != 'INVALID':
+                    if status != 'INVALID' and status != 'DUPLICATE':
                         del tasks[i]
                         nexti = i
 
