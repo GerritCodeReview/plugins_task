@@ -110,7 +110,7 @@
           icon.tooltip = 'Failed';
           break;
         case 'READY':
-          icon.id = 'gr-icons:rebase';
+          icon.id = 'gr-icons:playArrow';
           icon.color = 'green';
           icon.tooltip = 'Ready';
           break;
@@ -120,12 +120,17 @@
           icon.tooltip = 'Invalid';
           break;
         case 'WAITING':
-          icon.id = 'gr-icons:side-by-side';
+          icon.id = 'gr-icons:pause';
           icon.color = 'red';
           icon.tooltip = 'Waiting';
           break;
-        case 'PASS':
+        case 'DUPLICATE':
           icon.id = 'gr-icons:check';
+          icon.color = 'green';
+          icon.tooltip = 'Duplicate';
+          break;
+        case 'PASS':
+          icon.id = 'gr-icons:check-circle';
           icon.color = 'green';
           icon.tooltip = 'Passed';
           break;

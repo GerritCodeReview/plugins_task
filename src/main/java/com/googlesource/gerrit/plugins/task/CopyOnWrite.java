@@ -14,9 +14,58 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.util.Arrays;
+import java.util.Optional;
 import java.util.function.Function;
 
 public class CopyOnWrite<T> {
+  public static class CloneOnWrite<C extends Cloneable> extends CopyOnWrite<C> {
+    public CloneOnWrite(C cloneable) {
+      super(cloneable, copier(cloneable));
+    }
+  }
+
+  public static <C extends Cloneable> Function<C, C> copier(C cloneable) {
+    return c -> clone(c);
+  }
+
+  @SuppressWarnings("unchecked")
+  public static <C extends Cloneable> C clone(C cloneable) {
+    try {
+      for (Class<?> cls = cloneable.getClass(); cls != null; cls = cls.getSuperclass()) {
+        Optional<Method> optional = getOptionalDeclaredMethod(cls, "clone");
+        if (optional.isPresent()) {
+          Method clone = optional.get();
+          clone.setAccessible(true);
+          return (C) cloneable.getClass().cast(clone.invoke(cloneable));
+        }
+      }
+      throw new RuntimeException("Cannot find clone() method");
+    } catch (SecurityException
+        | IllegalAccessException
+        | IllegalArgumentException
+        | InvocationTargetException e) {
+      throw new RuntimeException(e);
+    }
+  }
+
+  /**
+   * A faster getDeclaredMethod() without exceptions. The original apparently does a linear search
+   * anyway, and it is significantly slower when it throws NoSuchMethodExceptions.
+   */
+  public static Optional<Method> getOptionalDeclaredMethod(
+      Class<?> cls, String name, Class<?>... parameterTypes) {
+    for (Method method : cls.getDeclaredMethods()) {
+      if (method.getName().equals(name)
+          && Arrays.equals(method.getParameterTypes(), parameterTypes)) {
+        return Optional.of(method);
+      }
+    }
+    return Optional.empty();
+  }
+
   protected Function<T, T> copier;
   protected T original;
   protected T copy;

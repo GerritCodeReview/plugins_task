@@ -14,7 +14,10 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
+import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
+import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -26,17 +29,23 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Use to pre-load a task definition with values from its preload-task definition. */
 public class Preloader {
+  protected final TaskConfigFactory taskConfigFactory;
   protected final Map<TaskExpressionKey, Optional<Task>> optionalTaskByExpression = new HashMap<>();
 
-  public List<Task> getRootTasks(TaskConfig cfg) {
-    return getTasks(cfg, TaskConfig.SECTION_ROOT);
+  @Inject
+  public Preloader(TaskConfigFactory taskConfigFactory) {
+    this.taskConfigFactory = taskConfigFactory;
   }
 
-  public List<Task> getTasks(TaskConfig cfg) {
-    return getTasks(cfg, TaskConfig.SECTION_TASK);
+  public List<Task> getRootTasks() throws IOException, ConfigInvalidException {
+    return getTasks(taskConfigFactory.getRootConfig(), TaskConfig.SECTION_ROOT);
   }
 
-  protected List<Task> getTasks(TaskConfig cfg, String type) {
+  public List<Task> getTasks(FileKey file) throws IOException, ConfigInvalidException {
+    return getTasks(taskConfigFactory.getTaskConfig(file), TaskConfig.SECTION_TASK);
+  }
+
+  protected List<Task> getTasks(TaskConfig cfg, String type) throws IOException {
     List<Task> preloaded = new ArrayList<>();
     for (Task task : cfg.getTasks(type)) {
       try {
@@ -55,27 +64,27 @@ public class Preloader {
    * @return Optional<Task> which is empty if the expression is optional and no tasks are resolved
    * @throws ConfigInvalidException if the expression requires a task and no tasks are resolved
    */
-  public Optional<Task> getOptionalTask(TaskConfig cfg, TaskExpression expression)
-      throws ConfigInvalidException {
+  public Optional<Task> getOptionalTask(TaskExpression expression)
+      throws ConfigInvalidException, IOException {
     Optional<Task> task = optionalTaskByExpression.get(expression.key);
     if (task == null) {
-      task = preloadOptionalTask(cfg, expression);
+      task = preloadOptionalTask(expression);
       optionalTaskByExpression.put(expression.key, task);
     }
     return task;
   }
 
-  protected Optional<Task> preloadOptionalTask(TaskConfig cfg, TaskExpression expression)
-      throws ConfigInvalidException {
-    Optional<Task> definition = loadOptionalTask(cfg, expression);
+  protected Optional<Task> preloadOptionalTask(TaskExpression expression)
+      throws ConfigInvalidException, IOException {
+    Optional<Task> definition = loadOptionalTask(expression);
     return definition.isPresent() ? Optional.of(preload(definition.get())) : definition;
   }
 
-  public Task preload(Task definition) throws ConfigInvalidException {
+  public Task preload(Task definition) throws ConfigInvalidException, IOException {
     String expression = definition.preloadTask;
     if (expression != null) {
       Optional<Task> preloadFrom =
-          getOptionalTask(definition.config, new TaskExpression(definition.file(), expression));
+          getOptionalTask(new TaskExpression(definition.file(), expression));
       if (preloadFrom.isPresent()) {
         return preloadFrom(definition, preloadFrom.get());
       }
@@ -83,11 +92,11 @@ public class Preloader {
     return definition;
   }
 
-  protected Optional<Task> loadOptionalTask(TaskConfig cfg, TaskExpression expression)
-      throws ConfigInvalidException {
+  protected Optional<Task> loadOptionalTask(TaskExpression expression)
+      throws ConfigInvalidException, IOException {
     try {
-      for (String name : expression) {
-        Optional<Task> task = cfg.getOptionalTask(name);
+      for (TaskKey key : expression) {
+        Optional<Task> task = getOptionalTask(key);
         if (task.isPresent()) {
           return task;
         }
@@ -115,6 +124,14 @@ public class Preloader {
       }
     }
     return preloadTo;
+  }
+
+  protected Optional<Task> getOptionalTask(TaskKey key) throws IOException, ConfigInvalidException {
+    return taskConfigFactory.getTaskConfig(key.subSection().file()).getOptionalTask(key.task());
+  }
+
+  public void masquerade(PatchSetArgument psa) {
+    taskConfigFactory.masquerade(psa);
   }
 
   protected static <S, K, V> void preloadField(
