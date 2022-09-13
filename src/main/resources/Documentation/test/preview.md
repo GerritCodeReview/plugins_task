@@ -122,18 +122,6 @@
          "status" : "INVALID"   # Only Test Suite: invalid
       },
       {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "Looping",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "name" : "UNKNOWN",
-               "status" : "INVALID"
-            }
-         ]
-      },
-      {
          "name" : "UNKNOWN",
          "status" : "INVALID"
       },
@@ -224,106 +212,6 @@
             {
                "name" : "UNKNOWN",
                "status" : "INVALID"
-            }
-         ]
-      },
-      {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "task (tasks-factory changes loop)",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "applicable" : true,
-               "change" : _change1_number,
-               "hasPass" : true,
-               "name" : "_change1_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory changes loop)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        },
-                        {
-                           "applicable" : true,
-                           "change" : _change2_number,
-                           "hasPass" : true,
-                           "name" : "_change2_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : false,
-                                 "name" : "task (tasks-factory changes loop)",
-                                 "status" : "WAITING",
-                                 "subTasks" : [
-                                    {
-                                       "name" : "UNKNOWN",
-                                       "status" : "INVALID"
-                                    },
-                                    {
-                                       "name" : "UNKNOWN",
-                                       "status" : "INVALID"
-                                    }
-                                 ]
-                              }
-                           ]
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "change" : _change2_number,
-               "hasPass" : true,
-               "name" : "_change2_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory changes loop)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "change" : _change1_number,
-                           "hasPass" : true,
-                           "name" : "_change1_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : false,
-                                 "name" : "task (tasks-factory changes loop)",
-                                 "status" : "WAITING",
-                                 "subTasks" : [
-                                    {
-                                       "name" : "UNKNOWN",
-                                       "status" : "INVALID"
-                                    },
-                                    {
-                                       "name" : "UNKNOWN",
-                                       "status" : "INVALID"
-                                    }
-                                 ]
-                              }
-                           ]
-                        },
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  }
-               ]
             }
          ]
       }
@@ -536,18 +424,6 @@
          "status" : "INVALID"   # Only Test Suite: invalid
       },
       {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "Looping",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "name" : "UNKNOWN",
-               "status" : "INVALID"
-            }
-         ]
-      },
-      {
          "name" : "UNKNOWN",
          "status" : "INVALID"
       },
@@ -638,106 +514,6 @@
             {
                "name" : "UNKNOWN",
                "status" : "INVALID"
-            }
-         ]
-      },
-      {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "task (tasks-factory changes loop)",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "applicable" : true,
-               "change" : _change1_number,
-               "hasPass" : true,
-               "name" : "_change1_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory changes loop)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        },
-                        {
-                           "applicable" : true,
-                           "change" : _change2_number,
-                           "hasPass" : true,
-                           "name" : "_change2_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : false,
-                                 "name" : "task (tasks-factory changes loop)",
-                                 "status" : "WAITING",
-                                 "subTasks" : [
-                                    {
-                                       "name" : "UNKNOWN",
-                                       "status" : "INVALID"
-                                    },
-                                    {
-                                       "name" : "UNKNOWN",
-                                       "status" : "INVALID"
-                                    }
-                                 ]
-                              }
-                           ]
-                        }
-                     ]
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "change" : _change2_number,
-               "hasPass" : true,
-               "name" : "_change2_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory changes loop)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "change" : _change1_number,
-                           "hasPass" : true,
-                           "name" : "_change1_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : false,
-                                 "name" : "task (tasks-factory changes loop)",
-                                 "status" : "WAITING",
-                                 "subTasks" : [
-                                    {
-                                       "name" : "UNKNOWN",
-                                       "status" : "INVALID"
-                                    },
-                                    {
-                                       "name" : "UNKNOWN",
-                                       "status" : "INVALID"
-                                    }
-                                 ]
-                              }
-                           ]
-                        },
-                        {
-                           "name" : "UNKNOWN",
-                           "status" : "INVALID"
-                        }
-                     ]
-                  }
-               ]
             }
          ]
       }

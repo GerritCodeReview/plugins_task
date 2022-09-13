@@ -29,17 +29,21 @@ import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
+
   public enum Status {
     INVALID,
     UNKNOWN,
+    DUPLICATE,
     WAITING,
     READY,
     PASS,
@@ -80,7 +84,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
   @Override
   public Map<Change.Id, PluginDefinedInfo> createPluginDefinedInfos(
-          Collection<ChangeData> cds, BeanProvider beanProvider, String plugin) {
+      Collection<ChangeData> cds, BeanProvider beanProvider, String plugin) {
     Map<Change.Id, PluginDefinedInfo> pluginInfosByChange = new HashMap<>();
     options = (Modules.MyOptions) beanProvider.getDynamicBean(plugin);
     if (options.all || options.onlyApplicable || options.onlyInvalid) {
@@ -93,13 +97,14 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   }
 
   protected PluginDefinedInfo createWithExceptions(ChangeData c) {
+    MatchCache matchCache = new MatchCache(predicateCache, c);
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
       for (Node node : definitions.getRootNodes(c)) {
-        if (node == null) {
+        if (node instanceof Node.Invalid) {
           a.roots.add(invalid());
         } else {
-          new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
+          new AttributeFactory(node, matchCache).create().ifPresent(t -> a.roots.add(t));
         }
       }
     } catch (ConfigInvalidException | IOException | StorageException e) {
@@ -118,10 +123,6 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     protected Task task;
     protected TaskAttribute attribute;
 
-    protected AttributeFactory(Node node) {
-      this(node, new MatchCache(predicateCache, node.getChangeData()));
-    }
-
     protected AttributeFactory(Node node, MatchCache matchCache) {
       this.node = node;
       this.matchCache = matchCache;
@@ -137,7 +138,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
         boolean applicable = matchCache.match(task.applicable);
         if (!task.isVisible) {
-          if (!task.isTrusted || (!applicable && !options.onlyApplicable)) {
+          if (!node.isTrusted() || (!applicable && !options.onlyApplicable)) {
             return Optional.of(unknown());
           }
         }
@@ -146,8 +147,10 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
           if (node.isChange()) {
             attribute.change = node.getChangeData().getId().get();
           }
-          attribute.hasPass = task.pass != null || task.fail != null;
-          attribute.subTasks = getSubTasks();
+          attribute.hasPass = !node.isDuplicate && (task.pass != null || task.fail != null);
+          if (!node.isDuplicate) {
+            attribute.subTasks = getSubTasks();
+          }
           attribute.status = getStatus();
           if (options.onlyInvalid && !isValidQueries()) {
             attribute.status = Status.INVALID;
@@ -161,11 +164,13 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
               if (!options.onlyApplicable) {
                 attribute.applicable = applicable;
               }
-              if (task.inProgress != null) {
-                attribute.inProgress = matchCache.matchOrNull(task.inProgress);
+              if (!node.isDuplicate) {
+                if (task.inProgress != null) {
+                  attribute.inProgress = matchCache.matchOrNull(task.inProgress);
+                }
+                attribute.exported = task.exported.isEmpty() ? null : task.exported;
               }
               attribute.hint = getHint(attribute.status, task);
-              attribute.exported = task.exported.isEmpty() ? null : task.exported;
 
               if (options.evaluationTime) {
                 attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
@@ -174,16 +179,16 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
             }
           }
         }
-      } catch (ConfigInvalidException
-          | IOException
-          | QueryParseException
-          | RuntimeException e) {
+      } catch (ConfigInvalidException | IOException | QueryParseException | RuntimeException e) {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
     }
 
     protected Status getStatusWithExceptions() throws StorageException, QueryParseException {
+      if (node.isDuplicate) {
+        return Status.DUPLICATE;
+      }
       if (isAllNull(task.pass, task.fail, attribute.subTasks)) {
         // A leaf def has no defined subdefs.
         boolean hasDefinedSubtasks =
@@ -219,7 +224,8 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
         }
       }
 
-      if (attribute.subTasks != null && !isAll(attribute.subTasks, Status.PASS)) {
+      if (attribute.subTasks != null
+          && !isAll(attribute.subTasks, EnumSet.of(Status.PASS, Status.DUPLICATE))) {
         // It is possible for a subtask's PASS criteria to change while
         // a parent task is executing, or even after the parent task
         // completes.  This can result in the parent PASS criteria being
@@ -255,8 +261,9 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     protected List<TaskAttribute> getSubTasks()
         throws ConfigInvalidException, IOException, StorageException {
       List<TaskAttribute> subTasks = new ArrayList<>();
-      for (Node subNode : node.getSubNodes()) {
-        if (subNode == null) {
+      for (Node subNode :
+          options.onlyApplicable ? node.getSubNodes(matchCache) : node.getSubNodes()) {
+        if (subNode instanceof Node.Invalid) {
           subTasks.add(invalid());
         } else {
           MatchCache subMatchCache = matchCache;
@@ -303,10 +310,16 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   }
 
   protected String getHint(Status status, Task def) {
-    if (status == Status.READY) {
-      return def.readyHint;
-    } else if (status == Status.FAIL) {
-      return def.failHint;
+    if (status != null) {
+      switch (status) {
+        case READY:
+          return def.readyHint;
+        case FAIL:
+          return def.failHint;
+        case DUPLICATE:
+          return "Duplicate task is non blocking and empty to break the loop";
+        default:
+      }
     }
     return null;
   }
@@ -320,9 +333,9 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     return true;
   }
 
-  protected static boolean isAll(Iterable<TaskAttribute> atts, Status state) {
+  protected static boolean isAll(Iterable<TaskAttribute> atts, Set<Status> states) {
     for (TaskAttribute att : atts) {
-      if (att.status != state) {
+      if (!states.contains(att.status)) {
         return false;
       }
     }
