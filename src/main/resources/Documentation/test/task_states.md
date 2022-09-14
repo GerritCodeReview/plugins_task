@@ -570,6 +570,12 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "userfile task/special.config FAIL",
          "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
       }
    ]
 }
@@ -595,6 +601,12 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "userfile task/special.config FAIL",
          "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
       },
       {
          "name" : "UNKNOWN",
@@ -630,6 +642,12 @@ The config below is expected to be in the `task.config` file in project
          "status" : "FAIL"
       },
       {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
+      },
+      {
          "name" : "UNKNOWN",
          "status" : "INVALID"
       }
@@ -661,6 +679,12 @@ The config below is expected to be in the `task.config` file in project
          "hasPass" : true,
          "name" : "userfile task/special.config FAIL",
          "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
       }
    ]
 }
@@ -724,12 +748,14 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "name" : "_change1_number",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
+         "change" : _change2_number,
          "hasPass" : true,
          "name" : "_change2_number",
          "status" : "FAIL"
@@ -765,37 +791,192 @@ The config below is expected to be in the `task.config` file in project
    "status" : "PASS"
 }
 
-[root "Root Properties"]
-  set-root-property = root-value
-  subtask = Subtask Properties
+[root "Root Same Name - Different Tasks-Factory"]
+  subtasks-factory = parent tasks-factory Same Name - Different Tasks-Factory
 
-[task "Subtask Properties"]
-  subtask = Subtask Properties Hints
-
-[task "Subtask Properties Hints"]
-  set-first-property = first-value
-  set-second-property = ${first-property} second-extra ${third-property}
-  set-third-property = third-value
+[tasks-factory "parent tasks-factory Same Name - Different Tasks-Factory"]
+  names-factory = parent names-factory Same Name - Different Tasks-Factory
   fail = True
-  fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
+  subtasks-factory = child tasks-factory Same Name - Different Tasks-Factory
+
+[names-factory "parent names-factory Same Name - Different Tasks-Factory"]
+  type = static
+  name = Same Name
+
+[tasks-factory "child tasks-factory Same Name - Different Tasks-Factory"]
+  names-factory = child names-factory Same Name - Different Tasks-Factory
+  fail = False
+
+[names-factory "child names-factory Same Name - Different Tasks-Factory"]
+  type = static
+  name = Same Name
 
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root Properties",
+   "name" : "Root Same Name - Different Tasks-Factory",
    "status" : "WAITING",
    "subTasks" : [
       {
          "applicable" : true,
+         "hasPass" : true,
+         "name" : "Same Name",
+         "status" : "FAIL",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Same Name",
+               "status" : "PASS"
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root Same Name - Different Change"]
+  subtasks-factory = init tasks-factory Same Name - Different Change
+
+[tasks-factory "init tasks-factory Same Name - Different Change"]
+  names-factory = init names-factory Same Name - Different Change
+  subtask = Same Name - Different Change
+
+[names-factory "init names-factory Same Name - Different Change"]
+  type = change
+  changes = change:_change2_number
+
+[task "Same Name - Different Change"]
+  subtasks-factory = tasks-factory Same Name - Different Change
+  pass = False
+  ready-hint = continues on to change _change1_number
+  fail-hint = stops here since we are change _change1_number
+  fail = change:_change1_number
+
+[tasks-factory "tasks-factory Same Name - Different Change"]
+  names-factory = names-factory Same Name - Different Change
+  subtask = Same Name - Different Change
+
+[names-factory "names-factory Same Name - Different Change"]
+  type = change
+  changes = change:_change1_number NOT change:${_change_number}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Same Name - Different Change",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "change" : _change2_number,
          "hasPass" : false,
-         "name" : "Subtask Properties",
+         "name" : "_change2_number",
          "status" : "WAITING",
          "subTasks" : [
             {
                "applicable" : true,
                "hasPass" : true,
-               "hint" : "root-property(root-value) first-property(first-value) second-property(first-value second-extra third-value)",
-               "name" : "Subtask Properties Hints",
+               "name" : "Same Name - Different Change",
+               "status" : "WAITING",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "change" : _change1_number,
+                     "hasPass" : false,
+                     "name" : "_change1_number",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "hasPass" : true,
+                           "hint" : "stops here since we are change _change1_number",
+                           "name" : "Same Name - Different Change",
+                           "status" : "FAIL"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root Property References"]
+  set-first-property = first-value
+  set-backward-reference = first-[${first-property}]
+  set-forward-reference = last-[${last-property}]
+  set-last-property = last-value
+  fail = True
+  fail-hint = backward-reference(${backward-reference}) forward-reference(${forward-reference})
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "hint" : "backward-reference(first-[first-value]) forward-reference(last-[last-value])",
+   "name" : "Root Property References",
+   "status" : "FAIL"
+}
+
+[root "Root Deep Property References"]
+  set-first-property = first-value
+  set-direct-reference = first-[${first-property}]
+  set-deep-reference = deep-{${direct-reference}}
+  fail = True
+  fail-hint = deep-reference(${deep-reference})
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "hint" : "deep-reference(deep-{first-[first-value]})",
+   "name" : "Root Deep Property References",
+   "status" : "FAIL"
+}
+
+[root "Root Properties Referenced Twice"]
+  set-first-property = first-value
+  set-referenced-twice = first-[${first-property}] first-[${first-property}]
+  fail = True
+  fail-hint = first-[${first-property}] referenced-twice(${referenced-twice}) referenced-twice(${referenced-twice})
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "hint" : "first-[first-value] referenced-twice(first-[first-value] first-[first-value]) referenced-twice(first-[first-value] first-[first-value])",
+   "name" : "Root Properties Referenced Twice",
+   "status" : "FAIL"
+}
+
+[root "Root Inherited Properties"]
+  set-root-property = root-value
+  subtask = Subtask Parent Inherited Properties
+
+[task "Subtask Parent Inherited Properties"]
+  set-parent-property = parent-value
+  subtask = Subtask Inherited Properties
+
+[task "Subtask Inherited Properties"]
+  set-my-property = my-value
+  fail = True
+  fail-hint = root-property(${root-property}) parent-property(${parent-property}) my-property(${my-property})
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Inherited Properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Parent Inherited Properties",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "root-property(root-value) parent-property(parent-value) my-property(my-value)",
+               "name" : "Subtask Inherited Properties",
                "status" : "FAIL"
             }
          ]
@@ -803,6 +984,41 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root Inherited Distant Properties"]
+  set-root-property = root-value
+  set-root-change-property = ${_change_number}
+  subtask = Subtask Parent Inherited Distant Properties
+
+[task "Subtask Parent Inherited Distant Properties"]
+  subtask = Subtask Inherited Distant Properties
+
+[task "Subtask Inherited Distant Properties"]
+  fail = True
+  fail-hint = root-property(${root-property}) root-change-property(${root-change-property})
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Inherited Distant Properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Parent Inherited Distant Properties",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "root-property(root-value) root-change-property(_change_number)",
+               "name" : "Subtask Inherited Distant Properties",
+               "status" : "FAIL"
+            }
+         ]
+      }
+   ]
+}
 
 [root "Root Properties Reset By Subtask"]
   set-root-to-reset-by-subtask = reset-my-root-value
@@ -825,6 +1041,46 @@ The config below is expected to be in the `task.config` file in project
          "hint" : "root-to-reset-by-subtask:(reset-by-subtask-root-value)",
          "name" : "Subtask Properties Reset",
          "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Inherited Property References"]
+  set-root-property = root-value
+  subtask = Subtask Parent Inherited Property References
+
+[task "Subtask Parent Inherited Property References"]
+  set-parent-property = parent-value
+  set-parent-inherited-root-reference = root-property(${root-property})
+  subtask = Subtask Inherited Property References
+
+[task "Subtask Inherited Property References"]
+  set-inherited-root-reference = root-[${root-property}]
+  set-inherited-parent-reference = parent-[${parent-property}]
+  set-inherited-root-deep-reference = parent-inherited-root-reference-[${parent-inherited-root-reference}]
+  fail = True
+  fail-hint = inherited-root-reference(${inherited-root-reference}) inherited-parent-reference(${inherited-parent-reference}) inherited-root-deep-reference(${inherited-root-deep-reference})
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Inherited Property References",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Subtask Parent Inherited Property References",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "hint" : "inherited-root-reference(root-[root-value]) inherited-parent-reference(parent-[parent-value]) inherited-root-deep-reference(parent-inherited-root-reference-[root-property(root-value)])",
+               "name" : "Subtask Inherited Property References",
+               "status" : "FAIL"
+            }
+         ]
       }
    ]
 }
@@ -927,6 +1183,99 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
+[root "Root applicable Property"]
+  subtask = Subtask applicable Property
+  subtasks-factory = tasks-factory branch NOT applicable Property
+
+[tasks-factory "tasks-factory branch NOT applicable Property"]
+  names-factory = names-factory branch NOT applicable Property
+  applicable = branch:dev
+  fail = True
+
+[names-factory "names-factory branch NOT applicable Property"]
+  type = static
+  name = NOT Applicable 1
+  name = NOT Applicable 2
+  name = NOT Applicable 3
+
+[task "Subtask applicable Property"]
+  applicable = change:${_change_number}
+  fail = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root applicable Property",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask applicable Property",
+         "status" : "FAIL"
+      },                              # Only Test Suite: all
+      {                               # Only Test Suite: all
+         "applicable" : false,        # Only Test Suite: all
+         "hasPass" : true,            # Only Test Suite: all
+         "name" : "NOT Applicable 1", # Only Test Suite: all
+         "status" : "FAIL"            # Only Test Suite: all
+      },                              # Only Test Suite: all
+      {                               # Only Test Suite: all
+         "applicable" : false,        # Only Test Suite: all
+         "hasPass" : true,            # Only Test Suite: all
+         "name" : "NOT Applicable 2", # Only Test Suite: all
+         "status" : "FAIL"            # Only Test Suite: all
+      },                              # Only Test Suite: all
+      {                               # Only Test Suite: all
+         "applicable" : false,        # Only Test Suite: all
+         "hasPass" : true,            # Only Test Suite: all
+         "name" : "NOT Applicable 3", # Only Test Suite: all
+         "status" : "FAIL"            # Only Test Suite: all
+      }
+   ]
+}
+
+[root "Root branch applicable Property"]
+  subtasks-factory = tasks-factory branch applicable Property
+
+[tasks-factory "tasks-factory branch applicable Property"]
+  names-factory = names-factory branch applicable Property
+  applicable = branch:master
+  fail = True
+
+[names-factory "names-factory branch applicable Property"]
+  type = static
+  name = Applicable 1
+  name = Applicable 2
+  name = Applicable 3
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root branch applicable Property",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Applicable 1",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Applicable 2",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Applicable 3",
+         "status" : "FAIL"
+      }
+   ]
+}
+
 [root "Root Properties tasks-factory STATIC"]
   subtasks-factory = tasks-factory STATIC Properties
 
@@ -973,7 +1322,7 @@ The config below is expected to be in the `task.config` file in project
   set-welcome-message = Welcome to the pleasuredome
   names-factory = names-factory a change
   fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
-  fail = True
+  fail = change:_change1_number
 
 [names-factory "names-factory a change"]
   type = change
@@ -987,6 +1336,7 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "hint" : "Welcome to the pleasuredome Name(_change1_number) Change Number(_change1_number) Change Id(_change1_id) Change Project(_change1_project) Change Branch(_change1_branch) Change Status(_change1_status) Change Topic(_change1_topic)",
          "name" : "_change1_number",
@@ -994,9 +1344,48 @@ The config below is expected to be in the `task.config` file in project
       },
       {
          "applicable" : true,
+         "change" : _change2_number,
          "hasPass" : true,
-         "hint" : "Welcome to the pleasuredome Name(_change2_number) Change Number(_change2_number) Change Id(_change2_id) Change Project(_change2_project) Change Branch(_change2_branch) Change Status(_change2_status) Change Topic(_change2_topic)",
          "name" : "_change2_number",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root tasks-factory _name Property Reference"]
+  subtasks-factory = Properties tasks-factory _name Property Reference
+
+[tasks-factory "Properties tasks-factory _name Property Reference"]
+  set-name-reference = first-property ${_name}
+  fail-hint = ${name-reference}
+  fail = true
+  names-factory = names-factory static list
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory _name Property Reference",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "first-property my a task",
+         "name" : "my a task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "first-property my b task",
+         "name" : "my b task",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "first-property my c task",
+         "name" : "my c task",
          "status" : "FAIL"
       }
    ]
@@ -1082,12 +1471,14 @@ The config below is expected to be in the `task.config` file in project
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change_number,
          "hasPass" : true,
          "name" : "_change_number",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
+         "change" : _change1_number,
          "hasPass" : true,
          "name" : "_change1_number",
          "status" : "FAIL"
@@ -1095,50 +1486,39 @@ The config below is expected to be in the `task.config` file in project
    ]
 }
 
-[root "Root Properties Expansion"]
-  applicable = status:open
-  subtask = Subtask Property Expansion fail-hint
+[root "Root CHANGE constant subtask list CHANGE Properties"]
+  subtasks-factory = tasks-factory Properties CHANGE names-factory CHANGE
 
-[task "Subtask Property Expansion fail-hint"]
-  subtasks-factory = tasks-factory Property Expansion fail-hint
+[tasks-factory "tasks-factory Properties CHANGE names-factory CHANGE"]
+  names-factory = Properties names-factory current CHANGE
+  subtask = Current CHANGE Property
 
-[tasks-factory "tasks-factory Property Expansion fail-hint"]
-  set-first-property = first-property ${_name}
-  fail-hint = ${first-property}
-  fail = true
-  names-factory = names-factory static list
+[task "Current CHANGE Property"]
+  fail = True
+  fail-hint = Current Change: ${_change_number}
+
+[names-factory "Properties names-factory current CHANGE"]
+  type = change
+  changes = change:${_change_number}
 
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root Properties Expansion",
+   "name" : "Root CHANGE constant subtask list CHANGE Properties",
    "status" : "WAITING",
    "subTasks" : [
       {
          "applicable" : true,
+         "change" : _change_number,
          "hasPass" : false,
-         "name" : "Subtask Property Expansion fail-hint",
+         "name" : "_change_number",
          "status" : "WAITING",
          "subTasks" : [
             {
                "applicable" : true,
                "hasPass" : true,
-               "hint" : "first-property my a task",
-               "name" : "my a task",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "first-property my b task",
-               "name" : "my b task",
-               "status" : "FAIL"
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "hint" : "first-property my c task",
-               "name" : "my c task",
+               "hint" : "Current Change: _change_number",
+               "name" : "Current CHANGE Property",
                "status" : "FAIL"
             }
          ]
@@ -1170,6 +1550,158 @@ The config below is expected to be in the `task.config` file in project
                "hasPass" : true,
                "name" : "Subtask PASS",
                "status" : "PASS"
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root Properties names-factory Reference"]
+  subtasks-factory = tasks-factory Properties names-factory Reference
+  set-predicate = change:_change1_number
+
+[tasks-factory "tasks-factory Properties names-factory Reference"]
+  names-factory = Properties names-factory Reference
+  fail = True
+
+[names-factory "Properties names-factory Reference"]
+  type = change
+  changes = ${predicate} OR change:${_change_number} project:${_change_project} branch:${_change_branch}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties names-factory Reference",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "change" : _change_number,
+         "hasPass" : true,
+         "name" : "_change_number",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "change" : _change1_number,
+         "hasPass" : true,
+         "name" : "_change1_number",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Properties names-factory Deep Reference"]
+  subtasks-factory = tasks-factory Properties names-factory Deep Reference
+  set-predicate-reference = ${predicate}
+  set-predicate = change:_change1_number
+
+[tasks-factory "tasks-factory Properties names-factory Deep Reference"]
+  names-factory = Properties names-factory Deep Reference
+  fail = True
+
+[names-factory "Properties names-factory Deep Reference"]
+  type = change
+  changes = ${predicate-reference} OR change:${_change_number} project:${_change_project} branch:${_change_branch}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties names-factory Deep Reference",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "change" : _change_number,
+         "hasPass" : true,
+         "name" : "_change_number",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "change" : _change1_number,
+         "hasPass" : true,
+         "name" : "_change1_number",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Properties names-factory Reference Internal"]
+  subtasks-factory = tasks-factory Properties names-factory Reference Internal
+  set-predicate = change:${_change_number} project:${_change_project} branch:${_change_branch}
+
+[tasks-factory "tasks-factory Properties names-factory Reference Internal"]
+  names-factory = Properties names-factory Reference Internal
+  fail = True
+
+[names-factory "Properties names-factory Reference Internal"]
+  type = change
+  changes = change:_change1_number OR ${predicate}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties names-factory Reference Internal",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "change" : _change_number,
+         "hasPass" : true,
+         "name" : "_change_number",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "change" : _change1_number,
+         "hasPass" : true,
+         "name" : "_change1_number",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Properties names-factory Reference Inherited"]
+  subtask = task Properties names-factory Reference Inherited
+  set-predicate = change:${_change_number} project:${_change_project} branch:${_change_branch}
+
+[task "task Properties names-factory Reference Inherited"]
+  subtasks-factory = tasks-factory Properties names-factory Reference Inherited
+
+[tasks-factory "tasks-factory Properties names-factory Reference Inherited"]
+  names-factory = Properties names-factory Reference Inherited
+  fail = True
+
+[names-factory "Properties names-factory Reference Inherited"]
+  type = change
+  changes = change:_change1_number OR ${predicate}
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties names-factory Reference Inherited",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task Properties names-factory Reference Inherited",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "change" : _change_number,
+               "hasPass" : true,
+               "name" : "_change_number",
+               "status" : "FAIL"
+            },
+            {
+               "applicable" : true,
+               "change" : _change1_number,
+               "hasPass" : true,
+               "name" : "_change1_number",
+               "status" : "FAIL"
             }
          ]
       }
@@ -1354,9 +1886,16 @@ The config below is expected to be in the `task.config` file in project
   subtask = Subtask Preload Properties
 
 [task "Subtask Preload Properties"]
-  preload-task = Subtask Properties Hints
+  preload-task = Subtask Preload Properties Hints
   set-fourth-property = fourth-value
   fail-hint = second-property(${second-property}) fourth-property(${fourth-property})
+
+[task "Subtask Preload Properties Hints"]
+  set-first-property = first-value
+  set-second-property = ${first-property} second-extra ${third-property}
+  set-third-property = third-value
+  fail = True
+  fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
 
 {
    "applicable" : true,
@@ -1370,6 +1909,247 @@ The config below is expected to be in the `task.config` file in project
          "hint" : "second-property(first-value second-extra third-value) fourth-property(fourth-value)",
          "name" : "Subtask Preload Properties",
          "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root Preload tasks-factory"]
+  subtasks-factory = tasks-factory Preload tasks-factory
+
+[tasks-factory "tasks-factory Preload tasks-factory"]
+  names-factory = names-factory static list
+  preload-task = Subtask PASS
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Preload tasks-factory",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my a task",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my b task",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my c task",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Looping"]
+  subtask = Looping
+
+[task "Looping"]
+  subtask = Looping
+  pass = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Looping",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Looping",
+         "status" : "PASS",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : false,
+               "hint" : "Duplicate task is non blocking and empty to break the loop",
+               "name" : "Looping",
+               "status" : "DUPLICATE"
+            }
+         ]
+      }
+   ]
+}
+
+[root "Root Looping DuplicateKey"]
+  preload-task = DuplicateKey
+
+[task "Looping DuplicateKey"]
+  preload-task = DuplicateKey
+  pass = True
+
+[task "DuplicateKey"]
+  duplicate-key = 1234
+  subtask = Looping DuplicateKey
+
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Looping DuplicateKey",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "hint" : "Duplicate task is non blocking and empty to break the loop",
+         "name" : "Looping DuplicateKey",
+         "status" : "DUPLICATE"
+      }
+   ]
+}
+
+[root "Root changes loop"]
+  subtask = task (tasks-factory changes loop)
+
+[task "task (tasks-factory changes loop)"]
+  subtasks-factory = tasks-factory change loop
+
+[tasks-factory "tasks-factory change loop"]
+  names-factory = names-factory change constant
+  subtask = task (tasks-factory changes loop)
+  fail = True
+
+[names-factory "names-factory change constant"]
+  changes = change:_change1_number OR change:_change2_number
+  type = change
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root changes loop",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory changes loop)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "change" : _change1_number,
+               "hasPass" : true,
+               "name" : "_change1_number",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "change" : _change1_number,
+                           "hasPass" : false,
+                           "hint" : "Duplicate task is non blocking and empty to break the loop",
+                           "name" : "_change1_number",
+                           "status" : "DUPLICATE"
+                        },
+                        {
+                           "applicable" : true,
+                           "change" : _change2_number,
+                           "hasPass" : true,
+                           "name" : "_change2_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "PASS",
+                                 "subTasks" : [
+                                    {
+                                       "applicable" : true,
+                                       "change" : _change1_number,
+                                       "hasPass" : false,
+                                       "hint" : "Duplicate task is non blocking and empty to break the loop",
+                                       "name" : "_change1_number",
+                                       "status" : "DUPLICATE"
+                                    },
+                                    {
+                                       "applicable" : true,
+                                       "change" : _change2_number,
+                                       "hasPass" : false,
+                                       "hint" : "Duplicate task is non blocking and empty to break the loop",
+                                       "name" : "_change2_number",
+                                       "status" : "DUPLICATE"
+                                    }
+                                 ]
+                              }
+                           ]
+                        }
+                     ]
+                  }
+               ]
+            },
+            {
+               "applicable" : true,
+               "change" : _change2_number,
+               "hasPass" : true,
+               "name" : "_change2_number",
+               "status" : "FAIL",
+               "subTasks" : [
+                  {
+                     "applicable" : true,
+                     "hasPass" : false,
+                     "name" : "task (tasks-factory changes loop)",
+                     "status" : "WAITING",
+                     "subTasks" : [
+                        {
+                           "applicable" : true,
+                           "change" : _change1_number,
+                           "hasPass" : true,
+                           "name" : "_change1_number",
+                           "status" : "FAIL",
+                           "subTasks" : [
+                              {
+                                 "applicable" : true,
+                                 "hasPass" : false,
+                                 "name" : "task (tasks-factory changes loop)",
+                                 "status" : "PASS",
+                                 "subTasks" : [
+                                    {
+                                       "applicable" : true,
+                                       "change" : _change1_number,
+                                       "hasPass" : false,
+                                       "hint" : "Duplicate task is non blocking and empty to break the loop",
+                                       "name" : "_change1_number",
+                                       "status" : "DUPLICATE"
+                                    },
+                                    {
+                                       "applicable" : true,
+                                       "change" : _change2_number,
+                                       "hasPass" : false,
+                                       "hint" : "Duplicate task is non blocking and empty to break the loop",
+                                       "name" : "_change2_number",
+                                       "status" : "DUPLICATE"
+                                    }
+                                 ]
+                              }
+                           ]
+                        },
+                        {
+                           "applicable" : true,
+                           "change" : _change2_number,
+                           "hasPass" : false,
+                           "hint" : "Duplicate task is non blocking and empty to break the loop",
+                           "name" : "_change2_number",
+                           "status" : "DUPLICATE"
+                        }
+                     ]
+                  }
+               ]
+            }
+         ]
       }
    ]
 }
@@ -1506,18 +2286,6 @@ The config below is expected to be in the `task.config` file in project
          "status" : "INVALID"   # Only Test Suite: !all
       },
       {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "Looping",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "name" : "UNKNOWN",
-               "status" : "INVALID"
-            }
-         ]
-      },
-      {
          "name" : "UNKNOWN",
          "status" : "INVALID"
       },
@@ -1608,38 +2376,6 @@ The config below is expected to be in the `task.config` file in project
             {
                "name" : "UNKNOWN",
                "status" : "INVALID"
-            }
-         ]
-      },
-      {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "task (tasks-factory changes loop)",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "_change1_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "_change2_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  }
-               ]
             }
          ]
       }
@@ -1793,18 +2529,6 @@ The config below is expected to be in the `task.config` file in project
          "status" : "INVALID"   # Only Test Suite: !all
       },
       {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "Looping",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "name" : "UNKNOWN",
-               "status" : "INVALID"
-            }
-         ]
-      },
-      {
          "name" : "UNKNOWN",
          "status" : "INVALID"
       },
@@ -1897,38 +2621,6 @@ The config below is expected to be in the `task.config` file in project
                "status" : "INVALID"
             }
          ]
-      },
-      {
-         "applicable" : true,
-         "hasPass" : false,
-         "name" : "task (tasks-factory changes loop)",
-         "status" : "WAITING",
-         "subTasks" : [
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "_change1_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  }
-               ]
-            },
-            {
-               "applicable" : true,
-               "hasPass" : true,
-               "name" : "_change2_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "name" : "UNKNOWN",
-                     "status" : "INVALID"
-                  }
-               ]
-            }
-         ]
       }
    ]
 }
@@ -1992,12 +2684,10 @@ The config below is expected to be in the `task.config` file in project
   fail = True
   in-progress = has:bad
 
-[task "Looping"]
-  subtask = Looping
-
 [task "Looping Properties"]
   set-A = ${B}
   set-B = ${A}
+  fail-hint = ${A}
   fail = True
 
 [task "task (tasks-factory missing)"]
@@ -2020,9 +2710,6 @@ The config below is expected to be in the `task.config` file in project
 
 [task "task (names-factory changes invalid)"]
   subtasks-factory = tasks-factory change (names-factory changes invalid)
-
-[task "task (tasks-factory changes loop)"]
-  subtasks-factory = tasks-factory change loop
 
 [tasks-factory "tasks-factory (names-factory type missing)"]
   names-factory = names-factory (type missing)
@@ -2047,11 +2734,6 @@ The config below is expected to be in the `task.config` file in project
   names-factory = names-factory change list (changes invalid)
   fail = True
 
-[tasks-factory "tasks-factory change loop"]
-  names-factory = names-factory change constant
-  subtask = task (tasks-factory changes loop)
-  fail = True
-
 [names-factory "names-factory (type missing)"]
   name = no type test
 
@@ -2071,11 +2753,7 @@ The config below is expected to be in the `task.config` file in project
   type = change
 
 [names-factory "names-factory change list (changes invalid)"]
-  change = change:invalidChange
-  type = change
-
-[names-factory "names-factory change constant"]
-  changes = change:_change1_number OR change:_change2_number
+  changes = change:invalidChange
   type = change
 
 ```
@@ -2090,4 +2768,7 @@ The config below is expected to be in the `task.config` file in project
 [task "userfile task/special.config FAIL"]
   applicable = is:open
   fail = is:open
+
+[task "file task/common.config Preload PASS"]
+  preload-task = userfile task/special.config PASS
 ```

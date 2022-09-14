@@ -29,33 +29,60 @@ import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
+
   public enum Status {
     INVALID,
     UNKNOWN,
+    DUPLICATE,
     WAITING,
     READY,
     PASS,
     FAIL;
   }
 
+  public static class Statistics {
+    public long numberOfChanges;
+    public long numberOfChangeNodes;
+    public long numberOfDuplicates;
+    public long numberOfNodes;
+    public long numberOfTaskPluginAttributes;
+    public Object predicateCache;
+    public Object matchCache;
+    public Preloader.Statistics preloader;
+    public TaskTree.Statistics treeCaches;
+  }
+
   public static class TaskAttribute {
+    public static class Statistics {
+      public boolean isApplicableRefreshRequired;
+      public boolean isSubNodeReloadRequired;
+      public boolean isTaskRefreshNeeded;
+      public Boolean hasUnfilterableSubNodes;
+      public Object nodesByBranchCache;
+      public Object properties;
+    }
+
     public Boolean applicable;
     public Map<String, String> exported;
     public Boolean hasPass;
     public String hint;
     public Boolean inProgress;
     public String name;
+    public Integer change;
     public Status status;
     public List<TaskAttribute> subTasks;
     public Long evaluationMilliSeconds;
+    public Statistics statistics;
 
     public TaskAttribute(String name) {
       this.name = name;
@@ -64,12 +91,15 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
   public static class TaskPluginAttribute extends PluginDefinedInfo {
     public List<TaskAttribute> roots = new ArrayList<>();
+    public Statistics queryStatistics;
   }
 
   protected final TaskTree definitions;
   protected final PredicateCache predicateCache;
 
   protected Modules.MyOptions options;
+  protected TaskPluginAttribute lastTaskPluginAttribute;
+  protected Statistics statistics;
 
   @Inject
   public TaskAttributeFactory(TaskTree definitions, PredicateCache predicateCache) {
@@ -79,14 +109,18 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
   @Override
   public Map<Change.Id, PluginDefinedInfo> createPluginDefinedInfos(
-          Collection<ChangeData> cds, BeanProvider beanProvider, String plugin) {
+      Collection<ChangeData> cds, BeanProvider beanProvider, String plugin) {
     Map<Change.Id, PluginDefinedInfo> pluginInfosByChange = new HashMap<>();
     options = (Modules.MyOptions) beanProvider.getDynamicBean(plugin);
     if (options.all || options.onlyApplicable || options.onlyInvalid) {
+      initStatistics();
       for (PatchSetArgument psa : options.patchSetArguments) {
         definitions.masquerade(psa);
       }
       cds.forEach(cd -> pluginInfosByChange.put(cd.getId(), createWithExceptions(cd)));
+      if (lastTaskPluginAttribute != null) {
+        lastTaskPluginAttribute.queryStatistics = getStatistics(pluginInfosByChange);
+      }
     }
     return pluginInfosByChange;
   }
@@ -95,37 +129,43 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
       for (Node node : definitions.getRootNodes(c)) {
-        if (node == null) {
+        if (node instanceof Node.Invalid) {
           a.roots.add(invalid());
         } else {
           new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
         }
       }
-    } catch (ConfigInvalidException | IOException e) {
+    } catch (ConfigInvalidException | IOException | StorageException e) {
       a.roots.add(invalid());
     }
 
     if (a.roots.isEmpty()) {
       return null;
     }
+    lastTaskPluginAttribute = a;
     return a;
   }
 
   protected class AttributeFactory {
     public Node node;
-    public MatchCache matchCache;
     protected Task task;
     protected TaskAttribute attribute;
 
     protected AttributeFactory(Node node) {
-      this(node, new MatchCache(predicateCache, node.getChangeData()));
-    }
-
-    protected AttributeFactory(Node node, MatchCache matchCache) {
       this.node = node;
-      this.matchCache = matchCache;
       this.task = node.task;
-      this.attribute = new TaskAttribute(task.name);
+      attribute = new TaskAttribute(task.name());
+      if (options.includeStatistics) {
+        statistics.numberOfNodes++;
+        if (node.isChange()) {
+          statistics.numberOfChangeNodes++;
+        }
+        if (node.isDuplicate) {
+          statistics.numberOfDuplicates++;
+        }
+        attribute.statistics = new TaskAttribute.Statistics();
+        attribute.statistics.properties = node.propertiesStatistics;
+      }
     }
 
     public Optional<TaskAttribute> create() {
@@ -134,16 +174,21 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
           attribute.evaluationMilliSeconds = millis();
         }
 
-        boolean applicable = matchCache.match(task.applicable);
+        boolean applicable = node.match(task.applicable);
         if (!task.isVisible) {
-          if (!task.isTrusted || (!applicable && !options.onlyApplicable)) {
+          if (!node.isTrusted() || (!applicable && !options.onlyApplicable)) {
             return Optional.of(unknown());
           }
         }
 
         if (applicable || !options.onlyApplicable) {
-          attribute.hasPass = task.pass != null || task.fail != null;
-          attribute.subTasks = getSubTasks();
+          if (node.isChange()) {
+            attribute.change = node.getChangeData().getId().get();
+          }
+          attribute.hasPass = !node.isDuplicate && (task.pass != null || task.fail != null);
+          if (!node.isDuplicate) {
+            attribute.subTasks = getSubTasks();
+          }
           attribute.status = getStatus();
           if (options.onlyInvalid && !isValidQueries()) {
             attribute.status = Status.INVALID;
@@ -157,26 +202,46 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
               if (!options.onlyApplicable) {
                 attribute.applicable = applicable;
               }
-              if (task.inProgress != null) {
-                attribute.inProgress = matchCache.matchOrNull(task.inProgress);
+              if (!node.isDuplicate) {
+                if (task.inProgress != null) {
+                  attribute.inProgress = node.matchOrNull(task.inProgress);
+                }
+                attribute.exported = task.exported.isEmpty() ? null : task.exported;
               }
               attribute.hint = getHint(attribute.status, task);
-              attribute.exported = task.exported.isEmpty() ? null : task.exported;
 
               if (options.evaluationTime) {
                 attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
               }
+              addStatistics(attribute.statistics);
               return Optional.of(attribute);
             }
           }
         }
-      } catch (QueryParseException | RuntimeException e) {
+      } catch (ConfigInvalidException | IOException | QueryParseException | RuntimeException e) {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
     }
 
+    public void addStatistics(TaskAttribute.Statistics statistics) {
+      if (statistics != null) {
+        statistics.isApplicableRefreshRequired = node.properties.isApplicableRefreshRequired();
+        statistics.isSubNodeReloadRequired = node.properties.isSubNodeReloadRequired();
+        statistics.isTaskRefreshNeeded = node.properties.isTaskRefreshRequired();
+        if (!statistics.isSubNodeReloadRequired) {
+          statistics.hasUnfilterableSubNodes = node.hasUnfilterableSubNodes;
+        }
+        if (node.nodesByBranch != null) {
+          statistics.nodesByBranchCache = node.nodesByBranch.getStatistics();
+        }
+      }
+    }
+
     protected Status getStatusWithExceptions() throws StorageException, QueryParseException {
+      if (node.isDuplicate) {
+        return Status.DUPLICATE;
+      }
       if (isAllNull(task.pass, task.fail, attribute.subTasks)) {
         // A leaf def has no defined subdefs.
         boolean hasDefinedSubtasks =
@@ -198,7 +263,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       }
 
       if (task.fail != null) {
-        if (matchCache.match(task.fail)) {
+        if (node.match(task.fail)) {
           // A FAIL definition is meant to be a hard blocking criteria
           // (like a CodeReview -2).  Thus, if hard blocked, it is
           // irrelevant what the subtask states, or the PASS criteria are.
@@ -212,7 +277,8 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
         }
       }
 
-      if (attribute.subTasks != null && !isAll(attribute.subTasks, Status.PASS)) {
+      if (attribute.subTasks != null
+          && !isAll(attribute.subTasks, EnumSet.of(Status.PASS, Status.DUPLICATE))) {
         // It is possible for a subtask's PASS criteria to change while
         // a parent task is executing, or even after the parent task
         // completes.  This can result in the parent PASS criteria being
@@ -224,7 +290,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
         return Status.WAITING;
       }
 
-      if (task.pass != null && !matchCache.match(task.pass)) {
+      if (task.pass != null && !node.match(task.pass)) {
         // Non-leaf tasks with no PASS criteria are supported in order
         // to support "grouping tasks" (tasks with no function aside from
         // organizing tasks).  A task without a PASS criteria, cannot ever
@@ -245,13 +311,15 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       }
     }
 
-    protected List<TaskAttribute> getSubTasks() throws StorageException {
+    protected List<TaskAttribute> getSubTasks()
+        throws ConfigInvalidException, IOException, StorageException {
       List<TaskAttribute> subTasks = new ArrayList<>();
-      for (Node subNode : node.getSubNodes()) {
-        if (subNode == null) {
+      for (Node subNode :
+          options.onlyApplicable ? node.getApplicableSubNodes() : node.getSubNodes()) {
+        if (subNode instanceof Node.Invalid) {
           subTasks.add(invalid());
         } else {
-          new AttributeFactory(subNode, matchCache).create().ifPresent(t -> subTasks.add(t));
+          new AttributeFactory(subNode).create().ifPresent(t -> subTasks.add(t));
         }
       }
       if (subTasks.isEmpty()) {
@@ -262,9 +330,9 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
 
     protected boolean isValidQueries() {
       try {
-        matchCache.match(task.inProgress);
-        matchCache.match(task.fail);
-        matchCache.match(task.pass);
+        node.match(task.inProgress);
+        node.match(task.fail);
+        node.match(task.pass);
         return true;
       } catch (QueryParseException | RuntimeException e) {
         return false;
@@ -276,7 +344,30 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     return System.nanoTime() / 1000000;
   }
 
-  protected TaskAttribute invalid() {
+  public void initStatistics() {
+    if (options.includeStatistics) {
+      statistics = new Statistics();
+      definitions.predicateCache.initStatistics();
+      definitions.matchCache.initStatistics();
+      definitions.preloader.initStatistics();
+      definitions.initStatistics();
+    }
+  }
+
+  public Statistics getStatistics(Map<Change.Id, PluginDefinedInfo> pluginInfosByChange) {
+    if (statistics != null) {
+      statistics.numberOfChanges = pluginInfosByChange.size();
+      statistics.numberOfTaskPluginAttributes =
+          pluginInfosByChange.values().stream().filter(tpa -> tpa != null).count();
+      statistics.predicateCache = definitions.predicateCache.getStatistics();
+      statistics.matchCache = definitions.matchCache.getStatistics();
+      statistics.preloader = definitions.preloader.getStatistics();
+      statistics.treeCaches = definitions.getStatistics();
+    }
+    return statistics;
+  }
+
+  protected static TaskAttribute invalid() {
     // For security reasons, do not expose the task name without knowing
     // the visibility which is derived from its applicability.
     TaskAttribute a = unknown();
@@ -284,17 +375,23 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     return a;
   }
 
-  protected TaskAttribute unknown() {
+  protected static TaskAttribute unknown() {
     TaskAttribute a = new TaskAttribute("UNKNOWN");
     a.status = Status.UNKNOWN;
     return a;
   }
 
-  protected String getHint(Status status, Task def) {
-    if (status == Status.READY) {
-      return def.readyHint;
-    } else if (status == Status.FAIL) {
-      return def.failHint;
+  protected static String getHint(Status status, Task def) {
+    if (status != null) {
+      switch (status) {
+        case READY:
+          return def.readyHint;
+        case FAIL:
+          return def.failHint;
+        case DUPLICATE:
+          return "Duplicate task is non blocking and empty to break the loop";
+        default:
+      }
     }
     return null;
   }
@@ -308,9 +405,9 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     return true;
   }
 
-  protected static boolean isAll(Iterable<TaskAttribute> atts, Status state) {
+  protected static boolean isAll(Iterable<TaskAttribute> atts, Set<Status> states) {
     for (TaskAttribute att : atts) {
-      if (att.status != state) {
+      if (!states.contains(att.status)) {
         return false;
       }
     }

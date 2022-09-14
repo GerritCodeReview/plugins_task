@@ -17,9 +17,11 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.AllProjectsName;
+import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.git.GitRepositoryManager;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.permissions.PermissionBackendException;
@@ -45,21 +47,22 @@ public class TaskConfigFactory {
   protected final AllProjectsName allProjects;
 
   protected final Map<BranchNameKey, PatchSetArgument> psaMasquerades = new HashMap<>();
+  protected final Map<FileKey, TaskConfig> taskCfgByFile = new HashMap<>();
 
   @Inject
   protected TaskConfigFactory(
-      AllProjectsName allProjects,
+      AllProjectsNameProvider allProjectsNameProvider,
       GitRepositoryManager gitMgr,
       PermissionBackend permissionBackend,
       CurrentUser user) {
-    this.allProjects = allProjects;
+    this.allProjects = allProjectsNameProvider.get();
     this.gitMgr = gitMgr;
     this.permissionBackend = permissionBackend;
     this.user = user;
   }
 
   public TaskConfig getRootConfig() throws ConfigInvalidException, IOException {
-    return getTaskConfig(getRootBranch(), DEFAULT, true);
+    return getTaskConfig(FileKey.create(getRootBranch(), DEFAULT));
   }
 
   public void masquerade(PatchSetArgument psa) {
@@ -67,26 +70,39 @@ public class TaskConfigFactory {
   }
 
   protected BranchNameKey getRootBranch() {
-    return BranchNameKey.create(allProjects, "refs/meta/config");
+    return BranchNameKey.create(allProjects, RefNames.REFS_CONFIG);
   }
 
-  public TaskConfig getTaskConfig(BranchNameKey branch, String fileName, boolean isTrusted)
-      throws ConfigInvalidException, IOException {
+  public TaskConfig getTaskConfig(FileKey key) throws ConfigInvalidException, IOException {
+    TaskConfig cfg = taskCfgByFile.get(key);
+    if (cfg == null) {
+      cfg = loadTaskConfig(key);
+      taskCfgByFile.put(key, cfg);
+    }
+    return cfg;
+  }
+
+  private TaskConfig loadTaskConfig(FileKey file) throws ConfigInvalidException, IOException {
+    BranchNameKey branch = file.branch();
     PatchSetArgument psa = psaMasquerades.get(branch);
     boolean visible = true; // invisible psas are filtered out by commandline
+    boolean isMasqueraded = false;
     if (psa == null) {
       visible = canRead(branch);
     } else {
-      isTrusted = false;
+      isMasqueraded = true;
       branch = BranchNameKey.create(psa.change.getProject(), psa.patchSet.refName());
     }
 
-    Project.NameKey project = branch.project();
-    TaskConfig cfg = new TaskConfig(branch, fileName, visible, isTrusted);
+    Project.NameKey project = file.branch().project();
+    TaskConfig cfg =
+        isMasqueraded
+            ? new TaskConfig(branch, file, visible, isMasqueraded)
+            : new TaskConfig(file, visible, isMasqueraded);
     try (Repository git = gitMgr.openRepository(project)) {
       cfg.load(project, git);
     } catch (IOException e) {
-      log.atWarning().withCause(e).log("Failed to load %s for %s", fileName, project);
+      log.atWarning().withCause(e).log("Failed to load %s for %s", file.file(), project);
       throw e;
     } catch (ConfigInvalidException e) {
       throw e;

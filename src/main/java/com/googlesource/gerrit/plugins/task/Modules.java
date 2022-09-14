@@ -61,6 +61,9 @@ public class Modules {
     @Option(name = "--evaluation-time", usage = "Include elapsed evaluation time on each task")
     public boolean evaluationTime = false;
 
+    @Option(name = "--include-statistics", usage = "Include statistcs about the task evaluations")
+    public boolean includeStatistics = false;
+
     @Option(
         name = "--preview",
         metaVar = "{CHANGE,PATCHSET}",

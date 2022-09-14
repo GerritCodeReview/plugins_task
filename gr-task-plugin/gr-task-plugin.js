@@ -22,10 +22,10 @@ import {htmlTemplate} from './gr-task-plugin_html.js';
 const Defs = {};
 /**
  * @typedef {{
- *  message: string,
  *  sub_tasks: Array<Defs.Task>,
  *  hint: ?string,
  *  name: string,
+ *  change: ?number,
  *  status: string
  * }} Defs.Task
  */
@@ -127,7 +127,7 @@ class GrTaskPlugin extends Polymer.Element {
         icon.tooltip = 'Failed';
         break;
       case 'READY':
-        icon.id = 'gr-icons:rebase';
+        icon.id = 'gr-icons:playArrow';
         icon.color = 'green';
         icon.tooltip = 'Ready';
         break;
@@ -137,12 +137,17 @@ class GrTaskPlugin extends Polymer.Element {
         icon.tooltip = 'Invalid';
         break;
       case 'WAITING':
-        icon.id = 'gr-icons:side-by-side';
+        icon.id = 'gr-icons:pause';
         icon.color = 'red';
         icon.tooltip = 'Waiting';
         break;
-      case 'PASS':
+      case 'DUPLICATE':
         icon.id = 'gr-icons:check';
+        icon.color = 'green';
+        icon.tooltip = 'Duplicate';
+        break;
+      case 'PASS':
+        icon.id = 'gr-icons:check-circle';
         icon.color = 'green';
         icon.tooltip = 'Passed';
         break;
@@ -181,7 +186,6 @@ class GrTaskPlugin extends Polymer.Element {
   _addTasks(tasks) { // rename to process, remove DOM bits
     if (!tasks) return [];
     tasks.forEach(task => {
-      task.message = task.hint || task.name;
       task.icon = this._computeIcon(task);
       task.showOnFilter = this._computeShowOnNeedsAndBlockedFilter(task);
       this._compute_counts(task);
