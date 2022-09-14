@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.common.collect.Sets;
+import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.server.query.change.ChangeData;
@@ -34,15 +34,22 @@ import java.util.regex.Pattern;
 
 /** Use to expand properties like ${_name} in the text of various definitions. */
 public class Properties {
-  public static final Properties EMPTY_PARENT = new Properties();
+  public static final Properties EMPTY =
+      new Properties() {
+        @Override
+        protected Function<String, String> getParentMapper() {
+          return n -> "";
+        }
+      };
 
-  protected final Properties parentProperties;
+  protected final TaskTree.Node node;
   protected final Task origTask;
   protected final CopyOnWrite<Task> task;
   protected Expander expander;
   protected Loader loader;
   protected boolean init = true;
   protected boolean isTaskRefreshNeeded;
+  protected boolean isApplicableRefreshRequired;
   protected boolean isSubNodeReloadRequired;
 
   public Properties() {
@@ -50,32 +57,26 @@ public class Properties {
     expander = new Expander(n -> "");
   }
 
-  public Properties(Task origTask, Properties parentProperties) {
+  public Properties(TaskTree.Node node, Task origTask) {
+    this.node = node;
     this.origTask = origTask;
-    this.parentProperties = parentProperties;
-    task = new CopyOnWrite<>(origTask, t -> origTask.config.new Task(t));
+    task = new CopyOnWrite.CloneOnWrite<>(origTask);
   }
 
   /** Use to expand properties specifically for Tasks. */
   public Task getTask(ChangeData changeData) throws StorageException {
-    if (loader != null && loader.isNonTaskDefinedPropertyLoaded()) {
-      // To detect NamesFactories dependent on non task defined properties, the checking must be
-      // done after subnodes are fully loaded, which unfortunately happens after getTask() is
-      // called. However, these non task property uses from the last change are still detectable
-      // here before we replace the old Loader with a new one.
-      isSubNodeReloadRequired = true;
-    }
-
     loader = new Loader(changeData);
     expander = new Expander(n -> loader.load(n));
-
     if (isTaskRefreshNeeded || init) {
+      expander.expand(task, TaskConfig.KEY_APPLICABLE);
+      isApplicableRefreshRequired = loader.isNonTaskDefinedPropertyLoaded();
+
+      expander.expand(task, ImmutableSet.of(TaskConfig.KEY_APPLICABLE, TaskConfig.KEY_NAME));
+
       Map<String, String> exported = expander.expand(origTask.exported);
       if (exported != origTask.exported) {
         task.getForWrite().exported = exported;
       }
-
-      expander.expand(task, Collections.emptySet());
 
       if (init) {
         init = false;
@@ -85,31 +86,37 @@ public class Properties {
     return task.getForRead();
   }
 
+  // To detect NamesFactories dependent on non task defined properties, the checking must be
+  // done after subnodes are fully loaded, which unfortunately happens after getTask() is
+  // called, therefore this must be called after all subnodes have been loaded.
+  public void expansionComplete() {
+    isSubNodeReloadRequired = loader.isNonTaskDefinedPropertyLoaded();
+  }
+
+  public boolean isApplicableRefreshRequired() {
+    return isApplicableRefreshRequired;
+  }
+
   public boolean isSubNodeReloadRequired() {
     return isSubNodeReloadRequired;
   }
 
   /** Use to expand properties specifically for NamesFactories. */
   public NamesFactory getNamesFactory(NamesFactory namesFactory) {
-    return expander.expand(
-        namesFactory,
-        nf -> namesFactory.config.new NamesFactory(nf),
-        Sets.newHashSet(TaskConfig.KEY_TYPE));
+    return expander.expand(namesFactory, ImmutableSet.of(TaskConfig.KEY_TYPE));
+  }
+
+  protected Function<String, String> getParentMapper() {
+    return n -> node.getParentProperties().expander.getValueForName(n);
   }
 
   protected class Loader {
     protected final ChangeData changeData;
-    protected final Function<String, String> inheritedMapper;
     protected Change change;
     protected boolean isInheritedPropertyLoaded;
 
     public Loader(ChangeData changeData) {
       this.changeData = changeData;
-      if (parentProperties == null || parentProperties.expander == null) {
-        inheritedMapper = n -> "";
-      } else {
-        inheritedMapper = n -> parentProperties.expander.getValueForName(n);
-      }
     }
 
     public boolean isNonTaskDefinedPropertyLoaded() {
@@ -124,7 +131,7 @@ public class Properties {
       if (value == null) {
         value = origTask.properties.get(name);
         if (value == null) {
-          value = inheritedMapper.apply(name);
+          value = getParentMapper().apply(name);
           if (!value.isEmpty()) {
             isInheritedPropertyLoaded = true;
           }
@@ -207,7 +214,7 @@ public class Properties {
 
     /**
      * Expand all properties (${property_name} -> property_value) in the given text. Returns same
-     * object if no expansions occured.
+     * object if no expansions occurred.
      */
     public Map<String, String> expand(Map<String, String> map) {
       if (map != null) {
@@ -269,7 +276,15 @@ public class Properties {
 
     /**
      * Returns expanded object if property found in the Strings in the object's Fields (except the
-     * excluded ones). Returns same object if no expansions occured.
+     * excluded ones). Returns same object if no expansions occurred.
+     */
+    public <C extends Cloneable> C expand(C object, Set<String> excludedFieldNames) {
+      return expand(new CopyOnWrite.CloneOnWrite<>(object), excludedFieldNames);
+    }
+
+    /**
+     * Returns expanded object if property found in the Strings in the object's Fields (except the
+     * excluded ones). Returns same object if no expansions occurred.
      */
     public <T> T expand(T object, Function<T, T> copier, Set<String> excludedFieldNames) {
       return expand(new CopyOnWrite<>(object, copier), excludedFieldNames);
@@ -277,38 +292,59 @@ public class Properties {
 
     /**
      * Returns expanded object if property found in the Strings in the object's Fields (except the
-     * excluded ones). Returns same object if no expansions occured.
+     * excluded ones). Returns same object if no expansions occurred.
      */
     public <T> T expand(CopyOnWrite<T> cow, Set<String> excludedFieldNames) {
       for (Field field : cow.getOriginal().getClass().getFields()) {
-        try {
-          if (!excludedFieldNames.contains(field.getName())) {
-            field.setAccessible(true);
-            Object o = field.get(cow.getOriginal());
-            if (o instanceof String) {
-              String expanded = expandText((String) o);
-              if (expanded != o) {
-                field.set(cow.getForWrite(), expanded);
-              }
-            } else if (o instanceof List) {
-              @SuppressWarnings("unchecked")
-              List<String> forceCheck = List.class.cast(o);
-              List<String> expanded = expand(forceCheck);
-              if (expanded != o) {
-                field.set(cow.getForWrite(), expanded);
-              }
-            }
-          }
-        } catch (IllegalAccessException e) {
-          throw new RuntimeException(e);
+        if (!excludedFieldNames.contains(field.getName())) {
+          expand(cow, field);
         }
       }
       return cow.getForRead();
     }
 
     /**
+     * Returns expanded object if property found in the fieldName Field if it is a String, or in the
+     * List's Strings if it is a List. Returns same object if no expansions occurred.
+     */
+    public <T> T expand(CopyOnWrite<T> cow, String fieldName) {
+      try {
+        return expand(cow, cow.getOriginal().getClass().getField(fieldName));
+      } catch (NoSuchFieldException e) {
+        throw new RuntimeException(e);
+      }
+    }
+
+    /**
+     * Returns expanded object if property found in the Field if it is a String, or in the List's
+     * Strings if it is a List. Returns same object if no expansions occurred.
+     */
+    public <T> T expand(CopyOnWrite<T> cow, Field field) {
+      try {
+        field.setAccessible(true);
+        Object o = field.get(cow.getOriginal());
+        if (o instanceof String) {
+          String expanded = expandText((String) o);
+          if (expanded != o) {
+            field.set(cow.getForWrite(), expanded);
+          }
+        } else if (o instanceof List) {
+          @SuppressWarnings("unchecked")
+          List<String> forceCheck = List.class.cast(o);
+          List<String> expanded = expand(forceCheck);
+          if (expanded != o) {
+            field.set(cow.getForWrite(), expanded);
+          }
+        }
+      } catch (IllegalAccessException e) {
+        throw new RuntimeException(e);
+      }
+      return cow.getForRead();
+    }
+
+    /**
      * Returns expanded unmodifiable List if property found. Returns same object if no expansions
-     * occured.
+     * occurred.
      */
     public List<String> expand(List<String> list) {
       if (list != null) {
@@ -325,18 +361,18 @@ public class Properties {
     }
 
     /**
-     * Expand all properties (${property_name} -> property_value) in the given text . Returns same
-     * object if no expansions occured.
+     * Expand all properties (${property_name} -> property_value) in the given text. Returns same
+     * object if no expansions occurred.
      */
     public String expandText(String text) {
       if (text == null) {
         return null;
       }
-      StringBuffer out = new StringBuffer();
       Matcher m = PATTERN.matcher(text);
       if (!m.find()) {
         return text;
       }
+      StringBuffer out = new StringBuffer();
       do {
         m.appendReplacement(out, Matcher.quoteReplacement(getValueForName(m.group(1))));
       } while (m.find());

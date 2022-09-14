@@ -35,7 +35,7 @@ import java.util.regex.Pattern;
  *   <li><code> "foo | bar |"   -> ("foo", "bar")     optional</code>
  * </ul>
  */
-public class TaskExpression implements Iterable<String> {
+public class TaskExpression implements Iterable<TaskKey> {
   protected static final Pattern EXPRESSION_PATTERN = Pattern.compile("([^ |]+[^|]*)(\\|)?");
   protected final TaskExpressionKey key;
 
@@ -44,8 +44,8 @@ public class TaskExpression implements Iterable<String> {
   }
 
   @Override
-  public Iterator<String> iterator() {
-    return new Iterator<String>() {
+  public Iterator<TaskKey> iterator() {
+    return new Iterator<TaskKey>() {
       Matcher m = EXPRESSION_PATTERN.matcher(key.expression());
       Boolean hasNext;
       boolean optional;
@@ -65,13 +65,14 @@ public class TaskExpression implements Iterable<String> {
       }
 
       @Override
-      public String next() {
-        hasNext(); // in case next() was (re)called w/o calling hasNext()
+      public TaskKey next() {
+        // Can't use @SuppressWarnings("ReturnValueIgnored") on method call
+        boolean ignored = hasNext(); // in case next() was (re)called w/o calling hasNext()
         if (!hasNext) {
           throw new NoSuchElementException("No more names, yet expression was not optional");
         }
         hasNext = null;
-        return m.group(1).trim();
+        return TaskKey.create(key.file(), m.group(1).trim());
       }
     };
   }
