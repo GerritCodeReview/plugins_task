@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.index.FieldDef;
 import com.google.gerrit.index.query.AndPredicate;
 import com.google.gerrit.index.query.NotPredicate;
 import com.google.gerrit.index.query.OrPredicate;
@@ -23,11 +24,11 @@ import com.google.gerrit.index.query.Predicate;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.GerritServerConfig;
+import com.google.gerrit.server.index.change.ChangeField;
 import com.google.gerrit.server.query.change.ChangeData;
+import com.google.gerrit.server.query.change.ChangeIndexPredicate;
 import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gerrit.server.query.change.DestinationPredicate;
-import com.google.gerrit.server.query.change.ProjectPredicate;
-import com.google.gerrit.server.query.change.RefPredicate;
 import com.google.gerrit.server.query.change.RegexProjectPredicate;
 import com.google.gerrit.server.query.change.RegexRefPredicate;
 import com.google.inject.Inject;
@@ -130,11 +131,15 @@ public class PredicateCache {
       return true;
     }
     if (predicate instanceof DestinationPredicate
-        || predicate instanceof ProjectPredicate
-        || predicate instanceof RefPredicate
         || predicate instanceof RegexProjectPredicate
         || predicate instanceof RegexRefPredicate) {
       return true;
+    }
+    if (predicate instanceof ChangeIndexPredicate) {
+      FieldDef<ChangeData, ?> field = ((ChangeIndexPredicate) predicate).getField();
+      if (field.equals(ChangeField.PROJECT) || field.equals(ChangeField.REF)) {
+        return true;
+      }
     }
     return cacheableByBranchPredicateClassNames.contains(predicate.getClass().getName());
   }
