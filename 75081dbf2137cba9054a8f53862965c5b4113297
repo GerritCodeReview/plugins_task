@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5e7c696d_a37ba0cf",
+        "filename": "package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2022-09-15T19:34:08Z",
+      "side": 1,
+      "message": "This probably shouldn\u0027t be a snapshot anymore, should it?",
+      "range": {
+        "startLine": 3,
+        "startChar": 16,
+        "endLine": 3,
+        "endChar": 17
+      },
+      "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
