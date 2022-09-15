@@ -93,6 +93,30 @@
       },
       "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eae6e124_5df6ea27",
+        "filename": "package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2022-09-15T19:46:56Z",
+      "side": 1,
+      "message": "I\u0027m not going to have time for it now, but the bazlets change needs part of 332279: Bazel: Bump rules_nodejs version to 5.1.0 | https://gerrit-review.googlesource.com/c/gerrit/+/332279 and then when task is updated to use that (on 3.3+ I think), it\u0027ll need some changes in its WORKSPACE file.",
+      "parentUuid": "b9774289_256373af",
+      "range": {
+        "startLine": 6,
+        "startChar": 23,
+        "endLine": 6,
+        "endChar": 28
+      },
+      "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
