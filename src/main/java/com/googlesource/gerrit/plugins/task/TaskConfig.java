@@ -14,21 +14,18 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.common.primitives.Primitives;
 import com.google.gerrit.common.Container;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Task Configuration file living in git */
 public class TaskConfig extends AbstractVersionedMetaData {
@@ -44,16 +41,19 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
   }
 
-  protected class Section extends Container {
+  protected class SubSection extends Container {
     public TaskConfig config;
+    public final SubSectionKey subSection;
 
-    public Section() {
+    public SubSection(SubSectionKey s) {
       this.config = TaskConfig.this;
+      this.subSection = s;
     }
   }
 
-  public class TaskBase extends Section {
+  public class TaskBase extends SubSection {
     public String applicable;
+    public String duplicateKey;
     public Map<String, String> exported;
     public String fail;
     public String failHint;
@@ -68,12 +68,14 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public List<String> subTasksFiles;
 
     public boolean isVisible;
-    public boolean isTrusted;
+    public boolean isMasqueraded;
 
-    public TaskBase(SubSection s, boolean isVisible, boolean isTrusted) {
+    public TaskBase(SubSectionKey s, boolean isVisible, boolean isMasqueraded) {
+      super(s);
       this.isVisible = isVisible;
-      this.isTrusted = isTrusted;
+      this.isMasqueraded = isMasqueraded;
       applicable = getString(s, KEY_APPLICABLE, null);
+      duplicateKey = getString(s, KEY_DUPLICATE_KEY, null);
       exported = getProperties(s, KEY_EXPORT_PREFIX);
       fail = getString(s, KEY_FAIL, null);
       failHint = getString(s, KEY_FAIL_HINT, null);
@@ -89,53 +91,31 @@ public class TaskConfig extends AbstractVersionedMetaData {
     }
 
     protected TaskBase(TaskBase base) {
-      copyDeclaredFields(TaskBase.class, base);
+      this(base.subSection);
+      Copier.shallowCopyDeclaredFields(TaskBase.class, base, this, false);
     }
 
-    protected <T> void copyDeclaredFields(Class<T> cls, T from) {
-      for (Field field : cls.getDeclaredFields()) {
-        try {
-          field.setAccessible(true);
-          Class<?> fieldCls = field.getType();
-          Object val = field.get(from);
-          if (field.getType().isPrimitive()
-              || Primitives.isWrapperType(fieldCls)
-              || (val instanceof String)
-              || val == null) {
-            field.set(this, val);
-          } else if (val instanceof List) {
-            List<?> list = List.class.cast(val);
-            field.set(this, new ArrayList<>(list));
-          } else if (val instanceof Map) {
-            Map<?, ?> map = Map.class.cast(val);
-            field.set(this, new HashMap<>(map));
-          } else if (field.getName().equals("this$0")) { // Don't copy internal final field
-          } else {
-            throw new RuntimeException(
-                "Don't know how to deep copy " + fieldValueToString(field, val));
-          }
-        } catch (IllegalAccessException e) {
-          throw new RuntimeException(
-              "Cannot access field to copy it " + fieldValueToString(field, "unknown"));
-        }
-      }
-    }
-
-    protected String fieldValueToString(Field field, Object val) {
-      return "field:" + field.getName() + " value:" + val + " type:" + field.getType();
+    protected TaskBase(SubSectionKey s) {
+      super(s);
     }
   }
 
-  public class Task extends TaskBase {
-    public String name;
+  public class Task extends TaskBase implements Cloneable {
+    public final TaskKey key;
 
-    public Task(SubSection s, boolean isVisible, boolean isTrusted) {
-      super(s, isVisible, isTrusted);
-      name = s.subSection;
+    public Task(SubSectionKey s, boolean isVisible, boolean isMasqueraded) {
+      super(s, isVisible, isMasqueraded);
+      key = TaskKey.create(s);
     }
 
-    protected Task(TaskBase base) {
-      super(base);
+    public Task(TasksFactory tasks, String name) {
+      super(tasks);
+      key = TaskKey.create(tasks.subSection, name);
+    }
+
+    public Task(SubSectionKey s) {
+      super(s);
+      key = TaskKey.create(s);
     }
 
     protected Map<String, String> getAllProperties() {
@@ -144,104 +124,103 @@ public class TaskConfig extends AbstractVersionedMetaData {
       return all;
     }
 
-    protected void setExpandedProperties(Map<String, String> expanded) {
-      properties.clear();
-      properties.putAll(expanded);
-      for (String property : exported.keySet()) {
-        exported.put(property, properties.get(property));
-      }
+    public String name() {
+      return key.task();
+    }
+
+    public FileKey file() {
+      return key.subSection().file();
+    }
+
+    public TaskKey key() {
+      return key;
     }
   }
 
   public class TasksFactory extends TaskBase {
     public String namesFactory;
 
-    public TasksFactory(SubSection s, boolean isVisible, boolean isTrusted) {
-      super(s, isVisible, isTrusted);
+    public TasksFactory(SubSectionKey s, boolean isVisible, boolean isMasqueraded) {
+      super(s, isVisible, isMasqueraded);
       namesFactory = getString(s, KEY_NAMES_FACTORY, null);
     }
   }
 
-  public class NamesFactory extends Section {
+  public class NamesFactory extends SubSection implements Cloneable {
     public String changes;
     public List<String> names;
     public String type;
 
-    public NamesFactory(SubSection s) {
+    public NamesFactory(SubSectionKey s) {
+      super(s);
       changes = getString(s, KEY_CHANGES, null);
       names = getStringList(s, KEY_NAME);
       type = getString(s, KEY_TYPE, null);
     }
   }
 
-  public class External extends Section {
+  public class External extends SubSection {
     public String name;
     public String file;
     public String user;
 
-    public External(SubSection s) {
-      name = s.subSection;
+    public External(SubSectionKey s) {
+      super(s);
+      name = s.subSection();
       file = getString(s, KEY_FILE, null);
       user = getString(s, KEY_USER, null);
     }
   }
 
-  protected static final Pattern OPTIONAL_TASK_PATTERN =
-      Pattern.compile("([^ |]*( *[^ |])*) *\\| *");
+  public static final String SEP = "\0";
 
-  protected static final String SECTION_EXTERNAL = "external";
-  protected static final String SECTION_NAMES_FACTORY = "names-factory";
-  protected static final String SECTION_ROOT = "root";
-  protected static final String SECTION_TASK = "task";
-  protected static final String SECTION_TASKS_FACTORY = "tasks-factory";
-  protected static final String KEY_APPLICABLE = "applicable";
-  protected static final String KEY_CHANGES = "changes";
-  protected static final String KEY_EXPORT_PREFIX = "export-";
-  protected static final String KEY_FAIL = "fail";
-  protected static final String KEY_FAIL_HINT = "fail-hint";
-  protected static final String KEY_FILE = "file";
-  protected static final String KEY_IN_PROGRESS = "in-progress";
-  protected static final String KEY_NAME = "name";
-  protected static final String KEY_NAMES_FACTORY = "names-factory";
-  protected static final String KEY_PASS = "pass";
-  protected static final String KEY_PRELOAD_TASK = "preload-task";
-  protected static final String KEY_PROPERTIES_PREFIX = "set-";
-  protected static final String KEY_READY_HINT = "ready-hint";
-  protected static final String KEY_SUBTASK = "subtask";
-  protected static final String KEY_SUBTASKS_EXTERNAL = "subtasks-external";
-  protected static final String KEY_SUBTASKS_FACTORY = "subtasks-factory";
-  protected static final String KEY_SUBTASKS_FILE = "subtasks-file";
-  protected static final String KEY_TYPE = "type";
-  protected static final String KEY_USER = "user";
+  public static final String SECTION_EXTERNAL = "external";
+  public static final String SECTION_NAMES_FACTORY = "names-factory";
+  public static final String SECTION_ROOT = "root";
+  public static final String SECTION_TASK = TaskKey.CONFIG_SECTION;
+  public static final String SECTION_TASKS_FACTORY = "tasks-factory";
+  public static final String KEY_APPLICABLE = "applicable";
+  public static final String KEY_CHANGES = "changes";
+  public static final String KEY_DUPLICATE_KEY = "duplicate-key";
+  public static final String KEY_EXPORT_PREFIX = "export-";
+  public static final String KEY_FAIL = "fail";
+  public static final String KEY_FAIL_HINT = "fail-hint";
+  public static final String KEY_FILE = "file";
+  public static final String KEY_IN_PROGRESS = "in-progress";
+  public static final String KEY_NAME = "name";
+  public static final String KEY_NAMES_FACTORY = "names-factory";
+  public static final String KEY_PASS = "pass";
+  public static final String KEY_PRELOAD_TASK = "preload-task";
+  public static final String KEY_PROPERTIES_PREFIX = "set-";
+  public static final String KEY_READY_HINT = "ready-hint";
+  public static final String KEY_SUBTASK = "subtask";
+  public static final String KEY_SUBTASKS_EXTERNAL = "subtasks-external";
+  public static final String KEY_SUBTASKS_FACTORY = "subtasks-factory";
+  public static final String KEY_SUBTASKS_FILE = "subtasks-file";
+  public static final String KEY_TYPE = "type";
+  public static final String KEY_USER = "user";
 
+  protected final FileKey file;
   public boolean isVisible;
-  public boolean isTrusted;
+  public boolean isMasqueraded;
 
-  public Task createTask(TasksFactory tasks, String name) {
-    Task task = new Task(tasks);
-    task.name = name;
-    return task;
+  public TaskConfig(FileKey file, boolean isVisible, boolean isMasqueraded) {
+    this(file.branch(), file, isVisible, isMasqueraded);
   }
 
-  public TaskConfig(BranchNameKey branch, String fileName, boolean isVisible, boolean isTrusted) {
-    super(branch, fileName);
+  public TaskConfig(
+      BranchNameKey masqueraded, FileKey file, boolean isVisible, boolean isMasqueraded) {
+    super(masqueraded, file.file());
+    this.file = file;
     this.isVisible = isVisible;
-    this.isTrusted = isTrusted;
-  }
-
-  public List<Task> getRootTasks() {
-    return getTasks(SECTION_ROOT);
-  }
-
-  public List<Task> getTasks() {
-    return getTasks(SECTION_TASK);
+    this.isMasqueraded = isMasqueraded;
   }
 
   protected List<Task> getTasks(String type) {
     List<Task> tasks = new ArrayList<>();
     // No need to get a task with no name (what would we call it?)
     for (String task : cfg.getSubsections(type)) {
-      tasks.add(new Task(new SubSection(type, task), isVisible, isTrusted));
+      tasks.add(new Task(subSectionKey(type, task), isVisible, isMasqueraded));
     }
     return tasks;
   }
@@ -255,103 +234,76 @@ public class TaskConfig extends AbstractVersionedMetaData {
     return externals;
   }
 
-  /* returs null only if optional and not found */
-  public Task getTaskOptional(String name) throws ConfigInvalidException {
-    int end = 0;
-    Matcher m = OPTIONAL_TASK_PATTERN.matcher(name);
-    while (m.find()) {
-      end = m.end();
-      Task task = getTaskOrNull(m.group(1));
-      if (task != null) {
-        return task;
-      }
-    }
-
-    String last = name.substring(end);
-    if (!"".equals(last)) { // Last entry was not optional
-      Task task = getTaskOrNull(last);
-      if (task != null) {
-        return task;
-      }
-      throw new ConfigInvalidException("task not defined");
-    }
-    return null;
-  }
-
-  /* returns null if not found */
-  protected Task getTaskOrNull(String name) {
-    SubSection subSection = new SubSection(SECTION_TASK, name);
-    return getNames(subSection).isEmpty() ? null : new Task(subSection, isVisible, isTrusted);
+  protected Optional<Task> getOptionalTask(String name) {
+    SubSectionKey subSection = subSectionKey(SECTION_TASK, name);
+    return getNames(subSection).isEmpty()
+        ? Optional.empty()
+        : Optional.of(new Task(subSection, isVisible, isMasqueraded));
   }
 
   public TasksFactory getTasksFactory(String name) {
-    return new TasksFactory(new SubSection(SECTION_TASKS_FACTORY, name), isVisible, isTrusted);
+    return new TasksFactory(subSectionKey(SECTION_TASKS_FACTORY, name), isVisible, isMasqueraded);
   }
 
   public NamesFactory getNamesFactory(String name) {
-    return new NamesFactory(new SubSection(SECTION_NAMES_FACTORY, name));
+    return new NamesFactory(subSectionKey(SECTION_NAMES_FACTORY, name));
   }
 
   public External getExternal(String name) {
-    return getExternal(new SubSection(SECTION_EXTERNAL, name));
+    return getExternal(subSectionKey(SECTION_EXTERNAL, name));
   }
 
-  protected External getExternal(SubSection s) {
+  protected External getExternal(SubSectionKey s) {
     return new External(s);
   }
 
-  protected Map<String, String> getProperties(SubSection s, String prefix) {
+  protected Map<String, String> getProperties(SubSectionKey s, String prefix) {
     Map<String, String> valueByName = new HashMap<>();
     for (Map.Entry<String, String> e :
         getStringByName(s, getMatchingNames(s, prefix + ".+")).entrySet()) {
       String name = e.getKey();
       valueByName.put(name.substring(prefix.length()), e.getValue());
     }
-    return valueByName;
+    return Collections.unmodifiableMap(valueByName);
   }
 
-  protected Map<String, String> getStringByName(SubSection s, Iterable<String> names) {
+  protected Map<String, String> getStringByName(SubSectionKey s, Iterable<String> names) {
     Map<String, String> valueByName = new HashMap<>();
     for (String name : names) {
       valueByName.put(name, getString(s, name));
     }
-    return valueByName;
+    return Collections.unmodifiableMap(valueByName);
   }
 
-  protected Set<String> getMatchingNames(SubSection s, String match) {
+  protected Set<String> getMatchingNames(SubSectionKey s, String match) {
     Set<String> matched = new HashSet<>();
     for (String name : getNames(s)) {
       if (name.matches(match)) {
         matched.add(name);
       }
     }
-    return matched;
+    return Collections.unmodifiableSet(matched);
   }
 
-  protected Set<String> getNames(SubSection s) {
-    return cfg.getNames(s.section, s.subSection);
+  protected Set<String> getNames(SubSectionKey s) {
+    return cfg.getNames(s.section(), s.subSection());
   }
 
-  protected String getString(SubSection s, String key, String def) {
+  protected String getString(SubSectionKey s, String key, String def) {
     String v = getString(s, key);
     return v != null ? v : def;
   }
 
-  protected String getString(SubSection s, String key) {
-    return cfg.getString(s.section, s.subSection, key);
+  protected String getString(SubSectionKey s, String key) {
+    return cfg.getString(s.section(), s.subSection(), key);
   }
 
-  protected List<String> getStringList(SubSection s, String key) {
-    return Arrays.asList(cfg.getStringList(s.section, s.subSection, key));
+  protected List<String> getStringList(SubSectionKey s, String key) {
+    return Collections.unmodifiableList(
+        Arrays.asList(cfg.getStringList(s.section(), s.subSection(), key)));
   }
 
-  protected static class SubSection {
-    public final String section;
-    public final String subSection;
-
-    protected SubSection(String section, String subSection) {
-      this.section = section;
-      this.subSection = subSection;
-    }
+  protected SubSectionKey subSectionKey(String section, String subSection) {
+    return SubSectionKey.create(file, section, subSection);
   }
 }

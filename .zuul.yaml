@@ -2,7 +2,8 @@
     name: plugins-task-build
     parent: gerrit-plugin-build
     pre-run:
-        tools/playbooks/install_docker.yaml
+        - tools/playbooks/install_docker.yaml
+        - tools/playbooks/install_python3-distutils.yaml
     vars:
         bazelisk_test_targets: "plugins/task/lint_test plugins/task/..."
 

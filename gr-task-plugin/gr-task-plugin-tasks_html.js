@@ -47,7 +47,15 @@ export const htmlTemplate = Polymer.html`
             </iron-icon>
         </gr-tooltip-content>
       </template>
-      [[task.message]]
+      <template is="dom-if" if="[[task.change]]">
+        <a class="links" href$="[[_getChangeUrl(task.change)]]">[[task.change]]</a>
+      </template>
+      <template is="dom-if" if="[[!task.change]]">
+        <template is="dom-if" if="[[!task.hint]]">
+          [[task.name]]
+        </template>
+      </template>
+      <template is="dom-if" if="[[task.hint]]">[[task.hint]]</template>
     </li>
   </template>
   <ul style="list-style-type:none; margin: 0 0 0 0; padding: 0 0 0 2em;">

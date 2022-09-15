@@ -44,6 +44,10 @@ class GrTaskPluginTasks extends Polymer.Element {
   _can_show(show, task) {
     return show === 'true' || task.showOnFilter;
   }
+
+  _getChangeUrl(change) {
+    return Gerrit.url(change.toString());
+  }
 }
 
 customElements.define(GrTaskPluginTasks.is, GrTaskPluginTasks);
