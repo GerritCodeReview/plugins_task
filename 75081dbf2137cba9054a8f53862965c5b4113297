@@ -48,6 +48,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ec9cc513_43317c79",
+        "filename": "package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2022-09-15T19:37:09Z",
+      "side": 1,
+      "message": "Oh wait, that is the plugin\u0027s version, I was thinking it was the Gerrit version.",
+      "parentUuid": "a9c3ed37_a2cb12f5",
+      "range": {
+        "startLine": 3,
+        "startChar": 16,
+        "endLine": 3,
+        "endChar": 17
+      },
+      "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b9774289_256373af",
