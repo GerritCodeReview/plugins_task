@@ -22,6 +22,53 @@
       },
       "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9c3ed37_a2cb12f5",
+        "filename": "package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 3,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2022-09-15T19:35:39Z",
+      "side": 1,
+      "message": "I dunno. We don\u0027t typically commit a \"release version\". What do you think it should be?",
+      "parentUuid": "5e7c696d_a37ba0cf",
+      "range": {
+        "startLine": 3,
+        "startChar": 16,
+        "endLine": 3,
+        "endChar": 17
+      },
+      "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b9774289_256373af",
+        "filename": "package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2022-09-15T19:35:39Z",
+      "side": 1,
+      "message": "These should update too, but that needs a fix in bazlets. I\u0027ll upload that and fix.",
+      "range": {
+        "startLine": 6,
+        "startChar": 23,
+        "endLine": 6,
+        "endChar": 28
+      },
+      "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
