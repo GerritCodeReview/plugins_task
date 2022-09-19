@@ -117,6 +117,30 @@
       },
       "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5200a9cb_d5a1732c",
+        "filename": "package.json",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2022-09-19T22:35:03Z",
+      "side": 1,
+      "message": "Ok, that\u0027s going to take more work and the UI seems to be fine as-is, so I\u0027m going to defer until later.",
+      "parentUuid": "eae6e124_5df6ea27",
+      "range": {
+        "startLine": 6,
+        "startChar": 23,
+        "endLine": 6,
+        "endChar": 28
+      },
+      "revId": "75081dbf2137cba9054a8f53862965c5b4113297",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
