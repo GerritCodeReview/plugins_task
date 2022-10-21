@@ -207,6 +207,14 @@ class GrTaskPlugin extends Polymer.Element {
   _switch_expand() {
     this._expand_all = !this._expand_all;
   }
+
+  _computeShowAllLabelText(showAllSections) {
+    if (showAllSections) {
+      return 'Hide all';
+    } else {
+      return 'Show all';
+    }
+  }
 }
 
 customElements.define(GrTaskPlugin.is, GrTaskPlugin);

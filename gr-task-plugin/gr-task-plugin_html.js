@@ -16,65 +16,104 @@
  */
 
 export const htmlTemplate = Polymer.html`
-<style>
-  ul {
-    padding-left: 0.5em;
-    margin-top: 0;
-  }
-  h3 {
-    padding-left: 0.1em;
-    margin: 0 0 0 0;
-  }
-  .cursor { cursor: pointer; }
-  .links {
-    color: blue;
-    cursor: pointer;
-    text-decoration: underline;
-  }
-  #tasks_header {
-    align-items: center;
-    background-color: #fafafa;
-    border-top: 1px solid #ddd;
-    display: flex;
-    padding: 6px 1rem;
-  }
-  .no-margins { margin: 0 0 0 0; }
+  <style include="gr-a11y-styles">
+    /* Workaround for empty style block - see https://github.com/Polymer/tools/issues/408 */
+  </style>
+  <style include="shared-styles">
+    .header {
+      align-items: center;
+      background-color: var(--background-color-primary);
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      padding: var(--spacing-s) var(--spacing-l);
+      z-index: 99; /* Less than gr-overlay's backdrop */
+    }
+    .headerTitle {
+      align-items: center;
+      display: flex;
+      flex: 1;
+    }
+    .headerSubject {
+      font-family: var(--header-font-family);
+      font-size: var(--font-size-h3);
+      font-weight: var(--font-weight-h3);
+      line-height: var(--line-height-h3);
+      margin-left: var(--spacing-l);
+    }
+    paper-tabs {
+      background-color: var(--background-color-tertiary);
+      margin-top: var(--spacing-m);
+      height: calc(var(--line-height-h3) + var(--spacing-m));
+      --paper-tabs-selection-bar-color: var(--link-color);
+    }
+    paper-tab {
+      box-sizing: border-box;
+      max-width: 12em;
+      --paper-tab-ink: var(--link-color);
+    }
+    section {
+      background-color: var(--view-background-color);
+      box-shadow: var(--elevation-level-1);
+    }
+    ul {
+      padding-left: 0.5em;
+      margin-top: 0;
+    }
+    .links {
+      color: var(--link-color);
+      cursor: pointer;
+      text-decoration: underline;
+    }
+    .show-all-button iron-icon {
+      color: inherit;
+      --iron-icon-height: 18px;
+      --iron-icon-width: 18px;
+    }
+    .no-margins { margin: 0 0 0 0; }
 </style>
 
 <div id="tasks" hidden$="[[!_tasks.length]]">
-  <div id="tasks_header" style="display: flex;">
-    <iron-icon
-        icon="gr-icons:expand-less"
-        hidden$="[[!_expand_all]]"
-        on-tap="_switch_expand"
-        class="cursor"> </iron-icon>
-    <iron-icon
-        icon="gr-icons:expand-more"
-        hidden$="[[_expand_all]]"
-        on-tap="_switch_expand"
-        class="cursor"> </iron-icon>
-    <div style="display: flex; align-items: center; column-gap: 1em;">
-    <h3 class="no-margins" on-tap="_switch_expand" class="cursor"> Tasks </h3>
+  <paper-tabs id="secondaryTabs" selected="0">
+    <paper-tab
+      data-name$="Tasks"
+      class="Tasks"
+    >
+      Tasks
+    </paper-tab>
+  </paper-tabs>
+  <section class="TasksList">
+    <div style="display: flex; align-items: center; column-gap: 1em; padding-top: 12px; padding-left: 12px">
     <template is="dom-if" if="[[_is_show_all(_show_all)]]">
-      <p class="no-margins" >All ([[_all_count]]) |&nbsp;
+      <p> All ([[_all_count]]) |
         <span
             on-click="_needs_and_blocked_tap"
             class="links">Needs + Blocked ([[_ready_count]], [[_fail_count]])</span>
       <p>
     </template>
     <template is="dom-if" if="[[!_is_show_all(_show_all)]]">
-      <p class="no-margins" > <span
+      <p> <span
             class="links"
             on-click="_show_all_tap">All ([[_all_count]])</span>
         &nbsp;| Needs + Blocked ([[_ready_count]], [[_fail_count]])</p>
     </template>
+    <gr-button link="" class="show-all-button" on-click="_switch_expand"
+    >[[_computeShowAllLabelText(_expand_all)]]
+    <iron-icon
+      icon="gr-icons:expand-more"
+      hidden$="[[_expand_all]]"
+    ></iron-icon
+    ><iron-icon
+      icon="gr-icons:expand-less"
+      hidden$="[[!_expand_all]]"
+    ></iron-icon>
+    </gr-button>
   </div>
-  </div>
-  <div hidden$="[[!_expand_all]]">
+  <div hidden$="[[!_expand_all]]" style="padding-bottom: 12px">
     <ul style="list-style-type:none;">
       <gr-task-plugin-tasks
           tasks="[[_tasks]]"
           show_all$="[[_show_all]]"> </gr-task-plugin-tasks>
     </ul>
   </div>
+  </section>
 </div>`;
