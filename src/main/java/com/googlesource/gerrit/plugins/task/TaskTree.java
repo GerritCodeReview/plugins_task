@@ -261,7 +261,7 @@ public class TaskTree {
           return;
         }
       } catch (StorageException e) {
-        log.atSevere().withCause(e).log("ERROR: running changes query: " + namesFactory.changes);
+        log.atSevere().withCause(e).log("ERROR: running changes query: %s", namesFactory.changes);
       } catch (QueryParseException e) {
       }
       addSubDefinition(null);
