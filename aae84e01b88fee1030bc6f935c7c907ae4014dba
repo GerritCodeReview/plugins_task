@@ -46,6 +46,30 @@
       },
       "revId": "aae84e01b88fee1030bc6f935c7c907ae4014dba",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c119930_a90fd07a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1025452
+      },
+      "writtenOn": "2022-11-09T10:52:07Z",
+      "side": 1,
+      "message": "I will do it as a follow-up. Will also grep for other `ERROR`",
+      "parentUuid": "2776fa3c_822e4107",
+      "range": {
+        "startLine": 264,
+        "startChar": 41,
+        "endLine": 264,
+        "endChar": 48
+      },
+      "revId": "aae84e01b88fee1030bc6f935c7c907ae4014dba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
