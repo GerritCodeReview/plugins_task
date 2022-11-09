@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5a8ddadf_2729a0ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1025452
+      },
+      "writtenOn": "2022-11-09T11:07:17Z",
+      "side": 1,
+      "message": "I have called\n```\n$ git grep -n \u0027ERROR\\|WARN\\|INFO\u0027 | grep java | wc -l\n       0\n```\nto verify that there is no more of them",
+      "revId": "a889f298e7828ff4e0317e7a72d8fd27a03269eb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
