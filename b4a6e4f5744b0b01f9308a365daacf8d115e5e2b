@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "20a099ca_c842a93d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1025452
+      },
+      "writtenOn": "2022-11-09T10:15:32Z",
+      "side": 1,
+      "message": "Good point! Done.",
+      "parentUuid": "ff284b8b_279687ad",
+      "revId": "b4a6e4f5744b0b01f9308a365daacf8d115e5e2b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "d1ec48ee_50209c93",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 1
