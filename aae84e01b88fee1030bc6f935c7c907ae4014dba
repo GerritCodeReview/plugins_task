@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c858a34_0c671a7e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 264,
+      "author": {
+        "id": 1003873
+      },
+      "writtenOn": "2022-11-09T10:26:20Z",
+      "side": 1,
+      "message": "unrelated to this change: the ERROR: prefix is redundant here as the logging level is automatically added by the logging library",
+      "range": {
+        "startLine": 264,
+        "startChar": 41,
+        "endLine": 264,
+        "endChar": 48
+      },
+      "revId": "aae84e01b88fee1030bc6f935c7c907ae4014dba",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
