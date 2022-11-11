@@ -557,7 +557,7 @@ running normally. If all tasks are properly configured, this switch should
 not output anything. This switch is particularly useful in combination
 with the **\-\-@PLUGIN@\-\-preview** switch.
 
-**\-\-@PLUGIN@\-\-task\-\-evaluation-time**
+**\-\-@PLUGIN@\-\-evaluation-time**
 
 This switch is meant as a debug switch to evaluate task performance. This
 switch outputs an elapsed time value on every task indicating how much time
