@@ -16,6 +16,24 @@
       "message": "If it\u0027s not finding it at this path, there\u0027s a different problem. The compose spec specifically mounts it here: https://gerrit.googlesource.com/plugins/task/+/master/test/docker/docker-compose.yaml#20",
       "revId": "a889f298e7828ff4e0317e7a72d8fd27a03269eb",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "47f55e27_fc768421",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1025452
+      },
+      "writtenOn": "2022-11-15T08:43:00Z",
+      "side": 0,
+      "message": "right so it should stay as it was 😊\nbut that should also apply to line #66 IOW in case when `retest` is called it will fail or I don\u0027t understand sth ;)",
+      "parentUuid": "9d47f429_474e1c81",
+      "revId": "a889f298e7828ff4e0317e7a72d8fd27a03269eb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
