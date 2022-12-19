@@ -70,9 +70,16 @@ export const htmlTemplate = Polymer.html`
       --iron-icon-width: 18px;
     }
     .no-margins { margin: 0 0 0 0; }
+    .task-list-item {
+      display: flex;
+      align-items: center;
+      column-gap: 1em;
+      padding-top: 12px;
+      padding-left: 12px;
+    }
 </style>
 
-<div id="tasks" hidden$="[[!_tasks.length]]">
+<div id="tasks" hidden$="[[_is_hidden(_isPending, _tasks)]]">
   <paper-tabs id="secondaryTabs" selected="0">
     <paper-tab
       data-name$="Tasks"
@@ -82,7 +89,8 @@ export const htmlTemplate = Polymer.html`
     </paper-tab>
   </paper-tabs>
   <section class="TasksList">
-    <div style="display: flex; align-items: center; column-gap: 1em; padding-top: 12px; padding-left: 12px">
+    <div hidden$="[[!_isPending]]" class="task-list-item">Loading...</div>
+    <div hidden$="[[_isPending]]" class="task-list-item">
     <template is="dom-if" if="[[_is_show_all(_show_all)]]">
       <p> All ([[_all_count]]) |
         <span

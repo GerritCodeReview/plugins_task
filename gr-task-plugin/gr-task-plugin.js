@@ -82,6 +82,11 @@ class GrTaskPlugin extends Polymer.Element {
         notify: true,
         value: 0,
       },
+
+      _isPending: {
+        type: Boolean,
+        value: true,
+      },
     };
   }
 
@@ -95,15 +100,21 @@ class GrTaskPlugin extends Polymer.Element {
     this._getTasks();
   }
 
+  _is_hidden(_isPending, _tasks) {
+    return (!_isPending && !_tasks.length);
+  }
+
   _getTasks() {
     if (!this.change) {
       return;
     }
 
+    this._isPending = true;
     const endpoint =
         `/changes/?q=change:${this.change._number}&--task--applicable`;
 
     return this.plugin.restApi().get(endpoint).then(response => {
+      this._isPending = false;
       if (response && response.length === 1) {
         const cinfo = response[0];
         if (cinfo.plugins) {
@@ -115,6 +126,8 @@ class GrTaskPlugin extends Polymer.Element {
           }
         }
       }
+    }).catch(e => {
+      this._isPending = false;
     });
   }
 
