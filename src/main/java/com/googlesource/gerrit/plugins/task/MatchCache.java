@@ -28,6 +28,14 @@ public class MatchCache {
     this.predicateCache = predicateCache;
   }
 
+  public Boolean matchOrNull(ChangeData changeData, String query) {
+    try {
+      return match(changeData, query);
+    } catch (StorageException | QueryParseException e) {
+    }
+    return null;
+  }
+
   public boolean match(ChangeData changeData, String query)
       throws StorageException, QueryParseException {
     if (query == null) {
@@ -36,21 +44,6 @@ public class MatchCache {
     Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());
     if (isMatched == null) {
       isMatched = predicateCache.matchWithExceptions(changeData, query);
-      resultByChangeByQuery.put(query, changeData.getId(), isMatched);
-    }
-    return isMatched;
-  }
-
-  public Boolean matchOrNull(ChangeData changeData, String query) {
-    if (query == null) {
-      return null;
-    }
-    Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());
-    if (isMatched == null) {
-      try {
-        isMatched = predicateCache.matchWithExceptions(changeData, query);
-      } catch (QueryParseException | RuntimeException e) {
-      }
       resultByChangeByQuery.put(query, changeData.getId(), isMatched);
     }
     return isMatched;
