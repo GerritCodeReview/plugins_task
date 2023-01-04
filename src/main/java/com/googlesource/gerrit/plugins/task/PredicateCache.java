@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.index.FieldDef;
 import com.google.gerrit.index.query.AndPredicate;
@@ -40,7 +39,6 @@ import org.eclipse.jgit.lib.Config;
 public class PredicateCache {
   public static class Statistics {
     protected Object predicatesByQueryCache;
-    protected long numberOfMatches;
   }
 
   protected final ChangeQueryBuilder cqb;
@@ -77,18 +75,7 @@ public class PredicateCache {
     return statistics;
   }
 
-  public boolean matchWithExceptions(ChangeData c, String query)
-      throws QueryParseException, StorageException {
-    if ("true".equalsIgnoreCase(query)) {
-      return true;
-    }
-    if (statistics != null) {
-      statistics.numberOfMatches++;
-    }
-    return getPredicate(query).asMatchable().match(c);
-  }
-
-  protected Predicate<ChangeData> getPredicate(String query) throws QueryParseException {
+  public Predicate<ChangeData> getPredicate(String query) throws QueryParseException {
     ThrowingProvider<Predicate<ChangeData>, QueryParseException> predProvider =
         predicatesByQuery.getOrStartLoad(query);
     if (predProvider != null) {

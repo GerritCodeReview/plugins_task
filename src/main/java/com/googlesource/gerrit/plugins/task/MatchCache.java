@@ -38,12 +38,12 @@ public class MatchCache {
 
   public boolean match(ChangeData changeData, String query)
       throws StorageException, QueryParseException {
-    if (query == null) {
+    if (query == null || "true".equalsIgnoreCase(query)) {
       return true;
     }
     Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());
     if (isMatched == null) {
-      isMatched = predicateCache.matchWithExceptions(changeData, query);
+      isMatched = predicateCache.getPredicate(query).asMatchable().match(changeData);
       resultByChangeByQuery.put(query, changeData.getId(), isMatched);
     }
     return isMatched;
