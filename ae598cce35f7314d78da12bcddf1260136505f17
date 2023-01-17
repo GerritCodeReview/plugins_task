@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c8db3807_bb06af10",
+        "filename": "test/docker/run_tests/start.sh",
+        "patchSetId": 2
+      },
+      "lineNbr": 6,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-01-17T16:26:13Z",
+      "side": 1,
+      "message": "This is fine, but I think if we have `jq` available that would work too.",
+      "range": {
+        "startLine": 6,
+        "startChar": 48,
+        "endLine": 6,
+        "endChar": 85
+      },
+      "revId": "ae598cce35f7314d78da12bcddf1260136505f17",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
