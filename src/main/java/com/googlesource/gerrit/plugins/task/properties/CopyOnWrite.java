@@ -69,7 +69,7 @@ public class CopyOnWrite<T> {
   }
 
   protected Function<T, T> copier;
-  protected StopWatch stopWatch = new StopWatch();
+  protected StopWatch.Runner stopWatch = StopWatch.Runner.DISABLED;
   protected T original;
   protected T copy;
 
@@ -79,7 +79,7 @@ public class CopyOnWrite<T> {
   }
 
   protected void setNanosecondsConsumer(LongConsumer nanosConsumer) {
-    stopWatch.setConsumer(nanosConsumer);
+    stopWatch = new StopWatch.Runner.Enabled().setNanosConsumer(nanosConsumer);
   }
 
   public T getOriginal() {

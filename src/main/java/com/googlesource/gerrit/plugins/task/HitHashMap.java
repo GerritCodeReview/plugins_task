@@ -28,8 +28,6 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
     public int size;
     public long sumNanosecondsLoading;
     public List<Object> elements;
-
-    protected transient StopWatch loadingStopWatch;
   }
 
   public static final long serialVersionUID = 1;
@@ -53,14 +51,6 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
     return v;
   }
 
-  public V getOrStartLoad(K key) {
-    V v = get(key);
-    if (v == null) {
-      startLoad();
-    }
-    return v;
-  }
-
   @Override
   public V getOrDefault(Object key, V dv) {
     V v = get(key);
@@ -71,14 +61,15 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   }
 
   @Override
+  @SuppressWarnings("try")
   public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
-    V v = getOrStartLoad(key);
+    V v = get(key);
     if (v == null) {
-      v = mappingFunction.apply(key);
+      try (StopWatch stopWatch = createLoadingStopWatch()) {
+        v = mappingFunction.apply(key);
+      }
       if (v != null) {
         put(key, v);
-      } else {
-        stopLoad(key);
       }
     }
     return v;
@@ -86,7 +77,6 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
 
   @Override
   public V put(K key, V value) {
-    stopLoad(key);
     if (statistics != null && value instanceof TracksStatistics) {
       ((TracksStatistics) value).ensureStatistics();
     }
@@ -138,23 +128,9 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
     throw new UnsupportedOperationException(); // Todo if needed
   }
 
-  public void startLoad() {
-    if (statistics != null && statistics.loadingStopWatch != null) {
-      statistics.loadingStopWatch.start();
-    }
-  }
-
-  public void stopLoad(K key) {
-    if (statistics != null && statistics.loadingStopWatch != null) {
-      statistics.loadingStopWatch.stop();
-    }
-  }
-
   @Override
   public void initStatistics() {
     statistics = new Statistics();
-    statistics.loadingStopWatch =
-        new StopWatch().enable().setConsumer(ns -> statistics.sumNanosecondsLoading += ns);
   }
 
   @Override
@@ -162,6 +138,13 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
     if (statistics == null) {
       initStatistics();
     }
+  }
+
+  public StopWatch createLoadingStopWatch() {
+    if (statistics == null) {
+      return StopWatch.DISABLED;
+    }
+    return new StopWatch.Enabled().setNanosConsumer(ns -> statistics.sumNanosecondsLoading += ns);
   }
 
   @Override
@@ -175,7 +158,6 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
     if (!elementStatistics.isEmpty()) {
       statistics.elements = elementStatistics;
     }
-    statistics.loadingStopWatch = null;
     return statistics;
   }
 }

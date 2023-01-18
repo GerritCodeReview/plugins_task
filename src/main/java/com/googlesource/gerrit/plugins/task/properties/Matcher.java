@@ -41,8 +41,8 @@ public class Matcher {
   protected int cursor;
 
   protected Statistics statistics;
-  protected StopWatch appendNanoseconds = new StopWatch();
-  protected StopWatch findNanoseconds = new StopWatch();
+  protected StopWatch.Runner appendNanoseconds = StopWatch.Runner.DISABLED;
+  protected StopWatch.Runner findNanoseconds = StopWatch.Runner.DISABLED;
 
   public Matcher(String text) {
     this.text = text;
@@ -52,22 +52,25 @@ public class Matcher {
     if (statisticsConsumer != null) {
       statistics = new Statistics();
       statisticsConsumer.accept(statistics);
-      appendNanoseconds.setConsumer(ns -> statistics.appendNanoseconds = ns);
-      findNanoseconds.setConsumer(ns -> statistics.findNanoseconds = ns);
+      appendNanoseconds =
+          new StopWatch.Runner.Enabled().setNanosConsumer(ns -> statistics.appendNanoseconds = ns);
+      findNanoseconds =
+          new StopWatch.Runner.Enabled().setNanosConsumer(ns -> statistics.findNanoseconds = ns);
     }
   }
 
   public boolean find() {
-    findNanoseconds.start();
+    return findNanoseconds.get(() -> findUntimed());
+  }
+
+  protected boolean findUntimed() {
     start = text.indexOf("${", cursor);
     nameStart = start + 2;
     if (start < 0 || text.length() < nameStart + 1) {
-      findNanoseconds.stop();
       return false;
     }
     end = text.indexOf('}', nameStart);
     boolean found = end >= 0;
-    findNanoseconds.stop();
     return found;
   }
 
@@ -76,21 +79,25 @@ public class Matcher {
   }
 
   public void appendValue(StringBuffer buffer, String value) {
-    appendNanoseconds.start();
+    appendNanoseconds.accept((b, v) -> appendValueUntimed(b, v), buffer, value);
+  }
+
+  protected void appendValueUntimed(StringBuffer buffer, String value) {
     if (start > cursor) {
       buffer.append(text.substring(cursor, start));
     }
     buffer.append(value);
     cursor = end + 1;
-    appendNanoseconds.stop();
   }
 
   public void appendTail(StringBuffer buffer) {
-    appendNanoseconds.start();
+    appendNanoseconds.accept(b -> appendTailUntimed(b), buffer);
+  }
+
+  protected void appendTailUntimed(StringBuffer buffer) {
     if (cursor < text.length()) {
       buffer.append(text.substring(cursor));
       cursor = text.length();
     }
-    appendNanoseconds.stop();
   }
 }
