@@ -592,14 +592,17 @@ public class TaskTree {
     return BranchNameKey.create(allUsers.get(), RefNames.refsUsers(acct));
   }
 
+  @SuppressWarnings("try")
   public List<ChangeData> query(String query) throws StorageException, QueryParseException {
-    List<ChangeData> changeDataList = changesByNamesFactoryQuery.getOrStartLoad(query);
+    List<ChangeData> changeDataList = changesByNamesFactoryQuery.get(query);
     if (changeDataList == null) {
-      changeDataList =
-          changeQueryProcessorProvider
-              .get()
-              .query(changeQueryBuilderProvider.get().parse(query))
-              .entities();
+      try (StopWatch stopWatch = changesByNamesFactoryQuery.createLoadingStopWatch()) {
+        changeDataList =
+            changeQueryProcessorProvider
+                .get()
+                .query(changeQueryBuilderProvider.get().parse(query))
+                .entities();
+      }
       changesByNamesFactoryQuery.put(query, changeDataList);
     }
     return changeDataList;
