@@ -75,14 +75,15 @@ public class PredicateCache {
     return statistics;
   }
 
+  @SuppressWarnings("try")
   public Predicate<ChangeData> getPredicate(String query) throws QueryParseException {
     ThrowingProvider<Predicate<ChangeData>, QueryParseException> predProvider =
-        predicatesByQuery.getOrStartLoad(query);
+        predicatesByQuery.get(query);
     if (predProvider != null) {
       return predProvider.get();
     }
     // never seen 'query' before
-    try {
+    try (StopWatch stopWatch = predicatesByQuery.createLoadingStopWatch()) {
       Predicate<ChangeData> pred = cqb.parse(query);
       predicatesByQuery.put(query, new ThrowingProvider.Entry<>(pred));
       return pred;

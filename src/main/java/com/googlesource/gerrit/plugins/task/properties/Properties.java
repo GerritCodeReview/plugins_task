@@ -33,6 +33,12 @@ public class Properties {
     public long copierNanoseconds;
     public Matcher.Statistics matcher;
 
+    public static void setNanoseconds(Statistics stats, long nanos) {
+      if (stats != null) {
+        stats.getTaskNanoseconds = nanos;
+      }
+    }
+
     public Statistics sum(Statistics other) {
       if (other == null) {
         return this;
@@ -43,8 +49,6 @@ public class Properties {
       statistics.matcher = matcher == null ? other.matcher : matcher.sum(other.matcher);
       return statistics;
     }
-
-    protected StopWatch getTask;
   }
 
   public static final Properties EMPTY =
@@ -80,32 +84,32 @@ public class Properties {
   }
 
   /** Use to expand properties specifically for Tasks. */
+  @SuppressWarnings("try")
   public Task getTask(ChangeData changeData) throws StorageException {
-    if (statistics != null) {
-      statistics.getTask = new StopWatch().enable().start();
-    }
-    loader = new Loader(origTask, changeData, getParentMapper());
-    expander = new Expander(n -> loader.load(n));
-    expander.setStatisticsConsumer(matcherStatisticsConsumer);
-    if (isTaskRefreshRequired || init) {
-      expander.expand(task, TaskConfig.KEY_APPLICABLE);
-      isApplicableRefreshRequired = loader.isNonTaskDefinedPropertyLoaded();
+    try (StopWatch stopWatch =
+        StopWatch.createEnabled(statistics != null)
+            .setNanosConsumer(l -> Statistics.setNanoseconds(statistics, l))) {
+      loader = new Loader(origTask, changeData, getParentMapper());
+      expander = new Expander(n -> loader.load(n));
+      expander.setStatisticsConsumer(matcherStatisticsConsumer);
+      if (isTaskRefreshRequired || init) {
+        expander.expand(task, TaskConfig.KEY_APPLICABLE);
+        isApplicableRefreshRequired = loader.isNonTaskDefinedPropertyLoaded();
 
-      expander.expand(task, ImmutableSet.of(TaskConfig.KEY_APPLICABLE, TaskConfig.KEY_NAME));
+        expander.expand(task, ImmutableSet.of(TaskConfig.KEY_APPLICABLE, TaskConfig.KEY_NAME));
 
-      Map<String, String> exported = expander.expand(origTask.exported);
-      if (exported != origTask.exported) {
-        task.getForWrite().exported = exported;
-      }
+        Map<String, String> exported = expander.expand(origTask.exported);
+        if (exported != origTask.exported) {
+          task.getForWrite().exported = exported;
+        }
 
-      if (init) {
-        init = false;
-        isTaskRefreshRequired = loader.isNonTaskDefinedPropertyLoaded();
+        if (init) {
+          init = false;
+          isTaskRefreshRequired = loader.isNonTaskDefinedPropertyLoaded();
+        }
       }
     }
     if (statisticsConsumer != null) {
-      statistics.getTaskNanoseconds = statistics.getTask.stop().get();
-      statistics.getTask = null;
       statisticsConsumer.accept(statistics);
     }
     return task.getForRead();

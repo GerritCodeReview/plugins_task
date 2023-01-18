@@ -18,65 +18,88 @@ import com.google.common.base.Stopwatch;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongConsumer;
 
-public class StopWatch {
-  protected Stopwatch stopwatch;
-  protected LongConsumer consumer;
-  protected long nanoseconds;
-
-  public StopWatch enableIfNonNull(Object statistics) {
-    if (statistics != null) {
-      enable();
-    }
-    return this;
-  }
-
-  public StopWatch enable() {
-    stopwatch = Stopwatch.createUnstarted();
-    return this;
-  }
-
-  public StopWatch run(Runnable runnable) {
-    start();
-    runnable.run();
-    stop();
-    return this;
-  }
-
-  public StopWatch start() {
-    if (stopwatch != null && !stopwatch.isRunning()) {
-      stopwatch.start();
-    }
-    return this;
-  }
-
-  public StopWatch stop() {
-    if (stopwatch != null && stopwatch.isRunning()) {
-      stopwatch.stop();
-      if (consumer != null) {
-        consume(consumer);
+/**
+ * StopWatchs with APIs designed to make it easy to disable, and to make robust in the face of
+ * exceptions.
+ *
+ * <p>The Stopwatch class from google commons is used by placing start() and stop() calls around
+ * code sections which need to be timed. This approach can be problematic since the code being timed
+ * could throw an exception and if the stop() is not in a finally clause, then it will likely never
+ * get called, potentially causing bad timings, or worse programatic issues elsewhere due to double
+ * calls to start(). The need for a finally clause to make things safe is an obvious hint that using
+ * an AutoCloaseable approach is likely going to be safer. With that in mind, the two API approaches
+ * provided by these StopWatch classes are:
+ *
+ * <ol>
+ *   <li>The timed try-with-resource API. Use the StopWatch.Enabled class for this API.
+ *   <li>The timed SAM evaluation API. Use the StopWatch.Runner.Enabled class for these APIs.
+ * </ol>
+ *
+ * <p>Finally, the commons stopwatch API also does not provide an easy way to disable timings at
+ * runtime when they are not desired, so the Disabled classes can be used for this with both
+ * approaches above, and thus provide low cost runtime substitutes for either the Enabled or Runner
+ * classes.
+ */
+public interface StopWatch extends AutoCloseable {
+  /** Designed for the greatest simplicity to time SAM executions. */
+  public abstract static class Runner extends SamTryWrapper<AutoCloseable> {
+    public static class Disabled extends Runner {
+      @Override
+      protected AutoCloseable getAutoCloseable() {
+        return () -> {};
       }
     }
-    return this;
-  }
 
-  public StopWatch setConsumer(LongConsumer consumer) {
-    if (consumer != null) {
-      stopwatch = Stopwatch.createUnstarted();
+    public static class Enabled extends Runner {
+      protected LongConsumer nanosConsumer = EMPTY_LONG_CONSUMER;
+
+      @Override
+      protected AutoCloseable getAutoCloseable() {
+        return new StopWatch.Enabled().setNanosConsumer(nanosConsumer);
+      }
+
+      @Override
+      public Runner setNanosConsumer(LongConsumer nanosConsumer) {
+        this.nanosConsumer = nanosConsumer;
+        return this;
+      }
     }
-    this.consumer = consumer;
-    return this;
-  }
 
-  public StopWatch consume(LongConsumer consumer) {
-    if (stopwatch != null) {
-      consumer.accept(get());
+    public Runner setNanosConsumer(LongConsumer nanosConsumer) {
+      return this;
     }
+  }
+
+  /** May be used anywhere that Enabled can be used */
+  public static class Disabled implements StopWatch {}
+
+  /** Should be created and used only within a try-with-resource */
+  public static class Enabled implements StopWatch {
+    protected LongConsumer nanosConsumer = EMPTY_LONG_CONSUMER;
+    protected Stopwatch stopwatch = Stopwatch.createStarted();
+
+    @Override
+    public StopWatch setNanosConsumer(LongConsumer nanosConsumer) {
+      this.nanosConsumer = nanosConsumer;
+      return this;
+    }
+
+    @Override
+    public void close() {
+      stopwatch.stop();
+      nanosConsumer.accept(stopwatch.elapsed(TimeUnit.NANOSECONDS));
+    }
+  }
+
+  public static final LongConsumer EMPTY_LONG_CONSUMER = l -> {};
+
+  public static StopWatch createEnabled(boolean enabled) {
+    return enabled ? new Enabled() : new Disabled();
+  }
+
+  default StopWatch setNanosConsumer(LongConsumer nanosConsumer) {
     return this;
   }
 
-  public long get() {
-    nanoseconds += stopwatch.elapsed(TimeUnit.NANOSECONDS);
-    stopwatch.reset();
-    return nanoseconds;
-  }
+  default void close() {}
 }
