@@ -300,8 +300,9 @@ public class TaskConfig extends AbstractVersionedMetaData {
   }
 
   protected List<String> getStringList(SubSectionKey s, String key) {
-    return Collections.unmodifiableList(
-        Arrays.asList(cfg.getStringList(s.section(), s.subSection(), key)));
+    List<String> stringList = Arrays.asList(cfg.getStringList(s.section(), s.subSection(), key));
+    stringList.replaceAll(str -> str == null ? "" : str);
+    return Collections.unmodifiableList(stringList);
   }
 
   protected SubSectionKey subSectionKey(String section, String subSection) {

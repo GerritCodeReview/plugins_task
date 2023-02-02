@@ -102,6 +102,18 @@
          ]
       },
       {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Blank",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
          "applicable" : false,
          "hasPass" : true,
          "name" : "NA Bad PASS query",
@@ -153,6 +165,18 @@
          "applicable" : true,
          "hasPass" : false,
          "name" : "task (names-factory type INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory name Blank)",
          "status" : "WAITING",
          "subTasks" : [
             {
@@ -404,6 +428,18 @@
          ]
       },
       {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Blank",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
          "applicable" : false,
          "hasPass" : true,
          "name" : "NA Bad PASS query",
@@ -455,6 +491,18 @@
          "applicable" : true,
          "hasPass" : false,
          "name" : "task (names-factory type INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory name Blank)",
          "status" : "WAITING",
          "subTasks" : [
             {

@@ -2266,6 +2266,18 @@ The config below is expected to be in the `task.config` file in project
          ]
       },
       {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Blank",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
          "applicable" : false,
          "hasPass" : true,
          "name" : "NA Bad PASS query",
@@ -2317,6 +2329,18 @@ The config below is expected to be in the `task.config` file in project
          "applicable" : true,
          "hasPass" : false,
          "name" : "task (names-factory type INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory name Blank)",
          "status" : "WAITING",
          "subTasks" : [
             {
@@ -2509,6 +2533,18 @@ The config below is expected to be in the `task.config` file in project
          ]
       },
       {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask Blank",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
          "applicable" : false,
          "hasPass" : true,
          "name" : "NA Bad PASS query",
@@ -2560,6 +2596,18 @@ The config below is expected to be in the `task.config` file in project
          "applicable" : true,
          "hasPass" : false,
          "name" : "task (names-factory type INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (names-factory name Blank)",
          "status" : "WAITING",
          "subTasks" : [
             {
@@ -2669,6 +2717,10 @@ The config below is expected to be in the `task.config` file in project
 [task "Subtask Optional"]
    subtask = MISSING | MISSING
 
+[task "Subtask Blank"]
+  pass = True
+  subtask =
+
 [task "NA Bad PASS query"]
   applicable = NOT is:open # Assumes test query is "is:open"
   fail = True
@@ -2699,6 +2751,9 @@ The config below is expected to be in the `task.config` file in project
 [task "task (names-factory type INVALID)"]
   subtasks-factory = tasks-factory (names-factory type INVALID)
 
+[task "task (names-factory name Blank)"]
+  subtasks-factory = tasks-factory (names-factory name Blank)
+
 [task "task (names-factory duplicate)"]
   subtasks-factory = tasks-factory (names-factory duplicate)
 
@@ -2717,6 +2772,10 @@ The config below is expected to be in the `task.config` file in project
 
 [tasks-factory "tasks-factory (names-factory type INVALID)"]
   names-factory = name-factory (type INVALID)
+
+[tasks-factory "tasks-factory (names-factory name Blank)"]
+  names-factory = names-factory (name Blank)
+  fail = True
 
 [tasks-factory "tasks-factory (names-factory duplicate)"]
   names-factory = names-factory duplicate
@@ -2743,6 +2802,10 @@ The config below is expected to be in the `task.config` file in project
 [names-factory "names-factory (type INVALID)"]
   name = invalid type test
   type = invalid
+
+[names-factory "names-factory (name Blank)"]
+  name =
+  type = static
 
 [names-factory "names-factory duplicate"]
   name = duplicate
