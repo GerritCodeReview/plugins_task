@@ -58,6 +58,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.util.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Add structure to access the task definitions from the config as a tree.
@@ -430,7 +433,11 @@ public class TaskTree {
       protected void addStaticTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
           throws ConfigInvalidException, IOException, StorageException {
         for (String name : namesFactory.names) {
-          addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
+          if (StringUtils.isEmptyOrNull(name)) {
+            addInvalidNode();
+          } else {
+            addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
+          }
         }
       }
 
