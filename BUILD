@@ -64,6 +64,7 @@ sh_test(
     args = ["--task-plugin-jar", "$(location :task)"],
     data = [plugin_name] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
     local = True,
+    tags = ["docker"],
 )
 
 eslint(
