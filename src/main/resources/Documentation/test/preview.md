@@ -152,6 +152,30 @@
       {
          "applicable" : true,
          "hasPass" : false,
+         "name" : "task (tasks-factory static INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory change INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
          "name" : "task (names-factory type missing)",
          "status" : "WAITING",
          "subTasks" : [
@@ -473,6 +497,30 @@
          "applicable" : true,
          "hasPass" : false,
          "name" : "task (tasks-factory missing)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory static INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory change INVALID)",
          "status" : "WAITING",
          "subTasks" : [
             {

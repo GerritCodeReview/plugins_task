@@ -2316,6 +2316,30 @@ The config below is expected to be in the `task.config` file in project
       {
          "applicable" : true,
          "hasPass" : false,
+         "name" : "task (tasks-factory static INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory change INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
          "name" : "task (names-factory type missing)",
          "status" : "WAITING",
          "subTasks" : [
@@ -2583,6 +2607,30 @@ The config below is expected to be in the `task.config` file in project
       {
          "applicable" : true,
          "hasPass" : false,
+         "name" : "task (tasks-factory static INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "task (tasks-factory change INVALID)",
+         "status" : "WAITING",
+         "subTasks" : [
+            {
+               "name" : "UNKNOWN",
+               "status" : "INVALID"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
          "name" : "task (names-factory type missing)",
          "status" : "WAITING",
          "subTasks" : [
@@ -2745,6 +2793,12 @@ The config below is expected to be in the `task.config` file in project
 [task "task (tasks-factory missing)"]
   subtasks-factory = missing
 
+[task "task (tasks-factory static INVALID)"]
+  subtasks-factory = tasks-factory (preload-task missing)
+
+[task "task (tasks-factory change INVALID)"]
+  subtasks-factory = tasks-factory change (preload-task missing)
+
 [task "task (names-factory type missing)"]
   subtasks-factory = tasks-factory (names-factory type missing)
 
@@ -2770,6 +2824,16 @@ The config below is expected to be in the `task.config` file in project
   names-factory = names-factory (type missing)
   fail = True
 
+[tasks-factory "tasks-factory (preload-task missing)"]
+  names-factory = names-factory static
+  fail = True
+  preload-task = missing
+
+[tasks-factory "tasks-factory change (preload-task missing)"]
+  names-factory = names-factory change list
+  fail = True
+  preload-task = missing
+
 [tasks-factory "tasks-factory (names-factory type INVALID)"]
   names-factory = name-factory (type INVALID)
 
@@ -2792,6 +2856,14 @@ The config below is expected to be in the `task.config` file in project
 [tasks-factory "tasks-factory change (names-factory changes invalid)"]
   names-factory = names-factory change list (changes invalid)
   fail = True
+
+[names-factory "names-factory static"]
+  name = task A
+  type = static
+
+[names-factory "names-factory change list"]
+  changes = change:_change1_number OR change:_change2_number
+  type = change
 
 [names-factory "names-factory (type missing)"]
   name = no type test

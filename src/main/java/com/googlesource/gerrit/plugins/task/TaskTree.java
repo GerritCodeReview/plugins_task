@@ -431,7 +431,11 @@ public class TaskTree {
           if (StringUtils.isEmptyOrNull(name)) {
             addInvalidNode();
           } else {
-            addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
+            try {
+              addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
+            } catch (ConfigInvalidException e) {
+              addInvalidNode();
+            }
           }
         }
       }
@@ -450,7 +454,7 @@ public class TaskTree {
           }
         } catch (StorageException e) {
           log.atSevere().withCause(e).log("ERROR: running changes query: " + namesFactory.changes);
-        } catch (QueryParseException e) {
+        } catch (QueryParseException | ConfigInvalidException e) {
         }
         addInvalidNode();
       }
