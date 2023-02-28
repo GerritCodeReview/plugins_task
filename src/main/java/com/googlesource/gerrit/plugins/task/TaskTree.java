@@ -166,8 +166,7 @@ public class TaskTree {
     protected class SubNodeFactory {
       protected Set<String> names = new HashSet<>();
 
-      public List<Node> createFromPreloaded(List<Task> defs)
-          throws ConfigInvalidException, StorageException {
+      public List<Node> createFromPreloaded(List<Task> defs) {
         List<Node> nodes = new ArrayList<>();
         for (Task def : defs) {
           nodes.add(createFromPreloaded(def));
@@ -175,12 +174,11 @@ public class TaskTree {
         return nodes;
       }
 
-      public Node createFromPreloaded(Task def) throws ConfigInvalidException, StorageException {
+      public Node createFromPreloaded(Task def) {
         return createFromPreloaded(def, (parent, definition) -> new Node(parent, definition));
       }
 
-      public Node createFromPreloaded(Task def, ChangeData changeData)
-          throws ConfigInvalidException, StorageException {
+      public Node createFromPreloaded(Task def, ChangeData changeData) {
         return createFromPreloaded(
             def,
             (parent, definition) ->
@@ -197,8 +195,7 @@ public class TaskTree {
                 });
       }
 
-      protected Node createFromPreloaded(Task def, NodeFactory nodeFactory)
-          throws ConfigInvalidException, StorageException {
+      protected Node createFromPreloaded(Task def, NodeFactory nodeFactory) {
         if (def != null) {
           try {
             Node node = cachedNodeByTask.get(def.key());
@@ -251,7 +248,7 @@ public class TaskTree {
       properties = null;
     }
 
-    public Node(NodeList parent, Task task) throws ConfigInvalidException, StorageException {
+    public Node(NodeList parent, Task task) {
       this.parent = parent;
       taskKey = task.key();
       properties = new Properties(this, task);
@@ -458,16 +455,15 @@ public class TaskTree {
         addInvalidNode();
       }
 
-      public void addPreloaded(List<Task> defs) throws ConfigInvalidException, StorageException {
+      public void addPreloaded(List<Task> defs) {
         nodes.addAll(factory.createFromPreloaded(defs));
       }
 
-      public void addPreloaded(Task def, ChangeData changeData)
-          throws ConfigInvalidException, StorageException {
+      public void addPreloaded(Task def, ChangeData changeData) {
         nodes.add(factory.createFromPreloaded(def, changeData));
       }
 
-      public void addPreloaded(Task def) throws ConfigInvalidException, StorageException {
+      public void addPreloaded(Task def) {
         nodes.add(factory.createFromPreloaded(def));
       }
 
