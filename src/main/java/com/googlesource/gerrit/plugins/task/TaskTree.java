@@ -229,7 +229,7 @@ public class TaskTree {
   public class Node extends NodeList {
     public class Invalid extends Node {
       @Override
-      public void refreshTask() throws ConfigInvalidException, StorageException {}
+      public void refreshTask() {}
 
       @Override
       public Task getDefinition() {
@@ -305,7 +305,7 @@ public class TaskTree {
     /* The task needs to be refreshed before a node is used, however
     subNode refreshing can wait until they are fetched since they may
     not be needed. */
-    public void refreshTask() throws ConfigInvalidException, StorageException {
+    public void refreshTask() {
       this.path = new LinkedList<>(parent.path);
       String key = key();
       isDuplicate = path.contains(key);
@@ -647,8 +647,7 @@ public class TaskTree {
     return statistics;
   }
 
-  protected static List<Node> refresh(List<Node> nodes)
-      throws ConfigInvalidException, StorageException {
+  protected static List<Node> refresh(List<Node> nodes) {
     for (Node node : nodes) {
       node.refreshTask();
     }

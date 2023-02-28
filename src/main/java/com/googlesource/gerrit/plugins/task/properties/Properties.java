@@ -15,7 +15,6 @@
 package com.googlesource.gerrit.plugins.task.properties;
 
 import com.google.common.collect.ImmutableSet;
-import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.googlesource.gerrit.plugins.task.TaskConfig;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
@@ -85,7 +84,7 @@ public class Properties {
 
   /** Use to expand properties specifically for Tasks. */
   @SuppressWarnings("try")
-  public Task getTask(ChangeData changeData) throws StorageException {
+  public Task getTask(ChangeData changeData) {
     try (StopWatch stopWatch =
         StopWatch.builder()
             .enabled(statistics != null)
