@@ -259,7 +259,7 @@ public class TaskTree {
       return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + taskKey;
     }
 
-    public List<Node> getSubNodes() throws ConfigInvalidException, IOException, StorageException {
+    public List<Node> getSubNodes() throws IOException, StorageException {
       if (cachedNodes != null) {
         return refresh(cachedNodes);
       }
@@ -282,14 +282,12 @@ public class TaskTree {
       return nodes;
     }
 
-    public List<Node> getApplicableSubNodes()
-        throws ConfigInvalidException, IOException, StorageException {
+    public List<Node> getApplicableSubNodes() throws IOException, StorageException {
       return hasUnfilterableSubNodes ? getSubNodes() : new ApplicableNodeFilter().getSubNodes();
     }
 
     @Override
-    protected List<Node> loadSubNodes()
-        throws ConfigInvalidException, IOException, StorageException {
+    protected List<Node> loadSubNodes() throws IOException, StorageException {
       List<Task> cachedDefinitions = definitionsBySubSection.get(task.key().subSection());
       if (cachedDefinitions != null) {
         return new SubNodeFactory().createFromPreloaded(cachedDefinitions);
@@ -355,7 +353,7 @@ public class TaskTree {
       protected List<Node> nodes = new ArrayList<>();
       protected SubNodeFactory factory = new SubNodeFactory();
 
-      public List<Node> getSubNodes() throws ConfigInvalidException, IOException, StorageException {
+      public List<Node> getSubNodes() throws IOException, StorageException {
         addSubTasks();
         addSubTasksFactoryTasks();
         addSubTasksFiles();
@@ -363,7 +361,7 @@ public class TaskTree {
         return nodes;
       }
 
-      protected void addSubTasks() throws ConfigInvalidException, IOException, StorageException {
+      protected void addSubTasks() throws IOException, StorageException {
         for (String expression : task.subTasks) {
           try {
             Optional<Task> def =
@@ -377,7 +375,7 @@ public class TaskTree {
         }
       }
 
-      protected void addSubTasksFiles() throws ConfigInvalidException, StorageException {
+      protected void addSubTasksFiles() {
         for (String file : task.subTasksFiles) {
           try {
             addPreloaded(
@@ -388,7 +386,7 @@ public class TaskTree {
         }
       }
 
-      protected void addSubTasksExternals() throws ConfigInvalidException, StorageException {
+      protected void addSubTasksExternals() throws StorageException {
         for (String external : task.subTasksExternals) {
           try {
             External ext = task.config.getExternal(external);
@@ -403,8 +401,7 @@ public class TaskTree {
         }
       }
 
-      protected void addSubTasksFactoryTasks()
-          throws ConfigInvalidException, IOException, StorageException {
+      protected void addSubTasksFactoryTasks() throws IOException, StorageException {
         for (String tasksFactoryName : task.subTasksFactories) {
           TasksFactory tasksFactory = task.config.getTasksFactory(tasksFactoryName);
           if (tasksFactory != null) {
@@ -426,7 +423,7 @@ public class TaskTree {
       }
 
       protected void addStaticTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
-          throws ConfigInvalidException, IOException, StorageException {
+          throws IOException, StorageException {
         for (String name : namesFactory.names) {
           if (StringUtils.isEmptyOrNull(name)) {
             addInvalidNode();
@@ -441,7 +438,7 @@ public class TaskTree {
       }
 
       protected void addChangeTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
-          throws ConfigInvalidException, IOException, StorageException {
+          throws IOException {
         try {
           if (namesFactory.changes != null) {
             for (ChangeData changeData : query(namesFactory.changes, task.isVisible)) {
@@ -488,9 +485,9 @@ public class TaskTree {
       protected Map<BranchNameKey, List<Task>> definitionsByBranch =
           definitionsByBranchBySubSection.get(subSection);
 
-      public ApplicableNodeFilter() throws ConfigInvalidException, IOException, StorageException {}
+      public ApplicableNodeFilter() throws StorageException {}
 
-      public List<Node> getSubNodes() throws ConfigInvalidException, IOException, StorageException {
+      public List<Node> getSubNodes() throws IOException, StorageException {
         if (nodesByBranch != null) {
           List<Node> nodes = nodesByBranch.get(branch);
           if (nodes != null) {
@@ -538,7 +535,7 @@ public class TaskTree {
       }
 
       protected Optional<List<Node>> getOptionalApplicableForBranch(List<Node> nodes)
-          throws ConfigInvalidException, IOException, StorageException {
+          throws StorageException {
         int filterable = 0;
         List<Node> applicableNodes = new ArrayList<>();
         for (Node node : nodes) {
