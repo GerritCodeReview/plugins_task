@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.exceptions.StorageException;
+import com.google.gerrit.index.query.Matchable;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.query.change.ChangeData;
 
@@ -36,6 +37,7 @@ public class MatchCache {
     return null;
   }
 
+  @SuppressWarnings("try")
   public boolean match(ChangeData changeData, String query)
       throws StorageException, QueryParseException {
     if (query == null || "true".equalsIgnoreCase(query)) {
@@ -43,8 +45,11 @@ public class MatchCache {
     }
     Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());
     if (isMatched == null) {
-      isMatched = predicateCache.getPredicate(query).asMatchable().match(changeData);
-      resultByChangeByQuery.put(query, changeData.getId(), isMatched);
+      Matchable<ChangeData> matchable = predicateCache.getPredicate(query).asMatchable();
+      try (StopWatch stopWatch = resultByChangeByQuery.createLoadingStopWatch()) {
+        isMatched = matchable.match(changeData);
+        resultByChangeByQuery.put(query, changeData.getId(), isMatched);
+      }
     }
     return isMatched;
   }
