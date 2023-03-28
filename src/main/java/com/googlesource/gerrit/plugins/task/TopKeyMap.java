@@ -31,6 +31,20 @@ package com.googlesource.gerrit.plugins.task;
  * insertion approach, it is easy to make a TopKeyMap efficiently thread safe.
  */
 public class TopKeyMap<V> {
+  /**
+   * A TableKeyValue is a helper class for TopKeyMap use cases, such as a table with with row and
+   * column keys, which involve two values.
+   */
+  public static class TableKeyValue<R, C> {
+    public final R row;
+    public final C column;
+
+    public TableKeyValue(R row, C column) {
+      this.row = row;
+      this.column = column;
+    }
+  }
+
   protected class Entry {
     public long key;
     public V value;
