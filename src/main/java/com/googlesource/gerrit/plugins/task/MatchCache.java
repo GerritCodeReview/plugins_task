@@ -55,8 +55,8 @@ public class MatchCache {
     return isMatched;
   }
 
-  public void initStatistics() {
-    resultByChangeByQuery.initStatistics();
+  public void initStatistics(int summaryCount) {
+    resultByChangeByQuery.initStatistics(summaryCount);
   }
 
   public Object getStatistics() {

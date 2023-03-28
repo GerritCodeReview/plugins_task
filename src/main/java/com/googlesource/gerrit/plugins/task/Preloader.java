@@ -222,9 +222,9 @@ public class Preloader {
     return extended;
   }
 
-  public void initStatistics() {
+  public void initStatistics(int summaryCount) {
     statistics = new Statistics();
-    optionalTaskByExpression.initStatistics();
+    optionalTaskByExpression.initStatistics(summaryCount);
   }
 
   public Statistics getStatistics() {
