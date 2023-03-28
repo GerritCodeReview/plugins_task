@@ -266,7 +266,8 @@ public class TaskTree {
         }
         definitionsBySubSection.computeIfAbsentTimed(
             task.key().subSection(),
-            k -> nodes.stream().map(n -> n.getDefinition()).collect(toList()));
+            k -> nodes.stream().map(n -> n.getDefinition()).collect(toList()),
+            task.isVisible);
       } else {
         hasUnfilterableSubNodes = true;
         cachedNodeByTask.clear();
@@ -339,11 +340,11 @@ public class TaskTree {
     }
 
     public boolean match(String query) throws StorageException, QueryParseException {
-      return matchCache.match(getChangeData(), query);
+      return matchCache.match(getChangeData(), query, task.isVisible);
     }
 
     public Boolean matchOrNull(String query) {
-      return matchCache.matchOrNull(getChangeData(), query);
+      return matchCache.matchOrNull(getChangeData(), query, task.isVisible);
     }
 
     protected class SubNodeAdder {
@@ -431,7 +432,7 @@ public class TaskTree {
           throws ConfigInvalidException, IOException, StorageException {
         try {
           if (namesFactory.changes != null) {
-            for (ChangeData changeData : query(namesFactory.changes)) {
+            for (ChangeData changeData : query(namesFactory.changes, task.isVisible)) {
               addPreloaded(
                   preloader.preload(
                       task.config.new Task(tasksFactory, changeData.getId().toString())),
@@ -559,7 +560,7 @@ public class TaskTree {
           return false;
         }
         try {
-          return predicateCache.isCacheableByBranch(applicable);
+          return predicateCache.isCacheableByBranch(applicable, task.isVisible);
         } catch (QueryParseException e) {
           return false;
         }
@@ -593,10 +594,12 @@ public class TaskTree {
   }
 
   @SuppressWarnings("try")
-  public List<ChangeData> query(String query) throws StorageException, QueryParseException {
+  public List<ChangeData> query(String query, boolean isVisible)
+      throws StorageException, QueryParseException {
     List<ChangeData> changeDataList = changesByNamesFactoryQuery.get(query);
     if (changeDataList == null) {
-      try (StopWatch stopWatch = changesByNamesFactoryQuery.createLoadingStopWatch()) {
+      try (StopWatch stopWatch =
+          changesByNamesFactoryQuery.createLoadingStopWatch(query, isVisible)) {
         changeDataList =
             changeQueryProcessorProvider
                 .get()

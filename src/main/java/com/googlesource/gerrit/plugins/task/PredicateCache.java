@@ -76,14 +76,15 @@ public class PredicateCache {
   }
 
   @SuppressWarnings("try")
-  public Predicate<ChangeData> getPredicate(String query) throws QueryParseException {
+  public Predicate<ChangeData> getPredicate(String query, boolean isVisible)
+      throws QueryParseException {
     ThrowingProvider<Predicate<ChangeData>, QueryParseException> predProvider =
         predicatesByQuery.get(query);
     if (predProvider != null) {
       return predProvider.get();
     }
     // never seen 'query' before
-    try (StopWatch stopWatch = predicatesByQuery.createLoadingStopWatch()) {
+    try (StopWatch stopWatch = predicatesByQuery.createLoadingStopWatch(query, isVisible)) {
       Predicate<ChangeData> pred = cqb.parse(query);
       predicatesByQuery.put(query, new ThrowingProvider.Entry<>(pred));
       return pred;
@@ -97,14 +98,14 @@ public class PredicateCache {
    * Can this query's output be assumed to be constant given any Change destined for the same
    * Branch.NameKey?
    */
-  public boolean isCacheableByBranch(String query) throws QueryParseException {
+  public boolean isCacheableByBranch(String query, boolean isVisible) throws QueryParseException {
     if (query == null
         || "".equals(query)
         || "false".equalsIgnoreCase(query)
         || "true".equalsIgnoreCase(query)) {
       return true;
     }
-    return isCacheableByBranch(getPredicate(query));
+    return isCacheableByBranch(getPredicate(query, isVisible));
   }
 
   protected boolean isCacheableByBranch(Predicate<ChangeData> predicate) {
