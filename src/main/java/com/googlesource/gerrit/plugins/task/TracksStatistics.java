@@ -15,9 +15,9 @@
 package com.googlesource.gerrit.plugins.task;
 
 public interface TracksStatistics {
-  void initStatistics();
+  void initStatistics(int summaryCount);
 
-  void ensureStatistics();
+  void ensureStatistics(int summaryCount);
 
   Object getStatistics();
 }

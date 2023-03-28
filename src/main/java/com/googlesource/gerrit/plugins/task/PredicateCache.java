@@ -63,9 +63,9 @@ public class PredicateCache {
                 config.getStringList(pluginName, "cacheable-predicates", "byBranch-className")));
   }
 
-  public void initStatistics() {
+  public void initStatistics(int summaryCount) {
     statistics = new Statistics();
-    predicatesByQuery.initStatistics();
+    predicatesByQuery.initStatistics(summaryCount);
   }
 
   public Object getStatistics() {

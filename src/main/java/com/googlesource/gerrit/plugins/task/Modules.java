@@ -64,6 +64,9 @@ public class Modules {
     @Option(name = "--include-statistics", usage = "Include statistcs about the task evaluations")
     public boolean includeStatistics = false;
 
+    @Option(name = "--summary-count", usage = "number of items to output in statistics summaries")
+    public int summaryCount = 5;
+
     @Option(
         name = "--preview",
         metaVar = "{CHANGE,PATCHSET}",

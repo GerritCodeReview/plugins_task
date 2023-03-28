@@ -27,7 +27,7 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
     public long hits;
     public int size;
     public Long sumNanosecondsLoading;
-    public TopKeyMap<K> topNanosecondsLoadingKeys = new TopKeyMap<>();
+    public TopKeyMap<K> topNanosecondsLoadingKeys;
     public List<Object> elements;
   }
 
@@ -36,12 +36,6 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   protected Statistics<K> statistics;
 
   public HitHashMap() {}
-
-  public HitHashMap(boolean initStatistics) {
-    if (initStatistics) {
-      initStatistics();
-    }
-  }
 
   @Override
   public V get(Object key) {
@@ -93,7 +87,7 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   @Override
   public V put(K key, V value) {
     if (statistics != null && value instanceof TracksStatistics) {
-      ((TracksStatistics) value).ensureStatistics();
+      ((TracksStatistics) value).ensureStatistics(statistics.topNanosecondsLoadingKeys.size());
     }
     return super.put(key, value);
   }
@@ -144,14 +138,15 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   }
 
   @Override
-  public void initStatistics() {
+  public void initStatistics(int summaryCount) {
     statistics = new Statistics<>();
+    statistics.topNanosecondsLoadingKeys = new TopKeyMap<>(summaryCount);
   }
 
   @Override
-  public void ensureStatistics() {
+  public void ensureStatistics(int summaryCount) {
     if (statistics == null) {
-      initStatistics();
+      initStatistics(summaryCount);
     }
   }
 
