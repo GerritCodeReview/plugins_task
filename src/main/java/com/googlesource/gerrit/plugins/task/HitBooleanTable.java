@@ -21,16 +21,17 @@ import com.google.gerrit.common.BooleanTable;
  * stored in it are all Booleans and uses BitSets to make this very space efficient.
  */
 public class HitBooleanTable<R, C> extends BooleanTable<R, C> implements TracksStatistics {
-  public static class Statistics {
+  public static class Statistics<V> {
     public long hits;
     public long misses;
     public long size;
     public int numberOfRows;
     public int numberOfColumns;
     public Long sumNanosecondsLoading;
+    public TopKeyMap<V> topNanosecondsLoadingKeys = new TopKeyMap<>();
   }
 
-  protected Statistics statistics;
+  protected Statistics<TopKeyMap.TableKeyValue<R, C>> statistics;
 
   @Override
   public Boolean get(R r, C c) {
@@ -45,19 +46,29 @@ public class HitBooleanTable<R, C> extends BooleanTable<R, C> implements TracksS
     return value;
   }
 
-  public StopWatch createLoadingStopWatch() {
+  public StopWatch createLoadingStopWatch(R row, C column, boolean isVisible) {
     if (statistics == null) {
       return StopWatch.DISABLED;
     }
     if (statistics.sumNanosecondsLoading == null) {
       statistics.sumNanosecondsLoading = 0L;
     }
-    return new StopWatch.Enabled().setNanosConsumer(ns -> statistics.sumNanosecondsLoading += ns);
+    return new StopWatch.Enabled()
+        .setNanosConsumer(
+            ns ->
+                statistics.sumNanosecondsLoading +=
+                    updateTopLoadingTimes(ns, row, column, isVisible));
+  }
+
+  public long updateTopLoadingTimes(long nanos, R row, C column, boolean isVisible) {
+    statistics.topNanosecondsLoadingKeys.addIfTop(
+        nanos, isVisible ? new TopKeyMap.TableKeyValue<R, C>(row, column) : null);
+    return nanos;
   }
 
   @Override
   public void initStatistics() {
-    statistics = new Statistics();
+    statistics = new Statistics<>();
   }
 
   @Override

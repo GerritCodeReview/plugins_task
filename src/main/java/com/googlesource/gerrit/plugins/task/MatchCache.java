@@ -46,7 +46,8 @@ public class MatchCache {
     Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());
     if (isMatched == null) {
       Matchable<ChangeData> matchable = predicateCache.getPredicate(query, isVisible).asMatchable();
-      try (StopWatch stopWatch = resultByChangeByQuery.createLoadingStopWatch()) {
+      try (StopWatch stopWatch =
+          resultByChangeByQuery.createLoadingStopWatch(query, changeData.getId(), isVisible)) {
         isMatched = matchable.match(changeData);
         resultByChangeByQuery.put(query, changeData.getId(), isMatched);
       }
