@@ -23,16 +23,17 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, V> {
-  public static class Statistics {
+  public static class Statistics<K> {
     public long hits;
     public int size;
     public Long sumNanosecondsLoading;
+    public TopKeyMap<K> topNanosecondsLoadingKeys = new TopKeyMap<>();
     public List<Object> elements;
   }
 
   public static final long serialVersionUID = 1;
 
-  protected Statistics statistics;
+  protected Statistics<K> statistics;
 
   public HitHashMap() {}
 
@@ -75,10 +76,11 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
 
   @Override
   @SuppressWarnings("try")
-  public V computeIfAbsentTimed(K key, Function<? super K, ? extends V> mappingFunction) {
+  public V computeIfAbsentTimed(
+      K key, Function<? super K, ? extends V> mappingFunction, boolean isVisible) {
     V v = get(key);
     if (v == null) {
-      try (StopWatch stopWatch = createLoadingStopWatch()) {
+      try (StopWatch stopWatch = createLoadingStopWatch(key, isVisible)) {
         v = mappingFunction.apply(key);
       }
       if (v != null) {
@@ -143,7 +145,7 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
 
   @Override
   public void initStatistics() {
-    statistics = new Statistics();
+    statistics = new Statistics<>();
   }
 
   @Override
@@ -153,14 +155,21 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
     }
   }
 
-  public StopWatch createLoadingStopWatch() {
+  public StopWatch createLoadingStopWatch(K key, boolean isVisible) {
     if (statistics == null) {
       return StopWatch.DISABLED;
     }
     if (statistics.sumNanosecondsLoading == null) {
       statistics.sumNanosecondsLoading = 0L;
     }
-    return new StopWatch.Enabled().setNanosConsumer(ns -> statistics.sumNanosecondsLoading += ns);
+    return new StopWatch.Enabled()
+        .setNanosConsumer(
+            ns -> statistics.sumNanosecondsLoading += updateTopLoadingTimes(ns, key, isVisible));
+  }
+
+  public long updateTopLoadingTimes(long nanos, K key, boolean isVisible) {
+    statistics.topNanosecondsLoadingKeys.addIfTop(nanos, isVisible ? key : null);
+    return nanos;
   }
 
   @Override

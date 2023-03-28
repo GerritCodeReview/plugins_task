@@ -22,14 +22,14 @@ import java.util.Comparator;
 import java.util.List;
 
 public class HitHashMapOfCollection<K, V extends Collection<?>> extends HitHashMap<K, V> {
-  public static class Statistics extends HitHashMap.Statistics {
+  public static class Statistics<K> extends HitHashMap.Statistics<K> {
     public List<Integer> top5CollectionSizes;
     public List<Integer> bottom5CollectionSizes;
   }
 
   public static final long serialVersionUID = 1;
 
-  protected Statistics statistics;
+  protected Statistics<K> statistics;
 
   public HitHashMapOfCollection() {}
 
@@ -42,7 +42,7 @@ public class HitHashMapOfCollection<K, V extends Collection<?>> extends HitHashM
   @Override
   public void initStatistics() {
     super.initStatistics();
-    statistics = new Statistics();
+    statistics = new Statistics<>();
   }
 
   @Override

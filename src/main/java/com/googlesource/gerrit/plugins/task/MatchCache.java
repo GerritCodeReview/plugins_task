@@ -29,23 +29,23 @@ public class MatchCache {
     this.predicateCache = predicateCache;
   }
 
-  public Boolean matchOrNull(ChangeData changeData, String query) {
+  public Boolean matchOrNull(ChangeData changeData, String query, boolean isVisible) {
     try {
-      return match(changeData, query);
+      return match(changeData, query, isVisible);
     } catch (StorageException | QueryParseException e) {
     }
     return null;
   }
 
   @SuppressWarnings("try")
-  public boolean match(ChangeData changeData, String query)
+  public boolean match(ChangeData changeData, String query, boolean isVisible)
       throws StorageException, QueryParseException {
     if (query == null || "true".equalsIgnoreCase(query)) {
       return true;
     }
     Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());
     if (isMatched == null) {
-      Matchable<ChangeData> matchable = predicateCache.getPredicate(query).asMatchable();
+      Matchable<ChangeData> matchable = predicateCache.getPredicate(query, isVisible).asMatchable();
       try (StopWatch stopWatch = resultByChangeByQuery.createLoadingStopWatch()) {
         isMatched = matchable.match(changeData);
         resultByChangeByQuery.put(query, changeData.getId(), isMatched);

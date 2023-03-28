@@ -18,7 +18,8 @@ import java.util.Map;
 import java.util.function.Function;
 
 public interface StatisticsMap<K, V> extends Map<K, V>, TracksStatistics {
-  V computeIfAbsentTimed(K key, Function<? super K, ? extends V> mappingFunction);
+  V computeIfAbsentTimed(
+      K key, Function<? super K, ? extends V> mappingFunction, boolean isVisible);
 
-  StopWatch createLoadingStopWatch();
+  StopWatch createLoadingStopWatch(K key, boolean isVisible);
 }
