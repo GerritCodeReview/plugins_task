@@ -15,8 +15,8 @@
 package com.googlesource.gerrit.plugins.task;
 
 /**
- * A TopKeyMap is a lightweight limited size (5) map with 'long' keys designed to store only the
- * elements with the top five largest keys.
+ * A TopKeyMap is a lightweight limited size (default 5) map with 'long' keys designed to store only
+ * the elements with the top five largest keys.
  *
  * <p>A TopKeyMap is array based and has O(n) insertion time. Despite not having O(1) insertion
  * times, it should likely be much faster than a hash based map for small n sizes. It also is more
@@ -55,10 +55,15 @@ public class TopKeyMap<V> {
     }
   }
 
-  @SuppressWarnings("unchecked")
-  protected Entry[] entries = (Entry[]) new Object[5];
+  protected Entry[] entries;
 
   public TopKeyMap() {
+    this(5);
+  }
+
+  @SuppressWarnings("unchecked")
+  public TopKeyMap(int length) {
+    entries = (Entry[]) new Object[length];
     for (int i = 0; i < entries.length; i++) {
       entries[i] = new Entry();
     }
@@ -81,5 +86,9 @@ public class TopKeyMap<V> {
         }
       }
     }
+  }
+
+  public int size() {
+    return entries.length;
   }
 }

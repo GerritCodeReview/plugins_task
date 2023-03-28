@@ -347,10 +347,10 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   public void initStatistics() {
     if (options.includeStatistics) {
       statistics = new Statistics();
-      definitions.predicateCache.initStatistics();
-      definitions.matchCache.initStatistics();
-      definitions.preloader.initStatistics();
-      definitions.initStatistics();
+      definitions.predicateCache.initStatistics(options.summaryCount);
+      definitions.matchCache.initStatistics(options.summaryCount);
+      definitions.preloader.initStatistics(options.summaryCount);
+      definitions.initStatistics(options.summaryCount);
     }
   }
 

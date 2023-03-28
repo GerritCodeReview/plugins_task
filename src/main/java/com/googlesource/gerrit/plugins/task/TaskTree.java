@@ -73,6 +73,7 @@ public class TaskTree {
     public Object definitionsByBranchBySubSectionCache;
     public Object changesByNamesFactoryQueryCache;
     public Properties.Statistics properties;
+    public transient int summaryCount;
   }
 
   protected static final String TASK_DIR = "task";
@@ -504,12 +505,12 @@ public class TaskTree {
           if (filterable.isPresent()) {
             if (!isChange()) {
               if (nodesByBranch == null) {
-                nodesByBranch = new HitHashMapOfCollection<>(statistics != null);
+                nodesByBranch = initStatistics(new HitHashMapOfCollection<>());
               }
               nodesByBranch.put(branch, filterable.get());
             } else {
               if (definitionsByBranch == null) {
-                definitionsByBranch = new HitHashMap<>(statistics != null);
+                definitionsByBranch = initStatistics(new HitHashMap<>());
                 definitionsByBranchBySubSection.put(subSection, definitionsByBranch);
               }
               definitionsByBranch.put(
@@ -611,11 +612,19 @@ public class TaskTree {
     return changeDataList;
   }
 
-  public void initStatistics() {
+  public void initStatistics(int summaryCount) {
     statistics = new Statistics();
-    definitionsBySubSection.initStatistics();
-    definitionsByBranchBySubSection.initStatistics();
-    changesByNamesFactoryQuery.initStatistics();
+    statistics.summaryCount = summaryCount;
+    definitionsBySubSection.initStatistics(summaryCount);
+    definitionsByBranchBySubSection.initStatistics(summaryCount);
+    changesByNamesFactoryQuery.initStatistics(summaryCount);
+  }
+
+  protected <T extends TracksStatistics> T initStatistics(T tracker) {
+    if (statistics != null) {
+      tracker.initStatistics(statistics.summaryCount);
+    }
+    return tracker;
   }
 
   public Statistics getStatistics() {

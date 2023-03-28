@@ -28,7 +28,7 @@ public class HitBooleanTable<R, C> extends BooleanTable<R, C> implements TracksS
     public int numberOfRows;
     public int numberOfColumns;
     public Long sumNanosecondsLoading;
-    public TopKeyMap<V> topNanosecondsLoadingKeys = new TopKeyMap<>();
+    public TopKeyMap<V> topNanosecondsLoadingKeys;
   }
 
   protected Statistics<TopKeyMap.TableKeyValue<R, C>> statistics;
@@ -67,14 +67,15 @@ public class HitBooleanTable<R, C> extends BooleanTable<R, C> implements TracksS
   }
 
   @Override
-  public void initStatistics() {
+  public void initStatistics(int summaryCount) {
     statistics = new Statistics<>();
+    statistics.topNanosecondsLoadingKeys = new TopKeyMap<>(summaryCount);
   }
 
   @Override
-  public void ensureStatistics() {
+  public void ensureStatistics(int summaryCount) {
     if (statistics == null) {
-      initStatistics();
+      initStatistics(summaryCount);
     }
   }
 
