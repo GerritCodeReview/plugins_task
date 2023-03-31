@@ -86,7 +86,7 @@ public class TaskTree {
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
-  protected final HitHashMap<String, List<ChangeData>> changesByNamesFactoryQuery =
+  protected final StatisticsMap<String, List<ChangeData>> changesByNamesFactoryQuery =
       new HitHashMap<>();
   protected final StatisticsMap<SubSectionKey, List<Task>> definitionsBySubSection =
       new HitHashMapOfCollection<>();
@@ -264,7 +264,7 @@ public class TaskTree {
         if (!isChange()) {
           return cachedNodes = nodes;
         }
-        definitionsBySubSection.computeIfAbsent(
+        definitionsBySubSection.computeIfAbsentTimed(
             task.key().subSection(),
             k -> nodes.stream().map(n -> n.getDefinition()).collect(toList()));
       } else {
