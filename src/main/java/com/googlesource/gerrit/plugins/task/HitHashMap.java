@@ -26,7 +26,7 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   public static class Statistics {
     public long hits;
     public int size;
-    public long sumNanosecondsLoading;
+    public Long sumNanosecondsLoading;
     public List<Object> elements;
   }
 
@@ -63,6 +63,19 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   @Override
   @SuppressWarnings("try")
   public V computeIfAbsent(K key, Function<? super K, ? extends V> mappingFunction) {
+    V v = get(key);
+    if (v == null) {
+      v = mappingFunction.apply(key);
+      if (v != null) {
+        put(key, v);
+      }
+    }
+    return v;
+  }
+
+  @Override
+  @SuppressWarnings("try")
+  public V computeIfAbsentTimed(K key, Function<? super K, ? extends V> mappingFunction) {
     V v = get(key);
     if (v == null) {
       try (StopWatch stopWatch = createLoadingStopWatch()) {
@@ -143,6 +156,9 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
   public StopWatch createLoadingStopWatch() {
     if (statistics == null) {
       return StopWatch.DISABLED;
+    }
+    if (statistics.sumNanosecondsLoading == null) {
+      statistics.sumNanosecondsLoading = 0L;
     }
     return new StopWatch.Enabled().setNanosConsumer(ns -> statistics.sumNanosecondsLoading += ns);
   }
