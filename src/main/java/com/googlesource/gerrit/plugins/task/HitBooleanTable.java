@@ -27,7 +27,7 @@ public class HitBooleanTable<R, C> extends BooleanTable<R, C> implements TracksS
     public long size;
     public int numberOfRows;
     public int numberOfColumns;
-    public long sumNanosecondsLoading;
+    public Long sumNanosecondsLoading;
   }
 
   protected Statistics statistics;
@@ -48,6 +48,9 @@ public class HitBooleanTable<R, C> extends BooleanTable<R, C> implements TracksS
   public StopWatch createLoadingStopWatch() {
     if (statistics == null) {
       return new StopWatch.Disabled();
+    }
+    if (statistics.sumNanosecondsLoading == null) {
+      statistics.sumNanosecondsLoading = 0L;
     }
     return new StopWatch.Enabled().setNanosConsumer(ns -> statistics.sumNanosecondsLoading += ns);
   }
