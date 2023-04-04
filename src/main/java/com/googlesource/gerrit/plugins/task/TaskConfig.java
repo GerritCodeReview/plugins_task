@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.common.Container;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
+import com.googlesource.gerrit.plugins.task.util.Copier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;

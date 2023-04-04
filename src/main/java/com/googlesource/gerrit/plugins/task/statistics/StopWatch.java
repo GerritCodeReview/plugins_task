@@ -15,7 +15,7 @@
 package com.googlesource.gerrit.plugins.task.statistics;
 
 import com.google.common.base.Stopwatch;
-import com.googlesource.gerrit.plugins.task.SamTryWrapper;
+import com.googlesource.gerrit.plugins.task.util.SamTryWrapper;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongConsumer;
 

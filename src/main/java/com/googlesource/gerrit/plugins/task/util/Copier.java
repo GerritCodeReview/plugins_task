@@ -12,12 +12,12 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.task;
+package com.googlesource.gerrit.plugins.task.util;
 
 import java.lang.reflect.Field;
 
 public class Copier {
-  protected static <T> void shallowCopyDeclaredFields(
+  public static <T> void shallowCopyDeclaredFields(
       Class<T> cls, T from, T to, boolean includeInaccessible) {
     for (Field field : cls.getDeclaredFields()) {
       try {

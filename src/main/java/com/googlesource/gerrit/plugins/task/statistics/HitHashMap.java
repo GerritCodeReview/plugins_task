@@ -16,7 +16,7 @@ package com.googlesource.gerrit.plugins.task.statistics;
 
 import static java.util.stream.Collectors.toList;
 
-import com.googlesource.gerrit.plugins.task.TopKeyMap;
+import com.googlesource.gerrit.plugins.task.util.TopKeyMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.task;
+package com.googlesource.gerrit.plugins.task.util;
 
 public interface ThrowingProvider<V, E extends Exception> {
   public V get() throws E;
