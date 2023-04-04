@@ -33,6 +33,7 @@ import com.google.gerrit.server.query.change.RegexRefPredicate;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
 import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
+import com.googlesource.gerrit.plugins.task.util.ThrowingProvider;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;

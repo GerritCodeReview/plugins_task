@@ -12,7 +12,7 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.task;
+package com.googlesource.gerrit.plugins.task.util;
 
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;

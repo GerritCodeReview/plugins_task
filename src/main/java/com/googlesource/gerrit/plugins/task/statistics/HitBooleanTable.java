@@ -15,7 +15,7 @@
 package com.googlesource.gerrit.plugins.task.statistics;
 
 import com.google.gerrit.common.BooleanTable;
-import com.googlesource.gerrit.plugins.task.TopKeyMap;
+import com.googlesource.gerrit.plugins.task.util.TopKeyMap;
 
 /**
  * A space efficient Table for Booleans. This Table takes advantage of the fact that the values
