@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task.properties;
 
-import com.googlesource.gerrit.plugins.task.StopWatch;
+import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;

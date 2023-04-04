@@ -19,6 +19,8 @@ import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.index.query.Matchable;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.query.change.ChangeData;
+import com.googlesource.gerrit.plugins.task.statistics.HitBooleanTable;
+import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
 
 public class MatchCache {
   protected final HitBooleanTable<String, Change.Id> resultByChangeByQuery =

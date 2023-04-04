@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.task;
+package com.googlesource.gerrit.plugins.task.statistics;
 
 import com.google.common.base.Stopwatch;
+import com.googlesource.gerrit.plugins.task.SamTryWrapper;
 import java.util.concurrent.TimeUnit;
 import java.util.function.LongConsumer;
 
