@@ -133,6 +133,30 @@
       },
       "revId": "4d7da258e1d7711806c3222b0cb36e84caa6c58e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c67ab66d_3ce824ba",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/StopWatch.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-04-04T23:43:41Z",
+      "side": 1,
+      "message": "\u003e But why take a boolean at all? createEnabled() makes me think it\u0027s going to be an enabled StopWatch. I would at least rename to createIfEnabled(), but it might be better to avoid this method entirely and have the 1 caller [1] do its null check and create the correct instance itself.\n\u003e \n\u003e [1] https://gerrit-review.googlesource.com/c/plugins/task/+/365034/1/src/main/java/com/googlesource/gerrit/plugins/task/properties/Properties.java#90\n\nWe can\u0027t put an \"if\" statement in the try() call, so I don\u0027t see a clean way to do that?",
+      "parentUuid": "f1e18b19_85764179",
+      "range": {
+        "startLine": 96,
+        "startChar": 26,
+        "endLine": 96,
+        "endChar": 39
+      },
+      "revId": "4d7da258e1d7711806c3222b0cb36e84caa6c58e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
