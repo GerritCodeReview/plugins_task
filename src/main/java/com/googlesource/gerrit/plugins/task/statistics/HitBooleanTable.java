@@ -12,9 +12,10 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.task;
+package com.googlesource.gerrit.plugins.task.statistics;
 
 import com.google.gerrit.common.BooleanTable;
+import com.googlesource.gerrit.plugins.task.TopKeyMap;
 
 /**
  * A space efficient Table for Booleans. This Table takes advantage of the fact that the values

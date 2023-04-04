@@ -14,7 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task.properties;
 
-import com.googlesource.gerrit.plugins.task.StopWatch;
+import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
 import java.util.function.Consumer;
 
 /** A handcrafted properties Matcher which has an API similar to an RE Matcher, but is faster. */
