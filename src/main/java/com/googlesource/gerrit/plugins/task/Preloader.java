@@ -17,6 +17,8 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
+import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
+import com.googlesource.gerrit.plugins.task.statistics.StatisticsMap;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.ArrayList;

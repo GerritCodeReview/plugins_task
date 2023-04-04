@@ -12,12 +12,14 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-package com.googlesource.gerrit.plugins.task;
+package com.googlesource.gerrit.plugins.task.statistics;
 
-public interface TracksStatistics {
-  void initStatistics(int summaryCount);
+import java.util.Map;
+import java.util.function.Function;
 
-  void ensureStatistics(int summaryCount);
+public interface StatisticsMap<K, V> extends Map<K, V>, TracksStatistics {
+  V computeIfAbsentTimed(
+      K key, Function<? super K, ? extends V> mappingFunction, boolean isVisible);
 
-  Object getStatistics();
+  StopWatch createLoadingStopWatch(K key, boolean isVisible);
 }
