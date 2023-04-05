@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "074cc091_1ef0cb97",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/StopWatch.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-04-05T22:01:27Z",
+      "side": 1,
+      "message": "nit: protected?",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 10
+      },
+      "revId": "ff596ff7a25ea337bab75db43facaf1a07193f8b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
