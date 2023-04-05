@@ -22,6 +22,30 @@
       },
       "revId": "ff596ff7a25ea337bab75db43facaf1a07193f8b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d105ca31_94a190ba",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/StopWatch.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-04-05T22:05:19Z",
+      "side": 1,
+      "message": "Should have been final.\n\nDo you still think it should not be public? What about BUILDER and DISABLED below? (I could go either way)",
+      "parentUuid": "074cc091_1ef0cb97",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 10
+      },
+      "revId": "ff596ff7a25ea337bab75db43facaf1a07193f8b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
