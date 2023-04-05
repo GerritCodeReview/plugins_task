@@ -46,6 +46,30 @@
       },
       "revId": "ff596ff7a25ea337bab75db43facaf1a07193f8b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "50a96c71_16278259",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/StopWatch.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 102,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-04-05T22:16:58Z",
+      "side": 1,
+      "message": "I think since the Builder.Enabled class is protected, this should be protected too. Since BUILDER and DISABLED are both only intended to be used within this file, I\u0027d say protected for both too.",
+      "parentUuid": "d105ca31_94a190ba",
+      "range": {
+        "startLine": 102,
+        "startChar": 4,
+        "endLine": 102,
+        "endChar": 10
+      },
+      "revId": "ff596ff7a25ea337bab75db43facaf1a07193f8b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
