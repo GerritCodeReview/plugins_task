@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2e63ba25_db18be10",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/HitHashMap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-04-05T23:52:58Z",
+      "side": 1,
+      "message": "Should this method look more like the code in Properties now?\n\n```suggestion\n  public StopWatch createLoadingStopWatch() {\n    return StopWatch.builder().enabled(statistics !\u003d null).build()\n      .setNanosConsumer(ns -\u003e statistics.sumNanosecondsLoading +\u003d ns);\n  }\n```",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 3
+      },
+      "revId": "b275949d33be32a7b7ffde33213ceaeadb42f06e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
