@@ -159,6 +159,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97f0a893_66196439",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/StopWatch.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-04-05T20:28:14Z",
+      "side": 1,
+      "message": "Used Builder solution for clarity.",
+      "parentUuid": "c67ab66d_3ce824ba",
+      "range": {
+        "startLine": 96,
+        "startChar": 26,
+        "endLine": 96,
+        "endChar": 39
+      },
+      "revId": "4d7da258e1d7711806c3222b0cb36e84caa6c58e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "772fb04c_d0df217b",
@@ -172,6 +196,30 @@
       "writtenOn": "2023-04-05T17:53:06Z",
       "side": 1,
       "message": "```suggestion\n    try (StopWatch stopWatch \u003d\n        StopWatch.builder().setEnabled(statistics !\u003d null).build()\n          .setNanosConsumer(l -\u003e Statistics.setNanoseconds(statistics, l))) {\n```",
+      "range": {
+        "startLine": 89,
+        "startChar": 0,
+        "endLine": 91,
+        "endChar": 79
+      },
+      "revId": "4d7da258e1d7711806c3222b0cb36e84caa6c58e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4333931_2e344311",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/Properties.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 91,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-04-05T20:28:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "772fb04c_d0df217b",
       "range": {
         "startLine": 89,
         "startChar": 0,
