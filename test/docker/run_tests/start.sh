@@ -37,6 +37,13 @@ UNTRUSTED_USER="untrusted_user"
 
 echo "Running Task plugin tests ..."
 
-cd "$USER_RUN_TESTS_DIR"/../../ && ./check_task_statuses.sh \
+RESULT=0
+
+"$USER_RUN_TESTS_DIR"/../../check_task_statuses.sh \
     --server "$GERRIT_HOST" --non-secret-user "$NON_SECRET_USER" \
-    --untrusted-user "$UNTRUSTED_USER"
+    --untrusted-user "$UNTRUSTED_USER" || RESULT=1
+
+"$USER_RUN_TESTS_DIR"/../../check_task_visibility.sh --server "$GERRIT_HOST" \
+    --non-secret-user "$NON_SECRET_USER" || RESULT=1
+
+exit $RESULT
