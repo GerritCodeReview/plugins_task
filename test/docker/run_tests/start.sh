@@ -28,4 +28,9 @@ is_plugin_loaded "task" || die "Task plugin is not installed"
 ./"$USER_RUN_TESTS_DIR"/update-all-users-project.sh
 
 echo "Running Task plugin tests ..."
-cd "$USER_RUN_TESTS_DIR"/../../ && ./check_task_statuses.sh "$GERRIT_HOST"
+untrusted_user="untrusted_user"
+ssh -p 29418 "$GERRIT_HOST" gerrit create-account "$untrusted_user" --full-name "$untrusted_user" \
+      --email "$untrusted_user"@example.com --ssh-key - < ~/.ssh/id_rsa.pub
+
+cd "$USER_RUN_TESTS_DIR"/../../ && ./check_task_statuses.sh \
+    --server "$GERRIT_HOST" --untrusted-user "$untrusted_user"

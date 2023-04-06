@@ -292,22 +292,28 @@
    "status" : "WAITING",
    "subTasks" : [
       {
-         "applicable" : true,
-         "hasPass" : true,
-         "name" : "userfile task/special.config PASS",
-         "status" : "PASS"
+         "applicable" : true,                              # Only Test Suite: !untrusted
+         "hasPass" : true,                                 # Only Test Suite: !untrusted
+         "name" : "userfile task/special.config PASS",     # Only Test Suite: !untrusted
+         "status" : "PASS"                                 # Only Test Suite: !untrusted
+         "name" : "UNKNOWN",                               # Only Test Suite: untrusted
+         "status" : "UNKNOWN"                              # Only Test Suite: untrusted
       },
       {
-         "applicable" : true,
-         "hasPass" : true,
-         "name" : "userfile task/special.config FAIL",
-         "status" : "FAIL"
+         "applicable" : true,                              # Only Test Suite: !untrusted
+         "hasPass" : true,                                 # Only Test Suite: !untrusted
+         "name" : "userfile task/special.config FAIL",     # Only Test Suite: !untrusted
+         "status" : "FAIL"                                 # Only Test Suite: !untrusted
+         "name" : "UNKNOWN",                               # Only Test Suite: untrusted
+         "status" : "UNKNOWN"                              # Only Test Suite: untrusted
       },
       {
-         "applicable" : true,
-         "hasPass" : true,
-         "name" : "file task/common.config Preload PASS",
-         "status" : "PASS"
+         "applicable" : true,                              # Only Test Suite: !untrusted
+         "hasPass" : true,                                 # Only Test Suite: !untrusted
+         "name" : "file task/common.config Preload PASS",  # Only Test Suite: !untrusted
+         "status" : "PASS"                                 # Only Test Suite: !untrusted
+         "name" : "UNKNOWN",                               # Only Test Suite: untrusted
+         "status" : "UNKNOWN"                              # Only Test Suite: untrusted
       }
    ]
 }

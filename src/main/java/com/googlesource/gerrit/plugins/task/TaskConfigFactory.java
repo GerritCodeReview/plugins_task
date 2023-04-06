@@ -88,7 +88,7 @@ public class TaskConfigFactory {
     boolean visible = true; // invisible psas are filtered out by commandline
     boolean isMasqueraded = false;
     if (psa == null) {
-      visible = canRead(branch);
+      visible = isVisible(branch);
     } else {
       isMasqueraded = true;
       branch = BranchNameKey.create(psa.change.getProject(), psa.patchSet.refName());
@@ -110,7 +110,7 @@ public class TaskConfigFactory {
     return cfg;
   }
 
-  public boolean canRead(BranchNameKey branch) {
+  public boolean isVisible(BranchNameKey branch) {
     try {
       PermissionBackend.ForProject permissions =
           permissionBackend.user(user).project(branch.project());
