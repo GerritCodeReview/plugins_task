@@ -30,6 +30,11 @@ setup_all_projects_repo() {
           --add access."refs/meta/config".read "group Visible-All-Projects-Config"
       git config -f "project.config" \
           --add capability.viewTaskPaths "group Administrators"
+#     After migrating to version 3.5, it is no longer feasible to assign read permissions to
+#     Administrators for another user's ref. To address this, add the 'accessDatabase' capability,
+#     allowing admins to read the user ref of other users
+      git config -f "project.config" \
+                --add capability.accessDatabase "group Administrators"
       q git add . && q git commit -m "project config update"
       q git push origin HEAD:refs/meta/config
     )
