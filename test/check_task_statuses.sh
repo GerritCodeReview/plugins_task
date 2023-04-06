@@ -17,6 +17,16 @@
 # Usage:
 # All-Projects.git - must have 'Push' rights on refs/meta/config
 
+create_configs_from_task_states() {
+    for marker in $(md_file_markers "$DOC_STATES") ; do
+        local project="$OUT/$(md_file_marker_project "$marker")"
+        local file="$(md_file_marker_file "$marker")"
+
+        mkdir -p "$(dirname "$project/$file")"
+        md_marker_content "$DOC_STATES" "$marker" | replace_user | testdoc_2_cfg > "$project/$file"
+    done
+}
+
 test_2generated() { # name task_args...
     local name=$1 ; shift
     local out=$(query "$@")
@@ -50,6 +60,7 @@ MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 MYPROG=$(basename -- "$0")
 
 source "$MYDIR/lib/lib_helper.sh"
+source "$MYDIR/lib/lib_md.sh"
 
 DOCS=$MYDIR/.././src/main/resources/Documentation/test
 OUT=$MYDIR/../target/tests
@@ -65,9 +76,6 @@ EXPECTED=$OUT/expected
 ACTUAL=$OUT/actual
 
 ROOT_CFG=$ALL/task.config
-COMMON_CFG=$ALL_TASKS/common.config
-INVALIDS_CFG=$ALL_TASKS/invalids.config
-USER_SPECIAL_CFG=$USER_TASKS/special.config
 
 # --- Args ----
 
@@ -108,10 +116,7 @@ set_change "$(echo "$changes" | awk 'NR==1')" ; CHANGE1=("${CHANGE[@]}")
 set_change "$(echo "$changes" | awk 'NR==2')" ; CHANGE2=("${CHANGE[@]}")
 DOC_STATES=$(replace_default_changes < "$DOCS/task_states.md")
 
-example 2 | replace_user | testdoc_2_cfg > "$ROOT_CFG"
-example 3 > "$COMMON_CFG"
-example 4 > "$INVALIDS_CFG"
-example 5 > "$USER_SPECIAL_CFG"
+create_configs_from_task_states
 
 ROOTS=$(config_section_keys "root") || err "Invalid ROOTS"
 
