@@ -22,6 +22,30 @@
       },
       "revId": "b275949d33be32a7b7ffde33213ceaeadb42f06e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fe1e8bc7_abe193cd",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/HitHashMap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 148,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-04-06T02:45:38Z",
+      "side": 1,
+      "message": "I thought about that, but if you look to this change https://gerrit-review.googlesource.com/c/plugins/task/+/367934/2/src/main/java/com/googlesource/gerrit/plugins/task/HitHashMap.java it would just get undone again. :(",
+      "parentUuid": "2e63ba25_db18be10",
+      "range": {
+        "startLine": 143,
+        "startChar": 0,
+        "endLine": 148,
+        "endChar": 3
+      },
+      "revId": "b275949d33be32a7b7ffde33213ceaeadb42f06e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
