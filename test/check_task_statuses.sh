@@ -17,6 +17,16 @@
 # Usage:
 # All-Projects.git - must have 'Push' rights on refs/meta/config
 
+create_configs_from_task_states() {
+    for marker in $(md_file_markers "$DOC_STATES") ; do
+        local project="$OUT/$(md_file_marker_project "$marker")"
+        local file="$(md_file_marker_file "$marker")"
+
+        mkdir -p "$(dirname "$project/$file")"
+        md_marker_content "$DOC_STATES" "$marker" | replace_user | testdoc_2_cfg > "$project/$file"
+    done
+}
+
 test_2generated() { # name task_args...
     local name=$1 ; shift
     local out=$(query "$@")
@@ -53,6 +63,7 @@ MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 MYPROG=$(basename -- "$0")
 
 source "$MYDIR/lib/lib_helper.sh"
+source "$MYDIR/lib/lib_md.sh"
 
 DOCS=$MYDIR/.././src/main/resources/Documentation/test
 OUT=$MYDIR/../target/tests
@@ -67,10 +78,6 @@ EXPECTED=$OUT/expected
 ACTUAL=$OUT/actual
 
 ROOT_CFG=$ALL/task.config
-COMMON_CFG=$ALL_TASKS/common.config
-USER_COMMON_CFG=$USER_TASKS/common.config
-INVALIDS_CFG=$ALL_TASKS/invalids.config
-USER_SPECIAL_CFG=$USER_TASKS/special.config
 
 # --- Args ----
 
@@ -120,11 +127,7 @@ DOC_STATES=$(replace_tokens < "$DOCS/task_states.md")
 DOC_PREVIEW=$(replace_tokens < "$DOCS/preview.md")
 DOC_PATHS=$(replace_tokens < "$DOCS/paths.md")
 
-example "$DOC_STATES" 2 | testdoc_2_cfg > "$ROOT_CFG"
-example "$DOC_STATES" 3 > "$COMMON_CFG"
-example "$DOC_STATES" 3 > "$USER_COMMON_CFG"
-example "$DOC_STATES" 4 > "$INVALIDS_CFG"
-example "$DOC_STATES" 5 > "$USER_SPECIAL_CFG"
+create_configs_from_task_states
 
 ROOTS=$(config_section_keys "root") || err "Invalid ROOTS"
 

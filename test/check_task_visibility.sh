@@ -19,6 +19,7 @@ MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 MYPROG=$(basename -- "$0")
 
 source "$MYDIR/lib/lib_helper.sh"
+source "$MYDIR/lib/lib_md.sh"
 
 # Visibility tests cases are described using a markdown file.
 # Each file has a list of config files specified by file
@@ -32,89 +33,6 @@ source "$MYDIR/lib/lib_helper.sh"
 # All lines start with a leading space and if a specific line is
 # part of diff, we use diff indicators (+/-) instead of a leading
 # space.
-
-# Example markdown file:
-# (Using block comment to better understand the file syntax.)
-
-: <<'END'
-# Test case description header
-
-file: `All-Projects.git:refs/meta/config:task.config`
-```
-[root "Test root"]
-    applicable = "is:open"
-    pass = True
-```
-
-file: `All-Users:refs/users/some_ref:task/sample.config`
-```
- [task "NON-SECRET task"]
-     applicable = is:open
-     pass = Fail
-+    subtasks-external = SECRET
-
-+[external "SECRET"]
-+    user = {secret_user}
-+    file = secret.config
-```
-
-json:
-```
-{
-   {
-     "some": "example"
-   }
-}
-END
-
-# (For example above)
-# out:
-# `All-Projects.git:refs/meta/config:task.config`
-# `All-Users:refs/users/some_ref:task/sample.config`
-get_file_markers() {
-    echo "$TEST_DOC" | grep -o "^file: .*" | cut -f2 -d'`'
-}
-
-# (For example above)
-# in: `All-Projects.git:refs/meta/config:task.config`
-# out:
-#[root "Test root"]
-#    applicable = "is:open"
-#    pass = True
-#
-# in: json:
-# out :
-# {
-#    {
-#      "some": "example"
-#    }
-# }
-get_marker_content() { # marker
-    local start_line=$(echo "$TEST_DOC" | grep -n "$1" | cut -f1 -d':')
-    echo "$TEST_DOC" | tail -n+"$start_line" | \
-        sed '1,/```/d;/```/,$d' | grep -v '```'
-}
-
-# file_marker > project
-# in: `All-Projects.git:refs/meta/config:task/task.config`
-# out: All-Projects.git
-get_project_from_marker() {
-    echo "$WORKSPACE_DIR/$(echo "$1" | cut -f1 -d':')"
-}
-
-# file_marker > ref
-# in: `All-Projects.git:refs/meta/config:task/task.config`
-# out: refs/meta/config
-get_ref_from_marker() {
-    echo "$1" | cut -f2 -d':'
-}
-
-# file_marker > file
-# in: `All-Projects.git:refs/meta/config:task/task.config`
-#out: task/task.config
-get_file_from_marker() {
-    echo "$1" | cut -f3 -d':'
-}
 
 # Example input for all diff functions:
 #
@@ -169,7 +87,7 @@ get_remote() { # project > remote_url
 # Gets json from the preview doc and creates
 # expected json in workspace to assert later.
 create_expected_json() {
-    local json=$(get_marker_content "json:")
+    local json=$(md_marker_content "$TEST_DOC" "json:")
 
     echo "$json" | remove_suites "non-secret" | \
       testdoc_2_pjson | ensure json_pp > "$EXPECTED_SECRET"
@@ -191,11 +109,11 @@ test_preview() { # preview_change_number
 }
 
 init_configs() {
-    for marker in $(get_file_markers) ; do
-        local project="$(get_project_from_marker "$marker")"
-        local ref="$(get_ref_from_marker "$marker")"
-        local file="$(get_file_from_marker "$marker")"
-        local content="$(get_marker_content "$marker")"
+    for marker in $(md_file_markers "$TEST_DOC") ; do
+        local project="$OUT/$(md_file_marker_project "$marker")"
+        local ref="$(md_file_marker_ref "$marker")"
+        local file="$(md_file_marker_file "$marker")"
+        local content="$(md_marker_content "$TEST_DOC" "$marker")"
         local tip_content
 
         q_setup setup_repo "$project" "$(get_remote "$project")" "$ref"
@@ -216,9 +134,9 @@ init_configs() {
 }
 
 test_change() {
-    local project="$(get_project_from_marker "$CHANGE_FILE_MARKER")"
-    local ref="$(get_ref_from_marker "$CHANGE_FILE_MARKER")"
-    local file="$(get_file_from_marker "$CHANGE_FILE_MARKER")"
+    local project="$OUT/$(md_file_marker_project "$CHANGE_FILE_MARKER")"
+    local ref="$(md_file_marker_ref "$CHANGE_FILE_MARKER")"
+    local file="$(md_file_marker_file "$CHANGE_FILE_MARKER")"
     q_setup setup_repo "$project" "$(get_remote "$project")" "$ref"
 
     echo "$CHANGE_CONTENT"  > "$project/$file"
@@ -260,11 +178,11 @@ done
 RESULT=0
 PORT=29418
 HTTP_PORT=8080
-WORKSPACE_DIR=$MYDIR/../target/preview
-EXPECTED_SECRET="$WORKSPACE_DIR/expected-secret"
-EXPECTED_NON_SECRET="$WORKSPACE_DIR/expected-non-secret"
-ACTUAL_SECRET="$WORKSPACE_DIR/actual-secret"
-ACTUAL_NON_SECRET="$WORKSPACE_DIR/actual-non-secret"
+OUT=$MYDIR/../target/preview
+EXPECTED_SECRET="$OUT/expected-secret"
+EXPECTED_NON_SECRET="$OUT/expected-non-secret"
+ACTUAL_SECRET="$OUT/actual-secret"
+ACTUAL_NON_SECRET="$OUT/actual-non-secret"
 TEST_DOC_DIR="$MYDIR/../src/main/resources/Documentation/test/task-preview/"
 
 declare -A USERS
@@ -274,8 +192,8 @@ USER_REFS["{secret_user_ref}"]="$(get_user_ref "$USER")"
 USERS["{non_secret_user}"]="$NON_SECRET_USER"
 USER_REFS["{non_secret_user_ref}"]="$(get_user_ref "$NON_SECRET_USER")"
 
-mkdir -p "$WORKSPACE_DIR"
-trap 'rm -rf "$WORKSPACE_DIR"' EXIT
+mkdir -p "$OUT"
+trap 'rm -rf "$OUT"' EXIT
 
 TESTS=(
 "new_root_with_original_with_external_secret_ref.md"
