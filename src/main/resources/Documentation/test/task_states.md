@@ -17,6 +17,7 @@ output for task config when running the following:
 The config below is expected to be in the `task.config` file in project
 `All-Projects` on ref `refs/meta/config`.
 
+file: `All-Projects:refs/meta/config:task.config`
 ```
 [root "Root N/A"]
   applicable = is:closed # Assumes test query is "is:open"
@@ -2733,8 +2734,7 @@ The config below is expected to be in the `task.config` file in project
 
 ```
 
-`task/common.config` file in project `All-Projects` on ref `refs/meta/config`.
-
+file: `All-Projects:refs/meta/config:task/common.config`
 ```
 [task "file task/common.config PASS"]
   applicable = is:open
@@ -2745,8 +2745,7 @@ The config below is expected to be in the `task.config` file in project
   fail = is:open
 ```
 
-`task/invalids.config` file in project `All-Projects` on ref `refs/meta/config`.
-
+file: `All-Projects:refs/meta/config:task/invalids.config`
 ```
 [task "No PASS criteria"]
   fail-hint = Invalid without Pass criteria and without subtasks
@@ -2907,8 +2906,7 @@ The config below is expected to be in the `task.config` file in project
 
 ```
 
-`task/special.config` file in project `All-Users` on ref `refs/users/self`.
-
+file: `All-Users:refs/meta/config:task/special.config`
 ```
 [task "userfile task/special.config PASS"]
   applicable = is:open
@@ -2920,4 +2918,15 @@ The config below is expected to be in the `task.config` file in project
 
 [task "file task/common.config Preload PASS"]
   preload-task = userfile task/special.config PASS
+```
+
+file: `All-Users:refs/users/self:task/common.config`
+```
+[task "file task/common.config PASS"]
+  applicable = is:open
+  pass = is:open
+
+[task "file task/common.config FAIL"]
+  applicable = is:open
+  fail = is:open
 ```
