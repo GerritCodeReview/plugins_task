@@ -199,7 +199,9 @@ TESTS=(
 "new_root_with_original_with_external_secret_ref.md"
 "non-secret_ref_with_external_secret_ref.md"
 "root_with_external_non-secret_ref_with_external_secret_ref.md"
-"root_with_external_secret_ref.md")
+"root_with_external_secret_ref.md"
+"non_root_with_subtask_from_root_task.md"
+)
 
 for test in "${TESTS[@]}" ; do
     TEST_DOC="$(replace_user_refs < "$TEST_DOC_DIR/$test" | replace_users)"

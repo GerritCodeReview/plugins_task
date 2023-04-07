@@ -166,8 +166,8 @@ in the preload-task will be loaded first, and will be overridden by attributes
 from the current task if they redefined in the current task. Attributes
 which are lists (such as subtasks) or maps (such as properties), will be
 preloaded by the preload-task and then extended with the attributes from the
-current task. See [Optional Tasks](#optional_tasks) for how to define optional
-preload-tasks.
+current task. See [Task Expression](task_expression.html) for how to define
+optional preload-tasks.
 
 Example:
 ```
@@ -178,8 +178,8 @@ Example:
 
 : This key lists the name of a subtask of the current task. This key may be
 used several times in a task section to define more than one subtask for a
-particular task. See [Optional Tasks](#optional_tasks) for how to define
-optional subtasks.
+particular task. See [Task Expression](task_expression.html) for how to define
+subtasks.
 
 Example:
 
@@ -323,26 +323,6 @@ Subtasks are defined using a "task" section. An example subtask definition:
     fail = label:code-review-2
 ```
 
-<a id="optional_tasks"/>
-Optional Tasks
---------------
-To define a task that may not exist and that will not cause the task referencing
-it to be INVALID, follow the task name with pipe (`|`) character. This feature
-is particularly useful when a property is used in the task name.
-
-```
-    preload-task = Optional Subtask {$_name} |
-```
-
-To define an alternate task to load when an optional task does not exist,
-list the alterante task name after the pipe (`|`) character. This feature
-may be chained together as many times as needed.
-
-```
-    subtask = Optional Subtask {$_name} |
-              Backup Optional Subtask {$_name} Backup |
-              Default Subtask # Must exist if the above two don't!
-```
 Tasks-Factory
 -------------
 A tasks-factory section supports all the keys supported by task sections.  In
