@@ -316,11 +316,14 @@ usage() { # [error_message]
     cat <<-EOF
 Usage:
     "$MYPROG" --server <gerrit_host> --non-secret-user <non-secret user>
+    --untrusted-user <untrusted user>
 
     --help|-h                     help text
     --server|-s                   gerrit host
     --non-secret-user             user who don't have permission
                                   to view other user refs.
+    --untrusted-user              user who doesn't have permission
+                                  to view refs/meta/config ref on All-Projects repo
 EOF
 
     [ -n "$1" ] && { echo "Error: $1" ; exit 1 ; }
@@ -355,6 +358,7 @@ while (( "$#" )) ; do
         --help|-h)                usage ;;
         --server|-s)              shift ; SERVER=$1 ;;
         --non-secret-user)        shift ; NON_SECRET_USER=$1 ;;
+        --untrusted-user)         shift ; UNTRUSTED_USER=$1 ;;
         *)                        usage "invalid argument $1" ;;
     esac
     shift
@@ -362,6 +366,7 @@ done
 
 [ -z "$SERVER" ] && usage "You must specify --server"
 [ -z "$NON_SECRET_USER" ] && usage "You must specify --non-secret-user"
+[ -z "$UNTRUSTED_USER" ] && usage "You must specify --untrusted-user"
 
 
 PORT=29418
@@ -423,17 +428,26 @@ all2_pjson=$(echo "$ex2_pjson" | \
         "NEW" \
         "")
 
-no_all_json=$(echo "$all_pjson" | remove_suites all)
-no_all2_json=$(echo "$all2_pjson" | remove_suites all)
+no_all_visible_json=$(echo "$all_pjson" | remove_suites "all" "!visible")
+no_all_no_visible_json=$(echo "$all_pjson" | remove_suites "all" "visible")
+no_all_visible2_json=$(echo "$all2_pjson" | remove_suites "all" "!visible")
+no_all_no_visible2_json=$(echo "$all2_pjson" | remove_suites "all" "visible")
 
-echo "$no_all_json" | strip_non_applicable | \
+echo "$no_all_visible_json" | strip_non_applicable | \
     grep -v "\"applicable\" :" > "$EXPECTED".applicable
-echo "$no_all2_json" | strip_non_applicable | \
+
+echo "$no_all_no_visible_json" | strip_non_applicable | \
+    grep -v "\"applicable\" :" > "$EXPECTED".applicable-visibility
+
+echo "$no_all_visible2_json" | strip_non_applicable | \
     grep -v "\"applicable\" :" > "$EXPECTED".applicable2
 
-echo "$all_pjson" | remove_not_suite all | ensure json_pp > "$EXPECTED".all
+echo "$no_all_no_visible2_json" | strip_non_applicable | \
+    grep -v "\"applicable\" :" > "$EXPECTED".applicable-visibility2
 
-echo "$no_all_json" | strip_non_invalid > "$EXPECTED".invalid
+echo "$all_pjson" | remove_suites "!all" "!visible" | ensure json_pp > "$EXPECTED".all
+
+echo "$no_all_visible_json" | strip_non_invalid > "$EXPECTED".invalid
 
 strip_non_invalid < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
 
@@ -454,6 +468,7 @@ PREVIEW_ROOTS=$(config_section_keys "root")
 RESULT=0
 query="(change:$change3_number OR change:$change4_number) status:open"
 test_2generated applicable --task--applicable "$query"
+test_2generated applicable-visibility -l "$UNTRUSTED_USER" --task--applicable "$query"
 test_generated all --task--all "$query"
 
 test_generated invalid --task--invalid "$query"
