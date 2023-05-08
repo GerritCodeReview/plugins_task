@@ -16,9 +16,3 @@ git config -f "project.config" \
 echo -e "global:Registered-Users\tRegistered Users" >> groups
 echo -e "global:Anonymous-Users\tAnonymous Users" >> groups
 git add . && git commit -m "project config update" && git push origin HEAD:refs/meta/config
-
-echo "Modifying All-Projects project ..."
-cd "$WORKSPACE" && git clone ssh://"$GERRIT_HOST":29418/All-Projects allProjects && cd allProjects
-git fetch origin refs/meta/config && git checkout FETCH_HEAD
-git config -f "project.config" --add access."refs/meta/config".read "group Registered Users"
-git add . && git commit -m "project config update" && git push origin HEAD:refs/meta/config
