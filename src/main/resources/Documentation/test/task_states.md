@@ -2278,6 +2278,11 @@ The config below is expected to be in the `task.config` file in project
          ]
       },
       {
+         "name" : "Bad APPLICABLE query",    # Only Test Suite: visible
+         "name" : "UNKNOWN",                 # Only Test Suite: !visible
+         "status" : "INVALID"
+      },
+      {
          "applicable" : false,
          "hasPass" : true,
          "name" : "NA Bad PASS query",
@@ -2569,6 +2574,11 @@ The config below is expected to be in the `task.config` file in project
          ]
       },
       {
+         "name" : "Bad APPLICABLE query",    # Only Test Suite: visible
+         "name" : "UNKNOWN",                 # Only Test Suite: !visible
+         "status" : "INVALID"
+      },
+      {
          "applicable" : false,
          "hasPass" : true,
          "name" : "NA Bad PASS query",
@@ -2768,6 +2778,10 @@ The config below is expected to be in the `task.config` file in project
 [task "Subtask Blank"]
   pass = True
   subtask =
+
+[task "Bad APPLICABLE query"]
+  applicable = bad:query
+  fail = True
 
 [task "NA Bad PASS query"]
   applicable = NOT is:open # Assumes test query is "is:open"

@@ -114,6 +114,10 @@
          ]
       },
       {
+         "name" : "Bad APPLICABLE query",
+         "status" : "INVALID"
+      },
+      {
          "applicable" : false,
          "hasPass" : true,
          "name" : "NA Bad PASS query",
@@ -468,6 +472,10 @@
                "status" : "INVALID"
             }
          ]
+      },
+      {
+         "name" : "Bad APPLICABLE query",
+         "status" : "INVALID"
       },
       {
          "applicable" : false,
