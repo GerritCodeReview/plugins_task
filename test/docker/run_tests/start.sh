@@ -25,9 +25,12 @@ cat "$USER_HOME"/.ssh/id_rsa.pub | ssh -p 29418 -i /server-ssh-key/ssh_host_rsa_
 is_plugin_loaded "task" || die "Task plugin is not installed"
 
 NON_SECRET_USER="non_secret_user"
-"$USER_RUN_TESTS_DIR"/create-one-time-test-data.sh --non-secret-user "$NON_SECRET_USER"
+UNTRUSTED_USER="untrusted_user"
+"$USER_RUN_TESTS_DIR"/create-one-time-test-data.sh --non-secret-user "$NON_SECRET_USER" \
+    --untrusted-user "$UNTRUSTED_USER"
 
 echo "Running Task plugin tests ..."
 
 cd "$USER_RUN_TESTS_DIR"/../../ && ./check_task_statuses.sh \
-    --server "$GERRIT_HOST" --non-secret-user "$NON_SECRET_USER"
+    --server "$GERRIT_HOST" --non-secret-user "$NON_SECRET_USER" \
+    --untrusted-user "$UNTRUSTED_USER"

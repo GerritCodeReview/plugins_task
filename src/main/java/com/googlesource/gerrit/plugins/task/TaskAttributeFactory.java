@@ -174,7 +174,12 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
           attribute.evaluationMilliSeconds = millis();
         }
 
-        boolean applicable = node.match(task.applicable);
+        boolean applicable;
+        try {
+          applicable = node.match(task.applicable);
+        } catch (QueryParseException e) {
+          return Optional.of(invalid());
+        }
         if (!task.isVisible) {
           if (!node.isTrusted() || (!applicable && !options.onlyApplicable)) {
             return Optional.of(unknown());
@@ -218,10 +223,18 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
             }
           }
         }
-      } catch (IOException | QueryParseException | RuntimeException e) {
+      } catch (IOException | RuntimeException e) {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
+    }
+
+    protected TaskAttribute invalid() {
+      TaskAttribute invalid = TaskAttributeFactory.invalid();
+      if (task.isVisible) {
+        invalid.name = task.name();
+      }
+      return invalid;
     }
 
     public void addStatistics(TaskAttribute.Statistics statistics) {
@@ -316,7 +329,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       for (Node subNode :
           options.onlyApplicable ? node.getApplicableSubNodes() : node.getSubNodes()) {
         if (subNode instanceof Node.Invalid) {
-          subTasks.add(invalid());
+          subTasks.add(TaskAttributeFactory.invalid());
         } else {
           new AttributeFactory(subNode).create().ifPresent(t -> subTasks.add(t));
         }
