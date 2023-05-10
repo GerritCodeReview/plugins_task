@@ -315,11 +315,11 @@ test_generated() { # name [-l query_user] task_args...
 usage() { # [error_message]
     cat <<-EOF
 Usage:
-    "$MYPROG" --server <gerrit_host> --untrusted-user <untrusted user>
+    "$MYPROG" --server <gerrit_host> --non-secret-user <non-secret user>
 
     --help|-h                     help text
     --server|-s                   gerrit host
-    --untrusted-user              user who don't have permission
+    --non-secret-user             user who don't have permission
                                   to view other user refs.
 EOF
 
@@ -354,14 +354,14 @@ while (( "$#" )) ; do
     case "$1" in
         --help|-h)                usage ;;
         --server|-s)              shift ; SERVER=$1 ;;
-        --untrusted-user)         shift ; UNTRUSTED_USER=$1 ;;
+        --non-secret-user)        shift ; NON_SECRET_USER=$1 ;;
         *)                        usage "invalid argument $1" ;;
     esac
     shift
 done
 
 [ -z "$SERVER" ] && usage "You must specify --server"
-[ -z "$UNTRUSTED_USER" ] && usage "You must specify --untrusted-user"
+[ -z "$NON_SECRET_USER" ] && usage "You must specify --non-secret-user"
 
 
 PORT=29418
@@ -439,11 +439,11 @@ strip_non_invalid < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
 
 
 preview_pjson=$(testdoc_2_pjson < "$DOC_PREVIEW" | replace_default_changes)
-echo "$preview_pjson" | remove_suites "invalid" "!untrusted" | \
-    ensure json_pp > "$EXPECTED".preview-untrusted
-echo "$preview_pjson" | remove_suites "invalid" "untrusted" | \
+echo "$preview_pjson" | remove_suites "invalid" "secret" | \
+    ensure json_pp > "$EXPECTED".preview-non-secret
+echo "$preview_pjson" | remove_suites "invalid" "!secret" | \
     ensure json_pp > "$EXPECTED".preview-admin
-echo "$preview_pjson" | remove_suites "!untrusted" "!invalid" | \
+echo "$preview_pjson" | remove_suites "secret" "!invalid" | \
     strip_non_invalid > "$EXPECTED".preview-invalid
 
 testdoc_2_cfg < "$DOC_PREVIEW" | replace_user > "$ROOT_CFG"
@@ -461,7 +461,7 @@ test_generated invalid-applicable --task--applicable --task--invalid "$query"
 
 ROOTS=$PREVIEW_ROOTS
 test_generated preview-admin --task--preview "$cnum,1" --task--all "$query"
-test_generated preview-untrusted -l "$UNTRUSTED_USER" --task--preview "$cnum,1" --task--all "$query"
+test_generated preview-non-secret -l "$NON_SECRET_USER" --task--preview "$cnum,1" --task--all "$query"
 test_generated preview-invalid --task--preview "$cnum,1" --task--invalid "$query"
 
 exit $RESULT
