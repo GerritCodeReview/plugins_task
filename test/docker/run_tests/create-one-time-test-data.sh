@@ -8,8 +8,8 @@ gssh() { ssh -x -p "$SSH_PORT" "$GERRIT_HOST" gerrit "$@" ; } # run a gerrit ssh
 
 create_test_user() {
     echo "Creating test user ..."
-    gssh create-account "$UNTRUSTED_USER" --full-name "$UNTRUSTED_USER" \
-       --email "$UNTRUSTED_USER"@example.com --ssh-key - < ~/.ssh/id_rsa.pub
+    gssh create-account "$NON_SECRET_USER" --full-name "$NON_SECRET_USER" \
+       --email "$NON_SECRET_USER"@example.com --ssh-key - < ~/.ssh/id_rsa.pub
 }
 
 setup_all_projects_repo() {
@@ -30,13 +30,13 @@ SSH_PORT=29418
 USER_RUN_TESTS_DIR="$USER_HOME"/"$RUN_TESTS_DIR"
 while (( "$#" )) ; do
    case "$1" in
-       --untrusted-user)                shift ; UNTRUSTED_USER="$1" ;;
+       --non-secret-user)               shift ; NON_SECRET_USER="$1" ;;
        *)                               die "invalid argument '$1'" ;;
    esac
    shift
 done
 
-[ -z "$UNTRUSTED_USER" ] && die "untrusted-user not set"
+[ -z "$NON_SECRET_USER" ] && die "non-secret-user not set"
 
 "$USER_RUN_TESTS_DIR"/create-test-project-and-changes.sh
 "$USER_RUN_TESTS_DIR"/update-all-users-project.sh
