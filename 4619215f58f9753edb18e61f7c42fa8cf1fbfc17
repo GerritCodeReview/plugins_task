@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ab0177e5_b9f59b61",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2023-05-23T11:03:26Z",
+      "side": 1,
+      "message": "may be you want to clarify other plugins?",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 38
+      },
+      "revId": "4619215f58f9753edb18e61f7c42fa8cf1fbfc17",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
