@@ -22,6 +22,30 @@
       },
       "revId": "4619215f58f9753edb18e61f7c42fa8cf1fbfc17",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "069baf64_dd657d9e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-05-23T15:41:47Z",
+      "side": 1,
+      "message": "Or maybe not really mention other plugins (since those are mostly our internal ideas), but rather the idea that we are trying to keep the \"interface\" standard so that it can become a good pattern to follow.",
+      "parentUuid": "ab0177e5_b9f59b61",
+      "range": {
+        "startLine": 9,
+        "startChar": 25,
+        "endLine": 9,
+        "endChar": 38
+      },
+      "revId": "4619215f58f9753edb18e61f7c42fa8cf1fbfc17",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
