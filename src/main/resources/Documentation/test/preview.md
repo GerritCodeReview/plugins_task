@@ -114,6 +114,10 @@
          ]
       },
       {
+         "name" : "Bad APPLICABLE query",
+         "status" : "INVALID"
+      },
+      {
          "applicable" : false,
          "hasPass" : true,
          "name" : "NA Bad PASS query",
@@ -316,28 +320,28 @@
    "status" : "WAITING",
    "subTasks" : [
       {
-         "applicable" : true,                              # Only Test Suite: !untrusted
-         "hasPass" : true,                                 # Only Test Suite: !untrusted
-         "name" : "userfile task/special.config PASS",     # Only Test Suite: !untrusted
-         "status" : "PASS"                                 # Only Test Suite: !untrusted
-         "name" : "UNKNOWN",                               # Only Test Suite: untrusted
-         "status" : "UNKNOWN"                              # Only Test Suite: untrusted
+         "applicable" : true,                              # Only Test Suite: secret
+         "hasPass" : true,                                 # Only Test Suite: secret
+         "name" : "userfile task/special.config PASS",     # Only Test Suite: secret
+         "status" : "PASS"                                 # Only Test Suite: secret
+         "name" : "UNKNOWN",                               # Only Test Suite: !secret
+         "status" : "UNKNOWN"                              # Only Test Suite: !secret
       },
       {
-         "applicable" : true,                              # Only Test Suite: !untrusted
-         "hasPass" : true,                                 # Only Test Suite: !untrusted
-         "name" : "userfile task/special.config FAIL",     # Only Test Suite: !untrusted
-         "status" : "FAIL"                                 # Only Test Suite: !untrusted
-         "name" : "UNKNOWN",                               # Only Test Suite: untrusted
-         "status" : "UNKNOWN"                              # Only Test Suite: untrusted
+         "applicable" : true,                              # Only Test Suite: secret
+         "hasPass" : true,                                 # Only Test Suite: secret
+         "name" : "userfile task/special.config FAIL",     # Only Test Suite: secret
+         "status" : "FAIL"                                 # Only Test Suite: secret
+         "name" : "UNKNOWN",                               # Only Test Suite: !secret
+         "status" : "UNKNOWN"                              # Only Test Suite: !secret
       },
       {
-         "applicable" : true,                              # Only Test Suite: !untrusted
-         "hasPass" : true,                                 # Only Test Suite: !untrusted
-         "name" : "file task/common.config Preload PASS",  # Only Test Suite: !untrusted
-         "status" : "PASS"                                 # Only Test Suite: !untrusted
-         "name" : "UNKNOWN",                               # Only Test Suite: untrusted
-         "status" : "UNKNOWN"                              # Only Test Suite: untrusted
+         "applicable" : true,                              # Only Test Suite: secret
+         "hasPass" : true,                                 # Only Test Suite: secret
+         "name" : "file task/common.config Preload PASS",  # Only Test Suite: secret
+         "status" : "PASS"                                 # Only Test Suite: secret
+         "name" : "UNKNOWN",                               # Only Test Suite: !secret
+         "status" : "UNKNOWN"                              # Only Test Suite: !secret
       }
    ]
 }
@@ -468,6 +472,10 @@
                "status" : "INVALID"
             }
          ]
+      },
+      {
+         "name" : "Bad APPLICABLE query",
+         "status" : "INVALID"
       },
       {
          "applicable" : false,
