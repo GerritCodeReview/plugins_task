@@ -33,7 +33,8 @@ import java.util.stream.Collectors;
 public class TaskConfig extends AbstractVersionedMetaData {
   public enum NamesFactoryType {
     CHANGE,
-    STATIC;
+    STATIC,
+    PLUGIN;
 
     public static NamesFactoryType getNamesFactoryType(String str) {
       for (NamesFactoryType type : NamesFactoryType.values()) {
@@ -164,12 +165,19 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String changes;
     public List<String> names;
     public String type;
+    public String plugin;
+    public String provider;
+    public List<String> args;
 
     public NamesFactory(SubSectionKey s) {
       super(s);
       changes = getString(s, KEY_CHANGES, null);
       names = getStringList(s, KEY_NAME);
       type = getString(s, KEY_TYPE, null);
+
+      plugin = getString(s, KEY_PLUGIN);
+      provider = getString(s, KEY_PROVIDER);
+      args = getStringList(s, KEY_ARG);
     }
   }
 
@@ -194,6 +202,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public static final String SECTION_TASK = TaskKey.CONFIG_SECTION;
   public static final String SECTION_TASKS_FACTORY = TaskKey.CONFIG_TASKS_FACTORY;
   public static final String KEY_APPLICABLE = "applicable";
+  public static final String KEY_ARG = "arg";
   public static final String KEY_CHANGES = "changes";
   public static final String KEY_DUPLICATE_KEY = "duplicate-key";
   public static final String KEY_EXPORT_PREFIX = "export-";
@@ -204,8 +213,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public static final String KEY_NAME = "name";
   public static final String KEY_NAMES_FACTORY = "names-factory";
   public static final String KEY_PASS = "pass";
+  public static final String KEY_PLUGIN = "plugin";
   public static final String KEY_PRELOAD_TASK = "preload-task";
   public static final String KEY_PROPERTIES_PREFIX = "set-";
+  public static final String KEY_PROVIDER = "provider";
   public static final String KEY_READY_HINT = "ready-hint";
   public static final String KEY_SUBTASK = "subtask";
   public static final String KEY_SUBTASKS_EXTERNAL = "subtasks-external";

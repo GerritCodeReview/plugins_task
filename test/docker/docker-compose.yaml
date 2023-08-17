@@ -7,6 +7,7 @@ services:
       args:
         - GERRIT_WAR
         - TASK_PLUGIN_JAR
+        - NAMES_FACTORY_PROVIDER_PLUGIN_JAR
     networks:
       - gerrit-net
     volumes:
