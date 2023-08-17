@@ -366,6 +366,17 @@ this:
 
 The following keys may be defined in any names-factory section:
 
+`arg`
+
+: This key defines argument to be passed to the provider method of a plugin.
+This key may be used several times in order to define list of arguments.
+This key can only be used along with names-factory of type `plugin`.
+
+Example:
+```
+    arg = 12345
+```
+
 `changes`
 
 : This key defines a query that is used to fetch change numbers which will be used
@@ -388,17 +399,40 @@ Example:
     name = 12345
 ```
 
+`plugin`
+
+: This key defines the name of a plugin. This key can only be used along with
+names-factory of type `plugin`.
+
+Example:
+```
+    plugin = foo
+```
+
+`provider`
+
+: This key defines the name of the provider for a plugin that exposes the
+method to provide all the names. This key can only be used along with
+names-factory of type `plugin`.
+
+Example:
+```
+    provider = bar_provider
+```
+
 `type`
 
 : This key defines the type of the names-factory section.  The type
-can be either `static` or `change`. For names-factory of type `static`,
-`name` key(s) should be defined where as names-factory of type `change`
-needs a `change` key to be defined.
+can be either `static` or `change` or `plugin`. For names-factory of type
+`static`, `name` key(s) should be defined. For names-factory of type `change`
+`change` key needs to be defined. For names-factory of type 'plugin', keys
+'plugin', 'provides' and 'arg' should be defined.
 
 Example:
 ```
     type = static
     type = change
+    type = plugin
 ```
 
 External Entries
