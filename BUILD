@@ -11,6 +11,7 @@ load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
 load("@rules_antlr//antlr:antlr4.bzl", "antlr")
 
 plugin_name = "task"
+test_factory_provider_plugin_name = "names-factory-provider"
 
 java_plugin(
     name = "auto-value-plugin",
@@ -75,12 +76,22 @@ junit_tests(
     deps = PLUGIN_TEST_DEPS + PLUGIN_DEPS + [plugin_name],
 )
 
+gerrit_plugin(
+    name = test_factory_provider_plugin_name,
+    srcs = ["src/main/java/com/googlesource/gerrit/plugins/task/extensions/PluginProvidedTaskNamesFactory.java"] + glob(["src/test/java/**/names_factory_provider/*.java"]),
+    manifest_entries = [
+        "Gerrit-PluginName: " + test_factory_provider_plugin_name,
+        "Gerrit-Module: com.googlesource.gerrit.plugins.names_factory_provider.Module",
+        "Implementation-Title: Names Factory Provider",
+    ],
+)
+
 sh_test(
     name = "docker-tests",
     size = "medium",
     srcs = ["test/docker/run.sh"],
-    args = ["--task-plugin-jar", "$(location :task)"],
-    data = [plugin_name] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
+    args = ["--task-plugin-jar", "$(location :task)", "--names-factory-provider-plugin-jar", "$(location :names-factory-provider)"],
+    data = [plugin_name, test_factory_provider_plugin_name] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
     local = True,
     tags = ["docker"],
 )
