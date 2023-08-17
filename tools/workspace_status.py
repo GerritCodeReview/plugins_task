@@ -29,3 +29,4 @@ def revision():
 
 
 print("STABLE_BUILD_TASK_LABEL %s" % revision())
+print("STABLE_BUILD_NAMES-FACTORY-PROVIDER_LABEL %s" % revision())
