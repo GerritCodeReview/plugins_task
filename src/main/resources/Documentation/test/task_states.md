@@ -784,6 +784,36 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root tasks-factory PLUGIN"]
+  applicable = status:new
+  subtasks-factory = tasks-factory plugin
+
+[tasks-factory "tasks-factory plugin"]
+  names-factory = names-factory plugin list
+  fail = True
+
+[names-factory "names-factory plugin list"]
+  type = plugin
+  plugin = names-factory-provider
+  provider = foobar_provider
+  arg = myarg1
+  arg = myarg2
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory PLUGIN",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "foobar_myarg1_myarg2",
+         "status" : "FAIL"
+      }
+   ]
+}
+
 [root "Root tasks-factory static (empty name)"]
   subtasks-factory = tasks-factory static (empty name)
   # Grouping task since it has no pass criteria, not output since it has no subtasks
@@ -1369,6 +1399,36 @@ file: `All-Projects:refs/meta/config:task.config`
          "hasPass" : true,
          "name" : "_change2_number",
          "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Properties tasks-factory PLUGIN"]
+  subtasks-factory = tasks-factory PLUGIN Properties
+
+[tasks-factory "tasks-factory PLUGIN Properties"]
+  set-welcome-message = Welcome to the party
+  names-factory = names-factory plugin provided list
+  fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  fail = True
+
+[names-factory "names-factory plugin provided list"]
+  type = plugin
+  plugin = names-factory-provider
+  provider = foobar_provider
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties tasks-factory PLUGIN",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Welcome to the party Name(foobar) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
+         "name" : "foobar",
+         "status" : "FAIL"
       }
    ]
 }
