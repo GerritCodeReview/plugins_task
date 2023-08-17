@@ -33,7 +33,8 @@ import java.util.stream.Collectors;
 public class TaskConfig extends AbstractVersionedMetaData {
   public enum NamesFactoryType {
     CHANGE,
-    STATIC;
+    STATIC,
+    PLUGIN;
 
     public static NamesFactoryType getNamesFactoryType(String str) {
       for (NamesFactoryType type : NamesFactoryType.values()) {
@@ -164,12 +165,19 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String changes;
     public List<String> names;
     public String type;
+    public String plugin;
+    public String provider;
+    public List<String> args;
 
     public NamesFactory(SubSectionKey s) {
       super(s);
       changes = getString(s, KEY_CHANGES, null);
       names = getStringList(s, KEY_NAME);
       type = getString(s, KEY_TYPE, null);
+
+      plugin = getString(s, "plugin");
+      provider = getString(s, "provider");
+      args = getStringList(s, "arg");
     }
   }
 

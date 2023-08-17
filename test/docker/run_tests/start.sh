@@ -29,6 +29,7 @@ echo "machine $GERRIT_HOST login $USER password $PASSWORD" > "$USER_HOME"/.netrc
 ssh -p 29418 "$GERRIT_HOST" gerrit set-account --http-password "$PASSWORD" "$USER"
 
 is_plugin_loaded "task" || die "Task plugin is not installed"
+is_plugin_loaded "names-factory-provider" || die "NamesFactoryProvider plugin is not installed"
 
 NON_SECRET_USER="non_secret_user"
 UNTRUSTED_USER="untrusted_user"

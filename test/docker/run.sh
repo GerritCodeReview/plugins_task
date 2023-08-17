@@ -24,7 +24,7 @@ progress() { # message cmd [args]...
 usage() { # [error_message]
     cat <<-EOF
 Usage:
-    $MYPROG [--task-plugin-jar|-t <FILE_PATH>] [--gerrit-war|-g <FILE_PATH>]
+    $MYPROG [--task-plugin-jar|-t <FILE_PATH>] [--names-factory-plugin-jar|-f <FILE_PATH>] [--gerrit-war|-g <FILE_PATH>]
 
     This tool runs the plugin functional tests in a Docker environment built
     from the gerritcodereview/gerrit base Docker image.
@@ -36,9 +36,10 @@ Usage:
 
     Options:
     --help|-h
-    --gerrit-war|-g            path to Gerrit WAR file
-    --task-plugin-jar|-t       path to task plugin JAR file
-    --preserve                 To preserve the docker setup for debugging
+    --gerrit-war|-g                           path to Gerrit WAR file
+    --task-plugin-jar|-t                      path to task plugin JAR file
+    --names-factory-provider-plugin-jar|-t    path to names-factory-provider plugin JAR file
+    --preserve                                To preserve the docker setup for debugging
 
 EOF
 
@@ -96,13 +97,14 @@ RETEST="false"
 COMPOSE_ARGS=()
 while (( "$#" )) ; do
     case "$1" in
-        --help|-h)                usage ;;
-        --gerrit-war|-g)          shift ; GERRIT_WAR=$1 ;;
-        --task-plugin-jar|-t)     shift ; TASK_PLUGIN_JAR=$1 ;;
-        --preserve)               PRESERVE="true" ;;
-        --retest)                 RETEST="true" ;;
-        --compose-arg)            shift ; COMPOSE_ARGS+=("$1") ;;
-        *)                        usage "invalid argument $1" ;;
+        --help|-h)                                usage ;;
+        --gerrit-war|-g)                          shift ; GERRIT_WAR=$1 ;;
+        --task-plugin-jar|-t)                     shift ; TASK_PLUGIN_JAR=$1 ;;
+        --names-factory-provider-plugin-jar|-f)   shift ; NAMES_FACTORY_PROVIDER_PLUGIN_JAR=$1 ;;
+        --preserve)                               PRESERVE="true" ;;
+        --retest)                                 RETEST="true" ;;
+        --compose-arg)                            shift ; COMPOSE_ARGS+=("$1") ;;
+        *)                                        usage "invalid argument $1" ;;
     esac
     shift
 done
@@ -114,13 +116,19 @@ COMPOSE_YAML="$MYDIR/docker-compose.yaml"
 COMPOSE_ARGS=(--project-name "$PROJECT_NAME" -f "$COMPOSE_YAML")
 check_prerequisite
 mkdir -p -- "$ARTIFACTS"
-[ -n "$TASK_PLUGIN_JAR" ] && cp -f -- "$TASK_PLUGIN_JAR" "$ARTIFACTS/task.jar"
+[ -n "$TASK_PLUGIN_JAR" ] && cp -f "$TASK_PLUGIN_JAR" "$ARTIFACTS/task.jar"
 if [ ! -e "$ARTIFACTS/task.jar" ] ; then
     MISSING="Missing $ARTIFACTS/task.jar"
     [ -n "$TASK_PLUGIN_JAR" ] && die "$MISSING, check for copy failure?"
     usage "$MISSING, did you forget --task-plugin-jar?"
 fi
-[ -n "$GERRIT_WAR" ] && cp -f -- "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
+[ -n "$NAMES_FACTORY_PROVIDER_PLUGIN_JAR" ] && cp -f "$NAMES_FACTORY_PROVIDER_PLUGIN_JAR" "$ARTIFACTS/names-factory-provider.jar"
+if [ ! -e "$ARTIFACTS/names-factory-provider.jar" ] ; then
+    MISSING="Missing $ARTIFACTS/names-factory-provider.jar"
+    [ -n "$TASK_PLUGIN_JAR" ] && die "$MISSING, check for copy failure?"
+    usage "$MISSING, did you forget --names-factory-provider-plugin-jar?"
+fi
+[ -n "$GERRIT_WAR" ] && cp -f "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
 ( trap cleanup EXIT SIGTERM
     progress "Building docker images" build_images
     run_task_plugin_tests
