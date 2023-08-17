@@ -58,6 +58,7 @@ gerrit_plugin(
         ":auto-value",
         ":task_reference_parser",
         "@antlr4_runtime//jar",
+        "//names-factory-provider:names-factory-provider",
     ],
     javacopts = [ "-Werror", "-Xlint:all", "-Xlint:-classfile", "-Xlint:-processing"],
 )
