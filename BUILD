@@ -85,6 +85,20 @@ sh_test(
     tags = ["docker"],
 )
 
+junit_tests(
+    name = "acceptance-tests",
+    size = "large",
+    srcs = glob(["src/test/java/**/*IT.java"]),
+    jvm_flags = ["-Xmx2G"],
+    tags = [
+        "acceptance",
+        "server",
+    ],
+    deps = PLUGIN_TEST_DEPS + PLUGIN_DEPS + [
+        ":task__plugin",
+    ],
+)
+
 eslint(
     name = "lint",
     srcs = glob([
