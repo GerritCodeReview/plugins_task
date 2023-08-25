@@ -44,7 +44,11 @@ import com.googlesource.gerrit.plugins.task.statistics.HitHashMapOfCollection;
 import com.googlesource.gerrit.plugins.task.statistics.StatisticsMap;
 import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
 import com.googlesource.gerrit.plugins.task.statistics.TracksStatistics;
+import com.googlesource.gerrit.plugins.task.util.CachingSupplierThrows3;
+import com.googlesource.gerrit.plugins.task.util.function.SupplierThrows3;
 import java.io.IOException;
+import java.lang.ref.Reference;
+import java.lang.ref.SoftReference;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -140,14 +144,12 @@ public class TaskTree {
     protected Collection<String> path;
     protected Collection<String> duplicateKeys;
     protected Map<TaskKey, Node> cachedNodeByTask = new HashMap<>();
-    protected List<Node> cachedNodes;
+    protected TaskCachingSupplierT3<List<Node>> cachedNodes = new TaskCachingSupplierT3<>(() -> loadSubNodes());
 
     protected List<Node> getSubNodes()
         throws ConfigInvalidException, IOException, StorageException {
-      if (cachedNodes != null) {
-        return refresh(cachedNodes);
-      }
-      return cachedNodes = loadSubNodes();
+      List<Node> nodes = cachedNodes.get();
+      return cachedNodes.wasLoaded() ? refresh(nodes) : nodes;
     }
 
     protected List<Node> loadSubNodes()
@@ -252,6 +254,7 @@ public class TaskTree {
       this.parent = parent;
       taskKey = task.key();
       properties = new Properties(this, task);
+      cachedNodes = new TaskCachingSupplierT3<>(() -> loadSubNodes());
       refreshTask();
     }
 
@@ -259,14 +262,15 @@ public class TaskTree {
       return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + taskKey;
     }
 
-    public List<Node> getSubNodes() throws IOException, StorageException {
-      if (cachedNodes != null) {
-        return refresh(cachedNodes);
+    public List<Node> getSubNodes()
+        throws ConfigInvalidException, IOException, StorageException {
+      List<Node> nodes = cachedNodes.get();
+      if (cachedNodes.wasLoaded()) {
+        return refresh(nodes);
       }
-      List<Node> nodes = loadSubNodes();
       if (!properties.isSubNodeReloadRequired()) {
         if (!isChange()) {
-          return cachedNodes = nodes;
+          return nodes;
         }
         definitionsBySubSection.computeIfAbsentTimed(
             task.key().subSection(),
@@ -279,15 +283,17 @@ public class TaskTree {
             .filter(n -> !(n instanceof Invalid) && !n.isChange())
             .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
       }
+      cachedNodes.clear();
       return nodes;
     }
 
-    public List<Node> getApplicableSubNodes() throws IOException, StorageException {
+    public List<Node> getApplicableSubNodes() throws ConfigInvalidException, IOException, StorageException {
       return hasUnfilterableSubNodes ? getSubNodes() : new ApplicableNodeFilter().getSubNodes();
     }
 
     @Override
-    protected List<Node> loadSubNodes() throws IOException, StorageException {
+    protected List<Node> loadSubNodes()
+        throws ConfigInvalidException, IOException, StorageException {
       List<Task> cachedDefinitions = definitionsBySubSection.get(task.key().subSection());
       if (cachedDefinitions != null) {
         return new SubNodeFactory().createFromPreloaded(cachedDefinitions);
@@ -487,7 +493,7 @@ public class TaskTree {
 
       public ApplicableNodeFilter() throws StorageException {}
 
-      public List<Node> getSubNodes() throws IOException, StorageException {
+      public List<Node> getSubNodes() throws ConfigInvalidException, IOException, StorageException {
         if (nodesByBranch != null) {
           List<Node> nodes = nodesByBranch.get(branch);
           if (nodes != null) {
@@ -649,5 +655,11 @@ public class TaskTree {
       node.refreshTask();
     }
     return nodes;
+  }
+
+  protected static class TaskCachingSupplierT3<T> extends CachingSupplierThrows3<T, ConfigInvalidException, IOException, StorageException> {
+    public TaskCachingSupplierT3(SupplierThrows3<T, ConfigInvalidException, IOException, StorageException> supplier) {
+      super(supplier);
+    }
   }
 }

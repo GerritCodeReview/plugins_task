@@ -249,7 +249,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
             }
           }
         }
-      } catch (IOException | RuntimeException e) {
+      } catch (ConfigInvalidException | IOException | RuntimeException e) {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
@@ -350,7 +350,8 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       }
     }
 
-    protected List<TaskAttribute> getSubTasks() throws IOException, StorageException {
+    protected List<TaskAttribute> getSubTasks()
+        throws ConfigInvalidException, IOException, StorageException {
       List<TaskAttribute> subTasks = new ArrayList<>();
       for (Node subNode :
           options.onlyApplicable ? node.getApplicableSubNodes() : node.getSubNodes()) {
