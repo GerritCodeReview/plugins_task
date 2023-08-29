@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.task;
 
 import static java.util.stream.Collectors.toList;
+import static java.util.stream.Collectors.toMap;
 
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Account;
@@ -143,7 +144,7 @@ public class TaskTree {
     protected NodeList parent = null;
     protected Collection<String> path;
     protected Collection<String> duplicateKeys;
-    protected Map<TaskKey, Node> cachedNodeByTask = new HashMap<>();
+    protected Reference<Map<TaskKey, Node>> cachedNodeByTask = new SoftReference<>(null);
     protected TaskCachingSupplierT3<List<Node>> cachedNodes = new TaskCachingSupplierT3<>(() -> loadSubNodes());
 
     protected List<Node> getSubNodes()
@@ -200,7 +201,7 @@ public class TaskTree {
       protected Node createFromPreloaded(Task def, NodeFactory nodeFactory) {
         if (def != null) {
           try {
-            Node node = cachedNodeByTask.get(def.key());
+            Node node = getCachedNode(def.key());
             boolean isRefreshNeeded = node != null;
             if (node == null) {
               node = nodeFactory.create(NodeList.this, def);
@@ -217,6 +218,11 @@ public class TaskTree {
           }
         }
         return createInvalid();
+      }
+
+      protected Node getCachedNode(TaskKey key) {
+        Map<TaskKey, Node> map = cachedNodeByTask.get();
+        return map == null ? null : map.get(key);
       }
 
       protected Node createInvalid() {
@@ -278,10 +284,9 @@ public class TaskTree {
             task.isVisible);
       } else {
         hasUnfilterableSubNodes = true;
-        cachedNodeByTask.clear();
-        nodes.stream()
+        cachedNodeByTask = new SoftReference<>(nodes.stream()
             .filter(n -> !(n instanceof Invalid) && !n.isChange())
-            .forEach(n -> cachedNodeByTask.put(n.task.key(), n));
+            .collect(toMap(n -> n.task.key(), n -> n)));
       }
       cachedNodes.clear();
       return nodes;
