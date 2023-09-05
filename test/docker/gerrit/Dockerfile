@@ -3,6 +3,7 @@ FROM gerritcodereview/gerrit:3.5.0.1-ubuntu20
 ENV GERRIT_SITE /var/gerrit
 RUN git config -f "$GERRIT_SITE/etc/gerrit.config" auth.type \
     DEVELOPMENT_BECOME_ANY_ACCOUNT
+RUN touch "$GERRIT_SITE"/.firstTimeRedirect
 
 COPY artifacts /tmp/
 RUN cp /tmp/task.jar "$GERRIT_SITE/plugins/task.jar"

@@ -24,6 +24,8 @@ cat "$USER_HOME"/.ssh/id_rsa.pub | ssh -p 29418 -i /server-ssh-key/ssh_host_rsa_
 
 is_plugin_loaded "task" || die "Task plugin is not installed"
 
+echo "machine $GERRIT_HOST login $USER password secret" > "$USER_HOME"/.netrc
+
 NON_SECRET_USER="non_secret_user"
 UNTRUSTED_USER="untrusted_user"
 "$USER_RUN_TESTS_DIR"/create-one-time-test-data.sh --non-secret-user "$NON_SECRET_USER" \
