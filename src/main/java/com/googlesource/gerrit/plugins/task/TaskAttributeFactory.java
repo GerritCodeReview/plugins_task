@@ -40,8 +40,10 @@ import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
-  private static final FluentLogger log = FluentLogger.forEnclosingClass();
-
+  public static final TaskPath MISSING_VIEW_PATH_CAPABILITY =
+          new TaskPath(
+                  String.format(
+                          "Can't perform operation, need %s capability", ViewPathsCapability.VIEW_PATHS));
   public enum Status {
     INVALID,
     UNKNOWN,
@@ -219,7 +221,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
             if (hasViewPathsCapability) {
               attribute.path = taskPathFactory.create(node.taskKey);
             } else {
-              attribute.path = TaskPath.MISSING_CAPABILITY;
+              attribute.path = MISSING_VIEW_PATH_CAPABILITY;
             }
           }
           boolean groupApplicable = attribute.status != null;

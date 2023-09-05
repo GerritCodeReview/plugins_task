@@ -26,11 +26,6 @@ import java.util.Optional;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class TaskPath {
-  public static final TaskPath MISSING_CAPABILITY =
-      new TaskPath(
-          String.format(
-              "Can't perform operation, need %s capability", ViewPathsCapability.VIEW_PATHS));
-
   public interface Factory {
     TaskPath create(TaskKey key);
   }
