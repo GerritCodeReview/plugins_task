@@ -153,7 +153,7 @@ gssh() {  # [-l user] cmd [args]...
 
 q() { "$@" > /dev/null 2>&1 ; } # cmd [args...]  # quiet a command
 
-gen_change_id() { echo "I$(uuidgen | openssl dgst -sha1 -binary | xxd -p)"; } # > change_id
+gen_change_id() { echo "I$(uuidgen | sha1sum | awk '{print $1}')"; } # > change_id
 
 commit_message() { printf "$1 \n\nChange-Id: $2" ; } # message change-id > commit_msg
 
