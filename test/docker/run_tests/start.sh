@@ -16,11 +16,15 @@ fi
 
 ./"$USER_RUN_TESTS_DIR"/wait-for-it.sh "$GERRIT_HOST":29418 -t 60 -- echo "gerrit is up"
 
-echo "Creating a default user account ..."
+echo "Update admin account ..."
 
 cat "$USER_HOME"/.ssh/id_rsa.pub | ssh -p 29418 -i /server-ssh-key/ssh_host_rsa_key \
     "Gerrit Code Review@$GERRIT_HOST" suexec --as "admin@example.com" -- gerrit set-account \
     admin --add-ssh-key -
+
+PASSWORD=$(uuidgen)
+echo "machine $GERRIT_HOST login $USER password $PASSWORD" > "$USER_HOME"/.netrc
+ssh -p 29418 "$GERRIT_HOST" gerrit set-account --http-password "$PASSWORD" "$USER"
 
 is_plugin_loaded "task" || die "Task plugin is not installed"
 

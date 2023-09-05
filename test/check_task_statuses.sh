@@ -191,6 +191,24 @@ replace_user() { # < text_with_testuser > text_with_$USER
     sed -e"s/testuser/$USER/"
 }
 
+get_user_ref() { # username > refs/users/<accountidshard>/<accountid>
+    local user_account_id="$(curl --netrc --silent "http://$SERVER:$HTTP_PORT/a/accounts/$1" | \
+    sed -e '1!b' -e "/^)]}'$/d" | jq ._account_id)"
+    echo "refs/users/${user_account_id:(-2)}/$user_account_id"
+}
+
+replace_user_refs() { # < text_with_user_refs > test_with_expanded_user_refs
+    local text="$(< /dev/stdin)"
+    for user in "${!USER_REFS[@]}" ; do
+        text="${text//"$user"/${USER_REFS["$user"]}}"
+    done
+    echo "$text"
+}
+
+replace_tokens() { # < text > text with replacing all tokens(changes, user)
+    replace_default_changes | replace_user_refs | replace_user
+}
+
 strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json
 strip_non_invalid() { ensure "$MYDIR"/strip_non_invalid.py ; } # < json > json
 
@@ -223,8 +241,8 @@ get_plugins() { # < change_json > plugins_json
         print json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True)"
 }
 
-example() { # example_num > text_for_example_num
-    echo "$DOC_STATES" | awk '/```/{Q++;E=(Q+1)/2};E=='"$1" | grep -v '```' | replace_user
+example() { # doc example_num > text_for_example_num
+    echo "$1" | awk '/```/{Q++;E=(Q+1)/2};E=='"$2" | grep -v '```'
 }
 
 get_change_num() { # < gerrit_push_response > changenum
@@ -342,12 +360,12 @@ ALL_TASKS=$ALL/task
 USERS=$OUT/All-Users
 USER_TASKS=$USERS/task
 
-DOC_PREVIEW=$DOCS/preview.md
 EXPECTED=$OUT/expected
 ACTUAL=$OUT/actual
 
 ROOT_CFG=$ALL/task.config
 COMMON_CFG=$ALL_TASKS/common.config
+USER_COMMON_CFG=$USER_TASKS/common.config
 INVALIDS_CFG=$ALL_TASKS/invalids.config
 USER_SPECIAL_CFG=$USER_TASKS/special.config
 
@@ -370,6 +388,7 @@ done
 
 
 PORT=29418
+HTTP_PORT=8080
 PROJECT=test
 BRANCH=master
 REMOTE_ALL=ssh://$SERVER:$PORT/All-Projects
@@ -381,6 +400,9 @@ REF_USERS=refs/users/self
 
 CONFIG=$ROOT_CFG
 
+declare -A USER_REFS
+USER_REFS["{testuser_user_ref}"]="$(get_user_ref "$USER")"
+
 mkdir -p "$OUT" "$ALL_TASKS" "$USER_TASKS"
 
 q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
@@ -390,12 +412,16 @@ q_setup setup_repo "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH"
 changes=$(gssh query "status:open limit:2" --format json)
 set_change "$(echo "$changes" | awk 'NR==1')" ; CHANGE1=("${CHANGE[@]}")
 set_change "$(echo "$changes" | awk 'NR==2')" ; CHANGE2=("${CHANGE[@]}")
-DOC_STATES=$(replace_default_changes < "$DOCS/task_states.md")
 
-example 2 | replace_user | testdoc_2_cfg > "$ROOT_CFG"
-example 3 > "$COMMON_CFG"
-example 4 > "$INVALIDS_CFG"
-example 5 > "$USER_SPECIAL_CFG"
+DOC_STATES=$(replace_tokens < "$DOCS/task_states.md")
+DOC_PREVIEW=$(replace_tokens < "$DOCS/preview.md")
+DOC_PATHS=$(replace_tokens < "$DOCS/paths.md")
+
+example "$DOC_STATES" 2 | testdoc_2_cfg > "$ROOT_CFG"
+example "$DOC_STATES" 3 > "$COMMON_CFG"
+example "$DOC_STATES" 3 > "$USER_COMMON_CFG"
+example "$DOC_STATES" 4 > "$INVALIDS_CFG"
+example "$DOC_STATES" 5 > "$USER_SPECIAL_CFG"
 
 ROOTS=$(config_section_keys "root") || err "Invalid ROOTS"
 
@@ -407,7 +433,7 @@ change4_id=$(gen_change_id)
 change4_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$change4_id")
 change3_number=$(create_repo_change "$OUT/$PROJECT" "$REMOTE_TEST" "$BRANCH" "$change3_id")
 
-ex2_pjson=$(example 2 | testdoc_2_pjson)
+ex2_pjson=$(example "$DOC_STATES" 2 | testdoc_2_pjson)
 all_pjson=$(echo "$ex2_pjson" | \
     replace_change_properties \
         "" \
@@ -452,7 +478,7 @@ echo "$no_all_visible_json" | strip_non_invalid > "$EXPECTED".invalid
 strip_non_invalid < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
 
 
-preview_pjson=$(testdoc_2_pjson < "$DOC_PREVIEW" | replace_default_changes)
+preview_pjson=$(echo "$DOC_PREVIEW" | testdoc_2_pjson)
 echo "$preview_pjson" | remove_suites "invalid" "secret" | \
     ensure json_pp > "$EXPECTED".preview-non-secret
 echo "$preview_pjson" | remove_suites "invalid" "!secret" | \
@@ -460,7 +486,7 @@ echo "$preview_pjson" | remove_suites "invalid" "!secret" | \
 echo "$preview_pjson" | remove_suites "secret" "!invalid" | \
     strip_non_invalid > "$EXPECTED".preview-invalid
 
-testdoc_2_cfg < "$DOC_PREVIEW" | replace_user > "$ROOT_CFG"
+echo "$DOC_PREVIEW" | testdoc_2_cfg | replace_user > "$ROOT_CFG"
 cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
 PREVIEW_ROOTS=$(config_section_keys "root")
 
@@ -478,5 +504,18 @@ ROOTS=$PREVIEW_ROOTS
 test_generated preview-admin --task--preview "$cnum,1" --task--all "$query"
 test_generated preview-non-secret -l "$NON_SECRET_USER" --task--preview "$cnum,1" --task--all "$query"
 test_generated preview-invalid --task--preview "$cnum,1" --task--invalid "$query"
+
+example "$DOC_PATHS" 1 | testdoc_2_cfg | replace_user > "$ROOT_CFG"
+q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
+ROOTS=$(config_section_keys "root")
+example "$DOC_PATHS" 1 | testdoc_2_pjson | ensure json_pp > "$EXPECTED".task-paths
+
+test_generated task-paths --task--all --task--include-paths "$query"
+
+example "$DOC_PATHS" 2 | testdoc_2_cfg > "$ROOT_CFG"
+q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
+ROOTS=$(config_section_keys "root")
+example "$DOC_PATHS" 2 | testdoc_2_pjson | ensure json_pp > "$EXPECTED".task-paths.non-secret
+test_generated task-paths.non-secret -l "$NON_SECRET_USER" --task--all --task--include-paths "$query"
 
 exit $RESULT

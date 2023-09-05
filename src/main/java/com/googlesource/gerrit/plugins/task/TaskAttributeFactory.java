@@ -17,10 +17,12 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.exceptions.StorageException;
+import com.google.gerrit.extensions.api.access.PluginPermission;
 import com.google.gerrit.extensions.common.PluginDefinedInfo;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.DynamicOptions.BeanProvider;
 import com.google.gerrit.server.change.ChangePluginDefinedInfoFactory;
+import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
@@ -77,6 +79,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     public Boolean hasPass;
     public String hint;
     public Boolean inProgress;
+    public TaskPath path;
     public String name;
     public Integer change;
     public Status status;
@@ -94,17 +97,31 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     public Statistics queryStatistics;
   }
 
+  protected final String pluginName;
   protected final TaskTree definitions;
   protected final PredicateCache predicateCache;
+  protected final boolean hasViewPathsCapability;
+  protected final TaskPath.Factory taskPathFactory;
 
   protected Modules.MyOptions options;
   protected TaskPluginAttribute lastTaskPluginAttribute;
   protected Statistics statistics;
 
   @Inject
-  public TaskAttributeFactory(TaskTree definitions, PredicateCache predicateCache) {
+  public TaskAttributeFactory(
+      String pluginName,
+      TaskTree definitions,
+      PredicateCache predicateCache,
+      PermissionBackend permissionBackend,
+      TaskPath.Factory taskPathFactory) {
+    this.pluginName = pluginName;
     this.definitions = definitions;
     this.predicateCache = predicateCache;
+    this.hasViewPathsCapability =
+        permissionBackend
+            .currentUser()
+            .testOrFalse(new PluginPermission(this.pluginName, ViewPathsCapability.VIEW_PATHS));
+    this.taskPathFactory = taskPathFactory;
   }
 
   @Override
@@ -197,6 +214,13 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
           attribute.status = getStatus();
           if (options.onlyInvalid && !isValidQueries()) {
             attribute.status = Status.INVALID;
+          }
+          if (options.includePaths) {
+            if (hasViewPathsCapability) {
+              attribute.path = taskPathFactory.create(node.taskKey);
+            } else {
+              attribute.path = TaskPath.MISSING_CAPABILITY;
+            }
           }
           boolean groupApplicable = attribute.status != null;
 

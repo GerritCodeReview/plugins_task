@@ -179,7 +179,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public static final String SECTION_NAMES_FACTORY = "names-factory";
   public static final String SECTION_ROOT = "root";
   public static final String SECTION_TASK = TaskKey.CONFIG_SECTION;
-  public static final String SECTION_TASKS_FACTORY = "tasks-factory";
+  public static final String SECTION_TASKS_FACTORY = TaskKey.CONFIG_TASKS_FACTORY;
   public static final String KEY_APPLICABLE = "applicable";
   public static final String KEY_CHANGES = "changes";
   public static final String KEY_DUPLICATE_KEY = "duplicate-key";
