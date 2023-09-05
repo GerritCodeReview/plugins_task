@@ -14,7 +14,9 @@ if [ "$1" = "retest" ] ; then
     exit $?
 fi
 
-./"$USER_RUN_TESTS_DIR"/wait-for-it.sh "$GERRIT_HOST":29418 -t 60 -- echo "gerrit is up"
+./"$USER_RUN_TESTS_DIR"/wait-for-it.sh "$GERRIT_HOST":29418 \
+    -t -60 || die "Failed to start gerrit"
+echo "gerrit is up"
 
 echo "Update admin account ..."
 
