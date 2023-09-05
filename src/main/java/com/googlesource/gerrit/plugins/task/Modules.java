@@ -15,6 +15,8 @@
 package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.extensions.annotations.Exports;
+import com.google.gerrit.extensions.config.CapabilityDefinition;
+import com.google.gerrit.extensions.config.FactoryModule;
 import com.google.gerrit.extensions.registration.DynamicSet;
 import com.google.gerrit.extensions.webui.JavaScriptPlugin;
 import com.google.gerrit.extensions.webui.WebUiPlugin;
@@ -23,7 +25,6 @@ import com.google.gerrit.server.change.ChangePluginDefinedInfoFactory;
 import com.google.gerrit.server.restapi.change.GetChange;
 import com.google.gerrit.server.restapi.change.QueryChanges;
 import com.google.gerrit.sshd.commands.Query;
-import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.util.ArrayList;
@@ -31,9 +32,14 @@ import java.util.List;
 import org.kohsuke.args4j.Option;
 
 public class Modules {
-  public static class Module extends AbstractModule {
+  public static class Module extends FactoryModule {
     @Override
     protected void configure() {
+      bind(CapabilityDefinition.class)
+          .annotatedWith(Exports.named(ViewPathsCapability.VIEW_PATHS))
+          .to(ViewPathsCapability.class);
+      factory(TaskPath.Factory.class);
+
       bind(ChangePluginDefinedInfoFactory.class)
           .annotatedWith(Exports.named("task"))
           .to(TaskAttributeFactory.class);
@@ -57,6 +63,9 @@ public class Modules {
         name = "--invalid",
         usage = "Include only invalid tasks and the tasks referencing them in the output")
     public boolean onlyInvalid = false;
+
+    @Option(name = "--include-paths", usage = "Include absolute path to each task")
+    public boolean includePaths = false;
 
     @Option(name = "--evaluation-time", usage = "Include elapsed evaluation time on each task")
     public boolean evaluationTime = false;

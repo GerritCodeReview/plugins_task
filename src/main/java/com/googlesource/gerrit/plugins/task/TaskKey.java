@@ -21,6 +21,7 @@ import com.google.gerrit.entities.BranchNameKey;
 @AutoValue
 public abstract class TaskKey {
   protected static final String CONFIG_SECTION = "task";
+  protected static final String CONFIG_TASKS_FACTORY = "tasks-factory";
 
   /** Creates a TaskKey with task name as the name of sub section. */
   public static TaskKey create(SubSectionKey section) {
@@ -44,4 +45,8 @@ public abstract class TaskKey {
   public abstract SubSectionKey subSection();
 
   public abstract String task();
+
+  public boolean isTasksFactoryGenerated() {
+    return subSection().section().equals(CONFIG_TASKS_FACTORY);
+  }
 }
