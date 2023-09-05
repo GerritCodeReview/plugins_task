@@ -57,12 +57,12 @@ build_images() {
 
 run_task_plugin_tests() {
     docker-compose "${COMPOSE_ARGS[@]}" up --detach
-    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=gerrit_admin run_tests \
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
         '/task/test/docker/run_tests/start.sh'
 }
 
 retest() {
-    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=gerrit_admin \
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin \
         run_tests task/test/docker/run_tests/start.sh retest
     RESULT=$?
     cleanup

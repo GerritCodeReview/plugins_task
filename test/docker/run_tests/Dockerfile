@@ -2,7 +2,7 @@ FROM alpine:3.11
 
 ARG UID=1000
 ARG GID=1000
-ENV USER gerrit_admin
+ENV USER admin
 ENV USER_HOME /home/$USER
 ENV RUN_TESTS_DIR task/test/docker/run_tests
 ENV WORKSPACE $USER_HOME/workspace
@@ -21,6 +21,6 @@ RUN ssh-keygen -P '' -f "$USER_HOME"/.ssh/id_rsa
 RUN chmod 400 "$USER_HOME"/.ssh/id_rsa
 RUN chmod 400 "$USER_HOME"/.ssh/id_rsa.pub
 RUN git config --global user.name "Gerrit Admin"
-RUN git config --global user.email "gerrit_admin@localdomain"
+RUN git config --global user.email "admin@example.com"
 
 ENTRYPOINT ["tail", "-f", "/dev/null"]
