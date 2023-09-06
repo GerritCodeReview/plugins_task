@@ -2155,6 +2155,123 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root Import tasks using absolute syntax"]
+  applicable = is:open
+  subtask = /relative.config^Root Import task from subdir using relative syntax
+  subtask = /dir/common.config^Root Import task from root task.config
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Import tasks using absolute syntax",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Root Import task from subdir using relative syntax",
+         "status" : "PASS",
+         "subTasks" : [
+            {
+                "applicable" : true,
+                "hasPass" : true,
+                "name" : "Sample relative task in sub dir",
+                "status" : "PASS"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Root Import task from root task.config",
+         "status" : "PASS",
+         "subTasks" : [
+             {
+                 "applicable" : true,
+                 "hasPass" : true,
+                 "name" : "Subtask PASS",
+                 "status" : "PASS"
+             }
+         ]
+      }
+   ]
+}
+
+[root "Root Import relative tasks from root config"]
+  applicable = is:open
+  subtask = dir/common.config^Root Import task from root task.config
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Import relative tasks from root config",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Root Import task from root task.config",
+         "status" : "PASS",
+         "subTasks" : [
+             {
+                 "applicable" : true,
+                 "hasPass" : true,
+                 "name" : "Subtask PASS",
+                 "status" : "PASS"
+             }
+         ]
+      }
+   ]
+}
+
+[root "Root subtasks-external user ref with Absolute and Relative syntaxes"]
+  subtasks-external = user absolute and relative syntaxes
+
+[external "user absolute and relative syntaxes"]
+  user = testuser
+  file = dir/sample.config
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root subtasks-external user ref with Absolute and Relative syntaxes",
+   "status" : "PASS",
+   "subTasks" : [
+       {
+           "applicable" : true,
+           "hasPass" : true,
+           "name" : "Referencing single task from same user ref",
+           "status" : "PASS",
+           "subTasks" : [
+               {
+                   "applicable" : true,
+                   "hasPass" : true,
+                   "name" : "Relative Task",
+                   "status" : "PASS"
+               },
+               {
+                   "applicable" : true,
+                   "hasPass" : true,
+                   "name" : "Relative Task in sub dir",
+                   "status" : "PASS"
+               },
+               {
+                   "applicable" : true,
+                   "hasPass" : true,
+                   "name" : "task in user root config file",
+                   "status" : "PASS"
+               },
+               {
+                   "applicable" : true,
+                   "hasPass" : true,
+                   "name" : "Absolute Task",
+                   "status" : "PASS"
+               }
+           ]
+       }
+   ]
+}
+
 [root "Root INVALID Preload"]
   preload-task = missing
 
@@ -2745,6 +2862,23 @@ file: `All-Projects:refs/meta/config:task/common.config`
   fail = is:open
 ```
 
+file: `All-Projects:refs/meta/config:task/relative.config`
+```
+[task "Root Import task from subdir using relative syntax"]
+    subtask = dir/common.config^Sample relative task in sub dir
+```
+
+file: `All-Projects:refs/meta/config:task/dir/common.config`
+```
+[task "Sample relative task in sub dir"]
+    applicable = is:open
+    pass = is:open
+
+[task "Root Import task from root task.config"]
+    applicable = is:open
+    subtask = ^Subtask PASS
+```
+
 file: `All-Projects:refs/meta/config:task/invalids.config`
 ```
 [task "No PASS criteria"]
@@ -2929,4 +3063,43 @@ file: `All-Users:refs/users/self:task/common.config`
 [task "file task/common.config FAIL"]
   applicable = is:open
   fail = is:open
+```
+
+file: `All-Users:refs/users/self:task.config`
+```
+[task "task in user root config file"]
+  applicable = is:open
+  pass = is:open
+```
+
+file: `All-Users:refs/users/self:task/dir/sample.config`
+```
+[task "Referencing single task from same user ref"]
+  applicable = is:open
+  pass = is:open
+  subtask = relative.config^Relative Task
+  subtask = sub_dir/relative.config^Relative Task in sub dir
+  subtask = ^task in user root config file
+  subtask = /foo/bar.config^Absolute Task
+```
+
+file: `All-Users:refs/users/self:task/dir/relative.config`
+```
+[task "Relative Task"]
+  applicable = is:open
+  pass = is:open
+```
+
+file: `All-Users:refs/users/self:task/dir/sub_dir/relative.config`
+```
+[task "Relative Task in sub dir"]
+  applicable = is:open
+  pass = is:open
+```
+
+file: `All-Users:refs/users/self:task/foo/bar.config`
+```
+[task "Absolute Task"]
+  applicable = is:open
+  pass = is:open
 ```

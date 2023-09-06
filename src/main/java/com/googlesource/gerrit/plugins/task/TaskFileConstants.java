@@ -14,21 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.auto.value.AutoValue;
-import com.google.gerrit.entities.BranchNameKey;
-
-/** A key for TaskExpression. */
-@AutoValue
-public abstract class TaskExpressionKey {
-  public static TaskExpressionKey create(FileKey file, String expression) {
-    return new AutoValue_TaskExpressionKey(file, expression);
-  }
-
-  public BranchNameKey branch() {
-    return file().branch();
-  }
-
-  public abstract FileKey file();
-
-  public abstract String expression();
+public final class TaskFileConstants {
+  public static final String TASK_DIR = "task";
+  public static final String TASK_CFG = "task.config";
 }

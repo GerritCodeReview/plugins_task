@@ -23,16 +23,30 @@ import java.util.regex.Pattern;
  * A TaskExpression represents a config string pointing to an expression which includes zero or more
  * task names separated by a '|', and potentially termintated by a '|'. If the expression is not
  * terminated by a '|' it indicates that task resolution of at least one task is required. Task
- * selection priority is from left to right. This can be expressed as: <code>
- * EXPR = [ TASK_NAME '|' ] TASK_NAME [ '|' ]</code>
+ * selection priority is from left to right. This can be expressed as:
+ *
+ * <pre>
+ * TASK_REF = [ [ TASK_FILE_PATH ] '^' ] TASK_NAME
+ * TASK_EXPR = TASK_REF [ WHITE_SPACE * '|' [ WHITE_SPACE * TASK_EXPR ] ]
+ * </pre>
  *
  * <p>Example expressions to prioritized names and requirements:
  *
  * <ul>
- *   <li><code> "simple"        -> ("simple")         required</code>
- *   <li><code> "world | peace" -> ("world", "peace") required</code>
- *   <li><code> "shadenfreud |" -> ("shadenfreud")    optional</code>
- *   <li><code> "foo | bar |"   -> ("foo", "bar")     optional</code>
+ *   <li>
+ *       <pre> "simple"            -> ("simple")                       required</pre>
+ *   <li>
+ *       <pre> "world | peace"     -> ("world", "peace")               required</pre>
+ *   <li>
+ *       <pre> "shadenfreud |"     -> ("shadenfreud")                  optional</pre>
+ *   <li>
+ *       <pre> "foo | bar |"       -> ("foo", "bar")                   optional</pre>
+ *   <li>
+ *       <pre> "/foo^bar | baz |"  -> ("task/foo^bar", "baz")          optional</pre>
+ *   <li>
+ *       <pre> "foo^bar | baz |"   -> ("cur_dir/foo^bar", "baz")       optional</pre>
+ *   <li>
+ *       <pre> "^bar | baz |"      -> ("task.config^bar", "baz")       optional</pre>
  * </ul>
  */
 public class TaskExpression implements Iterable<TaskKey> {
@@ -72,7 +86,7 @@ public class TaskExpression implements Iterable<TaskKey> {
           throw new NoSuchElementException("No more names, yet expression was not optional");
         }
         hasNext = null;
-        return TaskKey.create(key.file(), m.group(1).trim());
+        return new TaskReference(key.file(), m.group(1)).getTaskKey();
       }
     };
   }
