@@ -228,7 +228,7 @@ define_jsonByRoot() { # task_plugin_ouptut > jsonByRoot_array_definition
         roots=json.loads(sys.stdin.read())['plugins'][0]['roots']
         for root in roots:
             root_json = json.dumps(root, indent=3, separators=(',', ' : '), sort_keys=True)
-            print root['name'] + '\x00' + root_json + '\x00',"
+            sys.stdout.write(root['name'] + '\x00' + root_json + '\x00')"
     )
 
     local def=$(declare -p jsonByRoot)
