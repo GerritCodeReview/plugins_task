@@ -22,10 +22,13 @@ import junit.framework.TestCase;
 
 /*
  * <ul>
- *   <li><code> "simple"        -> ("simple")         required</code>
- *   <li><code> "world | peace" -> ("world", "peace") required</code>
- *   <li><code> "shadenfreud |" -> ("shadenfreud")    optional</code>
- *   <li><code> "foo | bar |"   -> ("foo", "bar")     optional</code>
+ *   <li><code> "simple"            -> ("simple")                   required</code>
+ *   <li><code> "world | peace"     -> ("world", "peace")           required</code>
+ *   <li><code> "shadenfreud |"     -> ("shadenfreud")              optional</code>
+ *   <li><code> "foo | bar |"       -> ("foo", "bar")               optional</code>
+ *   <li><code> "/foo^bar | baz |"  -> ("task/foo^bar", "baz")      optional</code>
+ *   <li><code> "foo^bar | baz |"   -> ("cur_dir/foo^bar", "baz")   optional</code>
+ *   <li><code> "^bar | baz |"      -> ("task.config^bar", "baz")   optional</code>
  * </ul>
  */
 public class TaskExpressionTest extends TestCase {
@@ -37,6 +40,14 @@ public class TaskExpressionTest extends TestCase {
   public static TaskKey SIMPLE_TASK = TaskKey.create(file, SIMPLE);
   public static TaskKey WORLD_TASK = TaskKey.create(file, WORLD);
   public static TaskKey PEACE_TASK = TaskKey.create(file, PEACE);
+
+  public static String SAMPLE = "sample";
+  public static String TASK_CFG = "task.config";
+  public static String SIMPLE_CFG = "task/simple.config";
+  public static String PEACE_CFG = "task/peace.config";
+  public static String WORLD_PEACE_CFG = "task/world/peace.config";
+  public static String REL_WORLD_PEACE_CFG = "world/peace.config";
+  public static String ABS_PEACE_CFG = "/peace.config";
 
   public void testBlank() {
     TaskExpression exp = getTaskExpression("");
@@ -143,6 +154,42 @@ public class TaskExpressionTest extends TestCase {
     assertNoSuchElementException(it);
   }
 
+  public void testAbsoluteAndRelativeReference() {
+    TaskExpression exp =
+        getTaskExpression(
+            createFileKey(SIMPLE_CFG),
+            REL_WORLD_PEACE_CFG + "^" + SAMPLE + " | " + ABS_PEACE_CFG + "^" + SAMPLE);
+    Iterator<TaskKey> it = exp.iterator();
+    assertTrue(it.hasNext());
+    assertEquals(it.next(), TaskKey.create(createFileKey(WORLD_PEACE_CFG), SAMPLE));
+    assertTrue(it.hasNext());
+    assertEquals(it.next(), TaskKey.create(createFileKey(PEACE_CFG), SAMPLE));
+    assertTrue(it.hasNext());
+    assertNoSuchElementException(it);
+  }
+
+  public void testAbsoluteAndRelativeReferenceFromRoot() {
+    TaskExpression exp =
+        getTaskExpression(
+            createFileKey(TASK_CFG),
+            REL_WORLD_PEACE_CFG + "^" + SAMPLE + " | " + ABS_PEACE_CFG + "^" + SAMPLE);
+    Iterator<TaskKey> it = exp.iterator();
+    assertTrue(it.hasNext());
+    assertEquals(it.next(), TaskKey.create(createFileKey(WORLD_PEACE_CFG), SAMPLE));
+    assertTrue(it.hasNext());
+    assertEquals(it.next(), TaskKey.create(createFileKey(PEACE_CFG), SAMPLE));
+    assertTrue(it.hasNext());
+    assertNoSuchElementException(it);
+  }
+
+  public void testReferenceFromRoot() {
+    TaskExpression exp = getTaskExpression(createFileKey(SIMPLE_CFG), " ^" + SAMPLE + " | ");
+    Iterator<TaskKey> it = exp.iterator();
+    assertTrue(it.hasNext());
+    assertEquals(it.next(), TaskKey.create(createFileKey(TASK_CFG), SAMPLE));
+    assertNoSuchElementException(it);
+  }
+
   public void testDifferentKeyOnDifferentFile() {
     TaskExpression exp = getTaskExpression(createFileKey("foo", "bar", "baz"), SIMPLE);
     TaskExpression otherExp = getTaskExpression(createFileKey("foo", "bar", "other"), SIMPLE);
@@ -182,6 +229,10 @@ public class TaskExpressionTest extends TestCase {
 
   protected TaskExpression getTaskExpression(FileKey file, String expression) {
     return new TaskExpression(file, expression);
+  }
+
+  protected static FileKey createFileKey(String file) {
+    return createFileKey("foo", "bar", file);
   }
 
   protected static FileKey createFileKey(String project, String branch, String file) {
