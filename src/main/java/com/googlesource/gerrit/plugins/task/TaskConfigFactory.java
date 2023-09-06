@@ -37,9 +37,6 @@ import org.eclipse.jgit.lib.Repository;
 public class TaskConfigFactory {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
 
-  protected static final String EXTENSION = ".config";
-  protected static final String DEFAULT = "task" + EXTENSION;
-
   protected final GitRepositoryManager gitMgr;
   protected final PermissionBackend permissionBackend;
 
@@ -62,7 +59,7 @@ public class TaskConfigFactory {
   }
 
   public TaskConfig getRootConfig() throws ConfigInvalidException, IOException {
-    return getTaskConfig(FileKey.create(getRootBranch(), DEFAULT));
+    return getTaskConfig(FileKey.create(getRootBranch(), TaskFileConstants.TASK_CFG));
   }
 
   public void masquerade(PatchSetArgument psa) {
