@@ -18,6 +18,7 @@ import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Project;
 import java.util.NoSuchElementException;
 import junit.framework.TestCase;
+import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.junit.Test;
 
 public class TaskReferenceTest extends TestCase {
@@ -53,10 +54,16 @@ public class TaskReferenceTest extends TestCase {
   }
 
   @Test
-  public void testReferencingRelativeTask() {
+  public void testReferencingRelativeDirTask() {
     String reference = " dir/common.config^" + SIMPLE;
     assertEquals(
         createTaskKey(SUB_COMMON_CFG, SIMPLE), getTaskFromReference(COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingRelativeFileTask() {
+    String reference = "common.config^" + SIMPLE;
+    assertEquals(createTaskKey(COMMON_CFG, SIMPLE), getTaskFromReference(COMMON_CFG, reference));
   }
 
   @Test
@@ -79,7 +86,11 @@ public class TaskReferenceTest extends TestCase {
   }
 
   protected static TaskKey getTaskFromReference(FileKey file, String expression) {
-    return new TaskReference(file, expression).getTaskKey();
+    try {
+      return new TaskReference(file, expression).getTaskKey();
+    } catch (ConfigInvalidException e) {
+      throw new NoSuchElementException();
+    }
   }
 
   protected static TaskKey createTaskKey(FileKey file, String task) {

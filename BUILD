@@ -29,6 +29,21 @@ java_library(
     exports = ["@auto-value//jar"],
 )
 
+load("@rules_antlr//antlr:antlr4.bzl", "antlr")
+
+antlr(
+    name = "task_reference",
+    srcs = ["src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4"],
+    package = "com.googlesource.gerrit.plugins.task",
+    visibility = ["//visibility:public"],
+)
+
+java_library(
+    name = "task_reference_parser",
+    srcs = [":task_reference"],
+    deps = ["@antlr4_runtime//jar"],
+)
+
 gerrit_plugin(
     name = plugin_name,
     srcs = glob(["src/main/java/**/*.java"]),
@@ -40,7 +55,11 @@ gerrit_plugin(
     ],
     resource_jars = [":gr-task-plugin"],
     resources = glob(["src/main/resources/**/*"]),
-    deps = [":auto-value"],
+    deps = [
+        ":auto-value",
+        ":task_reference_parser",
+        "@antlr4_runtime//jar",
+    ],
     javacopts = [ "-Werror", "-Xlint:all", "-Xlint:-classfile", "-Xlint:-processing"],
 )
 
