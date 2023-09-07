@@ -129,6 +129,8 @@ public class Preloader {
           return task;
         }
       }
+    } catch (RuntimeConfigInvalidException e) {
+      throw e.checkedException;
     } catch (NoSuchElementException e) {
       // expression was not optional but we ran out of names to try
       throw new ConfigInvalidException("task not defined");

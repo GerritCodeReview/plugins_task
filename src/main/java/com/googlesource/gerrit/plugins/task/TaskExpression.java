@@ -18,17 +18,20 @@ import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /**
  * A TaskExpression represents a config string pointing to an expression which includes zero or more
- * task names separated by a '|', and potentially termintated by a '|'. If the expression is not
- * terminated by a '|' it indicates that task resolution of at least one task is required. Task
+ * task references separated by a '|', and potentially termintated by a '|'. If the expression is
+ * not terminated by a '|' it indicates that task resolution of at least one task is required. Task
  * selection priority is from left to right. This can be expressed as:
  *
  * <pre>
- * TASK_REF = [ [ TASK_FILE_PATH ] '^' ] TASK_NAME
- * TASK_EXPR = TASK_REF [ WHITE_SPACE * '|' [ WHITE_SPACE * TASK_EXPR ] ]
+ * TASK_EXPR = TASK_REFERENCE [ WHITE_SPACE * '|' [ WHITE_SPACE * TASK_EXPR ] ]
  * </pre>
+ *
+ * <a href="file:../../../../../../antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4">See
+ * this for Task Reference</a>
  *
  * <p>Example expressions to prioritized names and requirements:
  *
@@ -41,12 +44,6 @@ import java.util.regex.Pattern;
  *       <pre> "shadenfreud |"     -> ("shadenfreud")                  optional</pre>
  *   <li>
  *       <pre> "foo | bar |"       -> ("foo", "bar")                   optional</pre>
- *   <li>
- *       <pre> "/foo^bar | baz |"  -> ("task/foo^bar", "baz")          optional</pre>
- *   <li>
- *       <pre> "foo^bar | baz |"   -> ("cur_dir/foo^bar", "baz")       optional</pre>
- *   <li>
- *       <pre> "^bar | baz |"      -> ("task.config^bar", "baz")       optional</pre>
  * </ul>
  */
 public class TaskExpression implements Iterable<TaskKey> {
@@ -86,7 +83,11 @@ public class TaskExpression implements Iterable<TaskKey> {
           throw new NoSuchElementException("No more names, yet expression was not optional");
         }
         hasNext = null;
-        return new TaskReference(key.file(), m.group(1)).getTaskKey();
+        try {
+          return new TaskReference(key.file(), m.group(1)).getTaskKey();
+        } catch (ConfigInvalidException e) {
+          throw new RuntimeConfigInvalidException(e);
+        }
       }
     };
   }
