@@ -8,6 +8,7 @@ load("//tools/bzl:js.bzl", "gerrit_js_bundle")
 load("//tools/js:eslint.bzl", "eslint")
 load("//tools/bzl:junit.bzl", "junit_tests")
 load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
+load("@rules_antlr//antlr:antlr4.bzl", "antlr")
 
 plugin_name = "task"
 
@@ -29,6 +30,25 @@ java_library(
     exports = ["@auto-value//jar"],
 )
 
+antlr(
+    name = "task_reference",
+    srcs = ["src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4"],
+    package = "com.googlesource.gerrit.plugins.task",
+    visibility = ["//visibility:public"],
+    deps = [
+        "@antlr4_tool//jar:jar",
+        "@antlr4_runtime//jar:jar",
+        "@antlr3_runtime//jar:jar",
+        "@stringtemplate4//jar:jar",
+    ],
+)
+
+java_library(
+    name = "task_reference_parser",
+    srcs = [":task_reference"],
+    deps = ["@antlr4_runtime//jar"],
+)
+
 gerrit_plugin(
     name = plugin_name,
     srcs = glob(["src/main/java/**/*.java"]),
@@ -40,7 +60,11 @@ gerrit_plugin(
     ],
     resource_jars = [":gr-task-plugin"],
     resources = glob(["src/main/resources/**/*"]),
-    deps = [":auto-value"],
+    deps = [
+        ":auto-value",
+        ":task_reference_parser",
+        "@antlr4_runtime//jar",
+    ],
     javacopts = [ "-Werror", "-Xlint:all", "-Xlint:-classfile", "-Xlint:-processing"],
 )
 
