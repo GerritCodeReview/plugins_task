@@ -1,3 +1,4 @@
+```
 [root "INVALIDS Preview"]
   subtasks-file = invalids.config
 
@@ -629,3 +630,4 @@
       }
    ]
 }
+```

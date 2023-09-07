@@ -184,7 +184,7 @@ echo "$no_all_visible_json" | strip_non_invalid > "$EXPECTED".invalid
 strip_non_invalid < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
 
 
-preview_pjson=$(echo "$DOC_PREVIEW" | testdoc_2_pjson)
+preview_pjson=$(example "$DOC_PREVIEW" 1 | testdoc_2_pjson)
 echo "$preview_pjson" | remove_suites "invalid" "secret" | \
     ensure json_pp > "$EXPECTED".preview-non-secret
 echo "$preview_pjson" | remove_suites "invalid" "!secret" | \
@@ -192,7 +192,7 @@ echo "$preview_pjson" | remove_suites "invalid" "!secret" | \
 echo "$preview_pjson" | remove_suites "secret" "!invalid" | \
     strip_non_invalid > "$EXPECTED".preview-invalid
 
-echo "$DOC_PREVIEW" | testdoc_2_cfg | replace_user > "$ROOT_CFG"
+example "$DOC_PREVIEW" 1 | testdoc_2_cfg | replace_user > "$ROOT_CFG"
 cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
 PREVIEW_ROOTS=$(config_section_keys "root")
 
