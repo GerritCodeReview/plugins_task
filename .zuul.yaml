@@ -2,6 +2,7 @@
     name: plugins-task-build
     parent: gerrit-plugin-build
     pre-run:
+        - tools/playbooks/install_maven.yaml
         - tools/playbooks/install_docker.yaml
         - tools/playbooks/install_python3-distutils.yaml
     vars:

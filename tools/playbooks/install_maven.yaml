@@ -1,0 +1,8 @@
+- hosts: all
+  tasks:
+    - name: Install maven
+      become: true
+      package:
+        name:
+          - maven
+        state: present

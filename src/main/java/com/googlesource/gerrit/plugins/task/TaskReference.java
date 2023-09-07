@@ -14,9 +14,17 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.CharStreams;
+import org.antlr.v4.runtime.CommonTokenStream;
+import org.antlr.v4.runtime.Lexer;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
+import org.antlr.v4.runtime.tree.ParseTree;
+import org.antlr.v4.runtime.tree.ParseTreeWalker;
+import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** This class is used by TaskExpression to decode the task from task reference. */
 public class TaskReference {
@@ -31,37 +39,78 @@ public class TaskReference {
     }
   }
 
-  public TaskKey getTaskKey() {
-    String[] referenceSplit = reference.split("\\^");
-    switch (referenceSplit.length) {
-      case 1:
-        return TaskKey.create(currentFile, referenceSplit[0]);
-      case 2:
-        return TaskKey.create(getFileKey(referenceSplit[0]), referenceSplit[1]);
-      default:
-        throw new NoSuchElementException();
+  public TaskKey getTaskKey() throws ConfigInvalidException {
+    TaskKey.Builder builder = new TaskKey.Builder(currentFile);
+    ParseTreeWalker walker = new ParseTreeWalker();
+    try {
+      walker.walk(new TaskReferenceListener(builder), parse());
+    } catch (RuntimeConfigInvalidException e) {
+      throw e.checkedException;
+    }
+    return builder.buildTaskKey();
+  }
+
+  protected ParseTree parse() {
+    Lexer lexer = new TaskReferenceLexer(CharStreams.fromString(reference));
+    lexer.removeErrorListeners();
+    lexer.addErrorListener(TaskReferenceErrorListener.INSTANCE);
+    return new TaskReferenceParser(new CommonTokenStream(lexer)).reference();
+  }
+
+  protected static class TaskReferenceErrorListener extends BaseErrorListener {
+    protected static final TaskReferenceErrorListener INSTANCE = new TaskReferenceErrorListener();
+
+    @Override
+    public void syntaxError(
+        Recognizer<?, ?> recognizer,
+        Object offendingSymbol,
+        int line,
+        int charPositionInLine,
+        String msg,
+        RecognitionException e) {
+      throw new NoSuchElementException();
     }
   }
 
-  protected FileKey getFileKey(String referenceFile) {
-    return FileKey.create(currentFile.branch(), getFile(referenceFile));
-  }
+  protected class TaskReferenceListener extends TaskReferenceBaseListener {
+    TaskKey.Builder builder;
 
-  protected String getFile(String referencedFile) {
-    if (referencedFile.isEmpty()) { // Implies a task from root task.config
-      return TaskFileConstants.TASK_CFG;
+    TaskReferenceListener(TaskKey.Builder builder) {
+      this.builder = builder;
     }
 
-    if (referencedFile.startsWith("/")) { // Implies absolute path to the config is provided
-      return Paths.get(TaskFileConstants.TASK_DIR, referencedFile).toString();
+    @Override
+    public void enterAbsolute(TaskReferenceParser.AbsoluteContext ctx) {
+      builder.setAbsolute();
     }
 
-    // Implies a relative path to sub-directory
-    Path dir = Paths.get(currentFile.file()).getParent();
-    if (dir == null) { // Relative path in root task.config should refer to files under task dir
-      return Paths.get(TaskFileConstants.TASK_DIR, referencedFile).toString();
-    } else {
-      return Paths.get(dir.toString(), referencedFile).toString();
+    @Override
+    public void enterRelative(TaskReferenceParser.RelativeContext ctx) {
+      try {
+        builder.setPath(
+            ctx.dir().stream()
+                .map(dir -> Paths.get(dir.NAME().getText()))
+                .reduce(Paths.get(""), (a, b) -> a.resolve(b))
+                .resolve(ctx.NAME().getText()));
+      } catch (ConfigInvalidException e) {
+        throw new RuntimeConfigInvalidException(e);
+      }
+    }
+
+    @Override
+    public void enterReference(TaskReferenceParser.ReferenceContext ctx) {
+      builder.setTaskName(ctx.TASK().getText());
+    }
+
+    @Override
+    public void enterFile_path(TaskReferenceParser.File_pathContext ctx) {
+      if (ctx.absolute() == null && ctx.relative() == null) {
+        try {
+          builder.setRefRootFile();
+        } catch (ConfigInvalidException e) {
+          throw new RuntimeConfigInvalidException(e);
+        }
+      }
     }
   }
 }
