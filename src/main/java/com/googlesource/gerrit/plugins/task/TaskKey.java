@@ -15,7 +15,11 @@
 package com.googlesource.gerrit.plugins.task;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.base.Preconditions;
 import com.google.gerrit.entities.BranchNameKey;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** An immutable reference to a task in task config file. */
 @AutoValue
@@ -48,5 +52,68 @@ public abstract class TaskKey {
 
   public boolean isTasksFactoryGenerated() {
     return subSection().section().equals(CONFIG_TASKS_FACTORY);
+  }
+
+  public static class Builder {
+    protected final FileKey relativeTo;
+    protected String file;
+    protected String task;
+
+    Builder(FileKey relativeTo) {
+      this.relativeTo = relativeTo;
+    }
+
+    public TaskKey buildTaskKey() {
+      return TaskKey.create(
+          isRelativePath() ? relativeTo : FileKey.create(relativeTo.branch(), file), task);
+    }
+
+    public void setAbsolute() {
+      file = TaskFileConstants.TASK_DIR;
+    }
+
+    public void setPath(Path path) throws ConfigInvalidException {
+      Path parentDir = Paths.get(relativeTo.file()).getParent();
+      if (parentDir == null) {
+        parentDir = Paths.get(TaskFileConstants.TASK_DIR);
+      }
+
+      file =
+          isRelativePath()
+              ? parentDir.resolve(path).toString()
+              : Paths.get(file).resolve(path).toString();
+      throwIfInvalidPath();
+    }
+
+    public void setRefRootFile() throws ConfigInvalidException {
+      Preconditions.checkState(!isFileAlreadySet());
+      file = TaskFileConstants.TASK_CFG;
+    }
+
+    public void setTaskName(String task) {
+      this.task = task;
+    }
+
+    protected void throwIfInvalidPath() throws ConfigInvalidException {
+      Path path = Paths.get(file);
+      if (!path.startsWith(TaskFileConstants.TASK_DIR)
+          && !path.equals(Paths.get(TaskFileConstants.TASK_CFG))) {
+        throw new ConfigInvalidException(
+            "Invalid config location, path should be "
+                + TaskFileConstants.TASK_CFG
+                + " or under "
+                + TaskFileConstants.TASK_DIR
+                + " directory");
+      }
+    }
+
+    /** Returns true when the path implies relative or same file. */
+    protected boolean isRelativePath() {
+      return file == null;
+    }
+
+    protected boolean isFileAlreadySet() {
+      return file != null;
+    }
   }
 }
