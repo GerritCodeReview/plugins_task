@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ff8788ea_07522c2d",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-09-08T17:04:36Z",
+      "side": 1,
+      "message": "Squash into parent since it is the change this fixes?",
+      "revId": "013e3d87aab2ff429b1a66eff3a3749925994df3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
