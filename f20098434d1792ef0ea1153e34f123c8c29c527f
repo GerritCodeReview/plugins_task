@@ -16,6 +16,24 @@
       "message": "Have you verified that all these methods match exactly what was removed from the other files?",
       "revId": "f20098434d1792ef0ea1153e34f123c8c29c527f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e026e5f_97affe25",
+        "filename": "test/lib/lib_helper.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2023-09-11T03:44:00Z",
+      "side": 1,
+      "message": "Yes",
+      "parentUuid": "05d9f5e4_69a4c591",
+      "revId": "f20098434d1792ef0ea1153e34f123c8c29c527f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
