@@ -16,8 +16,11 @@
  */
 
 import './gr-task-plugin.js';
+import './gr-task-summary.js';
 
 Gerrit.install(plugin => {
   plugin.registerCustomComponent(
       'change-view-integration', 'gr-task-plugin');
+  plugin.registerCustomComponent(
+      'commit-container', 'gr-task-summary');
 });
