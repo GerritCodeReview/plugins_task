@@ -26,10 +26,10 @@ import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.index.change.ChangeField;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeIndexPredicate;
-import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gerrit.server.query.change.DestinationPredicate;
 import com.google.gerrit.server.query.change.RegexProjectPredicate;
 import com.google.gerrit.server.query.change.RegexRefPredicate;
+import com.google.gerrit.server.query.change.SubmitRequirementChangeQueryBuilder;
 import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
 import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
@@ -44,7 +44,7 @@ public class PredicateCache {
     protected Object predicatesByQueryCache;
   }
 
-  protected final ChangeQueryBuilder cqb;
+  protected final SubmitRequirementChangeQueryBuilder srcqb;
   protected final Set<String> cacheableByBranchPredicateClassNames;
   protected final CurrentUser user;
   protected final HitHashMap<String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
@@ -57,9 +57,9 @@ public class PredicateCache {
       @GerritServerConfig Config config,
       @PluginName String pluginName,
       CurrentUser user,
-      ChangeQueryBuilder cqb) {
+      SubmitRequirementChangeQueryBuilder srcqb) {
     this.user = user;
-    this.cqb = cqb;
+    this.srcqb = srcqb;
     cacheableByBranchPredicateClassNames =
         new HashSet<>(
             Arrays.asList(
@@ -88,7 +88,7 @@ public class PredicateCache {
     }
     // never seen 'query' before
     try (StopWatch stopWatch = predicatesByQuery.createLoadingStopWatch(query, isVisible)) {
-      Predicate<ChangeData> pred = cqb.parse(query);
+      Predicate<ChangeData> pred = srcqb.parse(query);
       predicatesByQuery.put(query, new ThrowingProvider.Entry<>(pred));
       return pred;
     } catch (QueryParseException e) {
