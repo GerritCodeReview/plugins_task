@@ -73,6 +73,26 @@ file: `All-Projects:refs/meta/config:task.config`
    "status" : "FAIL"
 }
 
+[root "Root PASS SR"]
+  pass = is:true_task
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root PASS SR",
+   "status" : "PASS"
+}
+
+[root "Root FAIL SR"]
+  fail = is:true_task
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root FAIL SR",
+   "status" : "FAIL"
+}
+
 [root "Root straight PASS"]
   applicable = is:open
   pass = is:open
