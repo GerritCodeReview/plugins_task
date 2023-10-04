@@ -44,6 +44,8 @@ public class Modules {
           .annotatedWith(Exports.named("task"))
           .to(TaskAttributeFactory.class);
 
+      install(new IsTrueOperator.Module());
+
       bind(DynamicBean.class).annotatedWith(Exports.named(GetChange.class)).to(MyOptions.class);
       bind(DynamicBean.class).annotatedWith(Exports.named(Query.class)).to(MyOptions.class);
       bind(DynamicBean.class).annotatedWith(Exports.named(QueryChanges.class)).to(MyOptions.class);

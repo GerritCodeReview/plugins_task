@@ -4,7 +4,7 @@ file: `All-Projects.git:refs/meta/config:task.config`
 ```
  [root "Root Preview SECRET external"]
      applicable = is:open
-     pass = True
+     pass = is:true_task
 +    subtasks-external = SECRET external
 
 +[external "SECRET external"]

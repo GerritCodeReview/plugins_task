@@ -271,7 +271,7 @@
 }
 
 [root "Root PASS Preview"]
-  pass = True
+  pass = is:true_task
 
 {
    "applicable" : true,
@@ -348,7 +348,7 @@
 
 [root "Root NA Pass Preview"]
   applicable = NOT is:open
-  pass = True
+  pass = is:true_task
 
 {
    "applicable" : false,

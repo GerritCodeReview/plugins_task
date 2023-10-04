@@ -42,7 +42,7 @@ public class MatchCache {
   @SuppressWarnings("try")
   public boolean match(ChangeData changeData, String query, boolean isVisible)
       throws StorageException, QueryParseException {
-    if (query == null || "true".equalsIgnoreCase(query)) {
+    if (query == null) {
       return true;
     }
     Boolean isMatched = resultByChangeByQuery.get(query, changeData.getId());

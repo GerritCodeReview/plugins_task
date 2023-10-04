@@ -4,7 +4,7 @@ file: `All-Projects.git:refs/meta/config:task.config`
 ```
  [root "Root Preview NON-SECRET external with SECRET external"]
      applicable = "is:open"
-     pass = True
+     pass = is:true_task
 +    subtasks-external = NON-SECRET with SECRET External
 
 +[external "NON-SECRET with SECRET External"]
@@ -16,7 +16,7 @@ file: `All-Users.git:{non_secret_user_ref}:task/secret_external.config`
 ```
 [task "NON-SECRET with SECRET external"]
     applicable = is:open
-    pass = True
+    pass = is:true_task
     subtasks-external = SECRET external
 
 [external "SECRET external"]

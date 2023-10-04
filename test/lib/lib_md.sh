@@ -26,7 +26,7 @@ file: `All-Projects.git:refs/meta/config:task.config`
 ```
 [root "Test root"]
     applicable = "is:open"
-    pass = True
+    pass = is:true_task
 ```
 
 file: `All-Users:refs/users/some_ref:task/sample.config`
@@ -63,7 +63,7 @@ md_file_markers() { # DOC_CONTENT
 # out:
 #[root "Test root"]
 #    applicable = "is:open"
-#    pass = True
+#    pass = is:true_task
 #
 # in: json:
 # out :

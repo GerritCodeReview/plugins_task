@@ -38,7 +38,7 @@ source "$MYDIR/lib/lib_md.sh"
 #
 #  [root "Root Preview SECRET external"]
 #      applicable = is:open
-#      pass = True
+#      pass = is:true_task
 # -    subtask = Subtask APPLICABLE
 # +    subtasks-external = SECRET external
 #
@@ -56,7 +56,7 @@ diff_indicators_present() { # file_content
 # out:
 #[root "Root Preview SECRET external"]
 #    applicable = is:open
-#    pass = True
+#    pass = is:true_task
 #    subtask = Subtask APPLICABLE
 diff_apply() {
     sed -e '/^-/d' -e 's/^.//'
@@ -66,7 +66,7 @@ diff_apply() {
 # out:
 #[root "Root Preview SECRET external"]
 #    applicable = is:open
-#    pass = True
+#    pass = is:true_task
 #    subtasks-external = SECRET external
 #
 #[external "SECRET external"]

@@ -194,7 +194,7 @@
 ```
 [root "Root Capability Error"]
     applicable = is:open
-    pass = true
+    pass = is:true_task
 
 {
    "applicable" : true,

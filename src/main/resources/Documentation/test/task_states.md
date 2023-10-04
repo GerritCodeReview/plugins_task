@@ -31,12 +31,12 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [root "Root APPLICABLE"]
   applicable = is:open # Assumes test query is "is:open"
-  pass = True
+  pass = is:true_task
   subtask = Subtask APPLICABLE
 
 [task "Subtask APPLICABLE"]
   applicable = is:open
-  pass = True
+  pass = is:true_task
 
 {
    "applicable" : true,
@@ -54,7 +54,7 @@ file: `All-Projects:refs/meta/config:task.config`
 }
 
 [root "Root PASS"]
-  pass = True
+  pass = is:true_task
 
 {
    "applicable" : true,
@@ -64,7 +64,7 @@ file: `All-Projects:refs/meta/config:task.config`
 }
 
 [root "Root FAIL"]
-  fail = True
+  fail = is:true_task
 
 {
    "applicable" : true,
@@ -374,7 +374,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [root "Root OPTIONAL MISSING"]
    subtask = OPTIONAL MISSING |
-   pass = True
+   pass = is:true_task
 
 {
    "applicable" : true,
@@ -695,7 +695,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory static"]
   names-factory = names-factory static list
-  fail = True
+  fail = is:true_task
 
 [names-factory "names-factory static list"]
   type = static
@@ -735,7 +735,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory change"]
   names-factory = names-factory change list
-  fail = True
+  fail = is:true_task
 
 [names-factory "names-factory change list"]
   changes = change:_change1_number OR change:_change2_number
@@ -770,7 +770,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory static (empty name)"]
   names-factory = names-factory static (empty name list)
-  fail = True
+  fail = is:true_task
 
 [names-factory "names-factory static (empty name list)"]
   type = static
@@ -782,7 +782,7 @@ file: `All-Projects:refs/meta/config:task.config`
 }
 
 [root "Root tasks-factory static (empty name PASS)"]
-  pass = True
+  pass = is:true_task
   subtasks-factory = tasks-factory static (empty name)
 
 {
@@ -797,7 +797,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "parent tasks-factory Same Name - Different Tasks-Factory"]
   names-factory = parent names-factory Same Name - Different Tasks-Factory
-  fail = True
+  fail = is:true_task
   subtasks-factory = child tasks-factory Same Name - Different Tasks-Factory
 
 [names-factory "parent names-factory Same Name - Different Tasks-Factory"]
@@ -908,7 +908,7 @@ file: `All-Projects:refs/meta/config:task.config`
   set-backward-reference = first-[${first-property}]
   set-forward-reference = last-[${last-property}]
   set-last-property = last-value
-  fail = True
+  fail = is:true_task
   fail-hint = backward-reference(${backward-reference}) forward-reference(${forward-reference})
 
 {
@@ -923,7 +923,7 @@ file: `All-Projects:refs/meta/config:task.config`
   set-first-property = first-value
   set-direct-reference = first-[${first-property}]
   set-deep-reference = deep-{${direct-reference}}
-  fail = True
+  fail = is:true_task
   fail-hint = deep-reference(${deep-reference})
 
 {
@@ -937,7 +937,7 @@ file: `All-Projects:refs/meta/config:task.config`
 [root "Root Properties Referenced Twice"]
   set-first-property = first-value
   set-referenced-twice = first-[${first-property}] first-[${first-property}]
-  fail = True
+  fail = is:true_task
   fail-hint = first-[${first-property}] referenced-twice(${referenced-twice}) referenced-twice(${referenced-twice})
 
 {
@@ -958,7 +958,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [task "Subtask Inherited Properties"]
   set-my-property = my-value
-  fail = True
+  fail = is:true_task
   fail-hint = root-property(${root-property}) parent-property(${parent-property}) my-property(${my-property})
 
 {
@@ -994,7 +994,7 @@ file: `All-Projects:refs/meta/config:task.config`
   subtask = Subtask Inherited Distant Properties
 
 [task "Subtask Inherited Distant Properties"]
-  fail = True
+  fail = is:true_task
   fail-hint = root-property(${root-property}) root-change-property(${root-change-property})
 
 {
@@ -1026,7 +1026,7 @@ file: `All-Projects:refs/meta/config:task.config`
   subtask = Subtask Properties Reset
 
 [task "Subtask Properties Reset"]
-  fail = True
+  fail = is:true_task
   set-root-to-reset-by-subtask = reset-by-subtask-root-value
   fail-hint = root-to-reset-by-subtask:(${root-to-reset-by-subtask})
 
@@ -1059,7 +1059,7 @@ file: `All-Projects:refs/meta/config:task.config`
   set-inherited-root-reference = root-[${root-property}]
   set-inherited-parent-reference = parent-[${parent-property}]
   set-inherited-root-deep-reference = parent-inherited-root-reference-[${parent-inherited-root-reference}]
-  fail = True
+  fail = is:true_task
   fail-hint = inherited-root-reference(${inherited-root-reference}) inherited-parent-reference(${inherited-parent-reference}) inherited-root-deep-reference(${inherited-root-deep-reference})
 
 {
@@ -1089,12 +1089,12 @@ file: `All-Projects:refs/meta/config:task.config`
 [root "Root Properties Exports"]
   export-root-exported = ${_name}
   subtask = Subtask Properties Exports
-  fail = True
+  fail = is:true_task
   fail-hint = root-exported(${root-exported})
 
 [task "Subtask Properties Exports"]
   export-subtask-exported = ${_name}
-  fail = True
+  fail = is:true_task
   fail-hint = root-exported(${root-exported}) subtask-exported(${subtask-exported})
 
 {
@@ -1123,12 +1123,12 @@ file: `All-Projects:refs/meta/config:task.config`
 [root "Root Internal Properties"]
   export-root = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   set-root-internals = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
-  fail = True
+  fail = is:true_task
   fail-hint = Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
   subtask = Subtask Internal Properties
 
 [task "Subtask Internal Properties"]
-  fail = True
+  fail = is:true_task
   fail-hint = root-internals(${root-internals}) Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
 
 {
@@ -1159,7 +1159,7 @@ file: `All-Projects:refs/meta/config:task.config`
   subtask = Second ${_name}
 
 [task "Second Subtask Via Property"]
-  fail = True
+  fail = is:true_task
 
 {
    "applicable" : true,
@@ -1191,7 +1191,7 @@ file: `All-Projects:refs/meta/config:task.config`
 [tasks-factory "tasks-factory branch NOT applicable Property"]
   names-factory = names-factory branch NOT applicable Property
   applicable = branch:dev
-  fail = True
+  fail = is:true_task
 
 [names-factory "names-factory branch NOT applicable Property"]
   type = static
@@ -1201,7 +1201,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [task "Subtask applicable Property"]
   applicable = change:${_change_number}
-  fail = True
+  fail = is:true_task
 
 {
    "applicable" : true,
@@ -1242,7 +1242,7 @@ file: `All-Projects:refs/meta/config:task.config`
 [tasks-factory "tasks-factory branch applicable Property"]
   names-factory = names-factory branch applicable Property
   applicable = branch:master
-  fail = True
+  fail = is:true_task
 
 [names-factory "names-factory branch applicable Property"]
   type = static
@@ -1284,7 +1284,7 @@ file: `All-Projects:refs/meta/config:task.config`
   set-welcome-message = Welcome to the jungle
   names-factory = names-factory static list
   fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
-  fail = True
+  fail = is:true_task
 
 {
    "applicable" : true,
@@ -1359,7 +1359,7 @@ file: `All-Projects:refs/meta/config:task.config`
 [tasks-factory "Properties tasks-factory _name Property Reference"]
   set-name-reference = first-property ${_name}
   fail-hint = ${name-reference}
-  fail = true
+  fail = is:true_task
   names-factory = names-factory static list
 
 {
@@ -1397,7 +1397,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory Properties names-factory STATIC"]
   names-factory = Properties names-factory STATIC
-  fail = True
+  fail = is:true_task
 
 [names-factory "Properties names-factory STATIC"]
   type = static
@@ -1458,7 +1458,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory Properties names-factory CHANGE"]
   names-factory = Properties names-factory CHANGE
-  fail = True
+  fail = is:true_task
 
 [names-factory "Properties names-factory CHANGE"]
   type = change
@@ -1495,7 +1495,7 @@ file: `All-Projects:refs/meta/config:task.config`
   subtask = Current CHANGE Property
 
 [task "Current CHANGE Property"]
-  fail = True
+  fail = is:true_task
   fail-hint = Current Change: ${_change_number}
 
 [names-factory "Properties names-factory current CHANGE"]
@@ -1563,7 +1563,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory Properties names-factory Reference"]
   names-factory = Properties names-factory Reference
-  fail = True
+  fail = is:true_task
 
 [names-factory "Properties names-factory Reference"]
   type = change
@@ -1599,7 +1599,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory Properties names-factory Deep Reference"]
   names-factory = Properties names-factory Deep Reference
-  fail = True
+  fail = is:true_task
 
 [names-factory "Properties names-factory Deep Reference"]
   type = change
@@ -1634,7 +1634,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory Properties names-factory Reference Internal"]
   names-factory = Properties names-factory Reference Internal
-  fail = True
+  fail = is:true_task
 
 [names-factory "Properties names-factory Reference Internal"]
   type = change
@@ -1672,7 +1672,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [tasks-factory "tasks-factory Properties names-factory Reference Inherited"]
   names-factory = Properties names-factory Reference Inherited
-  fail = True
+  fail = is:true_task
 
 [names-factory "Properties names-factory Reference Inherited"]
   type = change
@@ -1765,7 +1765,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [task "Subtask Preload Hints FAIL"]
   preload-task = Subtask Hints
-  fail = True
+  fail = is:true_task
 
 {
    "applicable" : true,
@@ -1895,7 +1895,7 @@ file: `All-Projects:refs/meta/config:task.config`
   set-first-property = first-value
   set-second-property = ${first-property} second-extra ${third-property}
   set-third-property = third-value
-  fail = True
+  fail = is:true_task
   fail-hint = root-property(${root-property}) first-property(${first-property}) second-property(${second-property})
 
 {
@@ -1953,7 +1953,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [task "Looping"]
   subtask = Looping
-  pass = True
+  pass = is:true_task
 
 {
    "applicable" : true,
@@ -1984,7 +1984,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [task "Looping DuplicateKey"]
   preload-task = DuplicateKey
-  pass = True
+  pass = is:true_task
 
 [task "DuplicateKey"]
   duplicate-key = 1234
@@ -2016,7 +2016,7 @@ file: `All-Projects:refs/meta/config:task.config`
 [tasks-factory "tasks-factory change loop"]
   names-factory = names-factory change constant
   subtask = task (tasks-factory changes loop)
-  fail = True
+  fail = is:true_task
 
 [names-factory "names-factory change constant"]
   changes = change:_change1_number OR change:_change2_number
@@ -2555,7 +2555,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [root "Root NA Pass"]
   applicable = NOT is:open # Assumes test query is "is:open"
-  pass = True
+  pass = is:true_task
 
 {
    "applicable" : false,
@@ -2566,7 +2566,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 [root "Root NA Fail"]
   applicable = NOT is:open # Assumes test query is "is:open"
-  fail = True
+  fail = is:true_task
 
 {
    "applicable" : false,
@@ -2909,33 +2909,33 @@ file: `All-Projects:refs/meta/config:task/invalids.config`
    subtask = MISSING | MISSING
 
 [task "Subtask Blank"]
-  pass = True
+  pass = is:true_task
   subtask =
 
 [task "Bad APPLICABLE query"]
   applicable = bad:query
-  fail = True
+  fail = is:true_task
 
 [task "NA Bad PASS query"]
   applicable = NOT is:open # Assumes test query is "is:open"
-  fail = True
+  fail = is:true_task
   pass = has:bad
 
 [task "NA Bad FAIL query"]
   applicable = NOT is:open # Assumes test query is "is:open"
-  pass = True
+  pass = is:true_task
   fail = has:bad
 
 [task "NA Bad INPROGRESS query"]
   applicable = NOT is:open # Assumes test query is "is:open"
-  fail = True
+  fail = is:true_task
   in-progress = has:bad
 
 [task "Looping Properties"]
   set-A = ${B}
   set-B = ${A}
   fail-hint = ${A}
-  fail = True
+  fail = is:true_task
 
 [task "task (tasks-factory missing)"]
   subtasks-factory = missing
@@ -2969,16 +2969,16 @@ file: `All-Projects:refs/meta/config:task/invalids.config`
 
 [tasks-factory "tasks-factory (names-factory type missing)"]
   names-factory = names-factory (type missing)
-  fail = True
+  fail = is:true_task
 
 [tasks-factory "tasks-factory (preload-task missing)"]
   names-factory = names-factory static
-  fail = True
+  fail = is:true_task
   preload-task = missing
 
 [tasks-factory "tasks-factory change (preload-task missing)"]
   names-factory = names-factory change list
-  fail = True
+  fail = is:true_task
   preload-task = missing
 
 [tasks-factory "tasks-factory (names-factory type INVALID)"]
@@ -2986,23 +2986,23 @@ file: `All-Projects:refs/meta/config:task/invalids.config`
 
 [tasks-factory "tasks-factory (names-factory name Blank)"]
   names-factory = names-factory (name Blank)
-  fail = True
+  fail = is:true_task
 
 [tasks-factory "tasks-factory (names-factory duplicate)"]
   names-factory = names-factory duplicate
-  fail = True
+  fail = is:true_task
 
 [tasks-factory "tasks-factory change (names-factory type missing)"]
   names-factory = names-factory change list (type missing)
-  fail = True
+  fail = is:true_task
 
 [tasks-factory "tasks-factory change (names-factory changes missing)"]
   names-factory = names-factory change list (changes missing)
-  fail = True
+  fail = is:true_task
 
 [tasks-factory "tasks-factory change (names-factory changes invalid)"]
   names-factory = names-factory change list (changes invalid)
-  fail = True
+  fail = is:true_task
 
 [names-factory "names-factory static"]
   name = task A

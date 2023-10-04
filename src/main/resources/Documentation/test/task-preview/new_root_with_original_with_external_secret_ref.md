@@ -15,7 +15,7 @@ file: `All-Projects.git:refs/meta/config:task.config`
 
 +[task "simple task"]
 +    applicable = is:open
-+    pass = True
++    pass = is:true_task
 ```
 
 file: `All-Users.git:{secret_user_ref}:task/secret.config`

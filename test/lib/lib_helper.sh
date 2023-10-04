@@ -75,7 +75,7 @@ remove_not_suite() { remove_suites !"$1" ; } # suite < pre_json > json
 # Sample Test Doc for 2 roots:
 #
 # [root "Root PASS"]
-#   pass = True
+#   pass = is:true_task
 #
 # {
 #    "applicable" : true,
@@ -85,7 +85,7 @@ remove_not_suite() { remove_suites !"$1" ; } # suite < pre_json > json
 # }
 #
 # [root "Root FAIL"]
-#   fail = True
+#   fail = is:true_task
 #
 # {
 #    <other root>
@@ -94,10 +94,10 @@ remove_not_suite() { remove_suites !"$1" ; } # suite < pre_json > json
 # Strip the json from Test Doc formatted text. For the sample above, the output would be:
 #
 # [root "Root PASS"]
-#   pass = True
+#   pass = is:true_task
 #
 # [root "Root FAIL"]
-#   fail = True
+#   fail = is:true_task
 # ...
 #
 testdoc_2_cfg() { awk '/^\{/,/^$/ { next } ; 1' ; } # testdoc_format > task_config

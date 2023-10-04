@@ -4,12 +4,12 @@ file: `All-Projects.git:refs/meta/config:task.config`
 ```
 [root "Points to subFile task with rootFile task preview"]
     applicable = is:open
-    pass = True
+    pass = is:true_task
     subtask = foo/bar/baz.config^Preview pointing to rootFile task
 
 [task "Task in rootFile"]
     applicable = is:open
-    pass = True
+    pass = is:true_task
 ```
 
 file: `All-Projects.git:refs/meta/config:task/foo/bar/baz.config`
