@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d7c9207_fa7b5ddc",
+        "filename": "gr-task-plugin/gr-task-chip.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2023-10-04T18:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8137b665_24cc7a27",
+      "revId": "c585416006f0d56a72a71a7ed5497b518cc14445",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "48743538_2606c8fe",
@@ -31,6 +49,24 @@
       "writtenOn": "2023-10-04T04:08:04Z",
       "side": 1,
       "message": "I understand the desire to match needs to warning, and blocked to error styles, but shouldn\u0027t that match happen here and not higher up? i.e Shouldn\u0027t we be calling the styles \"ready\" and \"blocked\" here?",
+      "revId": "c585416006f0d56a72a71a7ed5497b518cc14445",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ab76662_59012005",
+        "filename": "gr-task-plugin/gr-task-chip_html.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2023-10-04T18:16:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "48743538_2606c8fe",
       "revId": "c585416006f0d56a72a71a7ed5497b518cc14445",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
