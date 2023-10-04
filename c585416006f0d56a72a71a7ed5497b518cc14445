@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8137b665_24cc7a27",
+        "filename": "gr-task-plugin/gr-task-chip.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-10-04T04:08:04Z",
+      "side": 1,
+      "message": "Out this logic in a method named after what it does, and then call it from here?",
+      "revId": "c585416006f0d56a72a71a7ed5497b518cc14445",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "48743538_2606c8fe",
+        "filename": "gr-task-plugin/gr-task-chip_html.js",
+        "patchSetId": 3
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-10-04T04:08:04Z",
+      "side": 1,
+      "message": "I understand the desire to match needs to warning, and blocked to error styles, but shouldn\u0027t that match happen here and not higher up? i.e Shouldn\u0027t we be calling the styles \"ready\" and \"blocked\" here?",
+      "revId": "c585416006f0d56a72a71a7ed5497b518cc14445",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
