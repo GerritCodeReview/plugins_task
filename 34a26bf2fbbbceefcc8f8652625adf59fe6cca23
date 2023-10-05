@@ -16,6 +16,24 @@
       "message": "Is it intentional to have both the 3 \u0026 4 runtimes?",
       "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "502f2742_6da1ba01",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2023-10-05T04:49:54Z",
+      "side": 1,
+      "message": "Yes, Runtime 4 is needed for building task plugin files and runtime 3 is needed internally for rules_antlr.\n\nWithout runtime 3 build fails with error: \nevery rule of type antlr implicitly depends upon the target \u0027@antlr3_runtime//jar:jar\u0027, but this target could not be found because of: no such package \u0027@antlr3_runtime//jar\u0027",
+      "parentUuid": "e37fc1f7_6ba9cb55",
+      "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
