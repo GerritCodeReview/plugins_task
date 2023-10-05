@@ -88,6 +88,24 @@
       "parentUuid": "d5f05679_5881cac5",
       "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "23869834_a0e8b013",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-05T05:03:54Z",
+      "side": 1,
+      "message": "\u003e I tried that but facing other errors like: \n\u003e \n\u003e If I just move the dependencies in `external_plugin_deps.bzl`:\n\u003e \n\u003e \u003e load statement not at top level\n\u003e \n\u003e \n\u003e \n\u003e If I move the load statements at the top:\n\u003e \n\u003e \u003e Cycle in the workspace file detected. This indicates that a repository is used prior to being defined.\n\u003e The following chain of repository dependencies lead to the missing definition.\n\u003e  - @rules_antlr\n\u003e This could either mean you have to add the \u0027@rules_antlr\u0027 repository with a statement like `http_archive` in your WORKSPACE file (note that transitive dependencies are not added automatically), or move an existing definition earlier in your WORKSPACE file.\n\u003e ERROR: cycles detected during target parsing\n\nThere must be some other issue happening then. I don\u0027t think you need antlr3 if you\u0027re correctly including antlr4 and using external_plugin_deps.bzl works in other standalone plugins.",
+      "parentUuid": "0ac38193_5aa2e498",
+      "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
