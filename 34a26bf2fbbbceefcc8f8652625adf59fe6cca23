@@ -70,6 +70,24 @@
       "parentUuid": "71f01276_4181f0f6",
       "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0ac38193_5aa2e498",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2023-10-05T05:00:16Z",
+      "side": 1,
+      "message": "I tried that but facing other errors like: \n\nIf I just move the dependencies in `external_plugin_deps.bzl`:\n\n\u003e load statement not at top level\n\n\n\nIf I move the load statements at the top:\n\n\u003e Cycle in the workspace file detected. This indicates that a repository is used prior to being defined.\nThe following chain of repository dependencies lead to the missing definition.\n - @rules_antlr\nThis could either mean you have to add the \u0027@rules_antlr\u0027 repository with a statement like `http_archive` in your WORKSPACE file (note that transitive dependencies are not added automatically), or move an existing definition earlier in your WORKSPACE file.\nERROR: cycles detected during target parsing",
+      "parentUuid": "d5f05679_5881cac5",
+      "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
