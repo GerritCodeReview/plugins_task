@@ -106,6 +106,24 @@
       "parentUuid": "0ac38193_5aa2e498",
       "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f05b500_439077af",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-06T19:37:22Z",
+      "side": 1,
+      "message": "\u003e There must be some other issue happening then. I don\u0027t think you need antlr3 if you\u0027re correctly including antlr4 and using external_plugin_deps.bzl works in other standalone plugins.\n\nI checked the maven dependencies and it does turn out that antlr3 is needed at runtime for antlr4. Strange.\n\nI did move the antlr4 deps into `external_plugin_deps.bzl` and it seems to work fine.",
+      "parentUuid": "23869834_a0e8b013",
+      "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
