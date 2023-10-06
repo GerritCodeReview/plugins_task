@@ -124,6 +124,24 @@
       "parentUuid": "23869834_a0e8b013",
       "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "668c442e_4ddf312c",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 74,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-06T23:22:07Z",
+      "side": 1,
+      "message": "\u003e I checked the maven dependencies and it does turn out that antlr3 is needed at runtime for antlr4. Strange.\n\nHowever, we can use the artifact provided with core\u0027s gerrit-plugin-api jar and skip depending on a specific version ourselves.",
+      "parentUuid": "3f05b500_439077af",
+      "revId": "34a26bf2fbbbceefcc8f8652625adf59fe6cca23",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
