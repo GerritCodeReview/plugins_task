@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cca01409_5e460c83",
+        "filename": "external_plugin_deps.bzl",
+        "patchSetId": 2
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-06T19:39:26Z",
+      "side": 1,
+      "message": "I did notice that this repo is not well maintained, so we might want to look at using a better maintained fork or creating our own fork.",
+      "revId": "ca1e38d0881c6d0402cc9663e0e871ea8b718b02",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
