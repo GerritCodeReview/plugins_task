@@ -16,6 +16,24 @@
       "message": "I don\u0027t think this makes a lot of sense to introduce a format which will just be throw away.",
       "revId": "57822bf03618c286f60936582adda21ff9884646",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5d3b07cd_dac34108",
+        "filename": "src/main/resources/Documentation/test/paths.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-09T21:08:22Z",
+      "side": 1,
+      "message": "I\u0027m guessing you meant to comment on the following line? I think it should be just `is:true` and configure an alias in the tests. That way when this merges up to stable-3.6, this file doesn\u0027t change but src/main/java/com/googlesource/gerrit/plugins/task/IsTrueOperator.java and the alias will be removed.",
+      "parentUuid": "10d2788c_3cd0caa5",
+      "revId": "57822bf03618c286f60936582adda21ff9884646",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
