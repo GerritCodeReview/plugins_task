@@ -70,6 +70,24 @@
       "parentUuid": "d476922b_eba7c6f4",
       "revId": "57822bf03618c286f60936582adda21ff9884646",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "142cecda_11128d06",
+        "filename": "src/main/resources/Documentation/test/paths.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-09T21:55:13Z",
+      "side": 1,
+      "message": "\u003e Why are we trying to eliminate the built-in \u0027true\u0027? If we are trying to do that, it should come as a separate change with a good explanation, and a way to not break any existing users (we nee to assume that there are external users of this plugin).\n\nThis change shouldn\u0027t be removing the built-in `true`. This change _could_ be deprecating `true` and we then we can remove it later on a non-stable branch.\n\n\u003e If we are just trying to prove that the SRs work, then we could add the temporary is:true_task and use it just for that test (in this change), and then there is no need to modify all the other tests.\n\nWe could limit the scope of this change to just that and decide later if we want to update docs and other tests to use `is:true` instead of `true`. I think it\u0027s worth doing that eventually since we\u0027re going to support SR predicates and having both `true` and `is:true` doesn\u0027t make sense to me. If we want to wait to do that until 3.6, that\u0027s fine with me. I guess even if we want to do that deprecation right away on stable-3.5, I would still support splitting up the change into those 2 changes.",
+      "parentUuid": "281c6f3f_e51d939f",
+      "revId": "57822bf03618c286f60936582adda21ff9884646",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
