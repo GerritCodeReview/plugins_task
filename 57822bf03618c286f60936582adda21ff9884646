@@ -52,6 +52,24 @@
       "parentUuid": "10d2788c_3cd0caa5",
       "revId": "57822bf03618c286f60936582adda21ff9884646",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "281c6f3f_e51d939f",
+        "filename": "src/main/resources/Documentation/test/paths.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1003883
+      },
+      "writtenOn": "2023-10-09T21:47:41Z",
+      "side": 1,
+      "message": "Why are we trying to eliminate the built-in \u0027true\u0027? If we are trying to do that, it should come as a separate change with a good explanation, and a way to not break any existing users (we nee to assume that there are external users of this plugin). If we are just trying to prove that the SRs work, then we could add the temporary is:true_task and use it just for that test (in this change), and then there is no need to modify all the other tests.",
+      "parentUuid": "d476922b_eba7c6f4",
+      "revId": "57822bf03618c286f60936582adda21ff9884646",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
