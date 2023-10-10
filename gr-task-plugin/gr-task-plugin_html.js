@@ -94,15 +94,15 @@ export const htmlTemplate = Polymer.html`
     <template is="dom-if" if="[[_is_show_all(_show_all)]]">
       <p> All ([[_all_count]]) |
         <span
-            on-click="_needs_and_blocked_tap"
-            class="links">Needs + Blocked ([[_ready_count]], [[_fail_count]])</span>
+            on-click="_needed_and_blocked_tap"
+            class="links">Needed + Blocked ([[_ready_count]], [[_fail_count]])</span>
       <p>
     </template>
     <template is="dom-if" if="[[!_is_show_all(_show_all)]]">
       <p> <span
             class="links"
             on-click="_show_all_tap">All ([[_all_count]])</span>
-        &nbsp;| Needs + Blocked ([[_ready_count]], [[_fail_count]])</p>
+        &nbsp;| Needed + Blocked ([[_ready_count]], [[_fail_count]])</p>
     </template>
     <gr-button link="" class="show-all-button" on-click="_switch_expand"
     >[[_computeShowAllLabelText(_expand_all)]]

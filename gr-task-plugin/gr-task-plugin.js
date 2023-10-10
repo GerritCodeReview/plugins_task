@@ -185,10 +185,10 @@ class GrTaskPlugin extends Polymer.Element {
     return false;
   }
 
-  _computeShowOnNeedsAndBlockedFilter(task) {
+  _computeShowOnNeededAndBlockedFilter(task) {
     return this._isFailOrReadyOrInvalid(task) ||
       (task.sub_tasks && task.sub_tasks.some(t =>
-        this._computeShowOnNeedsAndBlockedFilter(t)));
+        this._computeShowOnNeededAndBlockedFilter(t)));
   }
 
   _compute_counts(task) {
@@ -207,7 +207,7 @@ class GrTaskPlugin extends Polymer.Element {
     if (!tasks) return [];
     tasks.forEach(task => {
       task.icon = this._computeIcon(task);
-      task.showOnFilter = this._computeShowOnNeedsAndBlockedFilter(task);
+      task.showOnFilter = this._computeShowOnNeededAndBlockedFilter(task);
       this._compute_counts(task);
       this._addTasks(task.sub_tasks);
     });
@@ -219,7 +219,7 @@ class GrTaskPlugin extends Polymer.Element {
     this._expand_all = 'true';
   }
 
-  _needs_and_blocked_tap() {
+  _needed_and_blocked_tap() {
     this._show_all = 'false';
     this._expand_all = 'true';
   }
