@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "05b60307_dd3054d9",
+        "filename": "gr-task-plugin/gr-task-summary_html.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 75,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-11T18:29:51Z",
+      "side": 1,
+      "message": "unrelated to this change: if both exist, blocked should probably come before needed, so these lines should be swapped.",
+      "revId": "01a0eb2a90b1606d45850e77ab80643ab07d4995",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
