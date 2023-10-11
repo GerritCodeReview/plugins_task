@@ -71,8 +71,8 @@ export const htmlTemplate = Polymer.html`
       <tr>
         <td class="key">Tasks</td>
         <td class="value">
-          <gr-task-chip chip_style="ready" hidden$="[[!ready_count]]">[[ready_count]] needed</gr-task-chip>
           <gr-task-chip chip_style="fail" hidden$="[[!fail_count]]">[[fail_count]] blocked</gr-task-chip>
+          <gr-task-chip chip_style="ready" hidden$="[[!ready_count]]">[[ready_count]] needed</gr-task-chip>
         </td>
       </tr>
     </table>
