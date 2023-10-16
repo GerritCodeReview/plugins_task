@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9ff9b017_8628c9ab",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-16T18:40:12Z",
+      "side": 1,
+      "message": "do the tests pass now that the core change [1] is submitted?\n\n[1] 389055: Setup operator aliases with submit requirement expressions | https://gerrit-review.googlesource.com/c/gerrit/+/389055",
+      "revId": "e30e71c7e6f4ef9e11b9638af80688f3dd4ab175",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d16d4b86_acfcd3dc",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 78,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-16T18:40:12Z",
+      "side": 1,
+      "message": "Since this will be removed in 3.6, I don\u0027t think we want to mention it here.",
+      "range": {
+        "startLine": 78,
+        "startChar": 1,
+        "endLine": 78,
+        "endChar": 17
+      },
+      "revId": "e30e71c7e6f4ef9e11b9638af80688f3dd4ab175",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
