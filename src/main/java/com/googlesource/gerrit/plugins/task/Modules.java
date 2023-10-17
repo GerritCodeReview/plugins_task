@@ -39,6 +39,8 @@ public class Modules {
           .annotatedWith(Exports.named(ViewPathsCapability.VIEW_PATHS))
           .to(ViewPathsCapability.class);
       factory(TaskPath.Factory.class);
+      factory(TaskReference.Factory.class);
+      factory(TaskExpression.Factory.class);
 
       bind(ChangePluginDefinedInfoFactory.class)
           .annotatedWith(Exports.named("task"))

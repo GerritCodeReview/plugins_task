@@ -17,6 +17,9 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import com.google.gerrit.entities.BranchNameKey;
+import com.google.gerrit.entities.RefNames;
+import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.config.AllUsersName;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -55,15 +58,32 @@ public abstract class TaskKey {
   }
 
   public static class Builder {
+    protected final AccountCache accountCache;
+    protected final AllUsersName allUsersName;
     protected final FileKey relativeTo;
+    protected BranchNameKey branch;
     protected String file;
     protected String task;
 
-    Builder(FileKey relativeTo) {
+    Builder(FileKey relativeTo, AllUsersName allUsersName, AccountCache accountCache) {
       this.relativeTo = relativeTo;
+      this.allUsersName = allUsersName;
+      this.accountCache = accountCache;
     }
 
     public TaskKey buildTaskKey() {
+      return isReferencingAnotherRef() ? getAnotherRefTask() : getSameRefTask();
+    }
+
+    protected TaskKey getAnotherRefTask() {
+      return TaskKey.create(
+          isReferencingRootFile()
+              ? FileKey.create(branch, TaskFileConstants.TASK_CFG)
+              : FileKey.create(branch, file),
+          task);
+    }
+
+    protected TaskKey getSameRefTask() {
       return TaskKey.create(
           isRelativePath() ? relativeTo : FileKey.create(relativeTo.branch(), file), task);
     }
@@ -94,6 +114,19 @@ public abstract class TaskKey {
       this.task = task;
     }
 
+    public void setUsername(String username) throws ConfigInvalidException {
+      branch =
+          BranchNameKey.create(
+              allUsersName,
+              RefNames.refsUsers(
+                  accountCache
+                      .getByUsername(username)
+                      .orElseThrow(
+                          () -> new ConfigInvalidException("Cannot resolve username: " + username))
+                      .account()
+                      .id()));
+    }
+
     protected void throwIfInvalidPath() throws ConfigInvalidException {
       Path path = Paths.get(file);
       if (!path.startsWith(TaskFileConstants.TASK_DIR)
@@ -114,6 +147,14 @@ public abstract class TaskKey {
 
     protected boolean isFileAlreadySet() {
       return file != null;
+    }
+
+    protected boolean isReferencingRootFile() {
+      return file == null;
+    }
+
+    protected boolean isReferencingAnotherRef() {
+      return branch != null;
     }
   }
 }

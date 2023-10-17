@@ -201,6 +201,8 @@ TESTS=(
 "root_with_external_non-secret_ref_with_external_secret_ref.md"
 "root_with_external_secret_ref.md"
 "non_root_with_subtask_from_root_task.md"
+"subtask_using_user_syntax/root_with_subtask_secret_ref.md"
+"subtask_using_user_syntax/root_with_subtask_non-secret_ref_with_subtask_secret_ref.md"
 )
 
 for test in "${TESTS[@]}" ; do

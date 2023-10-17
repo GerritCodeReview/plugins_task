@@ -16,10 +16,15 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.auto.value.AutoValue;
 import com.google.gerrit.entities.BranchNameKey;
+import com.google.gerrit.entities.Project;
 
 /** An immutable reference to a fully qualified file in gerrit repo. */
 @AutoValue
 public abstract class FileKey {
+  public static FileKey create(Project.NameKey project, String branch, String file) {
+    return new AutoValue_FileKey(BranchNameKey.create(project, branch), file);
+  }
+
   public static FileKey create(BranchNameKey branch, String file) {
     return new AutoValue_FileKey(branch, file);
   }

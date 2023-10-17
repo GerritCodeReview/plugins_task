@@ -16,7 +16,10 @@
  *
  * This file defines the grammar used for Task Reference
  *
- * TASK_REF = [ [ TASK_FILE_PATH ] '^' ] TASK_NAME
+ * TASK_REFERENCE = [
+ *                    [ @USERNAME [ TASK_FILE_PATH ] ] |
+ *                    [ TASK_FILE_PATH ]
+ *                  ] '^' TASK_NAME
  *
  * Examples:
  *
@@ -40,6 +43,16 @@
  * Implied task:
  *     file: All-Projects:refs/meta/config:task.config task: sample
  *
+ * file: Any projects, ref, file
+ * reference: @jim^sample
+ * Implied task:
+ *     file: All-Users:refs/users/<jim>:task.config task: sample
+ *
+ * file: Any projects, ref, file
+ * reference: @jim/foo^simple
+ * Implied task:
+ *     file: All-Users:refs/users/<jim>:task/foo^simple task: sample
+ *
  */
 
 grammar TaskReference;
@@ -53,7 +66,12 @@ reference
   ;
 
 file_path
- : (absolute| relative)? TASK_DELIMETER
+ : user absolute? TASK_DELIMETER
+ | (absolute| relative)? TASK_DELIMETER
+ ;
+
+user
+ : '@' NAME
  ;
 
 absolute
@@ -73,11 +91,16 @@ TASK
  ;
 
 NAME
- : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH+
+ : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH*
  ;
 
 fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH
- : ':' | '?' | '#' | '[' | ']' | '@'
+ : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT
+ | '@'
+ ;
+
+fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT
+ : ':' | '?' | '#' | '[' | ']'
  |'!' | '$' | '&' | '\'' | '(' | ')'
  | '*' | '+' | ',' | ';' | '=' | '%'
  | 'A'..'Z' | 'a'..'z' | '0'..'9'

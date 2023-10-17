@@ -14,6 +14,8 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.regex.Matcher;
@@ -47,11 +49,21 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
  * </ul>
  */
 public class TaskExpression implements Iterable<TaskKey> {
+  public interface Factory {
+    TaskExpression create(FileKey key, String expression);
+  }
+
   protected static final Pattern EXPRESSION_PATTERN = Pattern.compile("([^ |]+[^|]*)(\\|)?");
   protected final TaskExpressionKey key;
+  protected final TaskReference.Factory taskReferenceFactory;
 
-  public TaskExpression(FileKey key, String expression) {
+  @Inject
+  public TaskExpression(
+      TaskReference.Factory taskReferenceFactory,
+      @Assisted FileKey key,
+      @Assisted String expression) {
     this.key = TaskExpressionKey.create(key, expression);
+    this.taskReferenceFactory = taskReferenceFactory;
   }
 
   @Override
@@ -84,7 +96,7 @@ public class TaskExpression implements Iterable<TaskKey> {
         }
         hasNext = null;
         try {
-          return new TaskReference(key.file(), m.group(1)).getTaskKey();
+          return taskReferenceFactory.create(key.file(), m.group(1)).getTaskKey();
         } catch (ConfigInvalidException e) {
           throw new RuntimeConfigInvalidException(e);
         }

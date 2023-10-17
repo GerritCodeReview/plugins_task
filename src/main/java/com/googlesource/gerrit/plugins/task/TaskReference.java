@@ -14,6 +14,11 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.common.annotations.VisibleForTesting;
+import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.config.AllUsersNameProvider;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -28,11 +33,25 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** This class is used by TaskExpression to decode the task from task reference. */
 public class TaskReference {
-  protected FileKey currentFile;
-  protected String reference;
+  protected final String reference;
+  protected final TaskKey.Builder taskKeyBuilder;
 
-  public TaskReference(FileKey originalFile, String reference) {
-    currentFile = originalFile;
+  interface Factory {
+    TaskReference create(FileKey relativeTo, String reference);
+  }
+
+  @Inject
+  public TaskReference(
+      AllUsersNameProvider allUsersNameProvider,
+      AccountCache accountCache,
+      @Assisted FileKey relativeTo,
+      @Assisted String reference) {
+    this(new TaskKey.Builder(relativeTo, allUsersNameProvider.get(), accountCache), reference);
+  }
+
+  @VisibleForTesting
+  public TaskReference(TaskKey.Builder taskKeyBuilder, String reference) {
+    this.taskKeyBuilder = taskKeyBuilder;
     this.reference = reference.trim();
     if (reference.isEmpty()) {
       throw new NoSuchElementException();
@@ -40,14 +59,13 @@ public class TaskReference {
   }
 
   public TaskKey getTaskKey() throws ConfigInvalidException {
-    TaskKey.Builder builder = new TaskKey.Builder(currentFile);
     ParseTreeWalker walker = new ParseTreeWalker();
     try {
-      walker.walk(new TaskReferenceListener(builder), parse());
+      walker.walk(new TaskReferenceListener(taskKeyBuilder), parse());
     } catch (RuntimeConfigInvalidException e) {
       throw e.checkedException;
     }
-    return builder.buildTaskKey();
+    return taskKeyBuilder.buildTaskKey();
   }
 
   protected ParseTree parse() {
@@ -110,6 +128,15 @@ public class TaskReference {
         } catch (ConfigInvalidException e) {
           throw new RuntimeConfigInvalidException(e);
         }
+      }
+    }
+
+    @Override
+    public void enterUser(TaskReferenceParser.UserContext ctx) {
+      try {
+        builder.setUsername(ctx.NAME().getText());
+      } catch (ConfigInvalidException e) {
+        throw new RuntimeConfigInvalidException(e);
       }
     }
   }

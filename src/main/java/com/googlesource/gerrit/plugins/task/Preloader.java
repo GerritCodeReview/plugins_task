@@ -39,14 +39,17 @@ public class Preloader {
   }
 
   protected final TaskConfigFactory taskConfigFactory;
+  protected final TaskExpression.Factory taskExpressionFactory;
   protected final StatisticsMap<TaskExpressionKey, Optional<Task>> optionalTaskByExpression =
       new HitHashMap<>();
 
   protected Statistics statistics;
 
   @Inject
-  public Preloader(TaskConfigFactory taskConfigFactory) {
+  public Preloader(
+      TaskConfigFactory taskConfigFactory, TaskExpression.Factory taskExpressionFactory) {
     this.taskConfigFactory = taskConfigFactory;
+    this.taskExpressionFactory = taskExpressionFactory;
   }
 
   public List<Task> getRootTasks() throws IOException, ConfigInvalidException {
@@ -109,7 +112,7 @@ public class Preloader {
         statistics.preloaded++;
       }
       Optional<Task> preloadFrom =
-          getOptionalTask(new TaskExpression(definition.file(), expression));
+          getOptionalTask(taskExpressionFactory.create(definition.file(), expression));
       if (preloadFrom.isPresent()) {
         return preloadFrom(definition, preloadFrom.get());
       }

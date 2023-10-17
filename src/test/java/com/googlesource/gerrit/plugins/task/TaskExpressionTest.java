@@ -16,9 +16,12 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.config.AllUsersName;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import junit.framework.TestCase;
+import org.mockito.Mockito;
 
 /*
  * <ul>
@@ -228,7 +231,18 @@ public class TaskExpressionTest extends TestCase {
   }
 
   protected TaskExpression getTaskExpression(FileKey file, String expression) {
-    return new TaskExpression(file, expression);
+    AccountCache accountCache = Mockito.mock(AccountCache.class);
+    TaskReference.Factory factory = Mockito.mock(TaskReference.Factory.class);
+    Mockito.when(factory.create(Mockito.any(), Mockito.any()))
+        .thenAnswer(
+            invocation ->
+                new TaskReference(
+                    new TaskKey.Builder(
+                        (FileKey) invocation.getArguments()[0],
+                        new AllUsersName("All-Users"),
+                        accountCache),
+                    (String) invocation.getArguments()[1]));
+    return new TaskExpression(factory, file, expression);
   }
 
   protected static FileKey createFileKey(String file) {

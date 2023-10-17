@@ -90,6 +90,7 @@ public class TaskTree {
   protected final PredicateCache predicateCache;
   protected final MatchCache matchCache;
   protected final Preloader preloader;
+  protected final TaskExpression.Factory taskExpressionFactory;
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
@@ -112,6 +113,7 @@ public class TaskTree {
       Provider<ChangeQueryBuilder> changeQueryBuilderProvider,
       Provider<ChangeQueryProcessor> changeQueryProcessorProvider,
       PredicateCache predicateCache,
+      TaskExpression.Factory taskExpressionFactory,
       Preloader preloader) {
     this.accountResolver = accountResolver;
     this.allUsers = allUsers;
@@ -120,6 +122,7 @@ public class TaskTree {
     this.changeQueryBuilderProvider = changeQueryBuilderProvider;
     this.predicateCache = predicateCache;
     this.matchCache = new MatchCache(predicateCache);
+    this.taskExpressionFactory = taskExpressionFactory;
     this.preloader = preloader;
   }
 
@@ -365,7 +368,7 @@ public class TaskTree {
         for (String expression : task.subTasks) {
           try {
             Optional<Task> def =
-                preloader.getOptionalTask(new TaskExpression(task.file(), expression));
+                preloader.getOptionalTask(taskExpressionFactory.create(task.file(), expression));
             if (def.isPresent()) {
               addPreloaded(def.get());
             }

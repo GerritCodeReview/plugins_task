@@ -4,7 +4,7 @@ Task Expression
 
 The tasks in subtask and preload-task can be defined using a Task Expression.
 Each task expression can contain multiple tasks (all can be optional). Tasks
-from other files can be referenced using [Task Reference](#task_reference).
+from other files and refs can be referenced using [Task Reference](#task_reference).
 
 ```
 TASK_EXPR = TASK_REFERENCE [ WHITE_SPACE * '|' [ WHITE_SPACE * TASK_EXPR ] ]
@@ -33,10 +33,14 @@ Task Reference
 ---------
 
 Tasks reference can be a simple task name when the defined task is intended to be in
-the same file, tasks from other files can also be referenced by syntax explained below.
+the same file, tasks from other files and refs can also be referenced by syntax explained
+below.
 
 ```
-TASK_REFERENCE = [ [ TASK_FILE_PATH ] '^' ] TASK_NAME
+ TASK_REFERENCE = [
+                    [ @USERNAME [ TASK_FILE_PATH ] ] |
+                    [ TASK_FILE_PATH ]
+                  ] '^' TASK_NAME
 ```
 
 To reference a task from root task.config (top level task.config file of a repository)
@@ -111,5 +115,38 @@ task/foo/bar.config
 ```
     ...
     [task "Relative from Root Example Task"]
+    ...
+```
+
+To reference a task from a specific user ref (All-Users.git:refs/users/<user>), specify the
+username with `@`.
+
+when referencing from user refs, to get task from top level task.config on a user ref use
+`@<username>^<task_name>` and to get any task under the task directory use the relative
+path, like: `@<username>/<relative path from task dir>^<task_name>`. It doesn't matter which
+project, ref and file one is referencing from while using this syntax.
+
+Example:
+Assumption: Account id of user_a is 1000000
+
+All-Users:refs/users/00/1000000:task.config
+```
+    ...
+    [task "top level task"]
+    ...
+```
+
+All-Users:refs/users/00/1000000:/task/dir/common.config
+```
+    ...
+    [task "common task"]
+    ...
+```
+
+All-Projects:refs/meta/config:/task.config
+```
+    ...
+    preload-task = @user_a_username^top level task
+    preload-task = @user_a_username/dir/common.config^common task
     ...
 ```

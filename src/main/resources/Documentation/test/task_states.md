@@ -2272,6 +2272,32 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root Import user tasks"]
+  applicable = is:open
+  subtask = @testuser/foo/bar.config^Absolute Task
+  subtask = @testuser^task in user root config file
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Import user tasks",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Absolute Task",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "task in user root config file",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root INVALID Preload"]
   preload-task = missing
 
