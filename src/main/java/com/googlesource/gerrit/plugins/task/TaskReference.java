@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
@@ -42,11 +43,15 @@ public class TaskReference {
 
   @Inject
   public TaskReference(
+      AllProjectsNameProvider allProjectsNameProvider,
       AllUsersNameProvider allUsersNameProvider,
       AccountCache accountCache,
       @Assisted FileKey relativeTo,
       @Assisted String reference) {
-    this(new TaskKey.Builder(relativeTo, allUsersNameProvider.get(), accountCache), reference);
+    this(
+        new TaskKey.Builder(
+            relativeTo, allProjectsNameProvider.get(), allUsersNameProvider.get(), accountCache),
+        reference);
   }
 
   @VisibleForTesting
@@ -122,6 +127,10 @@ public class TaskReference {
 
     @Override
     public void enterFile_path(TaskReferenceParser.File_pathContext ctx) {
+      if (ctx.ALL_PROJECTS_ROOT() != null || (ctx.FWD_SLASH() != null && ctx.absolute() != null)) {
+        builder.setReferringAllProjectsTask();
+      }
+
       if (ctx.absolute() == null && ctx.relative() == null) {
         try {
           builder.setRefRootFile();

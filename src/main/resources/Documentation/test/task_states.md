@@ -2298,6 +2298,55 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root Reference tasks from All-Projects"]
+  applicable = is:open
+  subtask = //^Subtask PASS
+  subtask = @testuser/dir/relative.config^Import All-Projects root task
+  subtask = @testuser/dir/relative.config^Import All-Projects non-root task
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Reference tasks from All-Projects",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Import All-Projects root task",
+         "status" : "PASS",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask PASS",
+               "status" : "PASS"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Import All-Projects non-root task",
+         "status" : "PASS",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Sample relative task in sub dir",
+               "status" : "PASS"
+            }
+         ]
+      }
+   ]
+}
+
 [root "Root INVALID Preload"]
   preload-task = missing
 
@@ -3114,6 +3163,14 @@ file: `All-Users:refs/users/self:task/dir/relative.config`
 [task "Relative Task"]
   applicable = is:open
   pass = is:open
+
+[task "Import All-Projects root task"]
+  applicable = is:open
+  subtask = //^Subtask PASS
+
+[task "Import All-Projects non-root task"]
+  applicable = is:open
+  subtask = //dir/common.config^Sample relative task in sub dir
 ```
 
 file: `All-Users:refs/users/self:task/dir/sub_dir/relative.config`

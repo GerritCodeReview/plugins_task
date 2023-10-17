@@ -17,8 +17,10 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Project;
+import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.AccountState;
+import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
 import java.sql.Timestamp;
 import java.util.NoSuchElementException;
@@ -30,14 +32,17 @@ import org.mockito.Mockito;
 
 public class TaskReferenceTest extends TestCase {
   private static final String ALL_USERS = "All-Users";
-
+  private static final String ALL_PROJECTS = "All-Projects";
   public static String SIMPLE = "simple";
   public static String ROOT = "task.config";
   public static String COMMON = "task/common.config";
   public static String SUB_COMMON = "task/dir/common.config";
-  public static FileKey ROOT_CFG = createFileKey("project", "branch", ROOT);
-  public static FileKey COMMON_CFG = createFileKey("project", "branch", COMMON);
-  public static FileKey SUB_COMMON_CFG = createFileKey("project", "branch", SUB_COMMON);
+  public static FileKey ROOT_CFG = createFileKey(ALL_PROJECTS, RefNames.REFS_CONFIG, ROOT);
+  public static FileKey COMMON_CFG = createFileKey(ALL_PROJECTS, RefNames.REFS_CONFIG, COMMON);
+  public static FileKey SUB_COMMON_CFG =
+      createFileKey(ALL_PROJECTS, RefNames.REFS_CONFIG, SUB_COMMON);
+
+  public static FileKey SAMPLE_PROJ_CFG = createFileKey("foo", RefNames.REFS_CONFIG, ROOT);
 
   public static final String TEST_USER = "testuser";
   public static final int TEST_USER_ID = 100000;
@@ -93,6 +98,19 @@ public class TaskReferenceTest extends TestCase {
   }
 
   @Test
+  public void testReferencingRootAllProjectsTask() throws Exception {
+    String reference = "//^" + SIMPLE;
+    assertEquals(createTaskKey(ROOT_CFG, SIMPLE), getTaskFromReference(SAMPLE_PROJ_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingAllProjectsTask() throws Exception {
+    String reference = "//common.config^" + SIMPLE;
+    assertEquals(
+        createTaskKey(COMMON_CFG, SIMPLE), getTaskFromReference(SAMPLE_PROJ_CFG, reference));
+  }
+
+  @Test
   public void testReferencingRootUserTask() throws Exception {
     String reference = "@" + TEST_USER + "^" + SIMPLE;
     assertEquals(
@@ -125,7 +143,12 @@ public class TaskReferenceTest extends TestCase {
         .thenReturn(Optional.of(AccountState.forAccount(TEST_USER_ACCOUNT)));
     try {
       return new TaskReference(
-              new TaskKey.Builder(file, new AllUsersName(ALL_USERS), accountCache), expression)
+              new TaskKey.Builder(
+                  file,
+                  new AllProjectsName(ALL_PROJECTS),
+                  new AllUsersName(ALL_USERS),
+                  accountCache),
+              expression)
           .getTaskKey();
     } catch (ConfigInvalidException e) {
       throw new NoSuchElementException();

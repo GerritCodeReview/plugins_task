@@ -19,6 +19,7 @@ import com.google.common.base.Preconditions;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -59,14 +60,20 @@ public abstract class TaskKey {
 
   public static class Builder {
     protected final AccountCache accountCache;
+    protected final AllProjectsName allProjectsName;
     protected final AllUsersName allUsersName;
     protected final FileKey relativeTo;
     protected BranchNameKey branch;
     protected String file;
     protected String task;
 
-    Builder(FileKey relativeTo, AllUsersName allUsersName, AccountCache accountCache) {
+    Builder(
+        FileKey relativeTo,
+        AllProjectsName allProjectsName,
+        AllUsersName allUsersName,
+        AccountCache accountCache) {
       this.relativeTo = relativeTo;
+      this.allProjectsName = allProjectsName;
       this.allUsersName = allUsersName;
       this.accountCache = accountCache;
     }
@@ -125,6 +132,10 @@ public abstract class TaskKey {
                           () -> new ConfigInvalidException("Cannot resolve username: " + username))
                       .account()
                       .id()));
+    }
+
+    public void setReferringAllProjectsTask() {
+      branch = BranchNameKey.create(allProjectsName, RefNames.REFS_CONFIG);
     }
 
     protected void throwIfInvalidPath() throws ConfigInvalidException {

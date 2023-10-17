@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
@@ -239,6 +240,7 @@ public class TaskExpressionTest extends TestCase {
                 new TaskReference(
                     new TaskKey.Builder(
                         (FileKey) invocation.getArguments()[0],
+                        new AllProjectsName("All-Projects"),
                         new AllUsersName("All-Users"),
                         accountCache),
                     (String) invocation.getArguments()[1]));

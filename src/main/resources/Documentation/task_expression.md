@@ -38,6 +38,7 @@ below.
 
 ```
  TASK_REFERENCE = [
+                    [ // TASK_FILE_PATH ]
                     [ @USERNAME [ TASK_FILE_PATH ] ] |
                     [ TASK_FILE_PATH ]
                   ] '^' TASK_NAME
@@ -148,5 +149,35 @@ All-Projects:refs/meta/config:/task.config
     ...
     preload-task = @user_a_username^top level task
     preload-task = @user_a_username/dir/common.config^common task
+    ...
+```
+
+To reference a task from root task.config on the All-Projects.git, prefix the task name with `//^`
+and to reference a task from task dir on the All-Projects.git, use
+`//<relative path from task dir>^<task_name>`. It doesn't matter which project, ref and file one
+is referencing from while using this syntax.
+
+Example:
+
+All-Projects:refs/meta/config:task.config
+```
+    ...
+    [task "root task"]
+    ...
+```
+
+All-Projects:refs/meta/config:/task/dir/sample.config
+
+```
+    ...
+    [task "sample task"]
+    ...
+```
+
+All-Users:refs/users/00/1000000:task.config
+```
+    ...
+    preload-task = //dir/sample.config^sample task
+    preload-task = //^root task
     ...
 ```

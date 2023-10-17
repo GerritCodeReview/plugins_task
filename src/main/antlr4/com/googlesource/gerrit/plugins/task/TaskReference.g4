@@ -17,6 +17,7 @@
  * This file defines the grammar used for Task Reference
  *
  * TASK_REFERENCE = [
+ *                    [ // TASK_FILE_PATH ] |
  *                    [ @USERNAME [ TASK_FILE_PATH ] ] |
  *                    [ TASK_FILE_PATH ]
  *                  ] '^' TASK_NAME
@@ -53,6 +54,15 @@
  * Implied task:
  *     file: All-Users:refs/users/<jim>:task/foo^simple task: sample
  *
+ * file: Any projects, ref, file
+ * reference: //foo.config^sample
+ * Implied task:
+ *     file: All-Projects:refs/meta/config:task/foo task: sample
+ *
+ * file: Any projects, ref, file
+ * reference: //^simple
+ * Implied task:
+ *     file: All-Projects:refs/meta/config:task.config task: sample
  */
 
 grammar TaskReference;
@@ -66,7 +76,9 @@ reference
   ;
 
 file_path
- : user absolute? TASK_DELIMETER
+ : ALL_PROJECTS_ROOT
+ | FWD_SLASH absolute TASK_DELIMETER
+ | user absolute? TASK_DELIMETER
  | (absolute| relative)? TASK_DELIMETER
  ;
 
@@ -75,7 +87,7 @@ user
  ;
 
 absolute
- : '/' relative
+ : FWD_SLASH relative
  ;
 
 relative
@@ -83,7 +95,7 @@ relative
  ;
 
 dir
- : (NAME '/')
+ : (NAME FWD_SLASH)
  ;
 
 TASK
@@ -109,4 +121,12 @@ fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT
 
 TASK_DELIMETER
  : '^'
+ ;
+
+ALL_PROJECTS_ROOT
+ : FWD_SLASH FWD_SLASH TASK_DELIMETER
+ ;
+
+FWD_SLASH
+ : '/'
  ;
