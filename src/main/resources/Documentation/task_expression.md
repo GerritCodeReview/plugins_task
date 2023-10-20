@@ -40,6 +40,8 @@ below.
  TASK_REFERENCE = [
                     [ // TASK_FILE_PATH ]
                     [ @USERNAME [ TASK_FILE_PATH ] ] |
+                    [ %GROUP_NAME [ TASK_FILE_PATH ] ] |
+                    [ %%GROUP_UUID [ TASK_FILE_PATH ] ] |
                     [ TASK_FILE_PATH ]
                   ] '^' TASK_NAME
 ```
@@ -179,5 +181,40 @@ All-Users:refs/users/00/1000000:task.config
     ...
     preload-task = //dir/sample.config^sample task
     preload-task = //^root task
+    ...
+```
+
+To reference a task from a specific group ref (All-Users.git:refs/groups/<sharded-group-uuid>),
+specify the group name with `%` or group uuid with `%%`.
+
+when referencing from group refs, to get task from top level task.config on a group ref use
+`%<group_name>^<task_name>` or `%%<group_uuid>^<task_name>` and to get any task under the
+task directory use the relative path,
+like: `%<group_name>/<relative path from task dir>^<task_name>` or
+`%%<group_uuid>/<relative path from task dir>^<task_name>`
+It doesn't matter which project, ref and file one is referencing from while using this syntax.
+
+Example:
+Assumption: Group uuid of group_a is 720269095421a08a24889e29d092df1839a7a706
+
+All-Users:refs/groups/72/720269095421a08a24889e29d092df1839a7a706:task.config
+```
+    ...
+    [task "top level task"]
+    ...
+```
+
+All-Users:refs/groups/72/720269095421a08a24889e29d092df1839a7a706:/task/dir/common.config
+```
+    ...
+    [task "common task"]
+    ...
+```
+
+All-Projects:refs/meta/config:/task.config
+```
+    ...
+    preload-task = %group_a^top level task
+    preload-task = %%720269095421a08a24889e29d092df1839a7a706/dir/common.config^common task
     ...
 ```

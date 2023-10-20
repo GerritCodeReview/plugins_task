@@ -2318,11 +2318,67 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root Import group tasks"]
+  applicable = is:open
+  subtask = %{non_secret_group_name_without_space}/foo/bar.config^Absolute Task 1
+  subtask = %{non_secret_group_name_without_space}^task in group root config file 1
+  subtask = %{non_secret_group_name_with_space}/foo/bar.config^Absolute Task 3
+  subtask = %{non_secret_group_name_with_space}^task in group root config file 3
+  subtask = %%{non_secret_group_uuid}/foo/bar.config^Absolute Task 2
+  subtask = %%{non_secret_group_uuid}^task in group root config file 2
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Import group tasks",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Absolute Task 1",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "task in group root config file 1",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Absolute Task 3",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "task in group root config file 3",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Absolute Task 2",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "task in group root config file 2",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root Reference tasks from All-Projects"]
   applicable = is:open
   subtask = //^Subtask PASS
   subtask = @testuser/dir/relative.config^Import All-Projects root task
   subtask = @testuser/dir/relative.config^Import All-Projects non-root task
+  subtask = %{non_secret_group_name_without_space}/dir/relative.config^Import All-Projects root task - groups
+  subtask = %{non_secret_group_name_without_space}/dir/relative.config^Import All-Projects non-root task - groups
 
 {
    "applicable" : true,
@@ -2354,6 +2410,34 @@ file: `All-Projects:refs/meta/config:task.config`
          "applicable" : true,
          "hasPass" : false,
          "name" : "Import All-Projects non-root task",
+         "status" : "PASS",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Sample relative task in sub dir",
+               "status" : "PASS"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Import All-Projects root task - groups",
+         "status" : "PASS",
+         "subTasks" : [
+            {
+               "applicable" : true,
+               "hasPass" : true,
+               "name" : "Subtask PASS",
+               "status" : "PASS"
+            }
+         ]
+      },
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "name" : "Import All-Projects non-root task - groups",
          "status" : "PASS",
          "subTasks" : [
             {
@@ -3203,6 +3287,53 @@ file: `All-Users:refs/users/self:task/dir/sub_dir/relative.config`
 file: `All-Users:refs/users/self:task/foo/bar.config`
 ```
 [task "Absolute Task"]
+  applicable = is:open
+  pass = is:open
+```
+
+file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task/dir/relative.config`
+```
+[task "Import All-Projects root task - groups"]
+  applicable = is:open
+  subtask = //^Subtask PASS
+
+[task "Import All-Projects non-root task - groups"]
+  applicable = is:open
+  subtask = //dir/common.config^Sample relative task in sub dir
+```
+
+file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task/foo/bar.config`
+```
+[task "Absolute Task 1"]
+  applicable = is:open
+  pass = is:open
+
+[task "Absolute Task 2"]
+  applicable = is:open
+  pass = is:open
+```
+
+file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task.config`
+```
+[task "task in group root config file 1"]
+  applicable = is:open
+  pass = is:open
+
+[task "task in group root config file 2"]
+  applicable = is:open
+  pass = is:open
+```
+
+file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_with_space}:task/foo/bar.config`
+```
+[task "Absolute Task 3"]
+  applicable = is:open
+  pass = is:open
+```
+
+file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_with_space}:task.config`
+```
+[task "task in group root config file 3"]
   applicable = is:open
   pass = is:open
 ```

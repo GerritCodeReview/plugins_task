@@ -16,9 +16,11 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
+import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
 import java.nio.file.Path;
@@ -66,16 +68,19 @@ public abstract class TaskKey {
     protected BranchNameKey branch;
     protected String file;
     protected String task;
+    protected GroupCache groupCache;
 
     Builder(
         FileKey relativeTo,
         AllProjectsName allProjectsName,
         AllUsersName allUsersName,
-        AccountCache accountCache) {
+        AccountCache accountCache,
+        GroupCache groupCache) {
       this.relativeTo = relativeTo;
       this.allProjectsName = allProjectsName;
       this.allUsersName = allUsersName;
       this.accountCache = accountCache;
+      this.groupCache = groupCache;
     }
 
     public TaskKey buildTaskKey() {
@@ -132,6 +137,34 @@ public abstract class TaskKey {
                           () -> new ConfigInvalidException("Cannot resolve username: " + username))
                       .account()
                       .id()));
+    }
+
+    public void setGroupName(String groupName) throws ConfigInvalidException {
+      branch =
+          BranchNameKey.create(
+              allUsersName,
+              RefNames.refsGroups(
+                  groupCache
+                      .get(AccountGroup.nameKey(groupName))
+                      .orElseThrow(
+                          () ->
+                              new ConfigInvalidException(
+                                  String.format("Cannot resolve group name: %s", groupName)))
+                      .getGroupUUID()));
+    }
+
+    public void setGroupUUID(String uuid) throws ConfigInvalidException {
+      branch =
+          BranchNameKey.create(
+              allUsersName,
+              RefNames.refsGroups(
+                  groupCache
+                      .get(AccountGroup.uuid(uuid))
+                      .orElseThrow(
+                          () ->
+                              new ConfigInvalidException(
+                                  String.format("Cannot resolve group uuid: %s", uuid)))
+                      .getGroupUUID()));
     }
 
     public void setReferringAllProjectsTask() {

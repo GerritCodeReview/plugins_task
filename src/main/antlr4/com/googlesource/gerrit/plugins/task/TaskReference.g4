@@ -19,6 +19,8 @@
  * TASK_REFERENCE = [
  *                    [ // TASK_FILE_PATH ] |
  *                    [ @USERNAME [ TASK_FILE_PATH ] ] |
+ *                    [ %GROUP_NAME [ TASK_FILE_PATH ] ] |
+ *                    [ %%GROUP_UUID [ TASK_FILE_PATH ] ] |
  *                    [ TASK_FILE_PATH ]
  *                  ] '^' TASK_NAME
  *
@@ -63,6 +65,22 @@
  * reference: //^simple
  * Implied task:
  *     file: All-Projects:refs/meta/config:task.config task: sample
+ *
+ * file: Any projects, ref, file
+ * reference: %pw.group^sample
+ * Implied task:
+ *     file: All-Users:refs/groups/<pw.group>:task.config task: sample
+ *
+ * file: Any projects, ref, file
+ * reference: %pw.group/foo^simple
+ * Implied task:
+ *     file: All-Users:refs/groups/<pw.group>:task/foo^simple task: sample
+ *
+ * file: Any projects, ref, file
+ * reference: %%a8341ade45d83e867c24a2d37f47b410cfdbea6d^sample
+ * Implied task:
+ *     file: All-Users:refs/groups/<pw.group>:task.config task: sample
+ *
  */
 
 grammar TaskReference;
@@ -79,11 +97,21 @@ file_path
  : ALL_PROJECTS_ROOT
  | FWD_SLASH absolute TASK_DELIMETER
  | user absolute? TASK_DELIMETER
+ | group_name absolute? TASK_DELIMETER
+ | group_uuid absolute? TASK_DELIMETER
  | (absolute| relative)? TASK_DELIMETER
  ;
 
 user
  : '@' NAME
+ ;
+
+group_name
+ : '%' NAME
+ ;
+
+group_uuid
+ : '%%' NAME
  ;
 
 absolute
@@ -103,20 +131,20 @@ TASK
  ;
 
 NAME
- : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH*
+ : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT_AND_PERCENTILE URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH*
  ;
 
 fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH
- : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT
- | '@'
+ : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT_AND_PERCENTILE
+ | '@' | '%'
  ;
 
-fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT
+fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT_AND_PERCENTILE
  : ':' | '?' | '#' | '[' | ']'
  |'!' | '$' | '&' | '\'' | '(' | ')'
- | '*' | '+' | ',' | ';' | '=' | '%'
+ | '*' | '+' | ',' | ';' | '='
  | 'A'..'Z' | 'a'..'z' | '0'..'9'
- | '_' | '.' | '\\' | '-' | '~'
+ | '_' | '.' | '\\' | '-' | '~' | ' '
  ;
 
 TASK_DELIMETER

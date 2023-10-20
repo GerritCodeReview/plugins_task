@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.common.annotations.VisibleForTesting;
 import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.inject.Inject;
@@ -46,11 +47,16 @@ public class TaskReference {
       AllProjectsNameProvider allProjectsNameProvider,
       AllUsersNameProvider allUsersNameProvider,
       AccountCache accountCache,
+      GroupCache groupCache,
       @Assisted FileKey relativeTo,
       @Assisted String reference) {
     this(
         new TaskKey.Builder(
-            relativeTo, allProjectsNameProvider.get(), allUsersNameProvider.get(), accountCache),
+            relativeTo,
+            allProjectsNameProvider.get(),
+            allUsersNameProvider.get(),
+            accountCache,
+            groupCache),
         reference);
   }
 
@@ -144,6 +150,24 @@ public class TaskReference {
     public void enterUser(TaskReferenceParser.UserContext ctx) {
       try {
         builder.setUsername(ctx.NAME().getText());
+      } catch (ConfigInvalidException e) {
+        throw new RuntimeConfigInvalidException(e);
+      }
+    }
+
+    @Override
+    public void enterGroup_name(TaskReferenceParser.Group_nameContext ctx) {
+      try {
+        builder.setGroupName(ctx.NAME().getText());
+      } catch (ConfigInvalidException e) {
+        throw new RuntimeConfigInvalidException(e);
+      }
+    }
+
+    @Override
+    public void enterGroup_uuid(TaskReferenceParser.Group_uuidContext ctx) {
+      try {
+        builder.setGroupUUID(ctx.NAME().getText());
       } catch (ConfigInvalidException e) {
         throw new RuntimeConfigInvalidException(e);
       }

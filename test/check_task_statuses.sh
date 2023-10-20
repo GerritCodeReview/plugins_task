@@ -19,11 +19,26 @@
 
 create_configs_from_task_states() {
     for marker in $(md_file_markers "$DOC_STATES") ; do
-        local project="$OUT/$(md_file_marker_project "$marker")"
+        local project_name="$(md_file_marker_project "$marker")"
+        local project_dir="$OUT/$project_name"
         local file="$(md_file_marker_file "$marker")"
+        local ref="$(md_file_marker_ref "$marker")"
 
-        mkdir -p "$(dirname "$project/$file")"
-        md_marker_content "$DOC_STATES" "$marker" | replace_user | testdoc_2_cfg > "$project/$file"
+        if [[ "$ref" == refs/groups/* ]] ; then
+            project_dir="$project_dir-${ref:(-7)}}"
+            q_setup setup_repo "$project_dir" "$REMOTE_USERS" "$ref"
+        fi
+
+        mkdir -p "$(dirname "$project_dir/$file")"
+        md_marker_content "$DOC_STATES" "$marker" | replace_user \
+            | testdoc_2_cfg > "$project_dir/$file"
+
+        if [[ "$ref" == refs/groups/* ]] ; then
+            # As support for pushing a change to group refs [1] is not yet in any release,
+            # push the update behind gerrit's back, directly into git.
+            # [1] https://gerrit-review.googlesource.com/c/gerrit/+/390614
+            q_setup update_repo "$project_dir" "$GERRIT_GIT_DIR/All-Users.git" "$ref"
+        fi
     done
 }
 
@@ -46,12 +61,14 @@ Usage:
     "$MYPROG" --server <gerrit_host> --non-secret-user <non-secret user>
     --untrusted-user <untrusted user>
 
-    --help|-h                     help text
-    --server|-s                   gerrit host
-    --non-secret-user             user who don't have permission
-                                  to view other user refs.
-    --untrusted-user              user who doesn't have permission
-                                  to view refs/meta/config ref on All-Projects repo
+    --help|-h                         help text
+    --server|-s                       gerrit host
+    --non-secret-user                 user who don't have permission
+                                      to view other user refs.
+    --untrusted-user                  user who doesn't have permission
+                                      to view refs/meta/config ref on All-Projects repo
+    --non-secret-group-without-space  non-secret group name without spaces
+    --non-secret-group-with-space     non-secret group name with spaces
 EOF
 
     [ -n "$1" ] && { echo "Error: $1" ; exit 1 ; }
@@ -83,11 +100,13 @@ ROOT_CFG=$ALL/task.config
 
 while (( "$#" )) ; do
     case "$1" in
-        --help|-h)                usage ;;
-        --server|-s)              shift ; SERVER=$1 ;;
-        --non-secret-user)        shift ; NON_SECRET_USER=$1 ;;
-        --untrusted-user)         shift ; UNTRUSTED_USER=$1 ;;
-        *)                        usage "invalid argument $1" ;;
+        --help|-h)                        usage ;;
+        --server|-s)                      shift ; SERVER=$1 ;;
+        --non-secret-user)                shift ; NON_SECRET_USER=$1 ;;
+        --untrusted-user)                 shift ; UNTRUSTED_USER=$1 ;;
+        --non-secret-group-without-space) shift ; GROUP_NAME_WITHOUT_SPACE=$1 ;;
+        --non-secret-group-with-space)    shift ; GROUP_NAME_WITH_SPACE=$1 ;;
+        *)                                usage "invalid argument $1" ;;
     esac
     shift
 done
@@ -95,6 +114,8 @@ done
 [ -z "$SERVER" ] && usage "You must specify --server"
 [ -z "$NON_SECRET_USER" ] && usage "You must specify --non-secret-user"
 [ -z "$UNTRUSTED_USER" ] && usage "You must specify --untrusted-user"
+[ -z "$GROUP_NAME_WITHOUT_SPACE" ] && usage "You must specify --non-secret-group-without-space"
+[ -z "$GROUP_NAME_WITH_SPACE" ] && usage "You must specify --non-secret-group-with-space"
 
 
 PORT=29418
@@ -112,6 +133,13 @@ CONFIG=$ROOT_CFG
 
 declare -A USER_REFS
 USER_REFS["{testuser_user_ref}"]="$(get_user_ref "$USER")"
+
+declare -A GROUP_EXPANDED_BY_PLACEHOLDER
+GROUP_EXPANDED_BY_PLACEHOLDER["{non_secret_group_name_without_space}"]="$GROUP_NAME_WITHOUT_SPACE"
+GROUP_EXPANDED_BY_PLACEHOLDER["{non_secret_group_name_with_space}"]="$GROUP_NAME_WITH_SPACE"
+GROUP_EXPANDED_BY_PLACEHOLDER["{non_secret_group_uuid}"]="$(get_group_uuid "$GROUP_NAME_WITHOUT_SPACE")"
+GROUP_EXPANDED_BY_PLACEHOLDER["{sharded_non_secret_group_uuid_without_space}"]="$(get_sharded_group_uuid "$GROUP_NAME_WITHOUT_SPACE")"
+GROUP_EXPANDED_BY_PLACEHOLDER["{sharded_non_secret_group_uuid_with_space}"]="$(get_sharded_group_uuid "$GROUP_NAME_WITH_SPACE")"
 
 mkdir -p "$OUT" "$ALL_TASKS" "$USER_TASKS"
 

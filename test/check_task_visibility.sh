@@ -129,7 +129,14 @@ init_configs() {
 
         echo "$tip_content" > "$project/$file"
         config_ensure "$project/$file"
-        q_setup update_repo "$project" "$(get_remote "$project")" "$ref"
+        if [[ "$ref" == refs/groups/* ]] ; then
+            # As support for pushing a change to group refs [1] is not yet in any release,
+            # push the update behind gerrit's back, directly into git.
+            # [1] https://gerrit-review.googlesource.com/c/gerrit/+/390614
+            q_setup update_repo "$project" "$GERRIT_GIT_DIR/All-Users.git" "$ref"
+        else
+            q_setup update_repo "$project" "$(get_remote "$project")" "$ref"
+        fi
     done
 }
 
@@ -156,6 +163,8 @@ Usage:
     --server|-s                   gerrit host
     --non-secret-user             user who doesn't have permission
                                   to view other user refs.
+    --non-secret-group            non-secret group name
+    --secret-group                secret group name
 EOF
 
     [ -n "$1" ] && { echo "Error: $1" ; exit 1 ; }
@@ -167,6 +176,8 @@ while (( "$#" )) ; do
         --help|-h)                usage ;;
         --server|-s)              shift ; SERVER=$1 ;;
         --non-secret-user)        shift ; NON_SECRET_USER=$1 ;;
+        --non-secret-group)       shift ; NON_SECRET_GROUP_NAME=$1 ;;
+        --secret-group)           shift ; SECRET_GROUP_NAME=$1 ;;
         *)                        usage "invalid argument $1" ;;
     esac
     shift
@@ -174,6 +185,8 @@ done
 
 [ -z "$SERVER" ] && usage "You must specify --server"
 [ -z "$NON_SECRET_USER" ] && usage "You must specify --non-secret-user"
+[ -z "$NON_SECRET_GROUP_NAME" ] && usage "You must specify --non-secret-group"
+[ -z "$SECRET_GROUP_NAME" ] && usage "You must specify --secret-group"
 
 RESULT=0
 PORT=29418
@@ -192,6 +205,12 @@ USER_REFS["{secret_user_ref}"]="$(get_user_ref "$USER")"
 USERS["{non_secret_user}"]="$NON_SECRET_USER"
 USER_REFS["{non_secret_user_ref}"]="$(get_user_ref "$NON_SECRET_USER")"
 
+declare -A GROUP_EXPANDED_BY_PLACEHOLDER
+GROUP_EXPANDED_BY_PLACEHOLDER["{secret_group_name}"]="$SECRET_GROUP_NAME"
+GROUP_EXPANDED_BY_PLACEHOLDER["{sharded_secret_group_uuid}"]="$(get_sharded_group_uuid "$SECRET_GROUP_NAME")"
+GROUP_EXPANDED_BY_PLACEHOLDER["{non_secret_group_name}"]="$NON_SECRET_GROUP_NAME"
+GROUP_EXPANDED_BY_PLACEHOLDER["{sharded_non_secret_group_uuid}"]="$(get_sharded_group_uuid "$NON_SECRET_GROUP_NAME")"
+
 mkdir -p "$OUT"
 trap 'rm -rf "$OUT"' EXIT
 
@@ -203,10 +222,12 @@ TESTS=(
 "non_root_with_subtask_from_root_task.md"
 "subtask_using_user_syntax/root_with_subtask_secret_ref.md"
 "subtask_using_user_syntax/root_with_subtask_non-secret_ref_with_subtask_secret_ref.md"
+"subtask_using_group_syntax/root_with_subtask_secret_ref.md"
+"subtask_using_group_syntax/root_with_subtask_non-secret_ref_with_subtask_secret_ref.md"
 )
 
 for test in "${TESTS[@]}" ; do
-    TEST_DOC="$(replace_user_refs < "$TEST_DOC_DIR/$test" | replace_users)"
+    TEST_DOC="$(replace_user_refs < "$TEST_DOC_DIR/$test" | replace_users | replace_groups)"
     init_configs
     test_change
 done

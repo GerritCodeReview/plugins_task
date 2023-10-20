@@ -5,6 +5,9 @@ echo "Updating All-Users project ..."
 cd "$WORKSPACE" && git clone ssh://"$GERRIT_HOST":29418/All-Users allusers && cd allusers
 git fetch origin refs/meta/config && git checkout FETCH_HEAD
 git config -f project.config access."refs/users/*".push "group Administrators"
+git config -f project.config access.'refs/groups/*'.label-Code-Review "-2..+2 group Administrators"
+git config -f project.config access.'refs/groups/*'.submit "group Administrators"
+git config -f project.config access.'refs/groups/*'.push "group Administrators"
 
 git config -f project.config access.'refs/users/${shardeduserid}'.read "group Registered Users"
 git config -f project.config access.'refs/users/${shardeduserid}'.push "group Registered Users"
