@@ -38,6 +38,11 @@ class GrTaskPluginTasks extends Polymer.Element {
         type: String,
         notify: true,
       },
+
+      config: {
+        type: Object,
+        value() { return {}; },
+      },
     };
   }
 
