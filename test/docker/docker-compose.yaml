@@ -11,6 +11,7 @@ services:
       - gerrit-net
     volumes:
       - "gerrit-site-etc:/var/gerrit/etc"
+      - "gerrit-site-git:/var/gerrit/git"
 
   run_tests:
     build: run_tests
@@ -19,10 +20,12 @@ services:
     volumes:
       - "../../:/task:ro"
       - "gerrit-site-etc:/server-ssh-key:ro"
+      - "gerrit-site-git:/gerrit-site-git"
     depends_on:
       - gerrit-01
     environment:
       - GERRIT_HOST=gerrit-01
+      - GERRIT_GIT_DIR=/gerrit-site-git
 
 networks:
   gerrit-net:
@@ -30,3 +33,4 @@ networks:
 
 volumes:
   gerrit-site-etc:
+  gerrit-site-git:

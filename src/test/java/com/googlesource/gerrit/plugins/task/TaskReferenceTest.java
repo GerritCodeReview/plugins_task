@@ -14,12 +14,16 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.entities.Account;
+import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.BranchNameKey;
+import com.google.gerrit.entities.InternalGroup;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.AccountState;
+import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
 import java.sql.Timestamp;
@@ -53,6 +57,41 @@ public class TaskReferenceTest extends TestCase {
   public static final FileKey TEST_USER_ROOT_CFG = createFileKey(ALL_USERS, TEST_USER_REF, ROOT);
   public static final FileKey TEST_USER_COMMON_CFG =
       createFileKey(ALL_USERS, TEST_USER_REF, COMMON);
+
+  public static final AccountGroup.NameKey TEST_GROUP_NAME1 = AccountGroup.nameKey("testgroup");
+  public static final AccountGroup.NameKey TEST_GROUP_NAME2 = AccountGroup.nameKey("test group");
+  public static final String TEST_GROUP_UUID1 = "526d2bf882635380fbd3b72320464e342fc14533";
+  public static final String TEST_GROUP_UUID2 = "62aa5663241f31b9483bad66132bd5d416b2bef9";
+  public static final InternalGroup TEST_GROUP1 =
+      buildTestGroup(AccountGroup.id(1), TEST_GROUP_NAME1, AccountGroup.uuid(TEST_GROUP_UUID1));
+  public static final InternalGroup TEST_GROUP2 =
+      buildTestGroup(AccountGroup.id(2), TEST_GROUP_NAME2, AccountGroup.uuid(TEST_GROUP_UUID2));
+  public static final String TEST_GROUP_REF1 =
+      "refs/groups/" + TEST_GROUP_UUID1.substring(0, 2) + "/" + TEST_GROUP_UUID1;
+  public static final String TEST_GROUP_REF2 =
+      "refs/groups/" + TEST_GROUP_UUID2.substring(0, 2) + "/" + TEST_GROUP_UUID2;
+  public static final FileKey TEST_GROUP_ROOT_CFG1 =
+      createFileKey(ALL_USERS, TEST_GROUP_REF1, ROOT);
+  public static final FileKey TEST_GROUP_COMMON_CFG1 =
+      createFileKey(ALL_USERS, TEST_GROUP_REF1, COMMON);
+  public static final FileKey TEST_GROUP_ROOT_CFG2 =
+      createFileKey(ALL_USERS, TEST_GROUP_REF2, ROOT);
+  public static final FileKey TEST_GROUP_COMMON_CFG2 =
+      createFileKey(ALL_USERS, TEST_GROUP_REF2, COMMON);
+
+  static InternalGroup buildTestGroup(
+      AccountGroup.Id id, AccountGroup.NameKey nameKey, AccountGroup.UUID uuid) {
+    return InternalGroup.builder()
+        .setGroupUUID(uuid)
+        .setNameKey(nameKey)
+        .setOwnerGroupUUID(uuid)
+        .setId(id)
+        .setVisibleToAll(true)
+        .setCreatedOn(new Timestamp(0L))
+        .setMembers(ImmutableSet.of())
+        .setSubgroups(ImmutableSet.of())
+        .build();
+  }
 
   @Test
   public void testReferencingTaskFromSameFile() throws Exception {
@@ -137,17 +176,99 @@ public class TaskReferenceTest extends TestCase {
     assertNoSuchElementException(() -> getTaskFromReference(SUB_COMMON_CFG, empty));
   }
 
+  @Test
+  public void testReferencingRootGroupNameWithoutSpaceTask() throws Exception {
+    String reference = "%" + TEST_GROUP_NAME1.get() + "^" + SIMPLE;
+    assertEquals(
+        createTaskKey(TEST_GROUP_ROOT_CFG1, SIMPLE),
+        getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingRootGroupNameWithSpaceTask() throws Exception {
+    String reference = "%" + TEST_GROUP_NAME2.get() + "^" + SIMPLE;
+    assertEquals(
+        createTaskKey(TEST_GROUP_ROOT_CFG2, SIMPLE),
+        getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingGroupNameWithoutSpaceTaskDir() throws Exception {
+    String reference = "%" + TEST_GROUP_NAME1.get() + "/common.config^" + SIMPLE;
+    assertEquals(
+        createTaskKey(TEST_GROUP_COMMON_CFG1, SIMPLE),
+        getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingUnknownGroupName() throws Exception {
+    String reference = "%unknown^" + SIMPLE;
+    assertNoSuchElementException(() -> getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingEmptyGroupName() throws Exception {
+    String reference = "%^" + SIMPLE;
+    assertNoSuchElementException(() -> getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingGroupNameWithSpaceTaskDir() throws Exception {
+    String reference = "%" + TEST_GROUP_NAME2.get() + "/common.config^" + SIMPLE;
+    assertEquals(
+        createTaskKey(TEST_GROUP_COMMON_CFG2, SIMPLE),
+        getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingRootGroupUUIDTask() throws Exception {
+    String reference = "%%" + TEST_GROUP_UUID1 + "^" + SIMPLE;
+    assertEquals(
+        createTaskKey(TEST_GROUP_ROOT_CFG1, SIMPLE),
+        getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingGroupUUIDTaskDir() throws Exception {
+    String reference = "%%" + TEST_GROUP_UUID1 + "/common.config^" + SIMPLE;
+    assertEquals(
+        createTaskKey(TEST_GROUP_COMMON_CFG1, SIMPLE),
+        getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingUnknownGroupUUID() throws Exception {
+    String reference = "%%a8341ade45d83e867c24a2d37f47b410cfdbea6d^" + SIMPLE;
+    assertNoSuchElementException(() -> getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
+  @Test
+  public void testReferencingEmptyGroupUUID() throws Exception {
+    String reference = "%%^" + SIMPLE;
+    assertNoSuchElementException(() -> getTaskFromReference(SUB_COMMON_CFG, reference));
+  }
+
   protected static TaskKey getTaskFromReference(FileKey file, String expression) {
+    System.out.println(expression);
     AccountCache accountCache = Mockito.mock(AccountCache.class);
+    GroupCache groupCache = Mockito.mock(GroupCache.class);
     Mockito.when(accountCache.getByUsername(TEST_USER))
         .thenReturn(Optional.of(AccountState.forAccount(TEST_USER_ACCOUNT)));
+    Mockito.when(groupCache.get(TEST_GROUP_NAME1)).thenReturn(Optional.of(TEST_GROUP1));
+    Mockito.when(groupCache.get(TEST_GROUP_NAME2)).thenReturn(Optional.of(TEST_GROUP2));
+    Mockito.when(groupCache.get(AccountGroup.uuid(TEST_GROUP_UUID1)))
+        .thenReturn(Optional.of(TEST_GROUP1));
+    Mockito.when(groupCache.get(AccountGroup.uuid(TEST_GROUP_UUID2)))
+        .thenReturn(Optional.of(TEST_GROUP2));
+
     try {
       return new TaskReference(
               new TaskKey.Builder(
                   file,
                   new AllProjectsName(ALL_PROJECTS),
                   new AllUsersName(ALL_USERS),
-                  accountCache),
+                  accountCache,
+                  groupCache),
               expression)
           .getTaskKey();
     } catch (ConfigInvalidException e) {
