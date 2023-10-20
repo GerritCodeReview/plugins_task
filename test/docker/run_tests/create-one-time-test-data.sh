@@ -15,6 +15,13 @@ create_test_users_and_group() {
         --email "$UNTRUSTED_USER"@example.com --ssh-key - < ~/.ssh/id_rsa.pub
 
     gssh create-group "Visible-All-Projects-Config" --member "$NON_SECRET_USER"
+
+    local secret_user=$USER
+    gssh create-group "$NON_SECRET_GROUP_NAME_WITHOUT_SPACE" \
+        --member "$NON_SECRET_USER" --member "$secret_user"
+    gssh create-group "\"$NON_SECRET_GROUP_NAME_WITH_SPACE\"" \
+        --member "$NON_SECRET_USER" --member "$secret_user"
+    gssh create-group "$SECRET_GROUP_NAME" --member "$secret_user"
 }
 
 setup_all_projects_repo() {
@@ -44,15 +51,21 @@ SSH_PORT=29418
 USER_RUN_TESTS_DIR="$USER_HOME"/"$RUN_TESTS_DIR"
 while (( "$#" )) ; do
    case "$1" in
-       --non-secret-user)               shift ; NON_SECRET_USER="$1" ;;
-       --untrusted-user)                shift ; UNTRUSTED_USER="$1" ;;
-       *)                               die "invalid argument '$1'" ;;
+       --non-secret-user)                 shift ; NON_SECRET_USER="$1" ;;
+       --untrusted-user)                  shift ; UNTRUSTED_USER="$1" ;;
+       --non-secret-group-without-space)  shift ; NON_SECRET_GROUP_NAME_WITHOUT_SPACE="$1" ;;
+       --non-secret-group-with-space)     shift ; NON_SECRET_GROUP_NAME_WITH_SPACE="$1" ;;
+       --secret-group)                    shift ; SECRET_GROUP_NAME="$1" ;;
+       *)                                 die "invalid argument '$1'" ;;
    esac
    shift
 done
 
 [ -z "$NON_SECRET_USER" ] && die "non-secret-user not set"
 [ -z "$UNTRUSTED_USER" ] && die "untrusted-user not set"
+[ -z "$NON_SECRET_GROUP_NAME_WITHOUT_SPACE" ] && die "non-secret-group-without-space not set"
+[ -z "$NON_SECRET_GROUP_NAME_WITH_SPACE" ] && die "non-secret-group-with-space not set"
+[ -z "$SECRET_GROUP_NAME" ] && die "secret-group not set"
 
 "$USER_RUN_TESTS_DIR"/create-test-project-and-changes.sh
 "$USER_RUN_TESTS_DIR"/update-all-users-project.sh

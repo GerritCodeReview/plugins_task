@@ -17,6 +17,7 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Project;
 import com.google.gerrit.server.account.AccountCache;
+import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
 import java.util.Iterator;
@@ -233,6 +234,7 @@ public class TaskExpressionTest extends TestCase {
 
   protected TaskExpression getTaskExpression(FileKey file, String expression) {
     AccountCache accountCache = Mockito.mock(AccountCache.class);
+    GroupCache groupCache = Mockito.mock(GroupCache.class);
     TaskReference.Factory factory = Mockito.mock(TaskReference.Factory.class);
     Mockito.when(factory.create(Mockito.any(), Mockito.any()))
         .thenAnswer(
@@ -242,7 +244,8 @@ public class TaskExpressionTest extends TestCase {
                         (FileKey) invocation.getArguments()[0],
                         new AllProjectsName("All-Projects"),
                         new AllUsersName("All-Users"),
-                        accountCache),
+                        accountCache,
+                        groupCache),
                     (String) invocation.getArguments()[1]));
     return new TaskExpression(factory, file, expression);
   }

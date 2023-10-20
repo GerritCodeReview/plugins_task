@@ -19,6 +19,8 @@
  * TASK_REFERENCE = [
  *                    [ // TASK_FILE_PATH ] |
  *                    [ @USERNAME [ TASK_FILE_PATH ] ] |
+ *                    [ %GROUP_NAME [ TASK_FILE_PATH ] ] |
+ *                    [ %%GROUP_UUID [ TASK_FILE_PATH ] ] |
  *                    [ TASK_FILE_PATH ]
  *                  ] '^' TASK_NAME
  *
@@ -63,6 +65,26 @@
  * reference: //^simple
  * Implied task:
  *     file: All-Projects:refs/meta/config:task.config task: sample
+ *
+ * Suppose a8341ade45d83e867c24a2d37f47b410cfdbea6d is the UUID of 'CI System Owners' group.
+ * file: Any projects, ref, file
+ * reference: %CI System Owners^sample
+ * Implied task:
+ *     file: All-Users:refs/groups/a8/a8341ade45d83e867c24a2d37f47b410cfdbea6d:task.config
+ *     task: sample
+ *
+ * file: Any projects, ref, file
+ * reference: %CI System Owners/foo^simple
+ * Implied task:
+ *     file: All-Users:refs/groups/a8/a8341ade45d83e867c24a2d37f47b410cfdbea6d:task/foo^simple
+ *     task: sample
+ *
+ * file: Any projects, ref, file
+ * reference: %%a8341ade45d83e867c24a2d37f47b410cfdbea6d^sample
+ * Implied task:
+ *     file: All-Users:refs/groups/a8/a8341ade45d83e867c24a2d37f47b410cfdbea6d:task.config
+ *     task: sample
+ *
  */
 
 grammar TaskReference;
@@ -79,11 +101,21 @@ file_path
  : ALL_PROJECTS_ROOT
  | FWD_SLASH absolute TASK_DELIMETER
  | user absolute? TASK_DELIMETER
+ | group_name absolute? TASK_DELIMETER
+ | group_uuid absolute? TASK_DELIMETER
  | (absolute| relative)? TASK_DELIMETER
  ;
 
 user
  : '@' NAME
+ ;
+
+group_name
+ : '%' (NAME | NAME_WITH_SPACES)
+ ;
+
+group_uuid
+ : '%%' INTERNAL_GROUP_UUID
  ;
 
 absolute
@@ -102,21 +134,41 @@ TASK
  : (~'^')+ EOF
  ;
 
+INTERNAL_GROUP_UUID
+ : HEX_10 HEX_10 HEX_10 HEX_10
+ ;
+
+fragment HEX_10
+ : HEX HEX HEX HEX HEX HEX HEX HEX HEX HEX
+ ;
+
+fragment HEX
+ : [0-9a-f]
+ ;
+
 NAME
- : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH*
+ : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT_AND_PERCENTILE URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH*
+ ;
+
+NAME_WITH_SPACES
+ : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT_AND_PERCENTILE (URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH | SPACE)*
  ;
 
 fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH
- : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT
- | '@'
+ : URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT_AND_PERCENTILE
+ | '@' | '%'
  ;
 
-fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT
+fragment URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT_AND_PERCENTILE
  : ':' | '?' | '#' | '[' | ']'
  |'!' | '$' | '&' | '\'' | '(' | ')'
- | '*' | '+' | ',' | ';' | '=' | '%'
+ | '*' | '+' | ',' | ';' | '='
  | 'A'..'Z' | 'a'..'z' | '0'..'9'
  | '_' | '.' | '\\' | '-' | '~'
+ ;
+
+fragment SPACE
+ : ' '
  ;
 
 TASK_DELIMETER

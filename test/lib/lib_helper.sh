@@ -184,6 +184,23 @@ replace_default_changes() {
     replace_change_properties "1" "${CHANGE1[@]}" | replace_change_properties "2" "${CHANGE2[@]}"
 }
 
+replace_groups() { # < text_with_groups > test_with_expanded_groups
+    local text="$(< /dev/stdin)"
+    for placeholder in "${!GROUP_EXPANDED_BY_PLACEHOLDER[@]}" ; do
+        text="${text//"$placeholder"/${GROUP_EXPANDED_BY_PLACEHOLDER["$placeholder"]}}"
+    done
+    echo "$text"
+}
+
+get_group_uuid() { # group_name > group_uuid
+    gssh ls-groups -v | awk '-F\t' '$1 == "'"$1"'" {print $2}'
+}
+
+get_sharded_group_uuid() { # group_name > sharded_group_uuid
+    local group_id=$(get_group_uuid "$1")
+    echo "${group_id:0:2}/$group_id"
+}
+
 replace_users() { # < text_with_users > test_with_expanded_users
   local text="$(< /dev/stdin)"
   for user in "${!USERS[@]}" ; do
@@ -211,7 +228,7 @@ replace_user_refs() { # < text_with_user_refs > test_with_expanded_user_refs
 }
 
 replace_tokens() { # < text > text with replacing all tokens(changes, user)
-    replace_default_changes | replace_user_refs | replace_user
+    replace_default_changes | replace_user_refs | replace_user | replace_groups
 }
 
 strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json
