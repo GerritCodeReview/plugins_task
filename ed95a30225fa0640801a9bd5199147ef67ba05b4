@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7187b27a_52af9453",
+        "filename": "gr-task-plugin/gr-task-plugin-tasks_html.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-23T07:00:53Z",
+      "side": 1,
+      "message": "can be [[]] (one-way binding) instead of {{}} (two-way binding)?",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "ed95a30225fa0640801a9bd5199147ef67ba05b4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
