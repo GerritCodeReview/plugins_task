@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fafdb61_9f0fddd0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-25T15:59:21Z",
+      "side": 1,
+      "message": "Seems like I missed to update junit tests (reason for the CI failure). I\u0027ll upload a new PS in sometime.",
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
