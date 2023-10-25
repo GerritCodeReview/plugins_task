@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e746cb7_d73b10e9",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 1
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-25T18:30:33Z",
+      "side": 0,
+      "message": "Could removing this break any existing tasks? If yes, that should be in a Release-Notes footer in the commit message.",
+      "range": {
+        "startLine": 117,
+        "startChar": 33,
+        "endLine": 117,
+        "endChar": 36
+      },
+      "revId": "6bc5dc019cd627e7eb6de09a7ae3a8b4bd90ee37",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
