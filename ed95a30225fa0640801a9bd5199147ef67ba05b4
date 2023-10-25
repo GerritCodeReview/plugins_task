@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b177ba8_01b1a11e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1156394
+      },
+      "writtenOn": "2023-10-25T05:03:17Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e11d5b8e_c6eec40d",
+      "revId": "ed95a30225fa0640801a9bd5199147ef67ba05b4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7187b27a_52af9453",
@@ -31,6 +49,30 @@
       "writtenOn": "2023-10-23T07:00:53Z",
       "side": 1,
       "message": "can be [[]] (one-way binding) instead of {{}} (two-way binding)?",
+      "range": {
+        "startLine": 62,
+        "startChar": 18,
+        "endLine": 62,
+        "endChar": 20
+      },
+      "revId": "ed95a30225fa0640801a9bd5199147ef67ba05b4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "06c697ca_1bcbb1a4",
+        "filename": "gr-task-plugin/gr-task-plugin-tasks_html.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1156394
+      },
+      "writtenOn": "2023-10-25T05:03:17Z",
+      "side": 1,
+      "message": "yes, that work\u0027s.",
+      "parentUuid": "7187b27a_52af9453",
       "range": {
         "startLine": 62,
         "startChar": 18,
