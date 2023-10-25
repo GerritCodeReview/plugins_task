@@ -55,7 +55,13 @@ export const htmlTemplate = Polymer.html`
           [[task.name]]
         </template>
       </template>
-      <template is="dom-if" if="[[task.hint]]">[[task.hint]]</template>
+      <template is="dom-if" if="[[task.hint]]">
+        <gr-linked-text style="display: -webkit-inline-box;"
+          pre=""
+          content="[[task.hint]]"
+          config="[[config]]">
+        </gr-linked-text>
+      </template>
     </li>
   </template>
   <ul style="list-style-type:none; margin: 0 0 0 0; padding: 0 0 0 2em;">
