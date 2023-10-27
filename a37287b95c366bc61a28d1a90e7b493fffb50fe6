@@ -83,6 +83,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "58344144_eac1b14b",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-27T16:34:10Z",
+      "side": 1,
+      "message": "\u003e You are talking about below case right?\n\nNo, the simplest case of just TASK_NAME (I think expressed as TASK below)\n\n```\n    subtask \u003d Example Task\n```\n\nIt doesn\u0027t have a leading \u0027^\u0027, but the \u0027^\u0027 isn\u0027t shown as optional in the syntax on this line. We also don\u0027t have this case in our examples below, but we do have it covered in the unit tests as `testReferencingTaskFromSameFile()`.",
+      "parentUuid": "79e8a73f_7b39e8bc",
+      "range": {
+        "startLine": 25,
+        "startChar": 20,
+        "endLine": 25,
+        "endChar": 25
+      },
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47ff94dd_ef7ab492",

@@ -1,0 +1,113 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a01df912_5994fc6a",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-27T16:34:10Z",
+      "side": 1,
+      "message": "nit: it would be clearer if this was either `CI System Owners UUID` or if you define the UUID used on line 80 as that group\u0027s UUID, then you could use it directly here.",
+      "range": {
+        "startLine": 72,
+        "startChar": 36,
+        "endLine": 72,
+        "endChar": 52
+      },
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a5edb274_41cc6ecf",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-27T16:34:10Z",
+      "side": 1,
+      "message": "Since you have the UUID a couple lines above this, it makes sense to use it here.",
+      "range": {
+        "startLine": 82,
+        "startChar": 35,
+        "endLine": 82,
+        "endChar": 53
+      },
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dcbefc69_346cb32b",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-27T16:34:10Z",
+      "side": 1,
+      "message": "I realized this is probably too generic of a name. This specifically is the format of an internal Gerrit Group UUID and other kinds of UUIDs have different formats. The generic name would be something like `HEX_40`, but that\u0027s not as nice to read/understand in `TaskReference.java`, so maybe rename this to `INTERNAL_GROUP_UUID`?\n\n```suggestion\nINTERNAL_GROUP_UUID\n```",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 4
+      },
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cd89b518_50e16aec",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskReferenceTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-27T16:34:10Z",
+      "side": 1,
+      "message": "nit: The naming for these should be `TEST_GROUP#_NAME`, `TEST_GROUP#_UUID`, `TEST_GROUP#_REF`, etc. (the hint for this is that you named the actual groups this way on lines 65/67).",
+      "range": {
+        "startLine": 61,
+        "startChar": 43,
+        "endLine": 61,
+        "endChar": 59
+      },
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "693e0f5c_b311e7d5",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskReferenceTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-10-27T16:34:10Z",
+      "side": 1,
+      "message": "Remove the debug code?",
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
