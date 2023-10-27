@@ -20,6 +20,24 @@
     {
       "unresolved": false,
       "key": {
+        "uuid": "b5f6bc2d_e3bab538",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5fafdb61_9f0fddd0",
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
         "uuid": "e824ef55_92feb1f5",
         "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
         "patchSetId": 1
@@ -31,6 +49,30 @@
       "writtenOn": "2023-10-25T18:30:33Z",
       "side": 1,
       "message": "follow-up: this looks like a doc bug from the first change that added this text, but I think this is missing the case where we have only a TASK_NAME, i.e. a reference to a task in the same project/ref/file.",
+      "range": {
+        "startLine": 25,
+        "startChar": 20,
+        "endLine": 25,
+        "endChar": 25
+      },
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "79e8a73f_7b39e8bc",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "You are talking about below case right?\n\n```\nTo provide an absolute reference to a task under the `task` folder,\nprovide the subpath starting from `task` directory with a leading\n`/` followed by a `^` and then task name.\n\nExample:\ntask.config\n    ...\n    subtask \u003d  /foo/bar/baz.config^Absolute Example Task\n    ...\n\n\ntask/foo/bar/baz.config\n    ...\n    [task \"Absolute Example Task\"]\n    ...\n```",
+      "parentUuid": "e824ef55_92feb1f5",
       "range": {
         "startLine": 25,
         "startChar": 20,
@@ -64,6 +106,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb5402c1_ad23afd5",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 1
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "47ff94dd_ef7ab492",
+      "range": {
+        "startLine": 70,
+        "startChar": 15,
+        "endLine": 70,
+        "endChar": 23
+      },
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "91d1bb43_9b5444e7",
@@ -77,6 +143,30 @@
       "writtenOn": "2023-10-25T18:30:33Z",
       "side": 1,
       "message": "I think should this use a new UUID rule that\u0027s much stricter than `URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH`.\n\n```suggestion\n : \u0027%%\u0027 UUID\n\nUUID\n : # TODO, something using a fragment like HEX to build the expected UUID pattern\n```",
+      "range": {
+        "startLine": 114,
+        "startChar": 8,
+        "endLine": 114,
+        "endChar": 12
+      },
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a3a92572_eb3b0077",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 1
+      },
+      "lineNbr": 114,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "91d1bb43_9b5444e7",
       "range": {
         "startLine": 114,
         "startChar": 8,
@@ -110,6 +200,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02255d85_f72ec0c7",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 1
+      },
+      "lineNbr": 147,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "\u003e Are we trying to support file/dir/user names with spaces too?\n\nWe might not want to do that. But definitely not in this change.\n\n\u003e If not, maybe we want to have something like SIMPLE_NAME_WITH_SPACES that\u0027s a subset of URL_ALLOWED_CHARS_EXCEPT_FWD_SLASH_AND_AT + SPACE?\n\nAck.",
+      "parentUuid": "d95f2b87_bed30a4c",
+      "range": {
+        "startLine": 147,
+        "startChar": 34,
+        "endLine": 147,
+        "endChar": 37
+      },
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7e5c9b0_9b55334f",
@@ -123,6 +237,30 @@
       "writtenOn": "2023-10-25T18:30:33Z",
       "side": 1,
       "message": "```suggestion\n        builder.setGroupUUID(ctx.UUID().getText());\n```",
+      "range": {
+        "startLine": 170,
+        "startChar": 33,
+        "endLine": 170,
+        "endChar": 37
+      },
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "52d6a9b2_6fee574a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskReference.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 170,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7e5c9b0_9b55334f",
       "range": {
         "startLine": 170,
         "startChar": 33,
@@ -156,6 +294,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "51cd3421_214e2bdb",
+        "filename": "src/main/resources/Documentation/task_expression.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 190,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0d8f71a9_68f8600f",
+      "range": {
+        "startLine": 190,
+        "startChar": 0,
+        "endLine": 190,
+        "endChar": 1
+      },
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "90e6cac1_1b223141",
@@ -173,6 +335,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0eecbf66_e85af39a",
+        "filename": "src/main/resources/Documentation/task_expression.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 194,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "90e6cac1_1b223141",
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5ef9fe51_1ed6e4a0",
@@ -186,6 +366,24 @@
       "writtenOn": "2023-10-25T18:30:33Z",
       "side": 1,
       "message": "This looks like it\u0027s out of date compared to the setup done in `create-one-time-test-data.sh` and `update-all-users-project.sh`. Can you try to fix it?",
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c4c0a3d1_c5b4d191",
+        "filename": "test/check_task_statuses.sh",
+        "patchSetId": 1
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T09:11:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5ef9fe51_1ed6e4a0",
       "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
