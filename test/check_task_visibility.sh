@@ -14,6 +14,16 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+# Usage:
+# 1. All-Projects.git - must have 'Push' rights on refs/meta/config for test user
+# 2. All-Projects.git - must have 'viewTaskPaths' capability for test user
+# 3. All-Projects.git - must have 'accessDatabase' capability for test user
+# 4. All-Users.git - must have 'push' rights on refs/users/* for test user
+# 5. All-Users.git - must have 'push' rights on refs/users/${shardeduserid} for Registered Users
+# 6. All-Users.git - must have 'read' rights on refs/users/${shardeduserid} for Registered Users
+# 7. All-Users.git - must have 'create' rights on refs/users/${shardeduserid} for Registered Users
+# 8. All-Users.git - must deny 'read' rights on refs/* for Anonymous Users
+
 readlink -f / &> /dev/null || readlink() { greadlink "$@" ; } # for MacOS
 MYDIR=$(dirname -- "$(readlink -f -- "$0")")
 MYPROG=$(basename -- "$0")
