@@ -107,6 +107,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "de5bb726_354b33e0",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 1
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T17:05:58Z",
+      "side": 1,
+      "message": "Right, I\u0027ll upload a separate change to fix it.",
+      "parentUuid": "58344144_eac1b14b",
+      "range": {
+        "startLine": 25,
+        "startChar": 20,
+        "endLine": 25,
+        "endChar": 25
+      },
+      "revId": "a37287b95c366bc61a28d1a90e7b493fffb50fe6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "47ff94dd_ef7ab492",

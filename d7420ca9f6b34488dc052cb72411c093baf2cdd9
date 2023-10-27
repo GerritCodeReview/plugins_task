@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "188a95eb_4f1f54de",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 2
+      },
+      "lineNbr": 72,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T17:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a01df912_5994fc6a",
+      "range": {
+        "startLine": 72,
+        "startChar": 36,
+        "endLine": 72,
+        "endChar": 52
+      },
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a5edb274_41cc6ecf",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-10-27T16:34:10Z",
       "side": 1,
       "message": "Since you have the UUID a couple lines above this, it makes sense to use it here.",
+      "range": {
+        "startLine": 82,
+        "startChar": 35,
+        "endLine": 82,
+        "endChar": 53
+      },
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "824c157e_8509738e",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 2
+      },
+      "lineNbr": 82,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T17:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5edb274_41cc6ecf",
       "range": {
         "startLine": 82,
         "startChar": 35,
@@ -70,6 +118,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4e459026_cc48c482",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 2
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T17:05:58Z",
+      "side": 1,
+      "message": "Yes INTERNAL_GROUP_UUID makes sense rather than HEX_40. Done",
+      "parentUuid": "dcbefc69_346cb32b",
+      "range": {
+        "startLine": 133,
+        "startChar": 0,
+        "endLine": 133,
+        "endChar": 4
+      },
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cd89b518_50e16aec",
@@ -93,6 +165,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97660088_caa73919",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskReferenceTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T17:05:58Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cd89b518_50e16aec",
+      "range": {
+        "startLine": 61,
+        "startChar": 43,
+        "endLine": 61,
+        "endChar": 59
+      },
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "693e0f5c_b311e7d5",
@@ -106,6 +202,24 @@
       "writtenOn": "2023-10-27T16:34:10Z",
       "side": 1,
       "message": "Remove the debug code?",
+      "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb8766e5_8b34ec30",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskReferenceTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 252,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-10-27T17:05:58Z",
+      "side": 1,
+      "message": "yep, Done",
+      "parentUuid": "693e0f5c_b311e7d5",
       "revId": "d7420ca9f6b34488dc052cb72411c093baf2cdd9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
