@@ -14,11 +14,21 @@
 
 package com.googlesource.gerrit.plugins.task.properties;
 
+import static com.google.common.base.Preconditions.checkArgument;
+import static java.lang.annotation.ElementType.METHOD;
+import static java.lang.annotation.RetentionPolicy.RUNTIME;
+
+import java.lang.annotation.Retention;
+import java.lang.annotation.Target;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
 
@@ -40,6 +50,16 @@ import java.util.function.Function;
  * the name/value associations via the getValueForName() method.
  */
 public abstract class AbstractExpander {
+  /** Returns a string which needs to be expanded */
+  @Target({METHOD})
+  @Retention(RUNTIME)
+  public @interface ProvidesUnexpandedString {}
+
+  /** Returns an instance with the input expanded string */
+  @Target({METHOD})
+  @Retention(RUNTIME)
+  public @interface ProvidesInstanceWithExpandedString {}
+
   protected Consumer<Matcher.Statistics> statisticsConsumer;
 
   public void setStatisticsConsumer(Consumer<Matcher.Statistics> statisticsConsumer) {
@@ -101,9 +121,7 @@ public abstract class AbstractExpander {
           field.set(cow.getForWrite(), expanded);
         }
       } else if (o instanceof List) {
-        @SuppressWarnings("unchecked")
-        List<String> forceCheck = List.class.cast(o);
-        List<String> expanded = expand(forceCheck);
+        List<?> expanded = expand((List<?>) o);
         if (expanded != o) {
           field.set(cow.getForWrite(), expanded);
         }
@@ -118,18 +136,80 @@ public abstract class AbstractExpander {
    * Returns expanded unmodifiable List if property found. Returns same object if no expansions
    * occurred.
    */
-  public List<String> expand(List<String> list) {
+  @SuppressWarnings("unchecked")
+  protected <T> List<T> expand(List<T> list) {
     if (list != null) {
+      if (list.isEmpty()) {
+        return list;
+      }
       boolean hasProperty = false;
-      List<String> expandedList = new ArrayList<>(list.size());
-      for (String value : list) {
-        String expanded = expandText(value);
-        hasProperty = hasProperty || value != expanded;
-        expandedList.add(expanded);
+      List<T> expandedList = new ArrayList<>(list.size());
+      Class<T> classType = (Class<T>) list.get(0).getClass();
+      Function<T, String> getUnexpanded = getUnexpandedStringFunction(classType);
+      BiFunction<T, String, T> createInstanceWithExpanded =
+          getCreateInstanceWithExpandedFunction(classType);
+      for (T value : list) {
+        String toExpand = getUnexpanded.apply(value);
+        String expanded = expandText(toExpand);
+        boolean hasExpanded = toExpand != expanded;
+        hasProperty = hasProperty || hasExpanded;
+        if (hasExpanded) {
+          expandedList.add(createInstanceWithExpanded.apply(value, expanded));
+        } else {
+          expandedList.add(value);
+        }
       }
       return hasProperty ? Collections.unmodifiableList(expandedList) : list;
     }
     return null;
+  }
+
+  protected <T> Function<T, String> getUnexpandedStringFunction(Class<T> classType) {
+    if (classType == String.class) {
+      return (v) -> (String) v;
+    }
+    for (Method method : classType.getMethods()) {
+      if (method.isAnnotationPresent(ProvidesUnexpandedString.class)) {
+        checkArgument(
+            String.class.isAssignableFrom(method.getReturnType())
+                && method.getParameterTypes().length == 0
+                && Modifier.isPublic(method.getModifiers()));
+        method.setAccessible(true);
+        return (v) -> {
+          try {
+            return (String) method.invoke(v);
+          } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException("Unable to provide unexpanded string");
+          }
+        };
+      }
+    }
+    throw new RuntimeException("No ProvidesUnexpandedString annotation present");
+  }
+
+  @SuppressWarnings("unchecked")
+  protected <T> BiFunction<T, String, T> getCreateInstanceWithExpandedFunction(Class<T> classType) {
+    if (classType == String.class) {
+      return (v, expanded) -> (T) expanded;
+    }
+    for (Method method : classType.getMethods()) {
+      if (method.isAnnotationPresent(ProvidesInstanceWithExpandedString.class)) {
+        checkArgument(
+            method.getReturnType().isAssignableFrom(classType)
+                && method.getParameterTypes().length == 1
+                && method.getParameterTypes()[0] == String.class
+                && Modifier.isPublic(method.getModifiers()));
+        method.setAccessible(true);
+        return (v, expanded) -> {
+          try {
+            return (T) method.invoke(v, expanded);
+          } catch (InvocationTargetException | IllegalAccessException e) {
+            throw new RuntimeException("Unable to provide instance with expanded");
+          }
+        };
+      }
+    }
+    throw new RuntimeException("No ProvidesInstanceWithExpandedString annotation present");
   }
 
   /**
