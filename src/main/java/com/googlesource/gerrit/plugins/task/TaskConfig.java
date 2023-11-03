@@ -27,6 +27,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /** Task Configuration file living in git */
 public class TaskConfig extends AbstractVersionedMetaData {
@@ -63,7 +64,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String preloadTask;
     public Map<String, String> properties;
     public String readyHint;
-    public List<String> subTasks;
+    public List<TaskKey> subTasks;
     public List<String> subTasksExternals;
     public List<String> subTasksFactories;
     public List<String> subTasksFiles;
@@ -85,7 +86,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
       preloadTask = getString(s, KEY_PRELOAD_TASK, null);
       properties = getProperties(s, KEY_PROPERTIES_PREFIX);
       readyHint = getString(s, KEY_READY_HINT, null);
-      subTasks = getStringList(s, KEY_SUBTASK);
+      subTasks =
+          getStringList(s, KEY_SUBTASK).stream()
+              .map(subtask -> TaskKey.create(s.file(), subtask))
+              .collect(Collectors.toList());
       subTasksExternals = getStringList(s, KEY_SUBTASKS_EXTERNAL);
       subTasksFactories = getStringList(s, KEY_SUBTASKS_FACTORY);
       subTasksFiles = getStringList(s, KEY_SUBTASKS_FILE);
