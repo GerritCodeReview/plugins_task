@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.task.properties;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.server.query.change.ChangeData;
+import com.googlesource.gerrit.plugins.task.SourceSubTask;
 import com.googlesource.gerrit.plugins.task.TaskConfig;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
@@ -92,6 +93,7 @@ public class Properties {
             .setNanosConsumer(l -> Statistics.setNanoseconds(statistics, l))) {
       loader = new Loader(origTask, changeData, getParentMapper());
       expander = new Expander(n -> loader.load(n));
+      expander.registerClassExpander(SourceSubTask.class, getSourceSubTaskExpander(expander));
       expander.setStatisticsConsumer(matcherStatisticsConsumer);
       if (isTaskRefreshRequired || init) {
         expander.expand(task, TaskConfig.KEY_APPLICABLE);
@@ -114,6 +116,16 @@ public class Properties {
       statisticsConsumer.accept(statistics);
     }
     return task.getForRead();
+  }
+
+  protected Function<SourceSubTask, SourceSubTask> getSourceSubTaskExpander(Expander expander) {
+    return (t) -> {
+      String expanded = expander.expandText(t.getValue());
+      if (t.getValue() != expanded) {
+        return new SourceSubTask(t.getSourceFile(), expanded);
+      }
+      return t;
+    };
   }
 
   public void setStatisticsConsumer(Consumer<Statistics> statisticsConsumer) {

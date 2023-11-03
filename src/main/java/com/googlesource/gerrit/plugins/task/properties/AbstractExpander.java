@@ -17,7 +17,9 @@ package com.googlesource.gerrit.plugins.task.properties;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -41,6 +43,12 @@ import java.util.function.Function;
  */
 public abstract class AbstractExpander {
   protected Consumer<Matcher.Statistics> statisticsConsumer;
+
+  protected final Map<Class<?>, Function<?, ?>> expanderByClass = new HashMap<>();
+
+  public <T> void registerClassExpander(Class<T> classType, Function<T, T> expander) {
+    expanderByClass.put(classType, expander);
+  }
 
   public void setStatisticsConsumer(Consumer<Matcher.Statistics> statisticsConsumer) {
     this.statisticsConsumer = statisticsConsumer;
@@ -101,9 +109,7 @@ public abstract class AbstractExpander {
           field.set(cow.getForWrite(), expanded);
         }
       } else if (o instanceof List) {
-        @SuppressWarnings("unchecked")
-        List<String> forceCheck = List.class.cast(o);
-        List<String> expanded = expand(forceCheck);
+        List<?> expanded = expand((List<?>) o);
         if (expanded != o) {
           field.set(cow.getForWrite(), expanded);
         }
@@ -118,18 +124,35 @@ public abstract class AbstractExpander {
    * Returns expanded unmodifiable List if property found. Returns same object if no expansions
    * occurred.
    */
-  public List<String> expand(List<String> list) {
+  public <T> List<T> expand(List<T> list) {
     if (list != null) {
       boolean hasProperty = false;
-      List<String> expandedList = new ArrayList<>(list.size());
-      for (String value : list) {
-        String expanded = expandText(value);
-        hasProperty = hasProperty || value != expanded;
+      List<T> expandedList = new ArrayList<>(list.size());
+      for (T value : list) {
+        T expanded = expand(value);
+        boolean hasExpanded = (value != expanded);
+        hasProperty = hasProperty || hasExpanded;
         expandedList.add(expanded);
       }
       return hasProperty ? Collections.unmodifiableList(expandedList) : list;
     }
     return null;
+  }
+
+  /**
+   * Expand all properties (${property_name} -> property_value) in the given generic value. Returns
+   * same object if no expansions occurred.
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T expand(T value) {
+    if (value == null) {
+      return null;
+    }
+    if (value instanceof String) {
+      return (T) expandText((String) value);
+    }
+    return ((Function<T, T>) expanderByClass.getOrDefault(value.getClass(), Function.identity()))
+        .apply(value);
   }
 
   /**
