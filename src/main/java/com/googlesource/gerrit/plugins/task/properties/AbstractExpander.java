@@ -40,6 +40,21 @@ import java.util.function.Function;
  * the name/value associations via the getValueForName() method.
  */
 public abstract class AbstractExpander {
+  public interface UnExpandedStringProvider {
+    /** Returns a string which needs to be expanded */
+    String getUnexpandedString();
+  }
+
+  public interface InstanceWithExpandedStringProvider<T> {
+    /**
+     * Returns an instance with the input expanded string
+     *
+     * @param expanded string
+     * @return an object which has expanded string
+     */
+    T createInstance(String expanded);
+  }
+
   protected Consumer<Matcher.Statistics> statisticsConsumer;
 
   public void setStatisticsConsumer(Consumer<Matcher.Statistics> statisticsConsumer) {
@@ -101,11 +116,17 @@ public abstract class AbstractExpander {
           field.set(cow.getForWrite(), expanded);
         }
       } else if (o instanceof List) {
-        @SuppressWarnings("unchecked")
-        List<String> forceCheck = List.class.cast(o);
-        List<String> expanded = expand(forceCheck);
-        if (expanded != o) {
-          field.set(cow.getForWrite(), expanded);
+        List<?> list = (List<?>) o;
+        if (!list.isEmpty()) {
+          if (list.get(0) instanceof String || list.get(0) instanceof UnExpandedStringProvider) {
+            List<?> expanded = expand(list);
+            if (expanded != o) {
+              field.set(cow.getForWrite(), expanded);
+            }
+          } else {
+            throw new RuntimeException(
+                String.format("Unknown list type: %s", list.get(0).getClass()));
+          }
         }
       }
     } catch (IllegalAccessException e) {
@@ -118,18 +139,38 @@ public abstract class AbstractExpander {
    * Returns expanded unmodifiable List if property found. Returns same object if no expansions
    * occurred.
    */
-  public List<String> expand(List<String> list) {
+  public <T> List<T> expand(List<T> list) {
     if (list != null) {
       boolean hasProperty = false;
-      List<String> expandedList = new ArrayList<>(list.size());
-      for (String value : list) {
-        String expanded = expandText(value);
+      List<T> expandedList = new ArrayList<>(list.size());
+      for (T value : list) {
+        T expanded = expand(value);
         hasProperty = hasProperty || value != expanded;
         expandedList.add(expanded);
       }
       return hasProperty ? Collections.unmodifiableList(expandedList) : list;
     }
     return null;
+  }
+
+  /**
+   * Expand all properties (${property_name} -> property_value) in the given expandable value.
+   * Returns same object if no expansions occurred.
+   */
+  @SuppressWarnings("unchecked")
+  public <T> T expand(T value) {
+    String toExpand =
+        value instanceof UnExpandedStringProvider
+            ? ((UnExpandedStringProvider) value).getUnexpandedString()
+            : (String) value;
+    String expanded = expandText(toExpand);
+    if (toExpand != expanded) {
+      return (T)
+          (value instanceof InstanceWithExpandedStringProvider
+              ? ((InstanceWithExpandedStringProvider<T>) value).createInstance(expanded)
+              : expanded);
+    }
+    return value;
   }
 
   /**
