@@ -2471,6 +2471,144 @@ file: `All-Projects:refs/meta/config:task.config`
    "status" : "PASS"
 }
 
+[root "Root Preload from all-projects sub-dir"]
+  preload-task = //dir/common.config^Sample relative task in sub dir
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from all-projects sub-dir",
+   "status" : "PASS"
+}
+
+[root "Root Preload from all-projects sub-dir which has subtask in same file"]
+  preload-task = //dir/common.config^Sample relative task in sub dir with subtask from same file
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from all-projects sub-dir which has subtask in same file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Sample relative task in sub dir",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Preload from all-projects sub-dir which has subtask in different file"]
+  preload-task = //dir/common.config^Sample relative task in sub dir with subtask from different file
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from all-projects sub-dir which has subtask in different file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Passing task",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Preload from user ref"]
+  preload-task = @testuser/dir/relative.config^Relative Task
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from user ref",
+   "status" : "PASS"
+}
+
+[root "Root Preload from user ref which has subtask in same file"]
+  preload-task = @testuser/dir/relative.config^Relative Task with subtask
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from user ref which has subtask in same file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Passing task",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Preload from user ref which has subtask in different file"]
+  preload-task = @testuser/dir/relative.config^Import All-Projects root task
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Preload from user ref which has subtask in different file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask PASS",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Preload from group ref"]
+  preload-task = %{non_secret_group_name_without_space}^task in group root config file 1
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from group ref",
+   "status" : "PASS"
+}
+
+[root "Root Preload from group ref which has subtask in same file"]
+  preload-task = %{non_secret_group_name_without_space}^task in group root with subtask
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from group ref which has subtask in same file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Passing task",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Preload from group ref which has subtask in different file"]
+  preload-task = %{non_secret_group_name_without_space}^task in group root with subtask from all-projects
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from group ref which has subtask in different file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask PASS",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root INVALID Preload"]
   preload-task = missing
 
@@ -3065,6 +3203,10 @@ file: `All-Projects:refs/meta/config:task/relative.config`
 ```
 [task "Root Import task from subdir using relative syntax"]
     subtask = dir/common.config^Sample relative task in sub dir
+
+[task "Passing task"]
+    applicable = is:open
+    pass = True
 ```
 
 file: `All-Projects:refs/meta/config:task/dir/common.config`
@@ -3072,6 +3214,16 @@ file: `All-Projects:refs/meta/config:task/dir/common.config`
 [task "Sample relative task in sub dir"]
     applicable = is:open
     pass = is:open
+
+[task "Sample relative task in sub dir with subtask from same file"]
+    applicable = is:open
+    pass = is:open
+    subtask = Sample relative task in sub dir
+
+[task "Sample relative task in sub dir with subtask from different file"]
+    applicable = is:open
+    pass = is:open
+    subtask = //relative.config^Passing task
 
 [task "Root Import task from root task.config"]
     applicable = is:open
@@ -3294,6 +3446,15 @@ file: `All-Users:refs/users/self:task/dir/relative.config`
   applicable = is:open
   pass = is:open
 
+[task "Relative Task with subtask"]
+  applicable = is:open
+  pass = is:open
+  subtask = Passing task
+
+[task "Passing task"]
+  applicable = is:open
+  pass = True
+
 [task "Import All-Projects root task"]
   applicable = is:open
   subtask = //^Subtask PASS
@@ -3344,6 +3505,20 @@ file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task.
 [task "task in group root config file 1"]
   applicable = is:open
   pass = is:open
+
+[task "task in group root with subtask"]
+  applicable = is:open
+  pass = is:open
+  subtask = Passing task
+
+[task "Passing task"]
+  applicable = is:open
+  pass = True
+
+[task "task in group root with subtask from all-projects"]
+  applicable = is:open
+  pass = is:open
+  subtask = //^Subtask PASS
 
 [task "task in group root config file 2"]
   applicable = is:open
