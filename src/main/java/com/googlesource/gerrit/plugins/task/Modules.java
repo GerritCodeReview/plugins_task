@@ -57,6 +57,13 @@ public class Modules {
   }
 
   public static class MyOptions implements DynamicBean {
+    @Option(
+        name = "--only",
+        usage =
+            "Evaluate tasks under this task only. Only root task names are supported."
+                + " This option can be provided multiple times.")
+    public List<String> includedRoots = new ArrayList<>();
+
     @Option(name = "--all", usage = "Include all visible tasks in the output")
     public boolean all = false;
 
@@ -96,6 +103,10 @@ public class Modules {
     @Inject
     public MyOptions(PatchSetArgument.Factory patchSetArgumentFactory) {
       this.patchSetArgumentFactory = patchSetArgumentFactory;
+    }
+
+    public boolean shouldFilterRoot(String rootName) {
+      return !includedRoots.isEmpty() && !includedRoots.contains(rootName);
     }
   }
 }

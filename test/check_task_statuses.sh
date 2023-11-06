@@ -249,6 +249,19 @@ test_generated preview-admin --task--preview "$cnum,1" --task--all "$query"
 test_generated preview-non-secret -l "$NON_SECRET_USER" --task--preview "$cnum,1" --task--all "$query"
 test_generated preview-invalid --task--preview "$cnum,1" --task--invalid "$query"
 
+cat <<-EOF > testdoc_2_pjson | ensure json_pp | "$EXPECTED".task-roots-filter
+{
+   "hasPass" : true,
+   "name" : "Root PASS",
+   "status" : "PASS"
+},
+{
+   "name" : "UNKNOWN",
+   "status" : "INVALID"
+}
+EOF
+test_generated task-roots-filter --task--applicable --task--only "Root\ PASS" "$query"
+
 example "$DOC_PATHS" 1 | testdoc_2_cfg | replace_user > "$ROOT_CFG"
 q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 ROOTS=$(config_section_keys "root")
