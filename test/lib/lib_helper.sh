@@ -59,7 +59,17 @@ config_section_keys() { # section > keys ...
 
 remove_suites() { # suites... < pre_json > json
     grep -vE "# Only Test Suite: ($(echo "$@" | sed "s/ /|/g"))" | \
-         sed -e's/# Only Test Suite:.*$//; s/ *$//'
+         sed -e's/# Only Test Suite:.*$//; s/# Test Suite:.*$//; s/ *$//'
+}
+
+# pre_json is a "templated json" used in the test docs to express test results. It looks
+# like json but has some extra comments to express when a certain output should be used.
+# These comments look like: "# Test Suite: <suite>[, <suite>][, <suite>]..."
+#
+
+keep_suites() { # suites... < pre_json > json
+    grep -E "# Test Suite: (.*, )?($(echo "$@" | sed "s/ /|/g"))(, .*)?$" | \
+         sed -e's/# Only Test Suite:.*$//; s/# Test Suite:.*$//; s/ *$//'
 }
 
 remove_not_suite() { remove_suites !"$1" ; } # suite < pre_json > json

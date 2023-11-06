@@ -56,12 +56,12 @@ file: `All-Projects:refs/meta/config:task.config`
 [root "Root PASS"]
   pass = True
 
-{
-   "applicable" : true,
-   "hasPass" : true,
-   "name" : "Root PASS",
-   "status" : "PASS"
-}
+{                              # Test Suite: task_only
+   "applicable" : true,        # Test Suite: task_only
+   "hasPass" : true,           # Test Suite: task_only
+   "name" : "Root PASS",       # Test Suite: task_only
+   "status" : "PASS"           # Test Suite: task_only
+}                              # Test Suite: task_only
 
 [root "Root FAIL"]
   fail = True
@@ -2620,10 +2620,10 @@ file: `All-Projects:refs/meta/config:task.config`
 [root "Root INVALID Preload"]
   preload-task = missing
 
-{
-   "name" : "UNKNOWN",
-   "status" : "INVALID"
-}
+{                         # Test Suite: task_only
+   "name" : "UNKNOWN",    # Test Suite: task_only
+   "status" : "INVALID"   # Test Suite: task_only
+}                         # Test Suite: task_only
 
 [root "INVALIDS"]
   subtasks-file = invalids.config

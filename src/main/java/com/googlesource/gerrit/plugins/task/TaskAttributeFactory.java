@@ -147,11 +147,14 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   protected PluginDefinedInfo createWithExceptions(ChangeData c) {
     TaskPluginAttribute a = new TaskPluginAttribute();
     try {
-      for (Node node : definitions.getRootNodes(c)) {
-        if (node instanceof Node.Invalid) {
+      for (Node root : definitions.getRootNodes(c)) {
+        if (root instanceof Node.Invalid) {
           a.roots.add(invalid());
         } else {
-          new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
+          if (options.shouldFilterRoot(root.task.name())) {
+            continue;
+          }
+          new AttributeFactory(root).create().ifPresent(t -> a.roots.add(t));
         }
       }
     } catch (ConfigInvalidException | IOException | StorageException e) {
