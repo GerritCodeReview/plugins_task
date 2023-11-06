@@ -588,6 +588,13 @@ the plugins section like below:
         status: PASS
 ```
 
+**\-\-@PLUGIN@\-\-root**
+
+This switch can be used to only evaluate tasks under a certain root when tasks
+from other roots are unwanted. For example, a CI system may not be interested
+in evaluating tasks for another CI system. The switch can be provided multiple
+times.
+
 Examples
 --------
 See [task_states](test/task_states.html) for a comprehensive list of examples
