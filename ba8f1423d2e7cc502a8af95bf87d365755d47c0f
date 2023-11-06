@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "48411409_a8b1598c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-06T09:46:54Z",
+      "side": 1,
+      "message": "No performance impact Nasser.",
+      "parentUuid": "6f32806f_8a66e3f5",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4fa61c54_a8386f3f",
@@ -79,6 +97,30 @@
       "side": 1,
       "message": "You might want to see if there\u0027s a way to de-dup some of the new code you added in `AbstractExander` when you do that.",
       "parentUuid": "bd6dc3d9_3837ef87",
+      "range": {
+        "startLine": 69,
+        "startChar": 16,
+        "endLine": 69,
+        "endChar": 22
+      },
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "176b6fba_f01e8437",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-06T09:46:54Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "47b3fcad_f30aecc5",
       "range": {
         "startLine": 69,
         "startChar": 16,
