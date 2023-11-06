@@ -44,6 +44,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
           new TaskPath(
                   String.format(
                           "Can't perform operation, need %s capability", ViewPathsCapability.VIEW_PATHS));
+
   public enum Status {
     INVALID,
     UNKNOWN,
@@ -151,6 +152,10 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
         if (node instanceof Node.Invalid) {
           a.roots.add(invalid());
         } else {
+          if (!options.filteredRoots.isEmpty()
+              && !options.filteredRoots.contains(node.task.name())) {
+            continue;
+          }
           new AttributeFactory(node).create().ifPresent(t -> a.roots.add(t));
         }
       }

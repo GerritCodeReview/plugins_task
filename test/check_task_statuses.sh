@@ -164,6 +164,7 @@ set_change "$(echo "$changes" | awk 'NR==2')" ; CHANGE2=("${CHANGE[@]}")
 DOC_STATES=$(replace_tokens < "$DOCS/task_states.md")
 DOC_PREVIEW=$(replace_tokens < "$DOCS/preview.md")
 DOC_PATHS=$(replace_tokens < "$DOCS/paths.md")
+DOC_ROOTS_FILTER=$(replace_tokens < "$DOCS/roots_filter.md")
 
 create_configs_from_task_states
 
@@ -261,5 +262,11 @@ q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 ROOTS=$(config_section_keys "root")
 example "$DOC_PATHS" 2 | testdoc_2_pjson | ensure json_pp > "$EXPECTED".task-paths.non-secret
 test_generated task-paths.non-secret -l "$NON_SECRET_USER" --task--all --task--include-paths "$query"
+
+example "$DOC_ROOTS_FILTER" 1 | testdoc_2_cfg > "$ROOT_CFG"
+q_setup update_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
+ROOTS=$(config_section_keys "root")
+example "$DOC_ROOTS_FILTER" 1 | testdoc_2_pjson | ensure json_pp > "$EXPECTED".task-roots-filter
+test_generated task-roots-filter --task--all --task--root "Root1" "$query"
 
 exit $RESULT
