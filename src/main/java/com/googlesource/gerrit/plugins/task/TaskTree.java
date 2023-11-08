@@ -90,6 +90,7 @@ public class TaskTree {
   protected final PredicateCache predicateCache;
   protected final MatchCache matchCache;
   protected final Preloader preloader;
+  protected final TaskConfigCache taskConfigCache;
   protected final TaskExpression.Factory taskExpressionFactory;
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
@@ -113,6 +114,7 @@ public class TaskTree {
       Provider<ChangeQueryBuilder> changeQueryBuilderProvider,
       Provider<ChangeQueryProcessor> changeQueryProcessorProvider,
       PredicateCache predicateCache,
+      Provider<TaskConfigCache> taskConfigCacheProvider,
       TaskExpression.Factory taskExpressionFactory,
       Preloader preloader) {
     this.accountResolver = accountResolver;
@@ -122,6 +124,7 @@ public class TaskTree {
     this.changeQueryBuilderProvider = changeQueryBuilderProvider;
     this.predicateCache = predicateCache;
     this.matchCache = new MatchCache(predicateCache);
+    this.taskConfigCache = taskConfigCacheProvider.get();
     this.taskExpressionFactory = taskExpressionFactory;
     this.preloader = preloader;
   }
@@ -262,7 +265,7 @@ public class TaskTree {
       return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + taskKey;
     }
 
-    public List<Node> getSubNodes() throws IOException, StorageException {
+    public List<Node> getSubNodes() throws IOException, StorageException, ConfigInvalidException {
       if (cachedNodes != null) {
         return refresh(cachedNodes);
       }
@@ -285,12 +288,14 @@ public class TaskTree {
       return nodes;
     }
 
-    public List<Node> getApplicableSubNodes() throws IOException, StorageException {
+    public List<Node> getApplicableSubNodes()
+        throws IOException, StorageException, ConfigInvalidException {
       return hasUnfilterableSubNodes ? getSubNodes() : new ApplicableNodeFilter().getSubNodes();
     }
 
     @Override
-    protected List<Node> loadSubNodes() throws IOException, StorageException {
+    protected List<Node> loadSubNodes()
+        throws IOException, StorageException, ConfigInvalidException {
       List<Task> cachedDefinitions = definitionsBySubSection.get(task.key().subSection());
       if (cachedDefinitions != null) {
         return new SubNodeFactory().createFromPreloaded(cachedDefinitions);
@@ -356,7 +361,7 @@ public class TaskTree {
       protected List<Node> nodes = new ArrayList<>();
       protected SubNodeFactory factory = new SubNodeFactory();
 
-      public List<Node> getSubNodes() throws IOException, StorageException {
+      public List<Node> getSubNodes() throws IOException, StorageException, ConfigInvalidException {
         addSubTasks();
         addSubTasksFactoryTasks();
         addSubTasksFiles();
@@ -406,11 +411,18 @@ public class TaskTree {
         }
       }
 
-      protected void addSubTasksFactoryTasks() throws IOException, StorageException {
-        for (String tasksFactoryName : task.subTasksFactories) {
-          TasksFactory tasksFactory = task.config.getTasksFactory(tasksFactoryName);
+      protected void addSubTasksFactoryTasks()
+          throws IOException, StorageException, ConfigInvalidException {
+        for (ConfigSourcedValue configSourcedValue : task.subTasksFactories) {
+          TasksFactory tasksFactory =
+              taskConfigCache
+                  .getTaskConfig(configSourcedValue.sourceFile())
+                  .getTasksFactory(configSourcedValue.value());
           if (tasksFactory != null) {
-            NamesFactory namesFactory = task.config.getNamesFactory(tasksFactory.namesFactory);
+            NamesFactory namesFactory =
+                taskConfigCache
+                    .getTaskConfig(configSourcedValue.sourceFile())
+                    .getNamesFactory(tasksFactory.namesFactory);
             if (namesFactory != null && namesFactory.type != null) {
               namesFactory = properties.getNamesFactory(namesFactory);
               switch (NamesFactoryType.getNamesFactoryType(namesFactory.type)) {
@@ -492,7 +504,7 @@ public class TaskTree {
 
       public ApplicableNodeFilter() throws StorageException {}
 
-      public List<Node> getSubNodes() throws IOException, StorageException {
+      public List<Node> getSubNodes() throws IOException, StorageException, ConfigInvalidException {
         if (nodesByBranch != null) {
           List<Node> nodes = nodesByBranch.get(branch);
           if (nodes != null) {
