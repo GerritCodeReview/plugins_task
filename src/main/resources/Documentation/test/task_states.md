@@ -2589,6 +2589,34 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root Preload from all-projects sub-dir which has preload-task in same file"]
+  preload-task = //dir/common.config^Sample task in sub dir with preload-task from same file
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from all-projects sub-dir which has preload-task in same file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Sample relative task in sub dir",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Preload from all-projects sub-dir which has preload-task in different file"]
+  preload-task = //dir/common.config^Sample task in sub dir with preload-task from different file
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from all-projects sub-dir which has preload-task in different file",
+   "status" : "PASS"
+}
+
 [root "Root INVALID Preload"]
   preload-task = missing
 
@@ -3208,6 +3236,12 @@ file: `All-Projects:refs/meta/config:task/dir/common.config`
 [task "Root Import task from root task.config"]
     applicable = is:open
     subtask = ^Subtask PASS
+
+[task "Sample task in sub dir with preload-task from same file"]
+    preload-task = Sample relative task in sub dir with subtask from same file
+
+[task "Sample task in sub dir with preload-task from different file"]
+    preload-task = %{non_secret_group_name_without_space}/foo/bar.config^Absolute Task 1
 ```
 
 file: `All-Projects:refs/meta/config:task/invalids.config`
