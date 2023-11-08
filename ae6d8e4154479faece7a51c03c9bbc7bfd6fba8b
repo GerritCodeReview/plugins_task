@@ -34,6 +34,23 @@
       "parentUuid": "d6f93fe3_16bdfc9c",
       "revId": "ae6d8e4154479faece7a51c03c9bbc7bfd6fba8b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "74bf2bb2_02c2ba5e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 156,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-08T05:31:04Z",
+      "side": 1,
+      "message": "We could move this condition into options itself? Something like options.canSkipRoot(name()) ?",
+      "revId": "ae6d8e4154479faece7a51c03c9bbc7bfd6fba8b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
