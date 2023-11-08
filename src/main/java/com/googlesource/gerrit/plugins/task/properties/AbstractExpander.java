@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task.properties;
 
+import com.googlesource.gerrit.plugins.task.FileKey;
 import com.googlesource.gerrit.plugins.task.SubSectionKey;
 import com.googlesource.gerrit.plugins.task.TaskKey;
 import java.lang.reflect.Field;
@@ -108,7 +109,8 @@ public abstract class AbstractExpander {
         Class<?> classType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
         if (classType == String.class
             || classType == TaskKey.class
-            || classType == SubSectionKey.class) {
+            || classType == SubSectionKey.class
+            || classType == FileKey.class) {
           List<?> expanded = expand((List<?>) o);
           if (expanded != o) {
             field.set(cow.getForWrite(), expanded);
@@ -144,7 +146,7 @@ public abstract class AbstractExpander {
 
   /**
    * Expand all properties (${property_name} -> property_value) in the given text or TaskKey or
-   * SubSectionKey. Returns same object if no expansions occurred.
+   * SubSectionKey or FileKey. Returns same object if no expansions occurred.
    */
   public <T> T expand(T value) throws NoSuchFieldException, IllegalAccessException {
     String toExpand = getStringFieldToExpand(value);
@@ -161,6 +163,8 @@ public abstract class AbstractExpander {
       return (String) getFieldObject(value, "task");
     } else if (value instanceof SubSectionKey) {
       return (String) getFieldObject(value, "subSection");
+    } else if (value instanceof FileKey) {
+      return (String) getFieldObject(value, "file");
     }
     return (String) value;
   }
@@ -180,6 +184,8 @@ public abstract class AbstractExpander {
       return (T)
           SubSectionKey.create(
               ((SubSectionKey) value).file(), ((SubSectionKey) value).section(), expanded);
+    } else if (value instanceof FileKey) {
+      return (T) FileKey.create(((FileKey) value).branch(), expanded);
     }
     return (T) expanded;
   }
