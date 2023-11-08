@@ -2553,6 +2553,68 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root Preload from all-projects sub-dir which has subtasks-external in same file"]
+  preload-task = //dir/common.config^Sample relative task in sub dir with subtasks-external from same file
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from all-projects sub-dir which has subtasks-external in same file",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "userfile task/special.config FAIL",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "file task/common.config Preload PASS",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Referencing single task from same user ref",
+         "status" : "PASS",
+         "subTasks" : [
+             {
+                 "applicable" : true,
+                 "hasPass" : true,
+                 "name" : "Relative Task",
+                 "status" : "PASS"
+             },
+             {
+                 "applicable" : true,
+                 "hasPass" : true,
+                 "name" : "Relative Task in sub dir",
+                 "status" : "PASS"
+             },
+             {
+                 "applicable" : true,
+                 "hasPass" : true,
+                 "name" : "task in user root config file",
+                 "status" : "PASS"
+             },
+             {
+                 "applicable" : true,
+                 "hasPass" : true,
+                 "name" : "Absolute Task",
+                 "status" : "PASS"
+             }
+         ]
+      }
+   ]
+}
+
 [root "Root Preload from user ref"]
   preload-task = @testuser/dir/relative.config^Relative Task
 
@@ -3280,6 +3342,21 @@ file: `All-Projects:refs/meta/config:task/dir/common.config`
 [names-factory "names-factory static list 2"]
     type = static
     name = my d task
+
+[task "Sample relative task in sub dir with subtasks-external from same file"]
+    applicable = is:open
+    pass = is:open
+    set-my-external-prop = user sample config
+    subtasks-external = user special tasks
+    subtasks-external = ${my-external-prop}
+
+[external "user special tasks"]
+  user = testuser
+  file = special.config
+
+[external "user sample config"]
+  user = testuser
+  file = dir/sample.config
 
 [task "Sample relative task in sub dir with subtask from different file"]
     applicable = is:open
