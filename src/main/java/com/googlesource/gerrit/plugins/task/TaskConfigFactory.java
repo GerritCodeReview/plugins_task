@@ -20,6 +20,7 @@ import com.google.gerrit.entities.Project;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.server.CurrentUser;
+import com.google.gerrit.server.cache.PerThreadCache;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.git.GitRepositoryManager;
@@ -37,6 +38,13 @@ import org.eclipse.jgit.lib.Repository;
 public class TaskConfigFactory {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
 
+  public static class TaskConfigByFileCache extends HashMap<FileKey, TaskConfig> {
+    private static final long serialVersionUID = 6101331416327907630L;
+  }
+
+  protected static final PerThreadCache.Key<TaskConfigByFileCache> TASK_CONFIG_BY_FILE_CACHE_KEY =
+      PerThreadCache.Key.create(TaskConfigByFileCache.class);
+
   protected final GitRepositoryManager gitMgr;
   protected final PermissionBackend permissionBackend;
 
@@ -44,7 +52,6 @@ public class TaskConfigFactory {
   protected final AllProjectsName allProjects;
 
   protected final Map<BranchNameKey, PatchSetArgument> psaMasquerades = new HashMap<>();
-  protected final Map<FileKey, TaskConfig> taskCfgByFile = new HashMap<>();
 
   @Inject
   protected TaskConfigFactory(
@@ -71,12 +78,31 @@ public class TaskConfigFactory {
   }
 
   public TaskConfig getTaskConfig(FileKey key) throws ConfigInvalidException, IOException {
-    TaskConfig cfg = taskCfgByFile.get(key);
-    if (cfg == null) {
-      cfg = loadTaskConfig(key);
-      taskCfgByFile.put(key, cfg);
+    PerThreadCache perThreadCache = PerThreadCache.get();
+    if (perThreadCache != null) {
+      Map<FileKey, TaskConfig> taskConfigByFileCache =
+          perThreadCache.get(TASK_CONFIG_BY_FILE_CACHE_KEY, TaskConfigByFileCache::new);
+      try {
+        return taskConfigByFileCache.computeIfAbsent(
+            key,
+            k -> {
+              try {
+                return loadTaskConfig(key);
+              } catch (ConfigInvalidException | IOException e) {
+                throw new RuntimeException(e);
+              }
+            });
+      } catch (RuntimeException e) {
+        if (e.getCause() instanceof ConfigInvalidException) {
+          throw (ConfigInvalidException) e.getCause();
+        }
+        if (e.getCause() instanceof IOException) {
+          throw (IOException) e.getCause();
+        }
+        throw e;
+      }
     }
-    return cfg;
+    return loadTaskConfig(key);
   }
 
   private TaskConfig loadTaskConfig(FileKey file) throws ConfigInvalidException, IOException {
