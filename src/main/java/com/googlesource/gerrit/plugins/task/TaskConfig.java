@@ -66,7 +66,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String readyHint;
     public List<TaskKey> subTasks;
     public List<String> subTasksExternals;
-    public List<String> subTasksFactories;
+    public List<SubSectionKey> subTasksFactories;
     public List<String> subTasksFiles;
 
     public boolean isVisible;
@@ -91,7 +91,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
               .map(subtask -> TaskKey.create(s.file(), subtask))
               .collect(Collectors.toList());
       subTasksExternals = getStringList(s, KEY_SUBTASKS_EXTERNAL);
-      subTasksFactories = getStringList(s, KEY_SUBTASKS_FACTORY);
+      subTasksFactories =
+          getStringList(s, KEY_SUBTASKS_FACTORY).stream()
+              .map(subtask -> SubSectionKey.create(s.file(), SECTION_TASKS_FACTORY, subtask))
+              .collect(Collectors.toList());
       subTasksFiles = getStringList(s, KEY_SUBTASKS_FILE);
     }
 
@@ -246,8 +249,8 @@ public class TaskConfig extends AbstractVersionedMetaData {
         : Optional.of(new Task(subSection, isVisible, isMasqueraded));
   }
 
-  public TasksFactory getTasksFactory(String name) {
-    return new TasksFactory(subSectionKey(SECTION_TASKS_FACTORY, name), isVisible, isMasqueraded);
+  public TasksFactory getTasksFactory(SubSectionKey subSectionKey) {
+    return new TasksFactory(subSectionKey, isVisible, isMasqueraded);
   }
 
   public NamesFactory getNamesFactory(String name) {
