@@ -171,8 +171,8 @@ public abstract class AbstractExpander {
   }
 
   /**
-   * Expand all properties (${property_name} -> property_value) in the given field.
-   * Returns same object if no expansions occurred.
+   * Expand all properties (${property_name} -> property_value) in the given field. Returns same
+   * object if no expansions occurred.
    */
   public <T> T expand(T value) throws NoSuchFieldException, IllegalAccessException {
     String toExpand = fieldConvertor.fromField(value);

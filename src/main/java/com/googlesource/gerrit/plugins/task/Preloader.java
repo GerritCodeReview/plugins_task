@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
@@ -45,7 +44,6 @@ public class Preloader {
 
   protected Statistics statistics;
 
-  @Inject
   public Preloader(
       TaskConfigFactory taskConfigFactory, TaskExpression.Factory taskExpressionFactory) {
     this.taskConfigFactory = taskConfigFactory;

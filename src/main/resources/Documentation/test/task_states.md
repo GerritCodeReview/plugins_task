@@ -2497,6 +2497,42 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root Preload from all-projects sub-dir which has subtasks-factory in same file"]
+  preload-task = //dir/common.config^Sample relative task in sub dir with subtasks-factory from same file
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from all-projects sub-dir which has subtasks-factory in same file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my a task",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my b task",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my c task",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "my d task",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root Preload from user ref"]
   preload-task = @testuser/dir/relative.config^Relative Task
 
@@ -3227,6 +3263,31 @@ file: `All-Projects:refs/meta/config:task/dir/common.config`
     applicable = is:open
     pass = is:open
     subtask = Sample relative task in sub dir
+
+[task "Sample relative task in sub dir with subtasks-factory from same file"]
+    applicable = is:open
+    pass = is:open
+    set-my-factory-prop = simple static tasks-factory 2
+    subtasks-factory = simple static tasks-factory 1
+    subtasks-factory = ${my-factory-prop}
+
+[tasks-factory "simple static tasks-factory 1"]
+    names-factory = names-factory static list 1
+    pass = True
+
+[names-factory "names-factory static list 1"]
+    type = static
+    name = my a task
+    name = my b task
+    name = my c task
+
+[tasks-factory "simple static tasks-factory 2"]
+    names-factory = names-factory static list 2
+    pass = True
+
+[names-factory "names-factory static list 2"]
+    type = static
+    name = my d task
 
 [task "Sample relative task in sub dir with subtask from different file"]
     applicable = is:open

@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.task.properties;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.server.query.change.ChangeData;
+import com.googlesource.gerrit.plugins.task.SubSectionKey;
 import com.googlesource.gerrit.plugins.task.TaskConfig;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
@@ -57,6 +58,8 @@ public class Properties {
     public <T> String fromField(T object) throws IllegalAccessException, NoSuchFieldException {
       if (object instanceof TaskKey) {
         return (String) getFieldObject(object, "task");
+      } else if (object instanceof SubSectionKey) {
+        return (String) getFieldObject(object, "subSection");
       }
       return (String) object;
     }
@@ -73,13 +76,19 @@ public class Properties {
     public <T> T toField(T object, String expanded) {
       if (object instanceof TaskKey) {
         return (T) TaskKey.create(((TaskKey) object).file(), expanded);
+      } else if (object instanceof SubSectionKey) {
+        return (T)
+            SubSectionKey.create(
+                ((SubSectionKey) object).file(), ((SubSectionKey) object).section(), expanded);
       }
       return (T) expanded;
     }
 
     @Override
     public <T> boolean isValidField(Class<T> fieldType) {
-      return fieldType == String.class || fieldType == TaskKey.class;
+      return fieldType == String.class
+          || fieldType == TaskKey.class
+          || fieldType == SubSectionKey.class;
     }
   }
 
