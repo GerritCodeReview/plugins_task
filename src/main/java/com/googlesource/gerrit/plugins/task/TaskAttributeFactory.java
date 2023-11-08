@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.Change;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.extensions.api.access.PluginPermission;
@@ -41,9 +40,10 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   public static final TaskPath MISSING_VIEW_PATH_CAPABILITY =
-          new TaskPath(
-                  String.format(
-                          "Can't perform operation, need %s capability", ViewPathsCapability.VIEW_PATHS));
+      new TaskPath(
+          String.format(
+              "Can't perform operation, need %s capability", ViewPathsCapability.VIEW_PATHS));
+
   public enum Status {
     INVALID,
     UNKNOWN,
@@ -252,7 +252,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
             }
           }
         }
-      } catch (IOException | RuntimeException e) {
+      } catch (IOException | RuntimeException | ConfigInvalidException e) {
         return Optional.of(invalid()); // bad applicability query
       }
       return Optional.empty();
@@ -353,7 +353,8 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       }
     }
 
-    protected List<TaskAttribute> getSubTasks() throws IOException, StorageException {
+    protected List<TaskAttribute> getSubTasks()
+        throws IOException, StorageException, ConfigInvalidException {
       List<TaskAttribute> subTasks = new ArrayList<>();
       for (Node subNode :
           options.onlyApplicable ? node.getApplicableSubNodes() : node.getSubNodes()) {
