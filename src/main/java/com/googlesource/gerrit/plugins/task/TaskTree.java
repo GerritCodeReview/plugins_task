@@ -396,9 +396,12 @@ public class TaskTree {
       }
 
       protected void addSubTasksExternals() throws StorageException {
-        for (String external : task.subTasksExternals) {
+        for (SourceSubTask sourceSubTask : task.subTasksExternals) {
           try {
-            External ext = task.config.getExternal(external);
+            External ext =
+                taskConfigFactory
+                    .getTaskConfig(sourceSubTask.getSourceFile())
+                    .getExternal(sourceSubTask.getValue());
             if (ext == null) {
               addInvalidNode();
             } else {
