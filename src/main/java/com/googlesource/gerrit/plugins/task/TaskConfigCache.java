@@ -20,6 +20,7 @@ import com.google.gerrit.entities.Project;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.server.CurrentUser;
+import com.google.gerrit.server.cache.PerThreadCache;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.git.GitRepositoryManager;
@@ -34,7 +35,40 @@ import java.util.Map;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 import org.eclipse.jgit.lib.Repository;
 
-public class TaskConfigFactory {
+public class TaskConfigCache {
+  public static class Provider implements com.google.inject.Provider<TaskConfigCache> {
+    protected static final PerThreadCache.Key<TaskConfigCache> TASK_CONFIG_FACTORY_CACHE_KEY =
+        PerThreadCache.Key.create(TaskConfigCache.class);
+
+    protected final AllProjectsNameProvider allProjectsNameProvider;
+    protected final GitRepositoryManager gitMgr;
+    protected final PermissionBackend permissionBackend;
+    protected final CurrentUser user;
+
+    @Inject
+    Provider(
+        AllProjectsNameProvider allProjectsNameProvider,
+        GitRepositoryManager gitMgr,
+        PermissionBackend permissionBackend,
+        CurrentUser user) {
+      this.allProjectsNameProvider = allProjectsNameProvider;
+      this.gitMgr = gitMgr;
+      this.permissionBackend = permissionBackend;
+      this.user = user;
+    }
+
+    @Override
+    public TaskConfigCache get() {
+      PerThreadCache perThreadCache = PerThreadCache.get();
+      if (perThreadCache != null) {
+        return perThreadCache.get(
+            TASK_CONFIG_FACTORY_CACHE_KEY,
+            () -> new TaskConfigCache(allProjectsNameProvider, gitMgr, permissionBackend, user));
+      }
+      return new TaskConfigCache(allProjectsNameProvider, gitMgr, permissionBackend, user);
+    }
+  }
+
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
 
   protected final GitRepositoryManager gitMgr;
@@ -46,8 +80,7 @@ public class TaskConfigFactory {
   protected final Map<BranchNameKey, PatchSetArgument> psaMasquerades = new HashMap<>();
   protected final Map<FileKey, TaskConfig> taskCfgByFile = new HashMap<>();
 
-  @Inject
-  protected TaskConfigFactory(
+  protected TaskConfigCache(
       AllProjectsNameProvider allProjectsNameProvider,
       GitRepositoryManager gitMgr,
       PermissionBackend permissionBackend,
