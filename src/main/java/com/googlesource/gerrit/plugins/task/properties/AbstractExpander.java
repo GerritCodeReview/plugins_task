@@ -14,6 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task.properties;
 
+import com.googlesource.gerrit.plugins.task.SubSectionKey;
 import com.googlesource.gerrit.plugins.task.TaskKey;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
@@ -105,17 +106,10 @@ public abstract class AbstractExpander {
       } else if (o instanceof List) {
         ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
         Class<?> classType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-        if (classType == String.class) {
-          @SuppressWarnings("unchecked")
-          List<String> forceCheck = List.class.cast(o);
-          List<String> expanded = expand(forceCheck);
-          if (expanded != o) {
-            field.set(cow.getForWrite(), expanded);
-          }
-        } else if (classType == TaskKey.class) {
-          @SuppressWarnings("unchecked")
-          List<TaskKey> forceCheck = List.class.cast(o);
-          List<TaskKey> expanded = expandTaskKey(forceCheck);
+        if (classType == String.class
+            || classType == TaskKey.class
+            || classType == SubSectionKey.class) {
+          List<?> expanded = expand((List<?>) o);
           if (expanded != o) {
             field.set(cow.getForWrite(), expanded);
           }
@@ -123,7 +117,7 @@ public abstract class AbstractExpander {
           throw new RuntimeException(String.format("Unknown list type: %s", classType));
         }
       }
-    } catch (IllegalAccessException e) {
+    } catch (IllegalAccessException | NoSuchFieldException e) {
       throw new RuntimeException(e);
     }
     return cow.getForRead();
@@ -133,19 +127,15 @@ public abstract class AbstractExpander {
    * Returns expanded unmodifiable List if property found. Returns same object if no expansions
    * occurred.
    */
-  public List<TaskKey> expandTaskKey(List<TaskKey> list) {
+  public <T> List<T> expand(List<T> list) throws NoSuchFieldException, IllegalAccessException {
     if (list != null) {
       boolean hasProperty = false;
-      List<TaskKey> expandedList = new ArrayList<>(list.size());
-      for (TaskKey value : list) {
-        String expanded = expandText(value.task());
-        boolean hasExpanded = (value.task() != expanded);
+      List<T> expandedList = new ArrayList<>(list.size());
+      for (T value : list) {
+        T expanded = expand(value);
+        boolean hasExpanded = (value != expanded);
         hasProperty = hasProperty || hasExpanded;
-        if (hasExpanded) {
-          expandedList.add(TaskKey.create(value.file(), expanded));
-        } else {
-          expandedList.add(value);
-        }
+        expandedList.add(expanded);
       }
       return hasProperty ? Collections.unmodifiableList(expandedList) : list;
     }
@@ -153,21 +143,45 @@ public abstract class AbstractExpander {
   }
 
   /**
-   * Returns expanded unmodifiable List if property found. Returns same object if no expansions
-   * occurred.
+   * Expand all properties (${property_name} -> property_value) in the given text or TaskKey or
+   * SubSectionKey. Returns same object if no expansions occurred.
    */
-  public List<String> expand(List<String> list) {
-    if (list != null) {
-      boolean hasProperty = false;
-      List<String> expandedList = new ArrayList<>(list.size());
-      for (String value : list) {
-        String expanded = expandText(value);
-        hasProperty = hasProperty || value != expanded;
-        expandedList.add(expanded);
-      }
-      return hasProperty ? Collections.unmodifiableList(expandedList) : list;
+  public <T> T expand(T value) throws NoSuchFieldException, IllegalAccessException {
+    String toExpand = getStringFieldToExpand(value);
+    String expanded = expandText(toExpand);
+    if (toExpand != expanded) {
+      return createWithExpanded(value, expanded);
     }
-    return null;
+    return value;
+  }
+
+  protected <T> String getStringFieldToExpand(T value)
+      throws IllegalAccessException, NoSuchFieldException {
+    if (value instanceof TaskKey) {
+      return (String) getFieldObject(value, "task");
+    } else if (value instanceof SubSectionKey) {
+      return (String) getFieldObject(value, "subSection");
+    }
+    return (String) value;
+  }
+
+  protected <T> Object getFieldObject(T value, String fieldName)
+      throws NoSuchFieldException, IllegalAccessException {
+    Field field = value.getClass().getDeclaredField(fieldName);
+    field.setAccessible(true);
+    return field.get(value);
+  }
+
+  @SuppressWarnings("unchecked")
+  protected <T> T createWithExpanded(T value, String expanded) {
+    if (value instanceof TaskKey) {
+      return (T) TaskKey.create(((TaskKey) value).file(), expanded);
+    } else if (value instanceof SubSectionKey) {
+      return (T)
+          SubSectionKey.create(
+              ((SubSectionKey) value).file(), ((SubSectionKey) value).section(), expanded);
+    }
+    return (T) expanded;
   }
 
   /**
