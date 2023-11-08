@@ -385,10 +385,13 @@ public class TaskTree {
       }
 
       protected void addSubTasksFiles() {
-        for (String file : task.subTasksFiles) {
+        for (SourceSubTask sourceSubTask : task.subTasksFiles) {
           try {
             addPreloaded(
-                preloader.getTasks(FileKey.create(task.key().branch(), resolveTaskFileName(file))));
+                preloader.getTasks(
+                    FileKey.create(
+                        sourceSubTask.getSourceFile().branch(),
+                        resolveTaskFileName(sourceSubTask.getValue()))));
           } catch (ConfigInvalidException | IOException e) {
             addInvalidNode();
           }
