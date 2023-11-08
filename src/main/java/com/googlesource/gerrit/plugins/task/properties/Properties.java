@@ -16,6 +16,7 @@ package com.googlesource.gerrit.plugins.task.properties;
 
 import com.google.common.collect.ImmutableSet;
 import com.google.gerrit.server.query.change.ChangeData;
+import com.googlesource.gerrit.plugins.task.FileKey;
 import com.googlesource.gerrit.plugins.task.SubSectionKey;
 import com.googlesource.gerrit.plugins.task.TaskConfig;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
@@ -60,6 +61,8 @@ public class Properties {
         return (String) getFieldObject(object, "task");
       } else if (object instanceof SubSectionKey) {
         return (String) getFieldObject(object, "subSection");
+      } else if (object instanceof FileKey) {
+        return (String) getFieldObject(object, "file");
       }
       return (String) object;
     }
@@ -80,6 +83,8 @@ public class Properties {
         return (T)
             SubSectionKey.create(
                 ((SubSectionKey) object).file(), ((SubSectionKey) object).section(), expanded);
+      } else if (object instanceof FileKey) {
+        return (T) FileKey.create(((FileKey) object).branch(), expanded);
       }
       return (T) expanded;
     }
@@ -88,7 +93,8 @@ public class Properties {
     public <T> boolean isValidField(Class<T> fieldType) {
       return fieldType == String.class
           || fieldType == TaskKey.class
-          || fieldType == SubSectionKey.class;
+          || fieldType == SubSectionKey.class
+          || fieldType == FileKey.class;
     }
   }
 
