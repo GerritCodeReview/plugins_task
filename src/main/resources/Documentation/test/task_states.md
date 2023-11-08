@@ -2615,6 +2615,36 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root Preload from group ref which has subtasks-file"]
+  preload-task = %{non_secret_group_name_without_space}^Sample task with subtasks-file
+
+{
+   "applicable" : true,
+   "hasPass" : true,
+   "name" : "Root Preload from group ref which has subtasks-file",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Absolute Task 1",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Absolute Task 2",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Absolute Task",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root Preload from user ref"]
   preload-task = @testuser/dir/relative.config^Relative Task
 
@@ -3638,6 +3668,13 @@ file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task/
   pass = is:open
 ```
 
+file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task/foo.config`
+```
+[task "Absolute Task"]
+  applicable = is:open
+  pass = is:open
+```
+
 file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task.config`
 ```
 [task "task in group root config file 1"]
@@ -3661,6 +3698,13 @@ file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task.
 [task "task in group root config file 2"]
   applicable = is:open
   pass = is:open
+
+[task "Sample task with subtasks-file"]
+  applicable = is:open
+  pass = is:open
+  set-my-prop = foo.config
+  subtasks-file = foo/bar.config
+  subtasks-file = ${my-prop}
 ```
 
 file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_with_space}:task/foo/bar.config`

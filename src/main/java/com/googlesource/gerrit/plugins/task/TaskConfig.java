@@ -67,7 +67,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public List<RelativeSubTask> subTasks;
     public List<RelativeSubTask> subTasksExternals;
     public List<RelativeSubTask> subTasksFactories;
-    public List<String> subTasksFiles;
+    public List<RelativeSubTask> subTasksFiles;
 
     public boolean isVisible;
     public boolean isMasqueraded;
@@ -98,7 +98,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
           getStringList(s, KEY_SUBTASKS_FACTORY).stream()
               .map(subTask -> RelativeSubTask.create(s.file(), subTask))
               .collect(Collectors.toList());
-      subTasksFiles = getStringList(s, KEY_SUBTASKS_FILE);
+      subTasksFiles =
+          getStringList(s, KEY_SUBTASKS_FILE).stream()
+              .map(fileName -> RelativeSubTask.create(s.file(), fileName))
+              .collect(Collectors.toList());
     }
 
     protected TaskBase(TaskBase base) {
