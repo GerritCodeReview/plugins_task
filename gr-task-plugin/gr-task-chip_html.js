@@ -35,6 +35,28 @@ export const htmlTemplate = Polymer.html`
       position: relative;
       top: 2px;
     }
+    .taskSummaryChip.success {
+      border-color: var(--success-foreground);
+      background: var(--success-background);
+    }
+    .taskSummaryChip.success:hover {
+      background: var(--success-background-hover);
+      box-shadow: var(--elevation-level-1);
+    }
+    .taskSummaryChip.success:focus-within {
+      background: var(--success-background-focus);
+    }
+    .taskSummaryChip.waiting {
+      border-color: var(--warning-foreground);
+      background: var(--warning-background);
+    }
+    .taskSummaryChip.waiting:hover {
+      background: var(--warning-background-hover);
+      box-shadow: var(--elevation-level-1);
+    }
+    .taskSummaryChip.waiting:focus-within {
+      background: var(--warning-background-focus);
+    }
     .taskSummaryChip.ready {
       border-color: var(--warning-foreground);
       background: var(--warning-background);
@@ -45,6 +67,30 @@ export const htmlTemplate = Polymer.html`
     }
     .taskSummaryChip.ready:focus-within {
       background: var(--warning-background-focus);
+    }
+    .taskSummaryChip.invalid {
+      color: var(--error-foreground);
+      border-color: var(--error-foreground);
+      background: var(--error-background);
+    }
+    .taskSummaryChip.invalid:hover {
+      background: var(--error-background-hover);
+      box-shadow: var(--elevation-level-1);
+    }
+    .taskSummaryChip.invalid:focus-within {
+      background: var(--error-background-focus);
+    }
+    .taskSummaryChip.duplicate {
+      color: var(--error-foreground);
+      border-color: var(--error-foreground);
+      background: var(--error-background);
+    }
+    .taskSummaryChip.duplicate:hover {
+      background: var(--error-background-hover);
+      box-shadow: var(--elevation-level-1);
+    }
+    .taskSummaryChip.duplicate:focus-within {
+      background: var(--error-background-focus);
     }
     .taskSummaryChip.fail {
       color: var(--error-foreground);
