@@ -82,7 +82,26 @@ class GrTaskPlugin extends Polymer.Element {
         notify: true,
         value: 0,
       },
-
+      _invalid_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
+      _waiting_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
+      _duplicate_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
+      _pass_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
       _isPending: {
         type: Boolean,
         value: true,
@@ -127,6 +146,10 @@ class GrTaskPlugin extends Polymer.Element {
               detail: {
                 ready_count: this._ready_count,
                 fail_count: this._fail_count,
+                invalid_count: this._invalid_count,
+                waiting_count: this._waiting_count,
+                duplicate_count: this._duplicate_count,
+                pass_count: this._pass_count,
               },
               composed: true, bubbles: true,
             }));
@@ -199,6 +222,18 @@ class GrTaskPlugin extends Polymer.Element {
         break;
       case 'READY':
         this._ready_count++;
+        break;
+      case 'INVALID':
+        this._invalid_count++;
+        break;
+      case 'WAITING':
+        this._waiting_count++;
+        break;
+      case 'DUPLICATE':
+        this._duplicate_count++;
+        break;
+      case 'PASS':
+        this._pass_count++;
         break;
     }
   }

@@ -40,6 +40,30 @@ class GrTaskSummary extends Polymer.Element {
         notify: true,
         value: 0,
       },
+
+      invalid_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
+
+      waiting_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
+
+      duplicate_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
+
+      pass_count: {
+        type: Number,
+        notify: true,
+        value: 0,
+      },
     };
   }
 
@@ -49,11 +73,17 @@ class GrTaskSummary extends Polymer.Element {
     document.addEventListener('tasks-loaded', e => {
       this.ready_count = e.detail.ready_count;
       this.fail_count = e.detail.fail_count;
+      this.invalid_count = e.detail.invalid_count;
+      this.waiting_count = e.detail.waiting_count;
+      this.duplicate_count = e.detail.duplicate_count;
+      this.pass_count = e.detail.pass_count;
     });
   }
 
-  _can_show(ready_count, fail_count) {
-    return ready_count || fail_count;
+  _can_show_chips(ready_count, fail_count, invalid_count,
+      waiting_count, duplicate_count, pass_count) {
+    return ready_count || fail_count || invalid_count ||
+      waiting_count || duplicate_count || pass_count;
   }
 }
 
