@@ -448,9 +448,9 @@ a task, tasks-factory, or names-factory definition.
 
 Examples:
 ```
-    fail-hint = {$_name} needs to be fixed
-    fail-hint = {$_change_number} with {$_change_status} needs to be fixed
-    fail-hint = {$_change_id} on {$_change_project} and {$_change_branch} needs to be fixed
+    fail-hint = ${_name} needs to be fixed
+    fail-hint = ${_change_number} with ${_change_status} needs to be fixed
+    fail-hint = ${_change_id} on ${_change_project} and ${_change_branch} needs to be fixed
     changes = parentof:${_change_number} project:${_change_project} branch:${_change_branch}
 ```
 
