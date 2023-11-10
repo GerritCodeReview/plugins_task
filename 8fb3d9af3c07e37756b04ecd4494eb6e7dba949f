@@ -43,6 +43,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "776f7096_321a2bc1",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-11-10T18:22:42Z",
+      "side": 1,
+      "message": "\u003e I\u0027ll be honest, I really don\u0027t like this approach. It would be better to have a more generic filtering mechanism which is not root specific and allows you to specify any node in the tree to mark as \"not applicable\". \n\nThat sounds a bit like this opposite of this approach though. The caller would need to know all the other roots and request that they be marked NA? Maybe I\u0027m missing something.\n\n\u003e \n\u003e I think the approach I propose would have the additional benefit of working if you start recursing over dependencies at some point, and a dependency points to a node outside of the root that you want to filter. With the --task--root approach, that dependency would likely get evaluated, whereas with the approach I propose it would likely halt as you would want.\n\nI\u0027m not sure if that would be desired behavior or not. I could see use cases for either result being valid.\n\nThe advantage of `--task--root` is that by limiting the scope to roots it does simplify the approach a lot and it\u0027s not adding a large code or API burden. We can always add a more generic filtering mechanism when that comes up as a use case someone wants to support.",
+      "parentUuid": "6cd3cdc0_e4b89e59",
+      "revId": "8fb3d9af3c07e37756b04ecd4494eb6e7dba949f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95ed5f94_2664cf08",
         "filename": "src/main/resources/Documentation/test/roots_filter.md",
         "patchSetId": 2
