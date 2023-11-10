@@ -61,6 +61,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fd1b9f57_83422a17",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-11-10T19:23:13Z",
+      "side": 1,
+      "message": "\u003e The caller would need to know all the other roots and request that they be marked NA? Maybe I\u0027m missing something.\n\nThe way I specified it, you are correct. I agree that you would only want to specify the ones you care about not the ones you don\u0027t care about, it was not my intent to \"invert that\". My intent is to make the \"filtering\" apply to any node, not just a root. We don\u0027t want roots to be seen as special, they are only special in QCOM because that is currently how CI systems use them. The more you move towards self service though, the more people will potentially need a CI system anywhere in the tree, so the more you likely will not be able to filter by roots, so this feels like a very short term approach that is very constricting.\n\nI also see that being able to specify an arbitrary subtree to keep would have efficiency issues if that specification does not \"start\" at a root. i.e. if I want to keep any subtree which has any arbitrary task, I would have to process entire subtrees just to find out if that task was in it or not, and that would defeat the point of the performance gain you are trying to achieve here. So to avoid that, you would want to make it possible to specify a \"path\" from root to the task. That could be done similar to the way you are doing roots with something as simple as: --task--keep \u003ctask_name\u003e[\u003cseparator\u003e\u003ctask_name\u003e...]. That would require defining a \u003cseparator\u003e as a character that cannot be in a task name, and ideally (but not a requirement), something that can\u0027t be in a task expression. But I suspect that if you wanted to skip that for now, you could probably make this work basically the way you currently have it, by just changing the name of the switch to --task--keep and not supporting specifying any \"deeper\" in the tree yet? Than later if you want to go deeper, you could define a \u003cseparator\u003e.\n\nYes, I realize that negates my proposal of wanting to filter dependencies, but I now think that idea was flawed from a performance standpoint.",
+      "parentUuid": "776f7096_321a2bc1",
+      "revId": "8fb3d9af3c07e37756b04ecd4494eb6e7dba949f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95ed5f94_2664cf08",
         "filename": "src/main/resources/Documentation/test/roots_filter.md",
         "patchSetId": 2
