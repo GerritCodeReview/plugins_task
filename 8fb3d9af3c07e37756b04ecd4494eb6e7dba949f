@@ -26,6 +26,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "6cd3cdc0_e4b89e59",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-11-10T17:32:39Z",
+      "side": 1,
+      "message": "I\u0027ll be honest, I really don\u0027t like this approach. It would be better to have a more generic filtering mechanism which is not root specific and allows you to specify any node in the tree to mark as \"not applicable\". \n\nI think the approach I propose would have the additional benefit of working if you start recursing over dependencies at some point, and a dependency points to a node outside of the root that you want to filter. With the --task--root approach, that dependency would likely get evaluated, whereas with the approach I propose it would likely halt as you would want.",
+      "revId": "8fb3d9af3c07e37756b04ecd4494eb6e7dba949f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "95ed5f94_2664cf08",
         "filename": "src/main/resources/Documentation/test/roots_filter.md",
         "patchSetId": 2
