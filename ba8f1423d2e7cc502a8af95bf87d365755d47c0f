@@ -150,6 +150,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c67d4ab3_6c4c389f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-14T17:33:30Z",
+      "side": 1,
+      "message": "Thanks for reviewing this change Martin. \n\n\u003e can\u0027t you use the file and task from the \"task\" variable instead?\n\nNo actually. The task variable here points to the current task file, where as the preloaded subtask also points to the current task file before this change. Rather we want the subtask to point to the file from which it was imported from.",
+      "parentUuid": "aa0615b3_42b979f1",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "6272627f_859e671b",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 1
