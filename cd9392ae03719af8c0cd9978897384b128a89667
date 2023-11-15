@@ -16,6 +16,24 @@
       "message": "Explain why?",
       "revId": "cd9392ae03719af8c0cd9978897384b128a89667",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3c49b260_e2d05b3b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-15T12:48:20Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b99288c8_19d4dcfa",
+      "revId": "cd9392ae03719af8c0cd9978897384b128a89667",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
