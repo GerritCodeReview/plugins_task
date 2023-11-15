@@ -185,6 +185,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e54d5083_8aa8509b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-15T13:02:12Z",
+      "side": 1,
+      "message": "Would it be ok for this logic to live in Expander.java[1] ?\n\n[1] https://gerrit.googlesource.com/plugins/task/+/refs/heads/stable-3.5/src/main/java/com/googlesource/gerrit/plugins/task/properties/Expander.java",
+      "parentUuid": "6272627f_859e671b",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f533bdf_606c5b37",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 1
