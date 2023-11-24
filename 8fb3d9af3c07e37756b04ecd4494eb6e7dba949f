@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e98d0c7_de9a9a2a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/Modules.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-24T04:25:52Z",
+      "side": 1,
+      "message": "Works when space is escaped.",
+      "parentUuid": "81d2aeaa_8dcadb67",
+      "range": {
+        "startLine": 61,
+        "startChar": 8,
+        "endLine": 61,
+        "endChar": 24
+      },
+      "revId": "8fb3d9af3c07e37756b04ecd4494eb6e7dba949f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baf70edf_f9d44452",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-11-09T23:15:18Z",
       "side": 1,
       "message": "You don\u0027t need a method for this, just move your `List` declaration here\n```suggestion\n    public final List\u003cString\u003e includedRoots \u003d new ArrayList\u003c\u003e();\n```",
+      "range": {
+        "startLine": 63,
+        "startChar": 0,
+        "endLine": 65,
+        "endChar": 5
+      },
+      "revId": "8fb3d9af3c07e37756b04ecd4494eb6e7dba949f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "974175d3_bea65abc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/Modules.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-24T04:25:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baf70edf_f9d44452",
       "range": {
         "startLine": 63,
         "startChar": 0,
@@ -118,6 +166,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61f2083f_9796a7d4",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 596,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-24T04:25:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24da88da_e03f605d",
+      "revId": "8fb3d9af3c07e37756b04ecd4494eb6e7dba949f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95ed5f94_2664cf08",
@@ -149,6 +215,24 @@
       "side": 1,
       "message": "+1",
       "parentUuid": "95ed5f94_2664cf08",
+      "revId": "8fb3d9af3c07e37756b04ecd4494eb6e7dba949f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "216c1ae1_eb4bd513",
+        "filename": "src/main/resources/Documentation/test/roots_filter.md",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-24T04:25:52Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "30a1610a_23e3bd67",
       "revId": "8fb3d9af3c07e37756b04ecd4494eb6e7dba949f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
