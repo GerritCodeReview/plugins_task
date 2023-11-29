@@ -39,6 +39,30 @@
       },
       "revId": "e9be7cfd50c27ee43fc94953af889ee400a72737",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "50d7bf48_a0b49675",
+        "filename": "test/check_task_statuses.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 261,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-11-29T10:40:05Z",
+      "side": 1,
+      "message": "Ack, Done.",
+      "parentUuid": "f56b2f21_1ee772ce",
+      "range": {
+        "startLine": 253,
+        "startChar": 0,
+        "endLine": 261,
+        "endChar": 1
+      },
+      "revId": "e9be7cfd50c27ee43fc94953af889ee400a72737",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
