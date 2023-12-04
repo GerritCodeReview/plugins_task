@@ -23,15 +23,24 @@
     chalk "^2.0.0"
     js-tokens "^4.0.0"
 
-"@bazel/rollup@^3.4.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@bazel/rollup/-/rollup-3.5.0.tgz#3de2db08cbc62c3cffbbabaa4517ec250cf6419a"
-  integrity sha512-sFPqbzSbIn6h66uuZdXgK5oitSmEGtnDPfL3TwTS4ZWy75SpYvk9X1TFGlvkralEkVnFfdH15sq80/1t+YgQow==
+"@bazel/rollup@~5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@bazel/rollup/-/rollup-5.1.0.tgz#dc858ddc93c9fdb9cc2e7982e632c939c646ebdc"
+  integrity sha512-wEiWdSyVbsycSirSYjR6FGfPGbRNI7sGNAYmrV0hIzYIi+KqXeTNcwKIRSE9PESP3mb0VWbZmHvXvmrWk6daPQ==
+  dependencies:
+    "@bazel/worker" "5.1.0"
 
-"@bazel/terser@^3.4.0":
-  version "3.5.0"
-  resolved "https://registry.yarnpkg.com/@bazel/terser/-/terser-3.5.0.tgz#4b1c3a3b781e65547694aa05bc600c251e4d8c0b"
-  integrity sha512-dpWHn1Iu+w0uA/kvPb0pP+4Io0PrVuzCCbVg2Ow4uRt/gTFKQJJWp4EiTitEZlPA2dHlW7PHThAb93lGo2c8qA==
+"@bazel/terser@~5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@bazel/terser/-/terser-5.1.0.tgz#5c82b93f4d9def8103c16be2dd33900d156fa066"
+  integrity sha512-uE3hTqfkZr4nvlk3jwi0xx6URqqI7r6GGPtDAU02/PVei+O4PfThaov7cwHO+D1FnoLncDqChb9Iolr7Crw/8A==
+
+"@bazel/worker@5.1.0":
+  version "5.1.0"
+  resolved "https://registry.yarnpkg.com/@bazel/worker/-/worker-5.1.0.tgz#6f1e0f3ef628e3449d424cacd341c9abd09a3735"
+  integrity sha512-u3aU93UtHz3vL6ozezq0jnw83s1cNT4dAnW+vvB7M++YKFlB3CWzZFb0JRJbCp1b6DDe30ML0WOdd3nVYuylpw==
+  dependencies:
+    google-protobuf "^3.6.1"
 
 "@eslint/eslintrc@^0.4.3":
   version "0.4.3"
@@ -732,6 +741,11 @@ globals@^13.6.0, globals@^13.9.0:
   integrity sha512-1C+6nQRb1GwGMKm2dH/E7enFAMxGTmGI7/dEdhy/DNelv85w9B72t3uc5frtMNXIbzrarJJ/lTCjcaZwbLJmyw==
   dependencies:
     type-fest "^0.20.2"
+
+google-protobuf@^3.6.1:
+  version "3.21.2"
+  resolved "https://registry.yarnpkg.com/google-protobuf/-/google-protobuf-3.21.2.tgz#4580a2bea8bbb291ee579d1fefb14d6fa3070ea4"
+  integrity sha512-3MSOYFO5U9mPGikIYCzK0SaThypfGgS6bHqrUGXG3DPHCrb+txNqeEcns1W0lkGfk0rCyNXm7xB9rMxnCiZOoA==
 
 has-bigints@^1.0.1:
   version "1.0.1"

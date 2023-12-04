@@ -3,8 +3,8 @@
   "version": "3.5.0-SNAPSHOT",
   "description": "Task Plugin",
   "dependencies": {
-    "@bazel/rollup": "^3.4.0",
-    "@bazel/terser": "^3.4.0"
+    "@bazel/rollup": "~5.1.0",
+    "@bazel/terser": "~5.1.0"
   },
   "devDependencies": {
     "eslint": "^7.24.0",

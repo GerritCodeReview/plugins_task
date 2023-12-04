@@ -1,14 +1,11 @@
 workspace(
     name = "task",
-    managed_directories = {
-        "@npm": ["node_modules"],
-    },
 )
 
 load("//:bazlets.bzl", "load_bazlets")
 
 load_bazlets(
-    commit = "cd9b114339913aad2c9981e387fd151123f40a44",
+    commit = "b6120a9fa50945d38f0a4d55d5879e3ec465c5e5",
     #local_path = "/home/<user>/projects/bazlets",
 )
 
@@ -20,12 +17,23 @@ load(
 
 gerrit_polymer()
 
-load("@build_bazel_rules_nodejs//:index.bzl", "yarn_install")
+load("@build_bazel_rules_nodejs//:repositories.bzl", "build_bazel_rules_nodejs_dependencies")
+
+build_bazel_rules_nodejs_dependencies()
+
+load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
+
+node_repositories(
+    node_version = "16.13.2",
+    yarn_version = "1.22.17",
+)
 
 yarn_install(
     name = "npm",
+    exports_directories_only = False,
     frozen_lockfile = False,
     package_json = "//:package.json",
+    symlink_node_modules = True,
     yarn_lock = "//:yarn.lock",
 )
 
