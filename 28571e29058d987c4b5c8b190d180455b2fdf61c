@@ -22,6 +22,30 @@
       },
       "revId": "28571e29058d987c4b5c8b190d180455b2fdf61c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "558ba8d4_958e13de",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-04T23:47:28Z",
+      "side": 1,
+      "message": "That might work, I think you got the idea. You might want a registration function instead of passing in a Map to the constructor, and it likely should take a single entry (even if then stored in a Map). Also, instead of a classname, you likely want a Class object.",
+      "parentUuid": "9636c7f0_3a04ba65",
+      "range": {
+        "startLine": 158,
+        "startChar": 23,
+        "endLine": 158,
+        "endChar": 45
+      },
+      "revId": "28571e29058d987c4b5c8b190d180455b2fdf61c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
