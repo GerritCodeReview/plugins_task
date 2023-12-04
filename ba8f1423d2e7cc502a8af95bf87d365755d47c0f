@@ -203,6 +203,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "4efb710d_b7a9b9ee",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-04T21:43:02Z",
+      "side": 1,
+      "message": "Based on other files in the properties package, the Expander class seems more appropriate to me.",
+      "parentUuid": "e54d5083_8aa8509b",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f533bdf_606c5b37",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 1
@@ -214,6 +232,42 @@
       "writtenOn": "2023-11-10T17:59:54Z",
       "side": 1,
       "message": "This feels weird to be expanding a TaskKey since a Key should be immutable?",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "995f2c5d_f54d0def",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-04T21:43:02Z",
+      "side": 1,
+      "message": "\u003e This feels weird to be expanding a TaskKey since a Key should be immutable?",
+      "parentUuid": "8f533bdf_606c5b37",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78b5cf5a_3f0d81f6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-04T21:43:02Z",
+      "side": 1,
+      "message": "\u003e This feels weird to be expanding a TaskKey since a Key should be immutable?\n\nIt is a little weird, but the values can have properties, so while it\u0027s immutable, it\u0027s not guaranteed to be an exact reference to a single task.\n\nI talked with Prudhvi about it today and using a SubSectionKey is actually sufficient for most of the config keys, but @prudhvi.alahari@linaro.org as I think on it more now, is there a reason we shouldn\u0027t use `TaskKey`? Depending on how we fix the issue I pointed out in [1] we might need it?\n\n[1] https://gerrit-review.googlesource.com/c/plugins/task/+/392274/comment/9636c7f0_3a04ba65/",
+      "parentUuid": "8f533bdf_606c5b37",
       "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
