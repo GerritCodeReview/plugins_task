@@ -239,6 +239,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "859959ba_96c54215",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-04T23:35:08Z",
+      "side": 1,
+      "message": "\u003e Expander looks to be \"generic\" also, and likely it would be better to 1) find a class which already has \"task\" specific stuff in it, or 2) override a generic class with a custom one, or 3) enhance a generic class to be modifiable via some custom task specific helper class or function pointer.\n\nOk, I see what you mean. So if we went the route of #3, that would be something like modifying Expander/AbstractExpander to optionally take a constructor parameter that would be provided by the Properties class (which does already have \"task\"-specific stuff in it) and that parameter would have the new special behavior for TaskKey/SubSectionKey/etc. Does that sound like the right track?\n\nThat constructor parameter might be a map of ClassName (String) -\u003e ExpandFunction (which provides functionality specific to each type similar to what the new methods added in [1] do).\n\n[1] https://gerrit-review.googlesource.com/c/plugins/task/+/392274/1/src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java#149",
+      "parentUuid": "ab7bd00d_941d25ab",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "8f533bdf_606c5b37",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 1
