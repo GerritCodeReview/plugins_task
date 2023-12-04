@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9636c7f0_3a04ba65",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-04T21:36:12Z",
+      "side": 1,
+      "message": "I realized this functionality doesn\u0027t match what the docs claim is possible:\n\n```\nThe task plugin supplies the following properties which may be used anywhere in a task, tasks-factory, or names-factory definition\n```\n\nSpecifically the *`may be used anywhere`* part. If we only expand a task name, then we\u0027re not really doing that, so I think we need to find a solution that matches the docs and write tests to cover what the docs claim is possible.",
+      "range": {
+        "startLine": 158,
+        "startChar": 23,
+        "endLine": 158,
+        "endChar": 45
+      },
+      "revId": "28571e29058d987c4b5c8b190d180455b2fdf61c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
