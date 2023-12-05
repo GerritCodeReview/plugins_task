@@ -133,6 +133,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a6fc2df0_9d38fae3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-05T18:00:29Z",
+      "side": 1,
+      "message": "I believe this breaks the ability to name a subtask in another file since it assumes the subTasks Strings only pointed to task names and not task references (as defined as legal here: https://gerrit.googlesource.com/plugins/task/+/ba8f1423d2e7cc502a8af95bf87d365755d47c0f/src/main/resources/Documentation/task_expression.md) which could include a file reference. I am surprised that this does not break any tests, we should have had tests for that.",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa0615b3_42b979f1",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 1
