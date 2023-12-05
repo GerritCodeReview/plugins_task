@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.task.properties;
 
-import com.googlesource.gerrit.plugins.task.TaskKey;
 import java.lang.reflect.Field;
 import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
@@ -42,7 +41,39 @@ import java.util.function.Function;
  * the name/value associations via the getValueForName() method.
  */
 public abstract class AbstractExpander {
+  public interface FieldConverter {
+    /**
+     * Returns a string from the input object which needs to be expanded
+     *
+     * @param object which contains a non-expanded string
+     * @return a string which needs to be expanded
+     */
+    <T> String fromField(T object) throws IllegalAccessException, NoSuchFieldException;
+
+    /**
+     * Creates and returns a field object with the expanded string
+     *
+     * @param object which contains a non-expanded string
+     * @param expanded string
+     * @return a field object which has expanded string
+     */
+    <T> T toField(T object, String expanded);
+
+    /**
+     * Returns true if the input field type is a valid field which can be expanded.
+     *
+     * @param fieldType
+     * @return true if the field type is valid
+     */
+    <T> boolean isValidField(Class<T> fieldType);
+  }
+
   protected Consumer<Matcher.Statistics> statisticsConsumer;
+  protected FieldConverter fieldConverter;
+
+  protected AbstractExpander(FieldConverter fieldConverter) {
+    this.fieldConverter = fieldConverter;
+  }
 
   public void setStatisticsConsumer(Consumer<Matcher.Statistics> statisticsConsumer) {
     this.statisticsConsumer = statisticsConsumer;
@@ -105,17 +136,8 @@ public abstract class AbstractExpander {
       } else if (o instanceof List) {
         ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
         Class<?> classType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-        if (classType == String.class) {
-          @SuppressWarnings("unchecked")
-          List<String> forceCheck = List.class.cast(o);
-          List<String> expanded = expand(forceCheck);
-          if (expanded != o) {
-            field.set(cow.getForWrite(), expanded);
-          }
-        } else if (classType == TaskKey.class) {
-          @SuppressWarnings("unchecked")
-          List<TaskKey> forceCheck = List.class.cast(o);
-          List<TaskKey> expanded = expandTaskKey(forceCheck);
+        if (fieldConverter.isValidField(classType)) {
+          List<?> expanded = expand((List<?>) o);
           if (expanded != o) {
             field.set(cow.getForWrite(), expanded);
           }
@@ -123,7 +145,7 @@ public abstract class AbstractExpander {
           throw new RuntimeException(String.format("Unknown list type: %s", classType));
         }
       }
-    } catch (IllegalAccessException e) {
+    } catch (IllegalAccessException | NoSuchFieldException e) {
       throw new RuntimeException(e);
     }
     return cow.getForRead();
@@ -133,19 +155,15 @@ public abstract class AbstractExpander {
    * Returns expanded unmodifiable List if property found. Returns same object if no expansions
    * occurred.
    */
-  public List<TaskKey> expandTaskKey(List<TaskKey> list) {
+  public <T> List<T> expand(List<T> list) throws NoSuchFieldException, IllegalAccessException {
     if (list != null) {
       boolean hasProperty = false;
-      List<TaskKey> expandedList = new ArrayList<>(list.size());
-      for (TaskKey value : list) {
-        String expanded = expandText(value.task());
-        boolean hasExpanded = (value.task() != expanded);
+      List<T> expandedList = new ArrayList<>(list.size());
+      for (T value : list) {
+        T expanded = expand(value);
+        boolean hasExpanded = (value != expanded);
         hasProperty = hasProperty || hasExpanded;
-        if (hasExpanded) {
-          expandedList.add(TaskKey.create(value.file(), expanded));
-        } else {
-          expandedList.add(value);
-        }
+        expandedList.add(expanded);
       }
       return hasProperty ? Collections.unmodifiableList(expandedList) : list;
     }
@@ -153,21 +171,16 @@ public abstract class AbstractExpander {
   }
 
   /**
-   * Returns expanded unmodifiable List if property found. Returns same object if no expansions
-   * occurred.
+   * Expand all properties (${property_name} -> property_value) in the given field. Returns same
+   * object if no expansions occurred.
    */
-  public List<String> expand(List<String> list) {
-    if (list != null) {
-      boolean hasProperty = false;
-      List<String> expandedList = new ArrayList<>(list.size());
-      for (String value : list) {
-        String expanded = expandText(value);
-        hasProperty = hasProperty || value != expanded;
-        expandedList.add(expanded);
-      }
-      return hasProperty ? Collections.unmodifiableList(expandedList) : list;
+  public <T> T expand(T value) throws NoSuchFieldException, IllegalAccessException {
+    String toExpand = fieldConverter.fromField(value);
+    String expanded = expandText(toExpand);
+    if (toExpand != expanded) {
+      return fieldConverter.toField(value, expanded);
     }
-    return null;
+    return value;
   }
 
   /**

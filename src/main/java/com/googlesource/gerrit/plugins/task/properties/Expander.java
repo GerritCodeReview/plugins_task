@@ -43,7 +43,8 @@ public class Expander extends AbstractExpander {
   protected final Map<String, String> valueByName = new HashMap<>();
   protected final Set<String> expanding = new HashSet<>();
 
-  public Expander(Function<String, String> loadingFunction) {
+  public Expander(Function<String, String> loadingFunction, FieldConverter fieldConverter) {
+    super(fieldConverter);
     this.loadingFunction = loadingFunction;
   }
 
