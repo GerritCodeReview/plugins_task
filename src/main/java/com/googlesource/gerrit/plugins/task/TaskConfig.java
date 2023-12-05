@@ -64,7 +64,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
     public String preloadTask;
     public Map<String, String> properties;
     public String readyHint;
-    public List<TaskKey> subTasks;
+    public List<RelativeSubTask> subTasks;
     public List<String> subTasksExternals;
     public List<String> subTasksFactories;
     public List<String> subTasksFiles;
@@ -88,7 +88,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
       readyHint = getString(s, KEY_READY_HINT, null);
       subTasks =
           getStringList(s, KEY_SUBTASK).stream()
-              .map(subtask -> TaskKey.create(s.file(), subtask))
+              .map(subTask -> RelativeSubTask.create(s.file(), subTask))
               .collect(Collectors.toList());
       subTasksExternals = getStringList(s, KEY_SUBTASKS_EXTERNAL);
       subTasksFactories = getStringList(s, KEY_SUBTASKS_FACTORY);
