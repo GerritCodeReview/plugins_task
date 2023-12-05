@@ -33,6 +33,24 @@
       "message": "The subsection key creation likely belongs in the getTaskFactory() on line 252?",
       "revId": "e3104f3ce3f8e9426c2957745c17c3b3368660e4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "68766045_89da6545",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-05T18:02:26Z",
+      "side": 1,
+      "message": "I think this is problematic the same way that this is https://gerrit-review.googlesource.com/c/plugins/task/+/391794/1/src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java#92 even though we haven\u0027t yet likely defined subtasksfactory references, we likely want/need to support them (which may need to come before you make this fix).",
+      "parentUuid": "fa85b7a3_c104f7ef",
+      "revId": "e3104f3ce3f8e9426c2957745c17c3b3368660e4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
