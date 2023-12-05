@@ -55,6 +55,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ab6db857_705b028d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-05T17:44:31Z",
+      "side": 1,
+      "message": "This class shouldn\u0027t really care that it is a Field, or a Field Attribute, should it? Also, \"Converter\" does not really reflect what this is doing either, it is Expanding a property.\n\nI think a big part of the problem is that this interface is not really generic, it seems very customized to the idea that you will be operating on a TaskKey, and perhaps that is why even the naming is hard. It is hard for me to really understand what the intent of this class is without either a good name (ideal), or good docs explaining its intent (alternative).",
+      "parentUuid": "3c1cc2e5_8893520f",
+      "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4472fe8d_d05fb296",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 2
@@ -66,6 +84,30 @@
       "writtenOn": "2023-12-05T15:50:21Z",
       "side": 1,
       "message": "Make this reflect the documented question, isExpandable()?",
+      "range": {
+        "startLine": 68,
+        "startChar": 16,
+        "endLine": 68,
+        "endChar": 28
+      },
+      "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa0ce70d_35b101dc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-05T17:44:31Z",
+      "side": 1,
+      "message": "This seems like it shouldn\u0027t be needed, this class likely should be registered to a Class so that it need not do this check. Also, doing a check like this implies that a linear search is needed of all the FieldConverters, whereas registering this class by Class allows for keyed lookups in constant times.",
+      "parentUuid": "4472fe8d_d05fb296",
       "range": {
         "startLine": 68,
         "startChar": 16,
@@ -130,6 +172,24 @@
       "side": 1,
       "message": "Yes. But we don\u0027t have such a use-case as of today. If we do have such use-case in future, then fromField could return a Map of field name by string?",
       "parentUuid": "e45f8340_0f33f8eb",
+      "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1cca8f4_2da77181",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-05T17:44:31Z",
+      "side": 1,
+      "message": "With the non key version, multiple expansions is supported, thus removing that support would be a regression.",
+      "parentUuid": "28093303_c233e0e0",
       "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
