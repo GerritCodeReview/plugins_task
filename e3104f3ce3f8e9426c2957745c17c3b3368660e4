@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28fb6378_c8da8d45",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-05T17:29:49Z",
+      "side": 1,
+      "message": "This \"summary\" doesn\u0027t seem to reflect what you actually care to fix? (You likely care that it isn\u0027t finding the correct subtasks-factory?)",
+      "revId": "e3104f3ce3f8e9426c2957745c17c3b3368660e4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fa85b7a3_c104f7ef",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-05T17:29:49Z",
+      "side": 1,
+      "message": "The subsection key creation likely belongs in the getTaskFactory() on line 252?",
+      "revId": "e3104f3ce3f8e9426c2957745c17c3b3368660e4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
