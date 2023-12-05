@@ -23,13 +23,16 @@ import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
+import com.googlesource.gerrit.plugins.task.properties.AbstractExpander;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** An immutable reference to a task in task config file. */
 @AutoValue
-public abstract class TaskKey {
+public abstract class TaskKey
+    implements AbstractExpander.UnExpandedStringProvider,
+        AbstractExpander.InstanceWithExpandedStringProvider<TaskKey> {
   protected static final String CONFIG_SECTION = "task";
   protected static final String CONFIG_TASKS_FACTORY = "tasks-factory";
 
@@ -62,6 +65,16 @@ public abstract class TaskKey {
 
   public boolean isTasksFactoryGenerated() {
     return subSection().section().equals(CONFIG_TASKS_FACTORY);
+  }
+
+  @Override
+  public String getUnExpandedString() {
+    return task();
+  }
+
+  @Override
+  public TaskKey getInstance(String expanded) {
+    return new AutoValue_TaskKey(subSection(), expanded);
   }
 
   public static class Builder {
