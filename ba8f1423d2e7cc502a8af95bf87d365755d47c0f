@@ -166,6 +166,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1b902259_fc06eda6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-05T14:55:37Z",
+      "side": 1,
+      "message": "I believe nothing is pending on this comment.",
+      "parentUuid": "c67d4ab3_6c4c389f",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6272627f_859e671b",
@@ -255,6 +273,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "fb087f3a_e2ec73b6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-05T14:55:37Z",
+      "side": 1,
+      "message": "Trying to address it here: https://gerrit-review.googlesource.com/c/plugins/task/+/396537/1\n\nKindly review.",
+      "parentUuid": "859959ba_96c54215",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8f533bdf_606c5b37",
@@ -322,6 +358,24 @@
       "side": 1,
       "message": "\u003e  but Prudhvi as I think on it more now, is there a reason we shouldn\u0027t use TaskKey?\n\nThere is no strong reason to not use TaskKey here. But it depends on the definition of the TaskKey class itself. If we think we only create a TaskKey once we have the exact reference to the task, then it is appropriate to use SubSectionKey here.",
       "parentUuid": "995f2c5d_f54d0def",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c39bff11_9f909aaa",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-05T14:55:37Z",
+      "side": 1,
+      "message": "Trying to address it here: https://gerrit-review.googlesource.com/c/plugins/task/+/396537/1\n\nKindly review.",
+      "parentUuid": "2f843ad8_28f4a7c3",
       "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
