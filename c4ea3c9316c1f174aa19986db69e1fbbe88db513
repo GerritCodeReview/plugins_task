@@ -37,6 +37,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "3c1cc2e5_8893520f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-05T17:26:02Z",
+      "side": 1,
+      "message": "Right. I do agree that it is easy to miss-interpret with field on line #127. Let\u0027s rename it to FieldAttributeConverter ?",
+      "parentUuid": "b006b1b3_c78d4818",
+      "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4472fe8d_d05fb296",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 2
@@ -94,6 +112,24 @@
       "writtenOn": "2023-12-05T15:50:21Z",
       "side": 1,
       "message": "This approach seem to only allow a single property in \"value\", but there can be more than one.",
+      "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28093303_c233e0e0",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-05T17:26:02Z",
+      "side": 1,
+      "message": "Yes. But we don\u0027t have such a use-case as of today. If we do have such use-case in future, then fromField could return a Map of field name by string?",
+      "parentUuid": "e45f8340_0f33f8eb",
       "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
