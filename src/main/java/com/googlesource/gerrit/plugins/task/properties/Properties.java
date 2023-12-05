@@ -19,8 +19,10 @@ import com.google.gerrit.server.query.change.ChangeData;
 import com.googlesource.gerrit.plugins.task.TaskConfig;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
+import com.googlesource.gerrit.plugins.task.TaskKey;
 import com.googlesource.gerrit.plugins.task.TaskTree;
 import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
+import java.lang.reflect.Field;
 import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Function;
@@ -50,6 +52,37 @@ public class Properties {
     }
   }
 
+  public static class FieldConvertorImpl implements AbstractExpander.FieldConvertor {
+    @Override
+    public <T> String fromField(T object) throws IllegalAccessException, NoSuchFieldException {
+      if (object instanceof TaskKey) {
+        return (String) getFieldObject(object, "task");
+      }
+      return (String) object;
+    }
+
+    protected <T> Object getFieldObject(T object, String fieldName)
+        throws NoSuchFieldException, IllegalAccessException {
+      Field field = object.getClass().getDeclaredField(fieldName);
+      field.setAccessible(true);
+      return field.get(object);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T> T toField(T object, String expanded) {
+      if (object instanceof TaskKey) {
+        return (T) TaskKey.create(((TaskKey) object).file(), expanded);
+      }
+      return (T) expanded;
+    }
+
+    @Override
+    public <T> boolean isValidField(Class<T> fieldType) {
+      return fieldType == String.class || fieldType == TaskKey.class;
+    }
+  }
+
   public static final Properties EMPTY =
       new Properties() {
         @Override
@@ -73,7 +106,7 @@ public class Properties {
 
   public Properties() {
     this(null, null);
-    expander = new Expander(n -> "");
+    expander = new Expander(n -> "", new FieldConvertorImpl());
   }
 
   public Properties(TaskTree.Node node, Task origTask) {
@@ -91,7 +124,7 @@ public class Properties {
             .build()
             .setNanosConsumer(l -> Statistics.setNanoseconds(statistics, l))) {
       loader = new Loader(origTask, changeData, getParentMapper());
-      expander = new Expander(n -> loader.load(n));
+      expander = new Expander(n -> loader.load(n), new FieldConvertorImpl());
       expander.setStatisticsConsumer(matcherStatisticsConsumer);
       if (isTaskRefreshRequired || init) {
         expander.expand(task, TaskConfig.KEY_APPLICABLE);
