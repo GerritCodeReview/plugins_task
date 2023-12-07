@@ -150,6 +150,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e7454c24_9b04c40e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-07T09:38:16Z",
+      "side": 1,
+      "message": "We already have tests for this Martin and passing as well [2]. Yes, initially we assumes that the task is in the current file and then after parsing the TaskReference we update the FileKey. That logic is in here [1], where we determine whether we are pointing to a task in same file or different file.\n\n[1] https://gerrit.googlesource.com/plugins/task/+/refs/changes/94/391794/1/src/main/java/com/googlesource/gerrit/plugins/task/TaskKey.java?autodive\u003d0%2F%2F#91\n\n[2]\n[root \"Root Import user tasks\"]\n  applicable \u003d is:open\n  subtask \u003d @testuser/foo/bar.config^Absolute Task\n  subtask \u003d @testuser^task in user root config file\n\nand \n\n[root \"Root Import group tasks\"]\n  applicable \u003d is:open\n  subtask \u003d %{non_secret_group_name_without_space}/foo/bar.config^Absolute Task 1\n  \nhttps://gerrit.googlesource.com/plugins/task/+/refs/changes/94/391794/1/src/main/resources/Documentation/test/task_states.md",
+      "parentUuid": "a6fc2df0_9d38fae3",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "aa0615b3_42b979f1",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 1
