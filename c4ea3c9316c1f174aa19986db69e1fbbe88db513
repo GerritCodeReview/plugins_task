@@ -276,6 +276,24 @@
       "parentUuid": "a1cca8f4_2da77181",
       "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "51586e70_564dbba5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-07T15:47:21Z",
+      "side": 1,
+      "message": "If you are trying to say string as in [1] is a regression, then it\u0027s not true. That part of the logic is in expandText which is not touched in this change.\n\n[1] \"change:${_change_number} AND branch:${_change_branch}\"",
+      "parentUuid": "d6f1530e_4fd295c2",
+      "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
