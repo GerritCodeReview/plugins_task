@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b625711d_ff5fe653",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/RelativeSubTask.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-13T22:51:02Z",
+      "side": 1,
+      "message": "this naming gets weird in https://gerrit-review.googlesource.com/c/plugins/task/+/392276/4/src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java\n\nMaybe `value()` would work better?\n```suggestion\n  public abstract String value();\n```",
+      "range": {
+        "startLine": 30,
+        "startChar": 25,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "802ff982_59c9075b",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 7
