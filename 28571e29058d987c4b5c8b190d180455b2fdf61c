@@ -70,6 +70,30 @@
       },
       "revId": "28571e29058d987c4b5c8b190d180455b2fdf61c",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "3744e7fa_8ba29174",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 158,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-13T10:26:25Z",
+      "side": 1,
+      "message": "Marking it as resolved for now, as I don\u0027t see any AI here. Feel free to re-open it.",
+      "parentUuid": "1006f8c7_899e439f",
+      "range": {
+        "startLine": 158,
+        "startChar": 23,
+        "endLine": 158,
+        "endChar": 45
+      },
+      "revId": "28571e29058d987c4b5c8b190d180455b2fdf61c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
