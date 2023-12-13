@@ -237,6 +237,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "96442707_6ea664cd",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 92,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-13T09:04:42Z",
+      "side": 1,
+      "message": "\u003e I think it\u0027s fin with the expansion happening later, but this shouldn\u0027t happen on a key. A key needs to be constant and unique, that is the point of a key. Anything that has \"tokens\" for expansion in it is not a good candidate for a key. Perhaps it makes sense to create another object that is similar to the key with similar data in it to represent this, or convert everything to an absolute reference using a String.\n\nYes Martin, tried to address that here: https://gerrit-review.googlesource.com/c/plugins/task/+/396537. PTAL.",
+      "parentUuid": "d26fbf97_769de4ef",
+      "revId": "ba8f1423d2e7cc502a8af95bf87d365755d47c0f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aa0615b3_42b979f1",
