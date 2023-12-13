@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "802ff982_59c9075b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-13T22:38:03Z",
+      "side": 1,
+      "message": "nit: Don\u0027t capitalize the the \u0027e\u0027\n```suggestion\n  public interface UnexpandedStringProvider {\n```",
+      "range": {
+        "startLine": 43,
+        "startChar": 19,
+        "endLine": 43,
+        "endChar": 43
+      },
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59b87f71_45afc7bc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-13T22:38:03Z",
+      "side": 1,
+      "message": "```suggestion\n    String getUnexpandedString();\n```",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 30
+      },
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "449ef7ba_bdb644c9",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-13T22:38:03Z",
+      "side": 1,
+      "message": "Make this a single line again like 165 was?",
+      "range": {
+        "startLine": 148,
+        "startChar": 8,
+        "endLine": 149,
+        "endChar": 49
+      },
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}

@@ -330,6 +330,24 @@
       "parentUuid": "7a4e2c33_c5fc816c",
       "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d681ea59_47fe2f19",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-13T22:38:03Z",
+      "side": 1,
+      "message": "+1. I wonder if this would be easier to review if you reverted the first change and rebased this on top as a \"Reapply\" (with fixed approach)?",
+      "parentUuid": "4aab3016_0bee0e6c",
+      "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
