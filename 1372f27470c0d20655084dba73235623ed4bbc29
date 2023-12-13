@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e83f5995_fee681a6",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 142,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-13T09:12:07Z",
+      "side": 1,
+      "message": "Not needed now?\n\nDone.",
+      "range": {
+        "startLine": 142,
+        "startChar": 42,
+        "endLine": 142,
+        "endChar": 94
+      },
+      "revId": "1372f27470c0d20655084dba73235623ed4bbc29",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
