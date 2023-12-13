@@ -312,6 +312,24 @@
       "parentUuid": "51586e70_564dbba5",
       "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4aab3016_0bee0e6c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-13T09:03:13Z",
+      "side": 1,
+      "message": "Martin, I think you might have miss-understood the diff in this file. The diff shows ```expand(List\u003cString\u003e list)``` is changed to ```expand(T value)```, ***which is not true***. ```expand(List\u003cString\u003e list)``` is changed to ```expand(List\u003cT\u003e list)```. So there is no regression. PTAL again?",
+      "parentUuid": "7a4e2c33_c5fc816c",
+      "revId": "c4ea3c9316c1f174aa19986db69e1fbbe88db513",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
