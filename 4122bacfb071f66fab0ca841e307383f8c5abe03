@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46c7daee_1f666fb1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 4
+      },
+      "lineNbr": 394,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-13T22:51:50Z",
+      "side": 1,
+      "message": "I don\u0027t really like this being called `subTask()`, but I think we can fix that naming. Commented on the first change: https://gerrit-review.googlesource.com/c/plugins/task/+/396537/comment/b625711d_ff5fe653/",
+      "range": {
+        "startLine": 394,
+        "startChar": 60,
+        "endLine": 394,
+        "endChar": 69
+      },
+      "revId": "4122bacfb071f66fab0ca841e307383f8c5abe03",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
