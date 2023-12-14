@@ -52,10 +52,6 @@ public abstract class TaskKey {
     return subSection().file().branch();
   }
 
-  public FileKey file() {
-    return subSection().file();
-  }
-
   public abstract SubSectionKey subSection();
 
   public abstract String task();
