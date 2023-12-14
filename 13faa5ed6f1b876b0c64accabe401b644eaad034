@@ -16,6 +16,24 @@
       "message": "Unrelated to this change? (same below)",
       "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f4afccdf_be5e3972",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-14T08:10:53Z",
+      "side": 0,
+      "message": "Yes, Done.",
+      "parentUuid": "fa9448b5_6ea02951",
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }

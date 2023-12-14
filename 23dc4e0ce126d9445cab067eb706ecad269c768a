@@ -22,6 +22,30 @@
       },
       "revId": "23dc4e0ce126d9445cab067eb706ecad269c768a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bea786f1_cdc45788",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 256,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-14T08:10:53Z",
+      "side": 1,
+      "message": "Actually this method is not needed now. Done.",
+      "parentUuid": "2ccec86f_fb43fa43",
+      "range": {
+        "startLine": 256,
+        "startChar": 2,
+        "endLine": 256,
+        "endChar": 8
+      },
+      "revId": "23dc4e0ce126d9445cab067eb706ecad269c768a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
