@@ -112,6 +112,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "d0d39802_80dbbfff",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-14T20:26:39Z",
+      "side": 1,
+      "message": "Also, if you wanted to look at using annotations to solve this instead, I think it would be something like:\n\nchange the interfaces above into annotations:\n```\n  /** Returns a string which needs to be expanded */\n  @Target({METHOD})\n  @Retention(RUNTIME)\n  public @interface ProvidesUnexpandedString {}\n\n  /** Returns an instance with the input expanded string */\n  @Target({METHOD})\n  @Retention(RUNTIME)\n  public @interface ProvidesInstanceWithExpandedString {}\n```\n\nand then in `RelativeSubTask` you would have:\n```\n  @ProvidesUnexpandedString\n  public abstract String value();\n  \n  @ProvidesInstanceWithExpandedString\n  public RelativeSubTask createInstance(String expanded) {\n```\n\nand then in a `getUnexpanded()` method in this class you would do:\n```\n  protected String getUnexpanded(T value) {\n    for (Method method : value.getClass().getMethods()) {\n      if (method.isAnnotationPresent(ProvidesUnexpandedString.class)) {\n        // probably should do a check like:\n        // checkArgument(String.class.isAssignableFrom(method.getReturnType()), ...);\n        // See QueryBuilder.Definition for an example\n        return expandText(method.invoke(value));\n        // since this method.invoke() takes a value object, you should be able\n        // to do it once for each List\u003cT\u003e and use the same method object repeatedly\n      }\n    }\n  }   \n```\n\nand then a similar thing for ProvidesInstanceWithExpandedString.",
+      "parentUuid": "260a23e3_6e1ff887",
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "cf137bec_8f0737e2",
         "filename": "src/main/resources/Documentation/test/task_states.md",
         "patchSetId": 10
