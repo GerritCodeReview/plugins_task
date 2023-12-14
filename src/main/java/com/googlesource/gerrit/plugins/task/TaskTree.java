@@ -365,11 +365,10 @@ public class TaskTree {
       }
 
       protected void addSubTasks() throws IOException, StorageException {
-        for (TaskKey taskKey : task.subTasks) {
+        for (String expression : task.subTasks) {
           try {
             Optional<Task> def =
-                preloader.getOptionalTask(
-                    taskExpressionFactory.create(taskKey.file(), taskKey.task()));
+                preloader.getOptionalTask(taskExpressionFactory.create(task.file(), expression));
             if (def.isPresent()) {
               addPreloaded(def.get());
             }
