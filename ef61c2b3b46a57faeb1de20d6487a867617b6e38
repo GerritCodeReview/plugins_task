@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "650951c2_c149a352",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskKey.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 55,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-14T10:21:06Z",
+      "side": 1,
+      "message": "not needed?\n\nDone",
+      "range": {
+        "startLine": 55,
+        "startChar": 17,
+        "endLine": 55,
+        "endChar": 21
+      },
+      "revId": "ef61c2b3b46a57faeb1de20d6487a867617b6e38",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
