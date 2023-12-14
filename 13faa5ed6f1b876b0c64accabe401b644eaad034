@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9186f5ba_02ea678e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/RelativeSubTask.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-14T08:10:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b625711d_ff5fe653",
+      "range": {
+        "startLine": 30,
+        "startChar": 25,
+        "endLine": 30,
+        "endChar": 32
+      },
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "802ff982_59c9075b",
@@ -37,6 +61,30 @@
       "writtenOn": "2023-12-13T22:38:03Z",
       "side": 1,
       "message": "nit: Don\u0027t capitalize the the \u0027e\u0027\n```suggestion\n  public interface UnexpandedStringProvider {\n```",
+      "range": {
+        "startLine": 43,
+        "startChar": 19,
+        "endLine": 43,
+        "endChar": 43
+      },
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7043cc94_56efb30b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-14T08:10:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "802ff982_59c9075b",
       "range": {
         "startLine": 43,
         "startChar": 19,
@@ -70,6 +118,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "97664dec_7e525c29",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-14T08:10:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "59b87f71_45afc7bc",
+      "range": {
+        "startLine": 45,
+        "startChar": 11,
+        "endLine": 45,
+        "endChar": 30
+      },
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "449ef7ba_bdb644c9",
@@ -83,6 +155,30 @@
       "writtenOn": "2023-12-13T22:38:03Z",
       "side": 1,
       "message": "Make this a single line again like 165 was?",
+      "range": {
+        "startLine": 148,
+        "startChar": 8,
+        "endLine": 149,
+        "endChar": 49
+      },
+      "revId": "13faa5ed6f1b876b0c64accabe401b644eaad034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e83fc21a_3777b02c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 149,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-14T08:10:09Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "449ef7ba_bdb644c9",
       "range": {
         "startLine": 148,
         "startChar": 8,
