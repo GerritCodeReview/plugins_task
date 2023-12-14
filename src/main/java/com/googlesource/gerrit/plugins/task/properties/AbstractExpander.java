@@ -14,9 +14,7 @@
 
 package com.googlesource.gerrit.plugins.task.properties;
 
-import com.googlesource.gerrit.plugins.task.TaskKey;
 import java.lang.reflect.Field;
-import java.lang.reflect.ParameterizedType;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -103,53 +101,17 @@ public abstract class AbstractExpander {
           field.set(cow.getForWrite(), expanded);
         }
       } else if (o instanceof List) {
-        ParameterizedType parameterizedType = (ParameterizedType) field.getGenericType();
-        Class<?> classType = (Class<?>) parameterizedType.getActualTypeArguments()[0];
-        if (classType == String.class) {
-          @SuppressWarnings("unchecked")
-          List<String> forceCheck = List.class.cast(o);
-          List<String> expanded = expand(forceCheck);
-          if (expanded != o) {
-            field.set(cow.getForWrite(), expanded);
-          }
-        } else if (classType == TaskKey.class) {
-          @SuppressWarnings("unchecked")
-          List<TaskKey> forceCheck = List.class.cast(o);
-          List<TaskKey> expanded = expandTaskKey(forceCheck);
-          if (expanded != o) {
-            field.set(cow.getForWrite(), expanded);
-          }
-        } else {
-          throw new RuntimeException(String.format("Unknown list type: %s", classType));
+        @SuppressWarnings("unchecked")
+        List<String> forceCheck = List.class.cast(o);
+        List<String> expanded = expand(forceCheck);
+        if (expanded != o) {
+          field.set(cow.getForWrite(), expanded);
         }
       }
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);
     }
     return cow.getForRead();
-  }
-
-  /**
-   * Returns expanded unmodifiable List if property found. Returns same object if no expansions
-   * occurred.
-   */
-  public List<TaskKey> expandTaskKey(List<TaskKey> list) {
-    if (list != null) {
-      boolean hasProperty = false;
-      List<TaskKey> expandedList = new ArrayList<>(list.size());
-      for (TaskKey value : list) {
-        String expanded = expandText(value.task());
-        boolean hasExpanded = (value.task() != expanded);
-        hasProperty = hasProperty || hasExpanded;
-        if (hasExpanded) {
-          expandedList.add(TaskKey.create(value.file(), expanded));
-        } else {
-          expandedList.add(value);
-        }
-      }
-      return hasProperty ? Collections.unmodifiableList(expandedList) : list;
-    }
-    return null;
   }
 
   /**
