@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "ee9ca41d_f2c818d1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-15T03:40:25Z",
+      "side": 1,
+      "message": "Sry, I thought I did change this. Seems like it happen to come back when I was reverting this original change.",
+      "parentUuid": "6f41721a_e128bca5",
+      "range": {
+        "startLine": 43,
+        "startChar": 19,
+        "endLine": 43,
+        "endChar": 43
+      },
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "f47ef316_06f70285",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 10
