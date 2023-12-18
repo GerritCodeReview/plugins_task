@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9d42cddb_60b44a27",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/RelativeSubTask.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 25,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-18T14:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a5d8bd92_588af6ee",
+      "range": {
+        "startLine": 24,
+        "startChar": 0,
+        "endLine": 25,
+        "endChar": 56
+      },
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6f41721a_e128bca5",
@@ -71,6 +95,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bab81e69_7518906c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-18T14:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ee9ca41d_f2c818d1",
+      "range": {
+        "startLine": 43,
+        "startChar": 19,
+        "endLine": 43,
+        "endChar": 43
+      },
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f47ef316_06f70285",
@@ -94,6 +142,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2c988c1f_6cbf42b4",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 121,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-18T14:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f47ef316_06f70285",
+      "range": {
+        "startLine": 121,
+        "startChar": 47,
+        "endLine": 121,
+        "endChar": 94
+      },
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "adc901bc_367e9248",
@@ -107,6 +179,30 @@
       "writtenOn": "2023-12-14T18:27:22Z",
       "side": 1,
       "message": "nit: this can probably be protected? Likely the same for the existing methods below, but those can be fixed separately.",
+      "range": {
+        "startLine": 161,
+        "startChar": 2,
+        "endLine": 161,
+        "endChar": 8
+      },
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5eed0c14_82595468",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-18T14:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "adc901bc_367e9248",
       "range": {
         "startLine": 161,
         "startChar": 2,
@@ -152,6 +248,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "05a8fd56_dd689c3d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 163,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-18T14:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d0d39802_80dbbfff",
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cf137bec_8f0737e2",
@@ -165,6 +279,24 @@
       "writtenOn": "2023-12-14T18:27:22Z",
       "side": 1,
       "message": "Can you add a `[root \"Root Preload from group ref which has subtask in different group ref\"]`? That adds coverage for referring to a 3rd file, which I don\u0027t think the other tests cover.",
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "994dfa8c_13a6b0a2",
+        "filename": "src/main/resources/Documentation/test/task_states.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 2611,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-18T14:01:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cf137bec_8f0737e2",
       "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
