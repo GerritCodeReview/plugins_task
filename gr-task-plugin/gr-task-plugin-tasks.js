@@ -51,7 +51,7 @@ class GrTaskPluginTasks extends Polymer.Element {
   }
 
   _getChangeUrl(change) {
-    return Gerrit.url(change.toString());
+    return '/c/' + change.toString();
   }
 }
 
