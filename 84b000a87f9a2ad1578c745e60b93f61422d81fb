@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "26aed27f_ec31a363",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-19T02:11:16Z",
+      "side": 1,
+      "message": "Requiring objects in Lists to implement these interfaces causes them to be \"bound\" to this package/class, this makes it hard to use this class with any already existing class which you may not be in control of, or a class which is in a package which should not depend on this package.\n\nIt would be better to avoid requiring classes to have to be modified to be used by an AbstractExpander.",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2412ce44_e732dd52",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 11

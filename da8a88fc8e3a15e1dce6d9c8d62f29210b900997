@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "23b0e997_460f1d39",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/RelativeSubTask.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-19T02:11:16Z",
+      "side": 1,
+      "message": "Since this should never be used as a key, it might not make sense to use an AutoValue for this.",
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "a5d8bd92_588af6ee",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/RelativeSubTask.java",
         "patchSetId": 10
@@ -43,6 +60,46 @@
         "startChar": 0,
         "endLine": 25,
         "endChar": 56
+      },
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a8148ce7_246801cb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/RelativeSubTask.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 28,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-19T02:11:16Z",
+      "side": 1,
+      "message": "I think that \"file\" here is too vague, in this case, it is the file that the \"value\" was referenced from, but no necessarily the file the reference task is in. Perhaps fromFile, or sourceFile?",
+      "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1fe1787_2f568619",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 10
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-19T02:11:16Z",
+      "side": 1,
+      "message": "\"Relative\" seems inappropriate since I believe this can also reference absolute subtasks in other files?",
+      "range": {
+        "startLine": 67,
+        "startChar": 16,
+        "endLine": 67,
+        "endChar": 31
       },
       "revId": "da8a88fc8e3a15e1dce6d9c8d62f29210b900997",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
