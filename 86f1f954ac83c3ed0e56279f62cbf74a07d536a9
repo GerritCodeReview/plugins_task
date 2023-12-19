@@ -16,6 +16,167 @@
       "message": "Can you copy the review comments I left internally to this change?",
       "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d568abc0_f65ddafa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T20:23:14Z",
+      "side": 1,
+      "message": "They were actually all my comments with your replies 😊 I\u0027ve copied them in now.",
+      "parentUuid": "39e526f9_0b238378",
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "084f3d8e_7ee4f196",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 225,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T20:23:14Z",
+      "side": 1,
+      "message": "Copied from internal review.\n\nNasser:\n\n\u003e Just a thought, it might be better to check isDuplicate inside getSubTasks().\n\u003e There\u0027s already a lot of control flow in this create() method, so breaking it up\n\u003e some might reduce the complexity. Easy to do as a follow-up if you want.\n\nMartin:\n\n\u003e I would like to decrease some of the flow in here, but that feels a bit wrong,\n\u003e but I\u0027m not sure. I\u0027ll think about that one more... Pushing it to getStatus()\n\u003e doesn\u0027t help much, because it is too big also!\n\nNasser:\n\n\u003e yeah, I\u0027m not sold on it either, just something to think on",
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6c400382_4b17fc64",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T20:23:14Z",
+      "side": 1,
+      "message": "Copied from internal review.\n\nNasser:\n\u003e nit: s/nodes/nodeKeys/ ?\n\nMartin:\n\u003e We generally don\u0027t use \"Keys\" in names for collections that should be keys (same\n\u003e for Maps). Nodes can\u0027t be put in a Set.\n\nNasser:\n\u003e Collections of Strings are special, because the string can be anything. If you\n\u003e don\u0027t want to name it nodeKeys, I\u0027m going to say you should wrap the String in a\n\u003e NodeKey class. Then a Set\u003cNodeKey\u003e is obvious and you can call it \u0027nodes\u0027.\n\n\u003e Further, would Nodes never be able to be put into a Set? There\u0027s no javadocs for\n\u003e NodeList or Node, so it\u0027s hard for a developer to know what\u0027s expected for the\n\u003e classes.",
+      "range": {
+        "startLine": 87,
+        "startChar": 26,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0fe49061_0eb529aa",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T20:23:14Z",
+      "side": 1,
+      "message": "Copied from internal review:\n\nNasser:\n\u003e Can you rename this so that \"needed\" is defined? I think it means whenever the\n\u003e enclosing TaskTree is for a different change than the one this NodeSet was\n\u003e created for?\n\nMartin:\n\u003e That feels wrong, because the caller shouldn\u0027t have to know the policy, this\n\u003e naming encapsulates it.\n\nNasser:\n\u003e Fair. But the problem I pointed out still exists. Can you add another method that\n\u003e clearIfNeeded() calls that has the policy-based name?",
+      "range": {
+        "startLine": 103,
+        "startChar": 19,
+        "endLine": 103,
+        "endChar": 32
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "95387001_f86a4ad2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T20:23:14Z",
+      "side": 1,
+      "message": "Related to the comment just above, do you actually want (or better, need) to do object reference comparison here? If you don\u0027t actually need the ChangeData object (you don\u0027t seem to use it for anything except this equality check), maybe only keep a reference to the Change.Id?",
+      "range": {
+        "startLine": 104,
+        "startChar": 21,
+        "endLine": 104,
+        "endChar": 23
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a1e3695d_4b15666e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T20:23:14Z",
+      "side": 1,
+      "message": "Copied from internal review.\n\nNasser:\n\u003e s/getChangeTaskByBaseTasksFactory/getChangeTasksByBaseTasksFactory/\n\nMartin:\n\u003e Maybe it should now be getNodeSet...()?\n\nNasser:\n\u003e maybe? Depends a bit on what we decide with the naming above. I was just pointing\n\u003e out the missing plural, but NodeSet!\u003dChangeTasks to me. However, above we\u0027re\n\u003e saying NodeSet is just a set of node keys. So maybe this should be getNodeKeys...\n\u003e or getNodes...?",
+      "range": {
+        "startLine": 374,
+        "startChar": 42,
+        "endLine": 374,
+        "endChar": 73
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2cd2faa5_656bc9b8",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T20:23:14Z",
+      "side": 1,
+      "message": "It would probably help to have an example for this new case, but I don\u0027t know how to fit that in with the existing docs. I can reason out what it means, but it wasn\u0027t trivial and would have been harder if I wasn\u0027t reviewing this code too.\n\nMaybe a reword would help?",
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bf203c05_986e00db",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T20:23:14Z",
+      "side": 1,
+      "message": "for follow up: This is missing a reference to `duplicate-key` below.",
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
