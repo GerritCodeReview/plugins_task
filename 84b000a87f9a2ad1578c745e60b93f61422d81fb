@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "1d6f8807_522b6cc2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-19T17:23:15Z",
+      "side": 1,
+      "message": "Too vague",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "26aed27f_ec31a363",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 11
@@ -32,6 +49,23 @@
       "side": 1,
       "message": "We can have the Properties class supply a map like below with registrations. ClassExpansionInfo will perform the validations for the unexpandedString and createInstance objects. This will also replace the validation done below in getUnexpandedStringFunction and getCreateInstanceWithExpandedFunction.\n\n```\n  public static class ClassExpansionInfo {\n    AccessibleObject unexpandedString;\n    Executable createInstance;\n  }\n  \n  AbstractExpander(Map\u003cClass\u003c?\u003e, ClassExpansionInfo\u003e expansionInfoByClass) {\n\n  }\n```",
       "parentUuid": "26aed27f_ec31a363",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c746817f_3a47cd05",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2023-12-19T17:23:15Z",
+      "side": 1,
+      "message": "I think it\u0027s important to focus on what the code below here \"should\" attempt to look like. I would imagine it looking like:\n```\n for (T value: list) {\n   T expanded \u003d expand(value);\n   ...\n }\n```\nwhich I am imagining leads to the next function being something like:\n```\n protected \u003cT\u003e T expand(T value) {\n   if (value \u003d\u003d null) return null;\n   if (value instanceof String) {\n     return expandText((String) value);\n   }\n   return expanderByClass.getOrDefault(value.getClass(), Function.identity()).apply(value);\n }\n```\nBut I\u0027m not sure if the ?s below will work, it might take some fancy warning silencing and casting:\n```\n Map\u003cClass, Function\u003c?, ?\u003e\u003e expanderByClass;\n```\nOnce you have that, you can add a method to register a Function by Class?",
       "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
