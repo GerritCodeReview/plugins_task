@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "fcc91b7f_8fad3124",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2023-12-19T16:19:38Z",
+      "side": 1,
+      "message": "We can have the Properties class supply a map like below with registrations. ClassExpansionInfo will perform the validations for the unexpandedString and createInstance objects. This will also replace the validation done below in getUnexpandedStringFunction and getCreateInstanceWithExpandedFunction.\n\n```\n  public static class ClassExpansionInfo {\n    AccessibleObject unexpandedString;\n    Executable createInstance;\n  }\n  \n  AbstractExpander(Map\u003cClass\u003c?\u003e, ClassExpansionInfo\u003e expansionInfoByClass) {\n\n  }\n```",
+      "parentUuid": "26aed27f_ec31a363",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2412ce44_e732dd52",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 11
