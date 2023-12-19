@@ -46,6 +46,30 @@
       },
       "revId": "0071c8ed4beefe62fcda162d7a6558c67ae6d886",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0857f302_c62d81a8",
+        "filename": "gr-task-plugin/gr-task-plugin-tasks.js",
+        "patchSetId": 2
+      },
+      "lineNbr": 53,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2023-12-19T11:10:56Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "b023a230_19431961",
+      "range": {
+        "startLine": 53,
+        "startChar": 2,
+        "endLine": 53,
+        "endChar": 15
+      },
+      "revId": "0071c8ed4beefe62fcda162d7a6558c67ae6d886",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
