@@ -126,6 +126,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0c3b815d_d202cbad",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-19T21:05:23Z",
+      "side": 1,
+      "message": "\u003e \u003e I\u0027m assuming you\u0027re making this comment in reference to Prudhvi\u0027s comment [1]...\n\u003e \n\u003e Sort of, but mostly I\u0027m trying to side step that line a bit to get to the core of the bare minimum needed in this class to support extending it. I think it\u0027s important to start with the bare minimum and to then justify anything more.\n\n\u003e A single lookup is risky since nothing guarantees that all the classes are the same.\n\nAh right. It could be a List\u003cAnimal\u003e with Dog and Cat instances as the values. We\u0027d want to ensure we use the correct subclass.\n\n\u003e The \"getUnexpanded.apply(value),expandText(toExpand), andcreateInstanceWithExpanded.apply(value, expanded)\" feels like awkward and not very generic logic to me that would be better not to have in here, and it gets simpler I think if it is not generic. If that logic ever does become reusable for other classes, then it can be shared (and made generic) via a helper class, or it can make good use of helper functions.\n\nI didn\u0027t mean logic as the code inside those methods, I meant the workflow / transformation process they represent.\n\n\u003e More importantly, even if that specific logic is reusable, nothing guarantees that it is the only \"custom\" logic that will ever be needed in here. So I think the extension point that I am proposing is not only simpler, I think it is more powerful as it allows other expansion approaches to potentially be plugged in if needed.\n\nOk, so I think you\u0027re saying that if the caller has to provide this info anyway, pivot to using per-class functional interfaces instead of reflection?\n\n\u003e \n\u003e \u003e I don\u0027t think using `Function.identity()` as a default makes sense. I would expect that if there\u0027s nothing registered, an exception is thrown. Do you see a use case where we could assume otherwise?\n\u003e \n\u003e I was mimicking what the code seems to already do on line 110, it does not attempt to expand what it doesn\u0027t understand. This allows fields which don\u0027t need expansion to exist, most objects likely don\u0027t have property references in them.\n\nI\u0027m not sure which line 110 you\u0027re referring to (it\u0027s a comment in PS11). If you mean on the base/tip, that\u0027s at a higher level than the logic we\u0027re discussing for a List. Line 105 on the base forces to a `List\u003cString\u003e`, so I think if a non-String List is given, we\u0027ll get a runtime exception. However, the javadocs on that method and its callers seem to indicate that\u0027s not the expected behavior and that it\u0027s probably a bug. Seems like some unit tests for this class would help.\n\n\u003e \u003e It\u0027s easy enough to support either, I\u0027m just curious if there\u0027s a bigger picture you have in mind.\n\u003e \n\u003e Simplicity and flexibility.\n\nOk.\n\nGoing back to this:\n\u003e ```\n\u003e Map\u003cClass, Function\u003c?, ?\u003e\u003e expanderByClass;\n\u003e ```\n\nassuming I\u0027m right and you can\u0027t do all this in one Function, I think you could change the fields on the `ClassExpander` object we suggested to be the map value class:\n```\n  public static class ClassExpander\u003cT\u003e {\n    Function\u003cT, String\u003e getUnexpandedString;\n    BiFunction\u003cT, String, T\u003e createExpandedInstance;\n  }\n  \n  Map\u003cClass\u003c?\u003e, ClassExpander\u003c?\u003e\u003e expanderByClass;\n```\n\nThough extending that map in another class might be better because then I think you can enforce the same type for the Class and ClassExpander generics.\n\n```\n  public static class ClassExpanderMap\u003cT\u003e extends Map\u003cClass\u003cT\u003e, ClassExpander\u003cT\u003e\u003e {...}\n  \n  ClassExpanderMap\u003c?\u003e expanderByClass;\n```",
+      "parentUuid": "a8b549fc_540abe8b",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2412ce44_e732dd52",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 11
