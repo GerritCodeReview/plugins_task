@@ -82,29 +82,15 @@ class GrTaskPlugin extends Polymer.Element {
         notify: true,
         value: 0,
       },
-      _invalid_count: {
-        type: Number,
-        notify: true,
-        value: 0,
-      },
-      _waiting_count: {
-        type: Number,
-        notify: true,
-        value: 0,
-      },
-      _duplicate_count: {
-        type: Number,
-        notify: true,
-        value: 0,
-      },
-      _pass_count: {
-        type: Number,
-        notify: true,
-        value: 0,
-      },
+
       _isPending: {
         type: Boolean,
         value: true,
+      },
+
+      _tasks_info: {
+        type: Object,
+        observer: '_tasksInfoChanged',
       },
     };
   }
@@ -113,52 +99,36 @@ class GrTaskPlugin extends Polymer.Element {
     return show_all === 'true';
   }
 
-  connectedCallback() {
-    super.connectedCallback();
-
+  ready() {
+    super.ready();
+    if (!this.change) {
+      return;
+    }
+    document.addEventListener(`response-tasks-${this.change._number}`, e => {
+      this._tasks_info = e.detail.tasks_info;
+      this._isPending = e.detail.is_loading;
+    });
     this._getTasks();
+  }
+
+  _tasksInfoChanged(newValue, oldValue) {
+    if (this._tasks_info) {
+      this._tasks = this._addTasks(this._tasks_info.roots);
+    }
   }
 
   _is_hidden(_isPending, _tasks) {
     return (!_isPending && !_tasks.length);
   }
 
-  _getTasks() {
-    if (!this.change) {
-      return;
+  async _getTasks() {
+    while (this._isPending) {
+      document.dispatchEvent(
+          new CustomEvent(`request-tasks-${this.change._number}`, {
+            composed: true, bubbles: true,
+          }));
+      await new Promise(r => setTimeout(r, 100));
     }
-
-    this._isPending = true;
-    const endpoint =
-        `/changes/?q=change:${this.change._number}&--task--applicable`;
-
-    return this.plugin.restApi().get(endpoint).then(response => {
-      this._isPending = false;
-      if (response && response.length === 1) {
-        const cinfo = response[0];
-        if (cinfo.plugins) {
-          const taskPluginInfo = cinfo.plugins.find(
-              pluginInfo => pluginInfo.name === 'task');
-
-          if (taskPluginInfo) {
-            this._tasks = this._addTasks(taskPluginInfo.roots);
-          }
-        }
-        document.dispatchEvent(new CustomEvent('tasks-loaded', {
-          detail: {
-            ready_count: this._ready_count,
-            fail_count: this._fail_count,
-            invalid_count: this._invalid_count,
-            waiting_count: this._waiting_count,
-            duplicate_count: this._duplicate_count,
-            pass_count: this._pass_count,
-          },
-          composed: true, bubbles: true,
-        }));
-      }
-    }).catch(e => {
-      this._isPending = false;
-    });
   }
 
   _computeIcon(task) {
@@ -222,18 +192,6 @@ class GrTaskPlugin extends Polymer.Element {
         break;
       case 'READY':
         this._ready_count++;
-        break;
-      case 'INVALID':
-        this._invalid_count++;
-        break;
-      case 'WAITING':
-        this._waiting_count++;
-        break;
-      case 'DUPLICATE':
-        this._duplicate_count++;
-        break;
-      case 'PASS':
-        this._pass_count++;
         break;
     }
   }
