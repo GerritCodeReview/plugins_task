@@ -18,7 +18,7 @@
 import './gr-task-plugin.js';
 import {htmlTemplate} from './gr-task-chip_html.js';
 
-class GrTaskChip extends Polymer.Element {
+export class GrTaskChip extends Polymer.Element {
   static get is() {
     return 'gr-task-chip';
   }
@@ -37,23 +37,24 @@ class GrTaskChip extends Polymer.Element {
     };
   }
 
-  _setTasksTabActive() {
-    // TODO: Identify a better way as current implementation is fragile
-    const endPointDecorators = document.querySelector('gr-app')
+  static getPrimaryTabs() {
+    return document.querySelector('gr-app')
         .shadowRoot.querySelector('gr-app-element')
         .shadowRoot.querySelector('main')
         .querySelector('gr-change-view')
         .shadowRoot.querySelector('#mainContent')
-        .getElementsByTagName('gr-endpoint-decorator');
-    if (endPointDecorators) {
-      for (let i = 0; i <= endPointDecorators.length; i++) {
-        const el = endPointDecorators[i]
-            ?.shadowRoot?.querySelector('gr-task-plugin');
-        if (el) {
-          el.shadowRoot.querySelector('paper-tabs')
-              .querySelector('paper-tab').scrollIntoView();
-          break;
-        }
+        .querySelector('#primaryTabs');
+  }
+
+  _setTasksTabActive() {
+    // TODO: Identify a better way as current implementation is fragile
+    const paperTabs = GrTaskChip.getPrimaryTabs();
+    const tabs = paperTabs.querySelectorAll('paper-tab')
+    for (let i=0; i <= tabs.length; i++) {
+      if (tabs[i].dataset['name'] === 'change-view-tab-header-task') {
+        paperTabs.selected = i;
+        tabs[i].scrollIntoView({block: 'center'});
+        break;
       }
     }
   }

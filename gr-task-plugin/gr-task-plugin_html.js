@@ -80,14 +80,6 @@ export const htmlTemplate = Polymer.html`
 </style>
 
 <div id="tasks" hidden$="[[_is_hidden(_isPending, _tasks)]]">
-  <paper-tabs id="secondaryTabs" selected="0">
-    <paper-tab
-      data-name$="Tasks"
-      class="Tasks"
-    >
-      Tasks
-    </paper-tab>
-  </paper-tabs>
   <section class="TasksList">
     <div hidden$="[[!_isPending]]" class="task-list-item">Loading...</div>
     <div hidden$="[[_isPending]]" class="task-list-item">
@@ -119,6 +111,7 @@ export const htmlTemplate = Polymer.html`
   <div hidden$="[[!_expand_all]]" style="padding-bottom: 12px">
     <ul style="list-style-type:none;">
       <gr-task-plugin-tasks
+          hidden$="[[_isPending]]"
           tasks="[[_tasks]]"
           show_all$="[[_show_all]]"> </gr-task-plugin-tasks>
     </ul>
