@@ -198,6 +198,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "85c41f96_d0072150",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-20T17:54:28Z",
+      "side": 1,
+      "message": "\u003e \u003e Sure. I don\u0027t know if using a Class or a Function will work better for type safety. Along the idea of overriding, maybe there should be an `Expander\u003cT\u003e` class that has the `public \u003cT\u003e T expand(T value)` method with that same kind of Function.identity() default and then it can be overridden for any other case?\n\u003e \n\u003e My suggestion was to let AbstractExpander do that, I\u0027m not sure what you had in mind by having another class do it?\n\nOk, I didn\u0027t think that would work because I\u0027m assuming:\n1. we still have a single AbstractExpander/Expander created by Properties, and\n2. the single AbstractExpander would need to support multiple types within Lists, and\n3. we can\u0027t override a method multiple times for different types in a single instance of the AbstractExpander class\n\nTherefore I was expecting we still needed some kind of class-\u003eexpander registration within AbstractExpander and this \"other class\" is the one being registered.\n\nHow were you thinking `expand(T value)` could be overridden for different types? Did I get something wrong in my assumptions?",
+      "parentUuid": "1ebc3ea2_72504b2f",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2412ce44_e732dd52",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 11
