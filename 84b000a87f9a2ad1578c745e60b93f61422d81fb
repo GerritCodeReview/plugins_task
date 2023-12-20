@@ -162,6 +162,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "91db180d_09cd7f4a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2023-12-20T06:44:17Z",
+      "side": 1,
+      "message": "\u003e \u003e Ok, so I think you\u0027re saying that if the caller has to provide this info anyway, pivot to using per-class functional interfaces instead of reflection?\n\u003e \n\u003e Not quite, what I\u0027m saying is to shift the thinking to what do you want the code in AbstractExpander to look like. I think it needs to stay simple and easily modifiable. The current reflection approach has issues from a usability approach, so I would no use reflection just for that reason. But shifting the flow to a sub method to operate just on an element makes things easier to reason about first. Then, what you do in that method should probably first be evaluate to see if it can be done by overriding that method (potentially simplest if it works), or using a simple function per class approach if that works.\n\nAck.\n\n\u003e \n\u003e \u003e I\u0027m not sure which line 110 you\u0027re referring to (it\u0027s a comment in PS11). If you mean on the base/tip, that\u0027s at a higher level than the logic we\u0027re discussing for a List. \n\u003e \n\u003e Correct, but I think the principle still applies, if we don\u0027t know how to expand a type, leave it as be.\n\n+1\n\n\u003e \n\u003e \u003e Line 105 on the base forces to a List\u003cString\u003e, so I think if a non-String List is given, we\u0027ll get a runtime exception. \n\u003e \n\u003e Agreed, and the new proposed approach will actually avoid that nicely.\n\n+1\n\n\u003e \n\u003e \u003e assuming I\u0027m right and you can\u0027t do all this in one Function\n\u003e \n\u003e Just be cause it is one function call doesn\u0027t mean it has to all be one function, it could be a method on a class with state and other methods. Do you see a reason why the interface would need to be anything more than \"expand this object\"?\n\nNo, that\u0027s probably enough. I think it would/should follow the same contract as `public \u003cT\u003e T expand(T value)` from PS10.\n\n\u003e \n\u003e \u003e I think you could change the fields on the ClassExpander\n\u003e \n\u003e I really don\u0027t like that class, it is awkward at best, and potentially the wrong approach anyway. It happens to work for the current limited case, but just imagine that the object needing expansion might contain more than one String field to expand (not a very far stretch), how would you deal with it with that interface?\n\nSure. I don\u0027t know if using a Class or a Function will work better for type safety. Along the idea of overriding, maybe there should be an `Expander\u003cT\u003e` class that has the `public \u003cT\u003e T expand(T value)` method with that same kind of Function.identity() default and then it can be overridden for any other case?\n\n\u003e \n\u003e \u003e Though extending that map in another class might be better because then I think you can enforce the same type for the Class and ClassExpander generics.\n\u003e \n\u003e Yes, that was a concern of mine with two \"separate interfaces\", they aren\u0027t really separate, they need to be tied together to avoid miss-matches.\n\nRight, and that problem exists if you use a Function or anything else, so tying them together into a wrapper class probably makes sense.",
+      "parentUuid": "2e8e0405_c7d59f1a",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "2412ce44_e732dd52",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 11
