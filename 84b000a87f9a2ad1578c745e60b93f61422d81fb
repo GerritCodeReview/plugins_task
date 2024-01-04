@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0b886be7_bd83c887",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 11
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-04T14:53:46Z",
+      "side": 1,
+      "message": "added some more context in PS12. Done",
+      "parentUuid": "1d6f8807_522b6cc2",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "26aed27f_ec31a363",
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "\u003e ```\n\u003e   public static class ClassExpansionInfo {\n\u003e ```\n\nMaybe to encapsulate better this should be a generic class? And then it could do validations against its generic type and provide more of the functionality from `getUnexpandedStringFunction` and `getCreateInstanceWithExpandedFunction`?\n\nAnd if it\u0027s going to \"do\" more, then it\u0027s probably not an \"Info\", so maybe name it `ClassExpander`? I think that fits this idea, since it\u0027s a specialized expander for a given class.",
       "parentUuid": "fcc91b7f_8fad3124",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5299e371_b7524bed",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-04T14:53:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "0ef40ae2_b22d4ca9",
       "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -250,6 +286,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "356e3e31_6215d129",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-04T14:53:46Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7f162a43_463e7dda",
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2412ce44_e732dd52",
@@ -263,6 +317,30 @@
       "writtenOn": "2023-12-18T23:39:59Z",
       "side": 1,
       "message": "nit: Should this be `getProvidesUnexpandedStringFunction`?",
+      "range": {
+        "startLine": 167,
+        "startChar": 36,
+        "endLine": 167,
+        "endChar": 63
+      },
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c4fa32e_46246f92",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 167,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-04T14:53:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "2412ce44_e732dd52",
       "range": {
         "startLine": 167,
         "startChar": 36,
@@ -296,6 +374,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7890b1e6_df3056d1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 187,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-04T14:53:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "fb3ca59a_e5b10486",
+      "range": {
+        "startLine": 187,
+        "startChar": 32,
+        "endLine": 187,
+        "endChar": 35
+      },
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "58a5131c_f7a07331",
@@ -309,6 +411,30 @@
       "writtenOn": "2023-12-18T23:39:59Z",
       "side": 1,
       "message": "nit: should this be `getProvidesInstanceWithExpandedStringFunction`?",
+      "range": {
+        "startLine": 191,
+        "startChar": 41,
+        "endLine": 191,
+        "endChar": 78
+      },
+      "revId": "84b000a87f9a2ad1578c745e60b93f61422d81fb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4527d436_df5d4da9",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 191,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-04T14:53:46Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "58a5131c_f7a07331",
       "range": {
         "startLine": 191,
         "startChar": 41,
