@@ -1,0 +1,124 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "836bf093_75bf52a9",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-04T20:08:12Z",
+      "side": 1,
+      "message": "This looks really simple and easy to understand now. I have just a few minor nits, but I think this will work well?",
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7bf4d5e_bacfeb79",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/SourceSubTask.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-04T20:08:12Z",
+      "side": 1,
+      "message": "I\u0027ll be honest, I don\u0027t love this name, but I can live with it. I suspect that if this weren\u0027t \"Task\" specific, you could then use it for TaskFactories in the next set of changes. Also, I\u0027m not sure the \"Sub\" is relevant here?",
+      "range": {
+        "startLine": 17,
+        "startChar": 13,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "daf41136_73c6969c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-04T20:08:12Z",
+      "side": 1,
+      "message": "Adding this variable seems to confuse things for me since now I can\u0027t tell from the naming what the difference between hasExpanded and hasProperty is intended to be. With only one variable, that issue goes away.",
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0c85e9bc_33b7963a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-04T20:08:12Z",
+      "side": 1,
+      "message": "It would be possible to register expandText() now for the String class to eliminate this special case entirely. That might hurt String expansion performance though so I\u0027m not sure it\u0027s worth it (it might help non String expansion performance).",
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "eeb239ed_c1a57796",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/Properties.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-04T20:08:12Z",
+      "side": 1,
+      "message": "Unneeded parens when a single arg?",
+      "range": {
+        "startLine": 122,
+        "startChar": 12,
+        "endLine": 122,
+        "endChar": 14
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cb6430b5_3a40c228",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/Properties.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-04T20:08:12Z",
+      "side": 1,
+      "message": "Store previous result to avoid another lookup?",
+      "range": {
+        "startLine": 124,
+        "startChar": 10,
+        "endLine": 124,
+        "endChar": 22
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
