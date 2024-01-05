@@ -109,6 +109,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "a37607ab_12c1c17d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/SourceSubTask.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-05T19:52:44Z",
+      "side": 1,
+      "message": "Odd, I have a reply here on PS13 that is not being brought forward to PS14 for me, and is only visible on some views, is it for you?",
+      "parentUuid": "83d88fb2_207fd6c2",
+      "range": {
+        "startLine": 17,
+        "startChar": 13,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "daf41136_73c6969c",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 13
