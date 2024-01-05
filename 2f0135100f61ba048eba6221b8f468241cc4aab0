@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "4a24d758_c9677346",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 13
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-05T16:49:48Z",
+      "side": 1,
+      "message": "\u003e but I think this will work well?\n\nYes Martin, this works fine.",
+      "parentUuid": "836bf093_75bf52a9",
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7bf4d5e_bacfeb79",
@@ -31,6 +49,30 @@
       "writtenOn": "2024-01-04T20:08:12Z",
       "side": 1,
       "message": "I\u0027ll be honest, I don\u0027t love this name, but I can live with it. I suspect that if this weren\u0027t \"Task\" specific, you could then use it for TaskFactories in the next set of changes. Also, I\u0027m not sure the \"Sub\" is relevant here?",
+      "range": {
+        "startLine": 17,
+        "startChar": 13,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83d88fb2_207fd6c2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/SourceSubTask.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-05T16:49:48Z",
+      "side": 1,
+      "message": "Since \u0027subtask\u0027, \u0027subtask-factory\u0027, \u0027subtask-external\u0027, \u0027subtask-file\u0027, have subtask as a commonality, choose SourceSubTask as the name.\n\n\u003e  I suspect that if this weren\u0027t \"Task\" specific, you could then use it for TaskFactories in the next set of changes.\n\nIf we don\u0027t call it a task, then probably we could call it a \u0027SourceReference\u0027 ?",
+      "parentUuid": "c7bf4d5e_bacfeb79",
       "range": {
         "startLine": 17,
         "startChar": 13,
@@ -58,6 +100,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "03b08741_248cf14c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-05T16:49:48Z",
+      "side": 1,
+      "message": "Right hasExpanded is not needed now. It got carry forwarded from previous PS. Done.",
+      "parentUuid": "daf41136_73c6969c",
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0c85e9bc_33b7963a",
@@ -71,6 +131,24 @@
       "writtenOn": "2024-01-04T20:08:12Z",
       "side": 1,
       "message": "It would be possible to register expandText() now for the String class to eliminate this special case entirely. That might hurt String expansion performance though so I\u0027m not sure it\u0027s worth it (it might help non String expansion performance).",
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b6e98c44_15377640",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-05T16:49:48Z",
+      "side": 1,
+      "message": "\u003e It would be possible to register expandText() now for the String class to eliminate this special case entirely.\n\nYes.\n\n\u003e  That might hurt String expansion performance though so I\u0027m not sure it\u0027s worth it\n\nWhy would that hurt performance? hashmap lookup is O(1) and apply() will be an additional function call. That shouldn\u0027t effect the perf?",
+      "parentUuid": "0c85e9bc_33b7963a",
       "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -98,6 +176,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7a20cf9e_caed8343",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/Properties.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 122,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-05T16:49:48Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eeb239ed_c1a57796",
+      "range": {
+        "startLine": 122,
+        "startChar": 12,
+        "endLine": 122,
+        "endChar": 14
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "cb6430b5_3a40c228",
@@ -111,6 +213,30 @@
       "writtenOn": "2024-01-04T20:08:12Z",
       "side": 1,
       "message": "Store previous result to avoid another lookup?",
+      "range": {
+        "startLine": 124,
+        "startChar": 10,
+        "endLine": 124,
+        "endChar": 22
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c1fa0ec2_0b83084c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/Properties.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-05T16:49:48Z",
+      "side": 1,
+      "message": "t.getValue() would return the value from the SourceSubTask. Why do you think t.getValue() is expensive?",
+      "parentUuid": "cb6430b5_3a40c228",
       "range": {
         "startLine": 124,
         "startChar": 10,
