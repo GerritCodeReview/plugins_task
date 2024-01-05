@@ -85,6 +85,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "5d731173_407c95fe",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/SourceSubTask.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 17,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-05T19:45:52Z",
+      "side": 1,
+      "message": "What about FileKeyedValue? (And potentially even making the Value generic instead of a String?\n\nAlso, although it is not really needed yet, it might make sense to store not just the FileKey in here, but the whole reference to where this came from, the FileKey, the Section, and the SubSection (the SubSectionKey?)?\n\nWhen I think about it more, what is needed is an reference to where this config value came from, so perhaps ConfigSourcedValue?",
+      "parentUuid": "c7bf4d5e_bacfeb79",
+      "range": {
+        "startLine": 17,
+        "startChar": 13,
+        "endLine": 17,
+        "endChar": 26
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "daf41136_73c6969c",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
         "patchSetId": 13
@@ -149,6 +173,24 @@
       "side": 1,
       "message": "\u003e It would be possible to register expandText() now for the String class to eliminate this special case entirely.\n\nYes.\n\n\u003e  That might hurt String expansion performance though so I\u0027m not sure it\u0027s worth it\n\nWhy would that hurt performance? hashmap lookup is O(1) and apply() will be an additional function call. That shouldn\u0027t effect the perf?",
       "parentUuid": "0c85e9bc_33b7963a",
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89116164_714975d2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/AbstractExpander.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 151,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-05T19:45:52Z",
+      "side": 1,
+      "message": "\u003e \u003e  That might hurt String expansion performance though so I\u0027m not sure it\u0027s worth it\n\u003e \n\u003e Why would that hurt performance? hashmap lookup is O(1) and apply() will be an additional function call. That shouldn\u0027t effect the perf?\n\nIt shouldn\u0027t hurt things from a big O standpoint, but a hashmap lookup is likely significantly slower than an instanceof operation, and this is in a highly optimized and very contentious area of the code which I have had to \"speedup\" in the past. I suggest doing some performance tests with status:open --task--applicable on real data sets that are very up to date (no invalids).",
+      "parentUuid": "b6e98c44_15377640",
       "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -237,6 +279,30 @@
       "side": 1,
       "message": "t.getValue() would return the value from the SourceSubTask. Why do you think t.getValue() is expensive?",
       "parentUuid": "cb6430b5_3a40c228",
+      "range": {
+        "startLine": 124,
+        "startChar": 10,
+        "endLine": 124,
+        "endChar": 22
+      },
+      "revId": "2f0135100f61ba048eba6221b8f468241cc4aab0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b96b2531_70d3cb2e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/properties/Properties.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 124,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-05T19:45:52Z",
+      "side": 1,
+      "message": "To keep your code future proof, code from this class as if you have no idea whether it (is, or) will stay fast in the future. i.e. Do not assume you know the internals of the classes you use.",
+      "parentUuid": "c1fa0ec2_0b83084c",
       "range": {
         "startLine": 124,
         "startChar": 10,
