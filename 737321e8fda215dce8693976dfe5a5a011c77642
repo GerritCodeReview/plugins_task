@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b742879b_707b0b24",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 16
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-07T04:33:30Z",
+      "side": 1,
+      "message": "```\n╰─❯ bazel test //...\nStarting local Bazel server and connecting to it...\nINFO: Invocation ID: 8045a893-6c82-49d1-b6f3-4ecee220e39c\nINFO: Analyzed 2 targets (94 packages loaded, 1220 targets configured).\nINFO: Found 2 test targets...\nINFO: Elapsed time: 193.483s, Critical Path: 181.27s\nINFO: 9 processes: 5 darwin-sandbox, 2 local, 2 worker.\nINFO: Build completed successfully, 9 total actions\n//:docker-tests                                                          PASSED in 151.1s\n//:junit-tests                                                           PASSED in 1.5s\n```",
+      "revId": "737321e8fda215dce8693976dfe5a5a011c77642",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
