@@ -16,6 +16,24 @@
       "message": "The TaskConfigFactory is now also a Cache, maybe it should be renamed?\n\nI sucks to no longer be able to use a Injection for the Preloader because you want to take advantage of the TaskConfigFactory cache being used in here. Would there be someway to still use Injection and get the same cache without making it a Singleton. Can we use the per thread cache with Injection?",
       "revId": "38e1afa163260dcc854ddb8202f3a2e9dc3090d6",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ba343526_6ea1aefe",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 11
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-07T06:38:38Z",
+      "side": 1,
+      "message": "\u003e Can we use the per thread cache with Injection?\n\nYes. Done.",
+      "parentUuid": "ef6cec09_e5cbdc51",
+      "revId": "38e1afa163260dcc854ddb8202f3a2e9dc3090d6",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
