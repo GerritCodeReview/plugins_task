@@ -16,6 +16,29 @@
       "message": "```\n╰─❯ bazel test //...\nStarting local Bazel server and connecting to it...\nINFO: Invocation ID: 8045a893-6c82-49d1-b6f3-4ecee220e39c\nINFO: Analyzed 2 targets (94 packages loaded, 1220 targets configured).\nINFO: Found 2 test targets...\nINFO: Elapsed time: 193.483s, Critical Path: 181.27s\nINFO: 9 processes: 5 darwin-sandbox, 2 local, 2 worker.\nINFO: Build completed successfully, 9 total actions\n//:docker-tests                                                          PASSED in 151.1s\n//:junit-tests                                                           PASSED in 1.5s\n```",
       "revId": "737321e8fda215dce8693976dfe5a5a011c77642",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "979adcb9_3e8fc7ed",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/ConfigSourcedValue.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 33,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-01-08T18:24:41Z",
+      "side": 1,
+      "message": "This should really be an AutoValue. It was created exactly to remove this kind of boilerplate code (literally reduces it by half).\n\n```suggestion\n@AutoValue\npublic abstract class ConfigSourcedValue {\n  public static ConfigSourcedValue create(FileKey sourceFile, String value) {\n    return new AutoValue_ConfigSourcedValue(sourceFile, value);\n  }\n  \n  protected abstract FileKey sourceFile();\n  protected abstract String value();\n}\n```",
+      "range": {
+        "startLine": 17,
+        "startChar": 0,
+        "endLine": 33,
+        "endChar": 1
+      },
+      "revId": "737321e8fda215dce8693976dfe5a5a011c77642",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
