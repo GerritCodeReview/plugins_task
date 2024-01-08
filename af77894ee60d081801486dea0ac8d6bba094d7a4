@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb5174d3_bc535c05",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigFactory.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-08T16:18:14Z",
+      "side": 1,
+      "message": "Sure, IDE happen to auto generate this. Done.",
+      "parentUuid": "e5039cf5_0c6a02e7",
+      "revId": "af77894ee60d081801486dea0ac8d6bba094d7a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3c47ec5f_75302875",
@@ -35,6 +53,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3aae2742_80104794",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigFactory.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-08T16:18:14Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3c47ec5f_75302875",
+      "revId": "af77894ee60d081801486dea0ac8d6bba094d7a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a86b8e58_9836e8c7",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-01-07T17:25:36Z",
       "side": 1,
       "message": "This is too big. Generally if you are adding another layer to a method, that\u0027s a good sign that you should probably move what is in the current method to a submethod, and then to wrap it with the new layer.",
+      "revId": "af77894ee60d081801486dea0ac8d6bba094d7a4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95701f6a_10d8ad56",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigFactory.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 80,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-08T16:18:14Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "a86b8e58_9836e8c7",
       "revId": "af77894ee60d081801486dea0ac8d6bba094d7a4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
