@@ -16,6 +16,24 @@
       "message": "CI failure is real:\n```\n/home/zuul/.cache/bazel/_bazel_zuul/f72647b18debaa5c8de805aa145c53cf/execroot/gerrit/bazel-out/k8-fastbuild/bin/plugins/task/lint_test.sh.runfiles/gerrit/plugins/task/gr-task-plugin/gr-task-summary.js\n  83:1  error  This line has a length of 103. Maximum allowed is 80  max-len\n  84:1  error  This line has a length of 104. Maximum allowed is 80  max-len\n```",
       "revId": "451062c781b1163678b29997a5beb2ef37164396",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a08e4b06_7612f3c0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-01-10T04:25:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d58aa6ff_1ed09060",
+      "revId": "451062c781b1163678b29997a5beb2ef37164396",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
