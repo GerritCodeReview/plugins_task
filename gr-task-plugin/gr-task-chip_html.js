@@ -35,6 +35,17 @@ export const htmlTemplate = Polymer.html`
       position: relative;
       top: 2px;
     }
+    .taskSummaryChip.loading {
+      border-color: var(--gray-foreground);
+      background: var(--gray-background);
+    }
+    .taskSummaryChip.loading:hover {
+      background: var(--gray-background-hover);
+      box-shadow: var(--elevation-level-1);
+    }
+    .taskSummaryChip.loading:focus-within {
+      background: var(--gray-background-focus);
+    }
     .taskSummaryChip.success {
       border-color: var(--success-foreground);
       background: var(--success-background);

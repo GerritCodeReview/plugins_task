@@ -64,6 +64,11 @@ class GrTaskSummary extends Polymer.Element {
         notify: true,
         value: 0,
       },
+
+      is_loading: {
+        type: Boolean,
+        value: true,
+      },
     };
   }
 
@@ -77,13 +82,19 @@ class GrTaskSummary extends Polymer.Element {
       this.waiting_count = e.detail.waiting_count;
       this.duplicate_count = e.detail.duplicate_count;
       this.pass_count = e.detail.pass_count;
+      this.is_loading = false;
     });
   }
 
-  _can_show_chips(ready_count, fail_count, invalid_count,
-      waiting_count, duplicate_count, pass_count) {
-    return ready_count || fail_count || invalid_count ||
-      waiting_count || duplicate_count || pass_count;
+  _show_no_tasks(is_loading, ready_count,
+                 fail_count, invalid_count,
+                 waiting_count, duplicate_count,
+                 pass_count) {
+    if (is_loading || ready_count || fail_count || invalid_count
+        || waiting_count || duplicate_count || pass_count) {
+      return false;
+    }
+    return true;
   }
 }
 
