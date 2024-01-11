@@ -142,19 +142,19 @@ class GrTaskPlugin extends Polymer.Element {
 
           if (taskPluginInfo) {
             this._tasks = this._addTasks(taskPluginInfo.roots);
-            document.dispatchEvent(new CustomEvent('tasks-loaded', {
-              detail: {
-                ready_count: this._ready_count,
-                fail_count: this._fail_count,
-                invalid_count: this._invalid_count,
-                waiting_count: this._waiting_count,
-                duplicate_count: this._duplicate_count,
-                pass_count: this._pass_count,
-              },
-              composed: true, bubbles: true,
-            }));
           }
         }
+        document.dispatchEvent(new CustomEvent('tasks-loaded', {
+          detail: {
+            ready_count: this._ready_count,
+            fail_count: this._fail_count,
+            invalid_count: this._invalid_count,
+            waiting_count: this._waiting_count,
+            duplicate_count: this._duplicate_count,
+            pass_count: this._pass_count,
+          },
+          composed: true, bubbles: true,
+        }));
       }
     }).catch(e => {
       this._isPending = false;
