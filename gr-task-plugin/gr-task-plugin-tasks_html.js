@@ -22,10 +22,13 @@ export const htmlTemplate = Polymer.html`
       <style>
         /* Matching colors with core code. */
         .green {
-          color: #9fcc6b;
+          color: var(--green-700);
         }
         .red {
-          color: #FFA62F;
+          color: var(--red-700);
+        }
+        .orange {
+          color: var(--orange-700);
         }
       </style>
       <template is="dom-if" if="[[task.icon.id]]">
