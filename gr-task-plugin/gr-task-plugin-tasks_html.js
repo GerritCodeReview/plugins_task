@@ -20,12 +20,15 @@ export const htmlTemplate = Polymer.html`
   <template is="dom-if" if="[[_can_show(show_all, task)]]">
     <li>
       <style>
-        /* Matching colors with core code. */
+        /* Matching colors with core theme. */
         .green {
-          color: #9fcc6b;
+          color: var(--success-foreground);
         }
         .red {
-          color: #FFA62F;
+          color: var(--error-foreground);
+        }
+        .orange {
+          color: var(--warning-foreground);
         }
         .links {
           color: var(--link-color);
