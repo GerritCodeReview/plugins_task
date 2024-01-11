@@ -69,15 +69,15 @@ export const htmlTemplate = Polymer.html`
       background: var(--warning-background-focus);
     }
     .taskSummaryChip.ready {
-      border-color: var(--warning-foreground);
-      background: var(--warning-background);
+      border-color: var(--success-foreground);
+      background: var(--success-background);
     }
     .taskSummaryChip.ready:hover {
-      background: var(--warning-background-hover);
+      background: var(--success-background-hover);
       box-shadow: var(--elevation-level-1);
     }
     .taskSummaryChip.ready:focus-within {
-      background: var(--warning-background-focus);
+      background: var(--success-background-focus);
     }
     .taskSummaryChip.invalid {
       color: var(--error-foreground);
