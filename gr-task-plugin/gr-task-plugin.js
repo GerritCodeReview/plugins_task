@@ -181,7 +181,7 @@ class GrTaskPlugin extends Polymer.Element {
         break;
       case 'WAITING':
         icon.id = 'gr-icons:pause';
-        icon.color = 'red';
+        icon.color = 'orange';
         icon.tooltip = 'Waiting';
         break;
       case 'DUPLICATE':
