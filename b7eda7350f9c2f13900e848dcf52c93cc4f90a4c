@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "84015fd0_86bb909b",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 17
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-15T03:47:09Z",
+      "side": 1,
+      "message": "╰─❯ bazel test //...\nINFO: Invocation ID: 2996b4a4-7fbf-48d6-8b80-c8a3c4157294\nINFO: Analyzed 2 targets (0 packages loaded, 0 targets configured).\nINFO: Found 2 test targets...\nINFO: Elapsed time: 162.091s, Critical Path: 161.90s\nINFO: 6 processes: 3 linux-sandbox, 2 local, 1 worker.\nINFO: Build completed successfully, 6 total actions\n//:docker-tests                                                          PASSED in 160.7s\n//:junit-tests                                                           PASSED in 0.9s\n\nINFO: Build completed successfully, 6 total actions",
+      "revId": "b7eda7350f9c2f13900e848dcf52c93cc4f90a4c",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
