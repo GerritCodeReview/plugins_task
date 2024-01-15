@@ -1,13 +1,9 @@
 {
   "checks": {
     "zuul-check:plugins_task": {
-      "state": "FAILED",
-      "message": "Change failed",
-      "url": "https://ci.gerritcodereview.com/t/gerrit/buildset/0e5eb4f8b03c41c6ad8f60b729ef6049",
-      "started": "2024-01-13T16:43:40Z",
-      "finished": "2024-01-13T17:45:19Z",
+      "state": "NOT_STARTED",
       "created": "2024-01-13T16:43:41Z",
-      "updated": "2024-01-13T17:45:19Z"
+      "updated": "2024-01-15T06:56:03Z"
     }
   }
 }
