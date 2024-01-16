@@ -86,15 +86,15 @@ class GrTaskSummary extends Polymer.Element {
     });
   }
 
-  _show_no_tasks(is_loading, ready_count,
+  _can_show_summary(is_loading, ready_count,
       fail_count, invalid_count,
       waiting_count, duplicate_count,
       pass_count) {
     if (is_loading || ready_count || fail_count || invalid_count ||
       waiting_count || duplicate_count || pass_count) {
-      return false;
+      return true;
     }
-    return true;
+    return false;
   }
 }
 

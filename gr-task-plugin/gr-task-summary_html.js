@@ -69,18 +69,17 @@ export const htmlTemplate = Polymer.html`
   <div class="task_summary">
     <table>
       <tr>
-        <td class="key">Tasks</td>
-        <td class="value">
-          <gr-task-chip chip_style="loading" hidden$="[[!is_loading]]">loading...</gr-task-chip>
-          <gr-task-chip chip_style="fail" hidden$="[[!fail_count]]">[[fail_count]] blocked</gr-task-chip>
-          <gr-task-chip chip_style="invalid" hidden$="[[!invalid_count]]">[[invalid_count]] invalid</gr-task-chip>
-          <gr-task-chip chip_style="duplicate" hidden$="[[!duplicate_count]]">[[duplicate_count]] duplicate</gr-task-chip>
-          <gr-task-chip chip_style="ready" hidden$="[[!ready_count]]">[[ready_count]] ready</gr-task-chip>
-          <gr-task-chip chip_style="waiting" hidden$="[[!waiting_count]]">[[waiting_count]] waiting</gr-task-chip>
-          <gr-task-chip chip_style="success" hidden$="[[!pass_count]]">[[pass_count]] passed</gr-task-chip>
-          <template is="dom-if" if="[[_show_no_tasks(is_loading, ready_count, fail_count, invalid_count, waiting_count, duplicate_count, pass_count)]]">
-            <td>No tasks</td>
-          </template>
+        <template is="dom-if" if="[[_can_show_summary(is_loading, ready_count, fail_count, invalid_count, waiting_count, duplicate_count, pass_count)]]">
+          <td class="key">Tasks</td>
+          <td class="value">
+            <gr-task-chip chip_style="loading" hidden$="[[!is_loading]]">loading...</gr-task-chip>
+            <gr-task-chip chip_style="fail" hidden$="[[!fail_count]]">[[fail_count]] blocked</gr-task-chip>
+            <gr-task-chip chip_style="invalid" hidden$="[[!invalid_count]]">[[invalid_count]] invalid</gr-task-chip>
+            <gr-task-chip chip_style="duplicate" hidden$="[[!duplicate_count]]">[[duplicate_count]] duplicate</gr-task-chip>
+            <gr-task-chip chip_style="ready" hidden$="[[!ready_count]]">[[ready_count]] ready</gr-task-chip>
+            <gr-task-chip chip_style="waiting" hidden$="[[!waiting_count]]">[[waiting_count]] waiting</gr-task-chip>
+            <gr-task-chip chip_style="success" hidden$="[[!pass_count]]">[[pass_count]] passed</gr-task-chip>
+        </template>
         </td>
       </tr>
     </table>
