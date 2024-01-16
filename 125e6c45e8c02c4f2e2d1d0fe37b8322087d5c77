@@ -1,0 +1,67 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24c5a539_2e4cc265",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-01-16T23:24:31Z",
+      "side": 1,
+      "message": "I think you missed updating this to be `ConfigSourcedValue`",
+      "range": {
+        "startLine": 14,
+        "startChar": 48,
+        "endLine": 14,
+        "endChar": 63
+      },
+      "revId": "125e6c45e8c02c4f2e2d1d0fe37b8322087d5c77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46171528_f9d64a1b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-01-16T23:24:31Z",
+      "side": 1,
+      "message": "Was this required for this change to work correctly or is it a performance optimization? If it\u0027s not required, can you split it into a separate change and either put it at the beginning or end of the series?",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 34
+      },
+      "revId": "125e6c45e8c02c4f2e2d1d0fe37b8322087d5c77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d0c6255a_b1009902",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/Preloader.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 165,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-01-16T23:24:31Z",
+      "side": 1,
+      "message": "Could you have done this in the previous change? Or a completely independent change? (related to my commit message question)",
+      "revId": "125e6c45e8c02c4f2e2d1d0fe37b8322087d5c77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
