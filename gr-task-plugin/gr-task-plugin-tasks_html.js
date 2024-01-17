@@ -27,6 +27,11 @@ export const htmlTemplate = Polymer.html`
         .red {
           color: #FFA62F;
         }
+        .links {
+          color: var(--link-color);
+          cursor: pointer;
+          text-decoration: underline;
+        }
       </style>
       <template is="dom-if" if="[[task.icon.id]]">
         <gr-tooltip-content
