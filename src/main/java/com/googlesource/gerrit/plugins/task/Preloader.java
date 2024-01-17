@@ -17,7 +17,6 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
-import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
 import com.googlesource.gerrit.plugins.task.statistics.StatisticsMap;
 import java.io.IOException;
@@ -163,10 +162,6 @@ public class Preloader {
 
   protected Optional<Task> getOptionalTask(TaskKey key) throws IOException, ConfigInvalidException {
     return taskConfigCache.getTaskConfig(key.subSection().file()).getOptionalTask(key.task());
-  }
-
-  public void masquerade(PatchSetArgument psa) {
-    taskConfigCache.masquerade(psa);
   }
 
   protected static <S, K, V> void preloadField(

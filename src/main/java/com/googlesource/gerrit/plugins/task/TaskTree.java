@@ -37,7 +37,6 @@ import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactoryType;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.TaskConfig.TasksFactory;
-import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import com.googlesource.gerrit.plugins.task.properties.Properties;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMapOfCollection;
@@ -124,10 +123,6 @@ public class TaskTree {
     this.matchCache = new MatchCache(predicateCache);
     this.taskExpressionFactory = taskExpressionFactory;
     this.preloader = preloader;
-  }
-
-  public void masquerade(PatchSetArgument psa) {
-    preloader.masquerade(psa);
   }
 
   public List<Node> getRootNodes(ChangeData changeData)

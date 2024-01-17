@@ -24,6 +24,7 @@ import com.google.gerrit.server.change.ChangePluginDefinedInfoFactory;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.TaskTree.Node;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
@@ -104,6 +105,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   protected final PredicateCache predicateCache;
   protected final boolean hasViewPathsCapability;
   protected final TaskPath.Factory taskPathFactory;
+  protected final TaskConfigCache taskConfigCache;
 
   protected Modules.MyOptions options;
   protected TaskPluginAttribute lastTaskPluginAttribute;
@@ -115,7 +117,8 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       TaskTree definitions,
       PredicateCache predicateCache,
       PermissionBackend permissionBackend,
-      TaskPath.Factory taskPathFactory) {
+      TaskPath.Factory taskPathFactory,
+      Provider<TaskConfigCache> taskConfigCacheProvider) {
     this.pluginName = pluginName;
     this.definitions = definitions;
     this.predicateCache = predicateCache;
@@ -124,6 +127,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
             .currentUser()
             .testOrFalse(new PluginPermission(this.pluginName, ViewPathsCapability.VIEW_PATHS));
     this.taskPathFactory = taskPathFactory;
+    this.taskConfigCache = taskConfigCacheProvider.get();
   }
 
   @Override
@@ -134,7 +138,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     if (options.all || options.onlyApplicable || options.onlyInvalid) {
       initStatistics();
       for (PatchSetArgument psa : options.patchSetArguments) {
-        definitions.masquerade(psa);
+        taskConfigCache.masquerade(psa);
       }
       cds.forEach(cd -> pluginInfosByChange.put(cd.getId(), createWithExceptions(cd)));
       if (lastTaskPluginAttribute != null) {
