@@ -52,6 +52,24 @@
       "parentUuid": "c5307fde_e9e1979d",
       "revId": "27a96e08054a887aa4d6d1065756bcf5a2604aef",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d443028a_b3499d8d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-01-17T23:24:21Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aa25ea89_af743ad0",
+      "revId": "27a96e08054a887aa4d6d1065756bcf5a2604aef",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
