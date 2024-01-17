@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a57db0d1_9a42ef6c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-17T19:25:38Z",
+      "side": 1,
+      "message": "Since you now have access to the taskConfigCache directly, this should probably be set directly on it instead of going through the preloader.",
+      "revId": "0e48d05d7eac6c59d73987ce537f2d05a1d89d6d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
