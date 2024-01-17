@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "659611b2_f59826d0",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-17T19:28:27Z",
+      "side": 1,
+      "message": "I think you should still be able to use Injection here if you ask the injector in the Provider for this class.",
+      "revId": "27a96e08054a887aa4d6d1065756bcf5a2604aef",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
