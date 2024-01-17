@@ -16,6 +16,24 @@
       "message": "I think you should still be able to use Injection here if you ask the injector in the Provider for this class.",
       "revId": "27a96e08054a887aa4d6d1065756bcf5a2604aef",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c5307fde_e9e1979d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-01-17T22:49:37Z",
+      "side": 1,
+      "message": "I do think this current code goes against https://github.com/google/guice/wiki/InjectOnlyDirectDependencies\n\nIs your suggestion to inject an Injector in the Provider constructor above and then replace the `new TaskConfigCache(...)` lines above with `injector.getInstance(TaskConfigCache.class)`? I think that would work, but it seems too low level for what we\u0027re trying to do.\n\nWould creating a (private?) TaskConfigCache.Factory and injecting that into the TaskConfigCache.Provider work? Then you\u0027d call `taskConfigCacheFactory.create()` instead of manually creating the new instances. I think if you make the Factory private that would prevent others from injecting it (instead of the Provider).",
+      "parentUuid": "659611b2_f59826d0",
+      "revId": "27a96e08054a887aa4d6d1065756bcf5a2604aef",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
