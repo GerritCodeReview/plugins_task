@@ -35,6 +35,7 @@ public class Modules {
   public static class Module extends FactoryModule {
     @Override
     protected void configure() {
+      bind(TaskConfigCache.class).toProvider(TaskConfigCache.Provider.class);
       bind(CapabilityDefinition.class)
           .annotatedWith(Exports.named(ViewPathsCapability.VIEW_PATHS))
           .to(ViewPathsCapability.class);
