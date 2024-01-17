@@ -49,6 +49,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0400f347_9a1ba73a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 14
+      },
+      "lineNbr": 18,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-17T03:43:03Z",
+      "side": 1,
+      "message": "Yes Nasser, it is required for this change. As we are now injecting TaskConfigFactory in multiple places, we don\u0027t want to duplicate the task config cache. Probably we can have this change as a parent to this one. Let me do that.",
+      "parentUuid": "46171528_f9d64a1b",
+      "range": {
+        "startLine": 18,
+        "startChar": 0,
+        "endLine": 18,
+        "endChar": 34
+      },
+      "revId": "125e6c45e8c02c4f2e2d1d0fe37b8322087d5c77",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "d0c6255a_b1009902",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/Preloader.java",
         "patchSetId": 14
