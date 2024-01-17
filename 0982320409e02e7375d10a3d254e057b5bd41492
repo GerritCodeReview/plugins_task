@@ -16,6 +16,24 @@
       "message": "Can you post before and after screenshots?",
       "revId": "0982320409e02e7375d10a3d254e057b5bd41492",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4db76685_525785d3",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-01-17T09:56:08Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8f45f090_8c7f5d56",
+      "revId": "0982320409e02e7375d10a3d254e057b5bd41492",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
