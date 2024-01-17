@@ -15,9 +15,8 @@
 package com.googlesource.gerrit.plugins.task;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
+import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
-import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
 import com.googlesource.gerrit.plugins.task.statistics.StatisticsMap;
 import java.io.IOException;
@@ -32,6 +31,10 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /** Use to pre-load a task definition with values from its preload-task definition. */
 public class Preloader {
+  public interface Factory {
+    Preloader create(@Assisted TaskConfigCache taskConfigCache);
+  }
+
   public static class Statistics {
     protected Object optionalTaskByExpressionCache;
     protected long loaded;
@@ -48,9 +51,8 @@ public class Preloader {
 
   @Inject
   public Preloader(
-      Provider<TaskConfigCache> taskConfigCacheProvider,
-      TaskExpression.Factory taskExpressionFactory) {
-    this.taskConfigCache = taskConfigCacheProvider.get();
+      TaskExpression.Factory taskExpressionFactory, @Assisted TaskConfigCache taskConfigCache) {
+    this.taskConfigCache = taskConfigCache;
     this.taskExpressionFactory = taskExpressionFactory;
   }
 
@@ -163,10 +165,6 @@ public class Preloader {
 
   protected Optional<Task> getOptionalTask(TaskKey key) throws IOException, ConfigInvalidException {
     return taskConfigCache.getTaskConfig(key.subSection().file()).getOptionalTask(key.task());
-  }
-
-  public void masquerade(PatchSetArgument psa) {
-    taskConfigCache.masquerade(psa);
   }
 
   protected static <S, K, V> void preloadField(

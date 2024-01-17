@@ -104,6 +104,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   protected final PredicateCache predicateCache;
   protected final boolean hasViewPathsCapability;
   protected final TaskPath.Factory taskPathFactory;
+  protected final TaskConfigCache taskConfigCache;
 
   protected Modules.MyOptions options;
   protected TaskPluginAttribute lastTaskPluginAttribute;
@@ -112,18 +113,20 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   @Inject
   public TaskAttributeFactory(
       String pluginName,
-      TaskTree definitions,
+      TaskTree.Factory taskTreeFactory,
       PredicateCache predicateCache,
       PermissionBackend permissionBackend,
-      TaskPath.Factory taskPathFactory) {
+      TaskPath.Factory taskPathFactory,
+      TaskConfigCache taskConfigCache) {
     this.pluginName = pluginName;
-    this.definitions = definitions;
+    this.definitions = taskTreeFactory.create(taskConfigCache);
     this.predicateCache = predicateCache;
     this.hasViewPathsCapability =
         permissionBackend
             .currentUser()
             .testOrFalse(new PluginPermission(this.pluginName, ViewPathsCapability.VIEW_PATHS));
     this.taskPathFactory = taskPathFactory;
+    this.taskConfigCache = taskConfigCache;
   }
 
   @Override
@@ -134,7 +137,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     if (options.all || options.onlyApplicable || options.onlyInvalid) {
       initStatistics();
       for (PatchSetArgument psa : options.patchSetArguments) {
-        definitions.masquerade(psa);
+        taskConfigCache.masquerade(psa);
       }
       cds.forEach(cd -> pluginInfosByChange.put(cd.getId(), createWithExceptions(cd)));
       if (lastTaskPluginAttribute != null) {

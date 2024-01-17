@@ -32,12 +32,12 @@ import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.assistedinject.Assisted;
 import com.googlesource.gerrit.plugins.task.TaskConfig.External;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactoryType;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.TaskConfig.TasksFactory;
-import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import com.googlesource.gerrit.plugins.task.properties.Properties;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMapOfCollection;
@@ -68,6 +68,10 @@ import org.eclipse.jgit.util.StringUtils;
  */
 public class TaskTree {
   private static final FluentLogger log = FluentLogger.forEnclosingClass();
+
+  public interface Factory {
+    TaskTree create(@Assisted TaskConfigCache taskConfigCache);
+  }
 
   @FunctionalInterface
   public interface NodeFactory {
@@ -114,7 +118,8 @@ public class TaskTree {
       Provider<ChangeQueryProcessor> changeQueryProcessorProvider,
       PredicateCache predicateCache,
       TaskExpression.Factory taskExpressionFactory,
-      Preloader preloader) {
+      Preloader.Factory preloaderFactory,
+      @Assisted TaskConfigCache taskConfigCache) {
     this.accountResolver = accountResolver;
     this.allUsers = allUsers;
     this.user = user != null ? user : anonymousUser;
@@ -123,11 +128,7 @@ public class TaskTree {
     this.predicateCache = predicateCache;
     this.matchCache = new MatchCache(predicateCache);
     this.taskExpressionFactory = taskExpressionFactory;
-    this.preloader = preloader;
-  }
-
-  public void masquerade(PatchSetArgument psa) {
-    preloader.masquerade(psa);
+    this.preloader = preloaderFactory.create(taskConfigCache);
   }
 
   public List<Node> getRootNodes(ChangeData changeData)

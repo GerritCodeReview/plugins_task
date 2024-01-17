@@ -35,13 +35,14 @@ public class Modules {
   public static class Module extends FactoryModule {
     @Override
     protected void configure() {
-      install(new TaskConfigCache.Module());
       bind(CapabilityDefinition.class)
           .annotatedWith(Exports.named(ViewPathsCapability.VIEW_PATHS))
           .to(ViewPathsCapability.class);
       factory(TaskPath.Factory.class);
       factory(TaskReference.Factory.class);
       factory(TaskExpression.Factory.class);
+      factory(TaskTree.Factory.class);
+      factory(Preloader.Factory.class);
 
       bind(ChangePluginDefinedInfoFactory.class)
           .annotatedWith(Exports.named("task"))
