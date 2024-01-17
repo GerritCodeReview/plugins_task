@@ -15,6 +15,7 @@
 package com.googlesource.gerrit.plugins.task;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
@@ -38,7 +39,7 @@ public class Preloader {
     protected long preloadedFromDefinition;
   }
 
-  protected final TaskConfigFactory taskConfigFactory;
+  protected final TaskConfigCache taskConfigCache;
   protected final TaskExpression.Factory taskExpressionFactory;
   protected final StatisticsMap<TaskExpressionKey, Optional<Task>> optionalTaskByExpression =
       new HitHashMap<>();
@@ -47,17 +48,18 @@ public class Preloader {
 
   @Inject
   public Preloader(
-      TaskConfigFactory taskConfigFactory, TaskExpression.Factory taskExpressionFactory) {
-    this.taskConfigFactory = taskConfigFactory;
+      Provider<TaskConfigCache> taskConfigCacheProvider,
+      TaskExpression.Factory taskExpressionFactory) {
+    this.taskConfigCache = taskConfigCacheProvider.get();
     this.taskExpressionFactory = taskExpressionFactory;
   }
 
   public List<Task> getRootTasks() throws IOException, ConfigInvalidException {
-    return getTasks(taskConfigFactory.getRootConfig(), TaskConfig.SECTION_ROOT);
+    return getTasks(taskConfigCache.getRootConfig(), TaskConfig.SECTION_ROOT);
   }
 
   public List<Task> getTasks(FileKey file) throws IOException, ConfigInvalidException {
-    return getTasks(taskConfigFactory.getTaskConfig(file), TaskConfig.SECTION_TASK);
+    return getTasks(taskConfigCache.getTaskConfig(file), TaskConfig.SECTION_TASK);
   }
 
   protected List<Task> getTasks(TaskConfig cfg, String type) throws IOException {
@@ -160,11 +162,11 @@ public class Preloader {
   }
 
   protected Optional<Task> getOptionalTask(TaskKey key) throws IOException, ConfigInvalidException {
-    return taskConfigFactory.getTaskConfig(key.subSection().file()).getOptionalTask(key.task());
+    return taskConfigCache.getTaskConfig(key.subSection().file()).getOptionalTask(key.task());
   }
 
   public void masquerade(PatchSetArgument psa) {
-    taskConfigFactory.masquerade(psa);
+    taskConfigCache.masquerade(psa);
   }
 
   protected static <S, K, V> void preloadField(
