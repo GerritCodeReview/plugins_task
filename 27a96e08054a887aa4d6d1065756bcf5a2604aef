@@ -34,6 +34,24 @@
       "parentUuid": "659611b2_f59826d0",
       "revId": "27a96e08054a887aa4d6d1065756bcf5a2604aef",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "aa25ea89_af743ad0",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-17T23:03:57Z",
+      "side": 1,
+      "message": "Yes, that was what I was suggesting. Sorry, I should have explained the reason for my suggestion. Mainly I don\u0027t like the duplication of all the injected stuff into the provider only to pass it down to the TaskConfigCache, that removes the benefits of injection. If your suggestion works (I think it would), then maybe it would do that nicely.",
+      "parentUuid": "c5307fde_e9e1979d",
+      "revId": "27a96e08054a887aa4d6d1065756bcf5a2604aef",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
