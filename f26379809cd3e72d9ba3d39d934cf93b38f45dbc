@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6173388b_1179f7e7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfigCache.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 60,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-17T23:27:03Z",
+      "side": 1,
+      "message": "The login in here feels like something that should get generalized into PerThreadCache (not in the change obviously).",
+      "revId": "f26379809cd3e72d9ba3d39d934cf93b38f45dbc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
