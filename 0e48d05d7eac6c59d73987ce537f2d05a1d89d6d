@@ -34,6 +34,24 @@
       "parentUuid": "a57db0d1_9a42ef6c",
       "revId": "0e48d05d7eac6c59d73987ce537f2d05a1d89d6d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "60aa4255_884942c2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 15
+      },
+      "lineNbr": 133,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-17T23:07:49Z",
+      "side": 1,
+      "message": "I think it is related because adding the cache to this class suddenly makes the code convoluted. I would encourage not having a \"mid\" point change where the code feels worse off than before it and then fixing it after.",
+      "parentUuid": "88dd1202_5de4a850",
+      "revId": "0e48d05d7eac6c59d73987ce537f2d05a1d89d6d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
