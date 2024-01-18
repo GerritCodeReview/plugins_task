@@ -88,6 +88,24 @@
       "parentUuid": "bd2f3b7f_274e88df",
       "revId": "7b6bb2401f90549dcb2152919ad2410a976def1b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "86ab7370_20a33a2b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-01-18T17:13:03Z",
+      "side": 1,
+      "message": "I think the issue is a bit of a problem with this class conflating being a cache, and a masquerading layer on top of the cache. The masquerading layer needs to be configured, and it needs to maintained (it cannot be flushed), the cache can be flushed. If there were a PerThreadConfig in addition to the PerThreadCache, we could use that. But to be honest, the per thread thing feels fine for the cache, but somewhat not quite right for this config because it ties to a specific task operation, and one could conceivably imagine more than one task operation being done on a thread where the configs should not \"blead\" into each other. The \"scope\" of the operation begins with the TaskAttributeFactory class, and should stay \"below\" that class, it should not really blead \"up\" to a per thread concept. \n\nSolving this might be as simple as using assisted injection for the classes starting from the TaskAttributeFactory down to the TastTree and then to the Preloader. The assisted piece could be the entire TaskConfigCache, or to be cleaner the masquerading could be split out of that cache and be the only piece that gets assisted. But I see that split as bonus, not something required in these changes to make things work (i.e. leaving the combined functionality is not a regression).",
+      "parentUuid": "4b1ed206_606ab9bf",
+      "revId": "7b6bb2401f90549dcb2152919ad2410a976def1b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
