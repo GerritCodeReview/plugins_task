@@ -34,6 +34,24 @@
       "parentUuid": "96ca6df6_1de6543a",
       "revId": "7b6bb2401f90549dcb2152919ad2410a976def1b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3e1f93ee_2f291cdb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1096442
+      },
+      "writtenOn": "2024-01-18T05:33:13Z",
+      "side": 1,
+      "message": "I think Nasser is right. When I was working on PerThreadCache change, the docker tests on subtasks-external failed when the PerThreadCache did not work as expected. Since the docker tests are passing on this whole series, this masquerade caching is working as expected.",
+      "parentUuid": "d55e255e_82a799b5",
+      "revId": "7b6bb2401f90549dcb2152919ad2410a976def1b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
