@@ -16,6 +16,24 @@
       "message": "If there\u0027s a possibility that the provider flushes the cached taskConfigCache from the PerThreadCache before the Preloader gets its copy of that cache, then these masquerades might get lost. I\u0027m not sure how to fix that.",
       "revId": "7b6bb2401f90549dcb2152919ad2410a976def1b",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d55e255e_82a799b5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskAttributeFactory.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 140,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-01-18T01:09:57Z",
+      "side": 1,
+      "message": "\u003e If there\u0027s a possibility that the provider flushes the cached taskConfigCache\n\nThere\u0027s no flushing in a PerThreadCache, so I don\u0027t think that\u0027s an issue?",
+      "parentUuid": "96ca6df6_1de6543a",
+      "revId": "7b6bb2401f90549dcb2152919ad2410a976def1b",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
