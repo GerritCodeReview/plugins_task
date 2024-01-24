@@ -2115,60 +2115,10 @@ file: `All-Projects:refs/meta/config:task.config`
             {
                "applicable" : true,
                "change" : _change2_number,
-               "hasPass" : true,
+               "hasPass" : false,
+               "hint" : "Duplicate task is non blocking and empty to break the loop",
                "name" : "_change2_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory changes loop)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "change" : _change1_number,
-                           "hasPass" : true,
-                           "name" : "_change1_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : false,
-                                 "name" : "task (tasks-factory changes loop)",
-                                 "status" : "PASS",
-                                 "subTasks" : [
-                                    {
-                                       "applicable" : true,
-                                       "change" : _change1_number,
-                                       "hasPass" : false,
-                                       "hint" : "Duplicate task is non blocking and empty to break the loop",
-                                       "name" : "_change1_number",
-                                       "status" : "DUPLICATE"
-                                    },
-                                    {
-                                       "applicable" : true,
-                                       "change" : _change2_number,
-                                       "hasPass" : false,
-                                       "hint" : "Duplicate task is non blocking and empty to break the loop",
-                                       "name" : "_change2_number",
-                                       "status" : "DUPLICATE"
-                                    }
-                                 ]
-                              }
-                           ]
-                        },
-                        {
-                           "applicable" : true,
-                           "change" : _change2_number,
-                           "hasPass" : false,
-                           "hint" : "Duplicate task is non blocking and empty to break the loop",
-                           "name" : "_change2_number",
-                           "status" : "DUPLICATE"
-                        }
-                     ]
-                  }
-               ]
+               "status" : "DUPLICATE"
             }
          ]
       }

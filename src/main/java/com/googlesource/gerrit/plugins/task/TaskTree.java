@@ -86,6 +86,32 @@ public class TaskTree {
     public transient int summaryCount;
   }
 
+  public class NodeSet {
+    protected ChangeData changeData;
+    protected Set<String> nodes = new HashSet<>();
+
+    public NodeSet() {
+      changeData = TaskTree.this.changeData;
+    }
+
+    public boolean contains(String nodeKey) {
+      clearIfNeeded();
+      return nodes.contains(nodeKey);
+    }
+
+    public boolean add(String nodeKey) {
+      clearIfNeeded();
+      return nodes.add(nodeKey);
+    }
+
+    protected void clearIfNeeded() {
+      if (changeData != TaskTree.this.changeData) {
+        nodes.clear();
+        changeData = TaskTree.this.changeData;
+      }
+    }
+  }
+
   protected static final String TASK_DIR = "task";
 
   protected final AccountResolver accountResolver;
@@ -101,6 +127,7 @@ public class TaskTree {
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
   protected final StatisticsMap<String, List<ChangeData>> changesByNamesFactoryQuery =
       new HitHashMap<>();
+  protected final Map<SubSectionKey, NodeSet> changeTasksByBaseTasksFactory = new HashMap<>();
   protected final StatisticsMap<SubSectionKey, List<Task>> definitionsBySubSection =
       new HitHashMapOfCollection<>();
   protected final StatisticsMap<SubSectionKey, Map<BranchNameKey, List<Task>>>
@@ -138,6 +165,7 @@ public class TaskTree {
     this.changeData = changeData;
     root.path = Collections.emptyList();
     root.duplicateKeys = Collections.emptyList();
+    changeTasksByBaseTasksFactory.clear();
     return root.getSubNodes();
   }
 
@@ -165,6 +193,10 @@ public class TaskTree {
       return TaskTree.this.changeData;
     }
 
+    protected Map<SubSectionKey, NodeSet> getChangeTasksByBaseTasksFactory() {
+      return TaskTree.this.changeTasksByBaseTasksFactory;
+    }
+
     protected boolean isTrusted() {
       return true;
     }
@@ -184,7 +216,10 @@ public class TaskTree {
         return createFromPreloaded(def, (parent, definition) -> new Node(parent, definition));
       }
 
-      public Node createFromPreloaded(Task def, ChangeData changeData) {
+      public Node createFromPreloaded(
+          Task def,
+          ChangeData changeData,
+          Map<SubSectionKey, NodeSet> changeTasksByBaseTasksFactory) {
         return createFromPreloaded(
             def,
             (parent, definition) ->
@@ -197,6 +232,11 @@ public class TaskTree {
                   @Override
                   public boolean isChange() {
                     return true;
+                  }
+
+                  @Override
+                  protected Map<SubSectionKey, NodeSet> getChangeTasksByBaseTasksFactory() {
+                    return changeTasksByBaseTasksFactory;
                   }
                 });
       }
@@ -332,6 +372,22 @@ public class TaskTree {
     }
 
     @Override
+    protected Map<SubSectionKey, NodeSet> getChangeTasksByBaseTasksFactory() {
+      return parent.getChangeTasksByBaseTasksFactory();
+    }
+
+    protected Map<SubSectionKey, NodeSet> getChangeTaskByBaseTasksFactory(
+        SubSectionKey subSection) {
+      Map<SubSectionKey, NodeSet> changeTasksByBaseTasksFactory =
+          getChangeTasksByBaseTasksFactory();
+      if (!changeTasksByBaseTasksFactory.containsKey(subSection)) {
+        changeTasksByBaseTasksFactory = new HashMap<>(changeTasksByBaseTasksFactory);
+        changeTasksByBaseTasksFactory.put(subSection, new NodeSet());
+      }
+      return changeTasksByBaseTasksFactory;
+    }
+
+    @Override
     protected boolean isTrusted() {
       return parent.isTrusted() && !task.isMasqueraded;
     }
@@ -464,11 +520,14 @@ public class TaskTree {
           throws IOException {
         try {
           if (namesFactory.changes != null) {
+            Map<SubSectionKey, NodeSet> changeTasksByBaseTasksFactory =
+                getChangeTaskByBaseTasksFactory(tasksFactory.subSection);
             for (ChangeData changeData : query(namesFactory.changes, task.isVisible)) {
               addPreloaded(
                   preloader.preload(
                       task.config.new Task(tasksFactory, changeData.getId().toString())),
-                  changeData);
+                  changeData,
+                  changeTasksByBaseTasksFactory);
             }
             return;
           }
@@ -483,8 +542,11 @@ public class TaskTree {
         nodes.addAll(factory.createFromPreloaded(defs));
       }
 
-      public void addPreloaded(Task def, ChangeData changeData) {
-        nodes.add(factory.createFromPreloaded(def, changeData));
+      public void addPreloaded(
+          Task def,
+          ChangeData changeData,
+          Map<SubSectionKey, NodeSet> changeTasksByBaseTasksFactory) {
+        nodes.add(factory.createFromPreloaded(def, changeData, changeTasksByBaseTasksFactory));
       }
 
       public void addPreloaded(Task def) {
