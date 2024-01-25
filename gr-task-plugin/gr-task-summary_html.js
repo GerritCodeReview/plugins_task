@@ -75,10 +75,10 @@ export const htmlTemplate = Polymer.html`
             <gr-task-chip chip_style="loading" hidden$="[[!is_loading]]">loading...</gr-task-chip>
             <gr-task-chip chip_style="fail" hidden$="[[!fail_count]]">[[fail_count]] blocked</gr-task-chip>
             <gr-task-chip chip_style="invalid" hidden$="[[!invalid_count]]">[[invalid_count]] invalid</gr-task-chip>
-            <gr-task-chip chip_style="duplicate" hidden$="[[!duplicate_count]]">[[duplicate_count]] duplicate</gr-task-chip>
-            <gr-task-chip chip_style="ready" hidden$="[[!ready_count]]">[[ready_count]] needed</gr-task-chip>
             <gr-task-chip chip_style="waiting" hidden$="[[!waiting_count]]">[[waiting_count]] waiting</gr-task-chip>
+            <gr-task-chip chip_style="ready" hidden$="[[!ready_count]]">[[ready_count]] needed</gr-task-chip>
             <gr-task-chip chip_style="success" hidden$="[[!pass_count]]">[[pass_count]] passed</gr-task-chip>
+            <gr-task-chip chip_style="duplicate" hidden$="[[!duplicate_count]]">[[duplicate_count]] duplicate</gr-task-chip>
         </template>
         </td>
       </tr>

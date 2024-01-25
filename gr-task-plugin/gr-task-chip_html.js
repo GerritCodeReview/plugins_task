@@ -92,16 +92,16 @@ export const htmlTemplate = Polymer.html`
       background: var(--error-background-focus);
     }
     .taskSummaryChip.duplicate {
-      color: var(--error-foreground);
-      border-color: var(--error-foreground);
-      background: var(--error-background);
+      color: var(--success-foreground);
+      border-color: var(--success-foreground);
+      background: var(--success-background);
     }
     .taskSummaryChip.duplicate:hover {
-      background: var(--error-background-hover);
+      background: var(--success-background-hover);
       box-shadow: var(--elevation-level-1);
     }
     .taskSummaryChip.duplicate:focus-within {
-      background: var(--error-background-focus);
+      background: var(--success-background-focus);
     }
     .taskSummaryChip.fail {
       color: var(--error-foreground);
