@@ -1,19 +1,19 @@
 {
   "name": "task",
-  "version": "3.8.0-SNAPSHOT",
+  "version": "3.9.1-SNAPSHOT",
   "description": "Task Plugin",
   "dependencies": {
-    "@bazel/rollup": "^5.5.0",
-    "@bazel/terser": "^5.5.0"
+    "@bazel/rollup": "^5.8.1",
+    "@bazel/terser": "^5.8.1"
   },
   "devDependencies": {
-    "eslint": "^8.16.0",
+    "eslint": "^8.49.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-html": "^6.2.0",
-    "eslint-plugin-import": "^2.26.0",
-    "eslint-plugin-jsdoc": "^39.6.4",
-    "rollup": "^2.45.2",
-    "terser": "^5.6.1"
+    "eslint-plugin-html": "^7.1.0",
+    "eslint-plugin-import": "^2.28.1",
+    "eslint-plugin-jsdoc": "^44.2.7",
+    "rollup": "^2.79.1",
+    "terser": "~5.8.0"
   },
   "scripts": {
     "eslint": "./node_modules/eslint/bin/eslint.js --ext .html,.js gr-task-plugin || exit 0",

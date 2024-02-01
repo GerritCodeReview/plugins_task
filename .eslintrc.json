@@ -169,7 +169,6 @@
       "jsdoc/check-types": 0,
       "jsdoc/implements-on-classes": 2,
       "jsdoc/match-description": 0,
-      "jsdoc/newline-after-description": 2,
       "jsdoc/no-types": 0,
       "jsdoc/no-undefined-types": 0,
       "jsdoc/require-description": 0,
