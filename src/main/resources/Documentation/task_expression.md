@@ -15,7 +15,7 @@ it to be INVALID, follow the task name with pipe (`|`) character. This feature
 is particularly useful when a property is used in the task name.
 
 ```
-    preload-task = Optional task {$_name} |
+    preload-task = Optional task ${_name} |
 ```
 
 To define an alternate task to load when an optional task does not exist,
@@ -23,8 +23,8 @@ list the alternate task name after the pipe (`|`) character. This feature
 may be chained together as many times as needed.
 
 ```
-    subtask = Optional Subtask {$_name} |
-              Backup Optional Subtask {$_name} Backup |
+    subtask = Optional Subtask ${_name} |
+              Backup Optional Subtask ${_name} Backup |
               Default Subtask # Must exist if the above two don't!
 ```
 
