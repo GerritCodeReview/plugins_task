@@ -96,5 +96,10 @@ eslint(
         ".js",
     ],
     ignore = ".eslintignore",
-    plugins = [],
+    plugins = [
+        "@npm//eslint-config-google",
+        "@npm//eslint-plugin-html",
+        "@npm//eslint-plugin-import",
+        "@npm//eslint-plugin-jsdoc",
+    ],
 )

@@ -473,7 +473,8 @@ public class TaskTree {
             return;
           }
         } catch (StorageException e) {
-          log.atSevere().withCause(e).log("Running changes query '%s' failed", namesFactory.changes);
+          log.atSevere().withCause(e).log(
+              "Running changes query '%s' failed", namesFactory.changes);
         } catch (QueryParseException | ConfigInvalidException e) {
         }
         addInvalidNode();
