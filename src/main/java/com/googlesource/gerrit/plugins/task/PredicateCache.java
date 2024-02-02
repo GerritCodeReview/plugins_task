@@ -24,9 +24,9 @@ import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.index.change.ChangeField;
+import com.google.gerrit.server.query.change.BranchSetIndexPredicate;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeIndexPredicate;
-import com.google.gerrit.server.query.change.DestinationPredicate;
 import com.google.gerrit.server.query.change.RegexProjectPredicate;
 import com.google.gerrit.server.query.change.RegexRefPredicate;
 import com.google.gerrit.server.query.change.SubmitRequirementChangeQueryBuilder;
@@ -122,14 +122,14 @@ public class PredicateCache {
       }
       return true;
     }
-    if (predicate instanceof DestinationPredicate
+    if (predicate instanceof BranchSetIndexPredicate
         || predicate instanceof RegexProjectPredicate
         || predicate instanceof RegexRefPredicate) {
       return true;
     }
     if (predicate instanceof ChangeIndexPredicate) {
       SchemaField<ChangeData, ?> field = ((ChangeIndexPredicate) predicate).getField();
-      if (field.equals(ChangeField.PROJECT) || field.equals(ChangeField.REF)) {
+      if (field.equals(ChangeField.PROJECT_FIELD) || field.equals(ChangeField.REF_FIELD)) {
         return true;
       }
     }
