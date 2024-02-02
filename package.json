@@ -1,6 +1,6 @@
 {
   "name": "task",
-  "version": "3.7.0-SNAPSHOT",
+  "version": "3.8.0-SNAPSHOT",
   "description": "Task Plugin",
   "dependencies": {
     "@bazel/rollup": "^5.5.0",

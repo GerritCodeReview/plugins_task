@@ -5,7 +5,7 @@ workspace(
 load("//:bazlets.bzl", "load_bazlets")
 
 load_bazlets(
-    commit = "4b1d0d1c0ec0c27db25eaf111c7ea07aecb13742",
+    commit = "e977766e5670dca125c502c37339e9f3da9b329b",
     #local_path = "/home/<user>/projects/bazlets",
 )
 
@@ -24,8 +24,8 @@ build_bazel_rules_nodejs_dependencies()
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 
 node_repositories(
-    node_version = "16.15.0",
-    yarn_version = "1.22.18",
+    node_version = "17.9.1",
+    yarn_version = "1.22.19",
 )
 
 yarn_install(
