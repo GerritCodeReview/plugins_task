@@ -15,7 +15,7 @@
 package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.extensions.annotations.PluginName;
-import com.google.gerrit.index.FieldDef;
+import com.google.gerrit.index.SchemaFieldDefs.SchemaField;
 import com.google.gerrit.index.query.AndPredicate;
 import com.google.gerrit.index.query.NotPredicate;
 import com.google.gerrit.index.query.OrPredicate;
@@ -128,7 +128,7 @@ public class PredicateCache {
       return true;
     }
     if (predicate instanceof ChangeIndexPredicate) {
-      FieldDef<ChangeData, ?> field = ((ChangeIndexPredicate) predicate).getField();
+      SchemaField<ChangeData, ?> field = ((ChangeIndexPredicate) predicate).getField();
       if (field.equals(ChangeField.PROJECT) || field.equals(ChangeField.REF)) {
         return true;
       }
