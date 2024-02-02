@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6649deb9_d633f578",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-02T23:44:29Z",
+      "side": 1,
+      "message": "Compiles and passes tests:\n```\n$ rm -rf test/docker/gerrit/artifacts \u0026\u0026 bazel build task \u0026\u0026 bazel test //... :lint_test\nINFO: Invocation ID: 38841e54-c849-4c7a-997c-82cc050712b7\nINFO: Analyzed target //:task (30 packages loaded, 4999 targets configured).\nINFO: Found 1 target...\nINFO: From Bundling JavaScript gr-task-plugin-bundle.js [rollup]:\n\ngr-task-plugin/plugin.js → bazel-out/darwin-fastbuild/bin/gr-task-plugin-bundle.js...\ncreated bazel-out/darwin-fastbuild/bin/gr-task-plugin-bundle.js in 110ms\nTarget //:task up-to-date:\n  bazel-bin/task.jar\nINFO: Elapsed time: 36.786s, Critical Path: 15.77s\nINFO: 14 processes: 5 disk cache hit, 7 internal, 2 darwin-sandbox.\nINFO: Build completed successfully, 14 total actions\nINFO: Invocation ID: bfc2b1a4-831b-4e7e-86a1-a6e2bcbb725b\nINFO: Analyzed 3 targets (130 packages loaded, 1988 targets configured).\nINFO: Found 3 test targets...\nINFO: Elapsed time: 105.025s, Critical Path: 104.20s\nINFO: 11 processes: 5 internal, 1 darwin-sandbox, 4 local, 1 worker.\nINFO: Build completed successfully, 11 total actions\n//:docker-tests                                                          PASSED in 103.9s\n//:junit-tests                                                           PASSED in 1.3s\n//:lint_test                                                             PASSED in 2.1s\n\nExecuted 3 out of 3 tests: 3 tests pass.\n```",
+      "revId": "5d9103cc38bbf998974ba3ff0e1717e65a4bd37d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
