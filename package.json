@@ -1,17 +1,17 @@
 {
   "name": "task",
-  "version": "3.6.0-SNAPSHOT",
+  "version": "3.7.0-SNAPSHOT",
   "description": "Task Plugin",
   "dependencies": {
-    "@bazel/rollup": "~5.1.0",
-    "@bazel/terser": "~5.1.0"
+    "@bazel/rollup": "^5.5.0",
+    "@bazel/terser": "^5.5.0"
   },
   "devDependencies": {
-    "eslint": "^7.24.0",
+    "eslint": "^8.16.0",
     "eslint-config-google": "^0.14.0",
-    "eslint-plugin-html": "^6.1.2",
-    "eslint-plugin-import": "^2.22.1",
-    "eslint-plugin-jsdoc": "^32.3.0",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsdoc": "^39.6.4",
     "rollup": "^2.45.2",
     "terser": "^5.6.1"
   },
