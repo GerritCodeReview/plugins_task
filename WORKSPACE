@@ -5,8 +5,8 @@ workspace(
 load("//:bazlets.bzl", "load_bazlets")
 
 load_bazlets(
-    commit = "b6120a9fa50945d38f0a4d55d5879e3ec465c5e5",
-    shallow_since = "1701477032 -0700",
+    commit = "ea5aa9f256fe94577accb074f1f51e12af106708",
+    shallow_since = "1701800158 -0700",
     #local_path = "/home/<user>/projects/bazlets",
 )
 

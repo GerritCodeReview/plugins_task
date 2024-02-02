@@ -26,7 +26,7 @@ import com.google.gerrit.server.account.AccountState;
 import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
-import java.sql.Timestamp;
+import java.time.Instant;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import junit.framework.TestCase;
@@ -51,7 +51,7 @@ public class TaskReferenceTest extends TestCase {
   public static final String TEST_USER = "testuser";
   public static final int TEST_USER_ID = 100000;
   public static final Account TEST_USER_ACCOUNT =
-      Account.builder(Account.id(TEST_USER_ID), new Timestamp(0L)).build();
+      Account.builder(Account.id(TEST_USER_ID), Instant.ofEpochMilli(0L)).build();
   public static final String TEST_USER_REF =
       "refs/users/" + String.format("%02d", TEST_USER_ID % 100) + "/" + TEST_USER_ID;
   public static final FileKey TEST_USER_ROOT_CFG = createFileKey(ALL_USERS, TEST_USER_REF, ROOT);
@@ -87,7 +87,7 @@ public class TaskReferenceTest extends TestCase {
         .setOwnerGroupUUID(uuid)
         .setId(id)
         .setVisibleToAll(true)
-        .setCreatedOn(new Timestamp(0L))
+        .setCreatedOn(Instant.ofEpochMilli(0L))
         .setMembers(ImmutableSet.of())
         .setSubgroups(ImmutableSet.of())
         .build();
