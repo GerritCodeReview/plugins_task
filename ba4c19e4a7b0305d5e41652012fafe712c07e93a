@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e16c03f5_c1c24ef0",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-03T00:29:08Z",
+      "side": 1,
+      "message": "The in-tree js lint_test fails because of a difference in how the npm modules are looked up. I\u0027m going to defer fixing that until later though.\n\nCompiles and passes tests:\n```\n$ rm -rf test/docker/gerrit/artifacts \u0026\u0026 bazel build task \u0026\u0026 bazel test //... :lint_test\nStarting local Bazel server and connecting to it...\nINFO: Invocation ID: 844662a0-c4ca-4e06-99e6-cb2a4d7d6717\nINFO: Analyzed target //:task (83 packages loaded, 5531 targets configured).\nINFO: Found 1 target...\nINFO: From Bundling JavaScript gr-task-plugin-bundle.js [rollup]:\n\ngr-task-plugin/plugin.js → bazel-out/darwin-fastbuild/bin/gr-task-plugin-bundle.js...\ncreated bazel-out/darwin-fastbuild/bin/gr-task-plugin-bundle.js in 78ms\nTarget //:task up-to-date:\n  bazel-bin/task.jar\nINFO: Elapsed time: 95.605s, Critical Path: 20.08s\nINFO: 29 processes: 15 disk cache hit, 9 internal, 4 darwin-sandbox, 1 worker.\nINFO: Build completed successfully, 29 total actions\nINFO: Invocation ID: 7aff592c-b2fc-4345-8830-9f627316c447\nINFO: Analyzed 3 targets (107 packages loaded, 1801 targets configured).\nINFO: Found 3 test targets...\nINFO: Elapsed time: 105.365s, Critical Path: 104.38s\nINFO: 15 processes: 4 disk cache hit, 5 internal, 1 darwin-sandbox, 4 local, 1 worker.\nINFO: Build completed successfully, 15 total actions\n//:docker-tests                                                          PASSED in 103.9s\n//:junit-tests                                                           PASSED in 1.7s\n//:lint_test                                                             PASSED in 2.7s\n\nExecuted 3 out of 3 tests: 3 tests pass.\n```",
+      "revId": "ba4c19e4a7b0305d5e41652012fafe712c07e93a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
