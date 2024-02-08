@@ -98,7 +98,7 @@ reference
   ;
 
 file_path
- : ALL_PROJECTS_ROOT
+ : PROJECT_ROOT
  | FWD_SLASH absolute TASK_DELIMETER
  | user absolute? TASK_DELIMETER
  | group_name absolute? TASK_DELIMETER
@@ -175,7 +175,7 @@ TASK_DELIMETER
  : '^'
  ;
 
-ALL_PROJECTS_ROOT
+PROJECT_ROOT
  : FWD_SLASH FWD_SLASH TASK_DELIMETER
  ;
 

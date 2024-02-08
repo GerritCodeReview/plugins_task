@@ -15,10 +15,12 @@
 package com.googlesource.gerrit.plugins.task;
 
 import com.google.common.annotations.VisibleForTesting;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.config.AllUsersNameProvider;
+import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import java.nio.file.Paths;
@@ -32,6 +34,7 @@ import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.ParseTreeWalker;
 import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.lib.Config;
 
 /** This class is used by TaskExpression to decode the task from task reference. */
 public class TaskReference {
@@ -48,6 +51,8 @@ public class TaskReference {
       AllUsersNameProvider allUsersNameProvider,
       AccountCache accountCache,
       GroupCache groupCache,
+      @PluginName String pluginName,
+      @GerritServerConfig Config config,
       @Assisted FileKey relativeTo,
       @Assisted String reference) {
     this(
@@ -56,7 +61,9 @@ public class TaskReference {
             allProjectsNameProvider.get(),
             allUsersNameProvider.get(),
             accountCache,
-            groupCache),
+            groupCache,
+            pluginName,
+            config),
         reference);
   }
 
@@ -133,8 +140,8 @@ public class TaskReference {
 
     @Override
     public void enterFile_path(TaskReferenceParser.File_pathContext ctx) {
-      if (ctx.ALL_PROJECTS_ROOT() != null || (ctx.FWD_SLASH() != null && ctx.absolute() != null)) {
-        builder.setReferringAllProjectsTask();
+      if (ctx.PROJECT_ROOT() != null || (ctx.FWD_SLASH() != null && ctx.absolute() != null)) {
+        builder.setReferringProjectRootTask();
       }
 
       if (ctx.absolute() == null && ctx.relative() == null) {
