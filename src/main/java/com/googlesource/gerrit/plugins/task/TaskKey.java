@@ -18,6 +18,7 @@ import com.google.auto.value.AutoValue;
 import com.google.common.base.Preconditions;
 import com.google.gerrit.entities.AccountGroup;
 import com.google.gerrit.entities.BranchNameKey;
+import com.google.gerrit.entities.Project;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.GroupCache;
@@ -26,6 +27,7 @@ import com.google.gerrit.server.config.AllUsersName;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.lib.Config;
 
 /** An immutable reference to a task in task config file. */
 @AutoValue
@@ -69,18 +71,24 @@ public abstract class TaskKey {
     protected String file;
     protected String task;
     protected GroupCache groupCache;
+    protected String pluginName;
+    protected Config config;
 
     Builder(
         FileKey relativeTo,
         AllProjectsName allProjectsName,
         AllUsersName allUsersName,
         AccountCache accountCache,
-        GroupCache groupCache) {
+        GroupCache groupCache,
+        String pluginName,
+        Config config) {
       this.relativeTo = relativeTo;
       this.allProjectsName = allProjectsName;
       this.allUsersName = allUsersName;
       this.accountCache = accountCache;
       this.groupCache = groupCache;
+      this.pluginName = pluginName;
+      this.config = config;
     }
 
     public TaskKey buildTaskKey() {
@@ -167,8 +175,13 @@ public abstract class TaskKey {
                       .getGroupUUID()));
     }
 
-    public void setReferringAllProjectsTask() {
-      branch = BranchNameKey.create(allProjectsName, RefNames.REFS_CONFIG);
+    public void setReferringProjectRootTask() {
+      String cfgRootProject = config.getString(pluginName, "root", "project");
+      String cfgRootBranch = config.getString(pluginName, "root", "branch");
+      Project.NameKey rootProject =
+          cfgRootProject != null ? Project.NameKey.parse(cfgRootProject) : allProjectsName;
+      String rootBranch = cfgRootBranch != null ? cfgRootBranch : RefNames.REFS_CONFIG;
+      branch = BranchNameKey.create(rootProject, rootBranch);
     }
 
     protected void throwIfInvalidPath() throws ConfigInvalidException {
