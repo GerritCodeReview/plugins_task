@@ -23,3 +23,15 @@ Example:
 [@PLUGIN@ "cacheable-predicates"]
         byBranch-className = com.google.gerrit.server.query.change.BranchSetPredicate
 ```
+
+### Section @PLUGIN@ "root"
+
+The @PLUGIN@.root section can be used to configure the project and branch containing the base task.config (i.e the one with the roots).
+
+#### @PLUGIN@.root.project
+
+The plugin will fetch the base task.config from the project set for this key. Defaults to `All-Projects`.
+
+#### @PLUGIN@.root.branch
+
+The plugin will fetch the base task.config from the branch set for this key. Defaults to `refs/meta/config`.

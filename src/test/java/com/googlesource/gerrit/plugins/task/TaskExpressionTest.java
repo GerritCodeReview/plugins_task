@@ -23,6 +23,7 @@ import com.google.gerrit.server.config.AllUsersName;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import junit.framework.TestCase;
+import org.eclipse.jgit.lib.Config;
 import org.mockito.Mockito;
 
 /*
@@ -245,7 +246,9 @@ public class TaskExpressionTest extends TestCase {
                         new AllProjectsName("All-Projects"),
                         new AllUsersName("All-Users"),
                         accountCache,
-                        groupCache),
+                        groupCache,
+                        "task",
+                        new Config()),
                     (String) invocation.getArguments()[1]));
     return new TaskExpression(factory, file, expression);
   }

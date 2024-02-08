@@ -31,6 +31,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import junit.framework.TestCase;
 import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.lib.Config;
 import org.junit.Test;
 import org.mockito.Mockito;
 
@@ -267,7 +268,9 @@ public class TaskReferenceTest extends TestCase {
                   new AllProjectsName(ALL_PROJECTS),
                   new AllUsersName(ALL_USERS),
                   accountCache,
-                  groupCache),
+                  groupCache,
+                  "task",
+                  new Config()),
               expression)
           .getTaskKey();
     } catch (ConfigInvalidException e) {
