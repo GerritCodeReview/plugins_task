@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d2ea793c_f2b2a4ce",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-02-09T22:27:08Z",
+      "side": 1,
+      "message": "Awesome! \n\nCan you control whether the task tab is shown first or not (versus the file tab)? If you can and the change has CR+2 (or potentially some other configurable criteria), then it seems like it might make sense to show the task tab first since it likely means it is at least done with the code review part and thus accessing file diffs may be less important?\n\nSide note: It seems odd that both \"needed\" and \"passed\" are the same color.",
+      "revId": "eabdd988717fb8c425af292c233ef04eb7a4c641",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
