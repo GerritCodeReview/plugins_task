@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "f03ffdd2_3b13bafa",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-10T00:42:29Z",
+      "side": 1,
+      "message": "Verified standalone and in-tree build+tests. The `:lint_test` target fails in-tree, but I can\u0027t get it to pass for both. I\u0027ll switch it to pass in-tree and fail for standalone later so that CI here shows up green.",
+      "revId": "41c8d2df1ef01cb1c46c2571612be4adc493e361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
