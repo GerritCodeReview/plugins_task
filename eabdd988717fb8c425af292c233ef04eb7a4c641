@@ -16,6 +16,24 @@
       "message": "Awesome! \n\nCan you control whether the task tab is shown first or not (versus the file tab)? If you can and the change has CR+2 (or potentially some other configurable criteria), then it seems like it might make sense to show the task tab first since it likely means it is at least done with the code review part and thus accessing file diffs may be less important?\n\nSide note: It seems odd that both \"needed\" and \"passed\" are the same color.",
       "revId": "eabdd988717fb8c425af292c233ef04eb7a4c641",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9ceb1c5b_1b318be6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-10T20:16:24Z",
+      "side": 1,
+      "message": "\u003e Awesome! \n\u003e \n\u003e Can you control whether the task tab is shown first or not (versus the file tab)? If you can and the change has CR+2 (or potentially some other configurable criteria), then it seems like it might make sense to show the task tab first since it likely means it is at least done with the code review part and thus accessing file diffs may be less important?\n\nI don\u0027t see a way to control where it shows up. However, we can add logic in the UI code to keep it selected when the page loads if some criteria is met.\n\n\u003e \n\u003e Side note: It seems odd that both \"needed\" and \"passed\" are the same color.\n\nYeah, agree, we should differentiate them. Currently, they are the same green color in the task-tree view. So, I kept them the same in summary view, to be consistent. At some point, we should revisit the colors and icons.",
+      "parentUuid": "d2ea793c_f2b2a4ce",
+      "revId": "eabdd988717fb8c425af292c233ef04eb7a4c641",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
