@@ -26,16 +26,16 @@ def keep_invalid(tasks):
         nexti = i + 1
 
         task=tasks[i]
-        if SUBTASKS in task.keys():
+        if SUBTASKS in list(task.keys()):
             subtasks=task[SUBTASKS]
             keep_invalid(subtasks)
             if len(subtasks) == 0:
                 del task[SUBTASKS]
 
         status=''
-        if STATUS in task.keys():
+        if STATUS in list(task.keys()):
             status = task[STATUS]
-        if status != 'INVALID' and not SUBTASKS in task.keys():
+        if status != 'INVALID' and not SUBTASKS in list(task.keys()):
             del tasks[i]
             nexti = i
 
@@ -44,4 +44,4 @@ def keep_invalid(tasks):
 plugins=json.loads(sys.stdin.read())
 roots=plugins['plugins'][0]['roots']
 keep_invalid(roots)
-print json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True)
+print(json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True))

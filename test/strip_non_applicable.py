@@ -28,20 +28,20 @@ def del_non_applicable(tasks):
         nexti = i + 1
 
         task=tasks[i]
-        if APPLICABLE in task.keys() and task[APPLICABLE] == False:
+        if APPLICABLE in list(task.keys()) and task[APPLICABLE] == False:
             del tasks[i]
             nexti = i
         else:
             subtasks=[]
-            if SUBTASKS in task.keys():
+            if SUBTASKS in list(task.keys()):
                 subtasks=task[SUBTASKS]
                 del_non_applicable(subtasks)
-            if SUBTASKS in task.keys() and len(subtasks) == 0:
+            if SUBTASKS in list(task.keys()) and len(subtasks) == 0:
                 del task[SUBTASKS]
-            if not SUBTASKS in task.keys():
-                if HASPASS in task.keys() and task[HASPASS] == False:
+            if not SUBTASKS in list(task.keys()):
+                if HASPASS in list(task.keys()) and task[HASPASS] == False:
                     status=''
-                    if STATUS in task.keys():
+                    if STATUS in list(task.keys()):
                         status = task[STATUS]
                     if status != 'INVALID' and status != 'DUPLICATE':
                         del tasks[i]
@@ -52,4 +52,4 @@ def del_non_applicable(tasks):
 plugins=json.loads(sys.stdin.read())
 roots=plugins['plugins'][0]['roots']
 del_non_applicable(roots)
-print json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True)
+print(json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True))
