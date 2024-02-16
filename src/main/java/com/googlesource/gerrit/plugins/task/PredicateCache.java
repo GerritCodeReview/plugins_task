@@ -22,7 +22,6 @@ import com.google.gerrit.index.query.OrPredicate;
 import com.google.gerrit.index.query.Predicate;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.CurrentUser;
-import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.index.change.ChangeField;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeIndexPredicate;
@@ -34,10 +33,6 @@ import com.google.inject.Inject;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
 import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
 import com.googlesource.gerrit.plugins.task.util.ThrowingProvider;
-import java.util.Arrays;
-import java.util.HashSet;
-import java.util.Set;
-import org.eclipse.jgit.lib.Config;
 
 public class PredicateCache {
   public static class Statistics {
@@ -45,7 +40,7 @@ public class PredicateCache {
   }
 
   protected final SubmitRequirementChangeQueryBuilder srcqb;
-  protected final Set<String> cacheableByBranchPredicateClassNames;
+  protected final TaskPluginConfiguration pluginConfig;
   protected final CurrentUser user;
   protected final HitHashMap<String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
       predicatesByQuery = new HitHashMap<>();
@@ -54,16 +49,13 @@ public class PredicateCache {
 
   @Inject
   public PredicateCache(
-      @GerritServerConfig Config config,
+      TaskPluginConfiguration pluginConfig,
       @PluginName String pluginName,
       CurrentUser user,
       SubmitRequirementChangeQueryBuilder srcqb) {
+    this.pluginConfig = pluginConfig;
     this.user = user;
     this.srcqb = srcqb;
-    cacheableByBranchPredicateClassNames =
-        new HashSet<>(
-            Arrays.asList(
-                config.getStringList(pluginName, "cacheable-predicates", "byBranch-className")));
   }
 
   public void initStatistics(int summaryCount) {
@@ -133,6 +125,8 @@ public class PredicateCache {
         return true;
       }
     }
-    return cacheableByBranchPredicateClassNames.contains(predicate.getClass().getName());
+    return pluginConfig
+        .getCacheableByBranchPredicateClassNames()
+        .contains(predicate.getClass().getName());
   }
 }
