@@ -145,11 +145,9 @@ json_pp() { # < json > json
             separators=(',', ' : '), sort_keys=True)"
 }
 
-json_val_by() { # json index|'key' > value
-    echo "$1" | python -c "import json,sys;print json.load(sys.stdin)[$2]"
+json_val_by_key() {  # json key > value
+    echo "$1" | jq -r --arg key "$2" '.[$key] // empty'
 }
-json_val_by_key() { json_val_by "$1" "'$2'" ; }  # json key > value
-
 # --------
 
 gssh() {  # [-l user] cmd [args]...
@@ -268,9 +266,7 @@ define_jsonByRoot() { # task_plugin_ouptut > jsonByRoot_array_definition
 }
 
 get_plugins() { # < change_json > plugins_json
-    python -c "import sys, json; \
-        plugins={}; plugins['plugins']=json.loads(sys.stdin.read())['plugins']; \
-        print json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True)"
+    jq --indent 3 --sort-keys '{plugins: .plugins}'
 }
 
 example() { # doc example_num > text_for_example_num
