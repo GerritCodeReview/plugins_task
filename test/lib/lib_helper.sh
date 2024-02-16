@@ -34,9 +34,13 @@ result_out() { # test expected actual
     result "$name" "$(diff <(echo "$expected") <(echo "$actual"))"
 }
 
-result_root() { # group root
-    local name="$1 - $(echo "$2" | sed -es'/Root //')"
-    result_out "$name" "${EXPECTED_ROOTS[$2]}" "${OUTPUT_ROOTS[$2]}"
+result_root() { # group root expected_file actual
+    local root=$(echo "$2" | sed -es'/Root //')
+    local name="$1 - $root"
+    local expected_file=$3 actual=$4
+    local expected_root=$(json_val_by_key "$(cat "$expected_file")" "$root")
+    local actual_root=$(json_val_by_key "$actual" "$root")
+    result_out "$name" "$expected_root" "$actual_root"
 }
 
 # -------- Git Config
@@ -112,7 +116,8 @@ remove_not_suite() { remove_suites !"$1" ; } # suite < pre_json > json
 #
 testdoc_2_cfg() { awk '/^\{/,/^$/ { next } ; 1' ; } # testdoc_format > task_config
 
-# Strip the git config from Test Doc formatted text. For the sample above, the output would be:
+# Strip the git config from Test Doc formatted text and wrap in a Gerrit-like
+# 'plugins' JSON section. For the sample above, the output would be:
 #
 # { "plugins" : [
 #     { "name" : "task",
@@ -242,29 +247,6 @@ replace_tokens() { # < text > text with replacing all tokens(changes, user)
 strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json
 strip_non_invalid() { ensure "$MYDIR"/strip_non_invalid.py ; } # < json > json
 
-define_jsonByRoot() { # task_plugin_ouptut > jsonByRoot_array_definition
-    local record root=''
-    local -A jsonByRoot
-    while IFS= read -r -d '' record ; do
-        if [ -z "$root" ] ; then
-            root=$record
-        else
-            jsonByRoot[$root]=$record
-            root=''
-        fi
-    done < <(python -c "if True: # NOP to start indent
-        import sys, json
-
-        roots=json.loads(sys.stdin.read())['plugins'][0]['roots']
-        for root in roots:
-            root_json = json.dumps(root, indent=3, separators=(',', ' : '), sort_keys=True)
-            sys.stdout.write(root['name'] + '\x00' + root_json + '\x00')"
-    )
-
-    local def=$(declare -p jsonByRoot)
-    echo "${def#*=}" # declare -A jsonByRoot='(...)' > '(...)'
-}
-
 get_plugins() { # < change_json > plugins_json
     jq --indent 3 --sort-keys '{plugins: .plugins}'
 }
@@ -331,16 +313,13 @@ query() {  # [-l user] query > json lines
 change_plugins() { awk "NR==$1" | get_plugins | json_pp ; }
 
 results_suite() { # name expected_file plugins_json
-    local name=$1 expected=$2 actual=$3
-
-    local -A EXPECTED_ROOTS=$(define_jsonByRoot < "$expected")
-    local -A OUTPUT_ROOTS=$(echo "$actual" | define_jsonByRoot)
+    local name=$1 expected_file=$2 actual=$3
 
     local out root
     echo "$ROOTS" | while read root ; do
-        result_root "$name" "$root"
+        result_root "$name" "$root" "$expected_file" "$actual"
     done
-    out=$(diff "$expected" <(echo "$actual") | head -15)
+    out=$(diff "$expected_file" <(echo "$actual") | head -15)
     [ -z "$out" ]
     result "$name - Full Test Suite" "$out"
 }
