@@ -145,9 +145,7 @@ testdoc_2_pjson() { # < testdoc_format > pjson_task_roots
 # ---- JSON PARSING ----
 
 json_pp() { # < json > json
-    python -c "import sys, json; \
-            print json.dumps(json.loads(sys.stdin.read()), indent=3, \
-            separators=(',', ' : '), sort_keys=True)"
+    jq --indent 3 --sort-keys
 }
 
 json_val_by_key() {  # json key > value
