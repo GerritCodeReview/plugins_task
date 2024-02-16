@@ -258,9 +258,10 @@ get_change_num() { # < gerrit_push_response > changenum
     echo "${url##*\/}" | tr -d -c '[:digit:]'
 }
 
-install_changeid_hook() { # repo
+install_changeid_hook() {
     local hook=$(git rev-parse --git-dir)/hooks/commit-msg
-    scp -p -P "$PORT" "$SERVER":hooks/commit-msg "$hook"
+    mkdir -p "$(dirname "$hook")"
+    curl -Lo "$hook" "http://$SERVER:$HTTP_PORT/tools/hooks/commit-msg"
     chmod +x "$hook"
 }
 
@@ -269,7 +270,7 @@ setup_repo() { # repo remote ref [--initial-commit]
     git init "$repo"
     (
         cd "$repo"
-        install_changeid_hook "$repo"
+        install_changeid_hook
         git fetch "$remote" "$ref"
         if ! git checkout FETCH_HEAD ; then
             if [ "$init" = "--initial-commit" ] ; then

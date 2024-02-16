@@ -1,4 +1,4 @@
-FROM alpine:3.11
+FROM alpine:3.16
 
 ARG UID=1000
 ARG GID=1000
@@ -7,7 +7,7 @@ ENV USER_HOME /home/$USER
 ENV RUN_TESTS_DIR task/test/docker/run_tests
 ENV WORKSPACE $USER_HOME/workspace
 
-RUN apk --update add --no-cache openssh bash git python2 shadow util-linux openssl xxd curl jq
+RUN apk --update add --no-cache openssh bash git python3 shadow util-linux openssl xxd curl jq
 RUN echo "StrictHostKeyChecking no" >> /etc/ssh/ssh_config
 
 RUN groupadd -f -g $GID users2
