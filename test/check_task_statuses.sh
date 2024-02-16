@@ -204,22 +204,28 @@ no_all_visible2_json=$(echo "$all2_pjson" | remove_suites "all" "!visible")
 no_all_no_visible2_json=$(echo "$all2_pjson" | remove_suites "all" "visible")
 
 echo "$no_all_visible_json" | strip_non_applicable | \
-    grep -v "\"applicable\" :" > "$EXPECTED".applicable
+    grep -v "\"applicable\" :" | ensure json_pp > "$EXPECTED".applicable
 
 echo "$no_all_no_visible_json" | strip_non_applicable | \
-    grep -v "\"applicable\" :" > "$EXPECTED".applicable-visibility
+    grep -v "\"applicable\" :" | \
+    ensure json_pp > "$EXPECTED".applicable-visibility
 
 echo "$no_all_visible2_json" | strip_non_applicable | \
-    grep -v "\"applicable\" :" > "$EXPECTED".applicable2
+    grep -v "\"applicable\" :" | ensure json_pp > "$EXPECTED".applicable2
 
 echo "$no_all_no_visible2_json" | strip_non_applicable | \
-    grep -v "\"applicable\" :" > "$EXPECTED".applicable-visibility2
+    grep -v "\"applicable\" :" | \
+    ensure json_pp > "$EXPECTED".applicable-visibility2
 
-echo "$all_pjson" | remove_suites "!all" "!visible" | ensure json_pp > "$EXPECTED".all
+echo "$all_pjson" | remove_suites "!all" "!visible" | \
+    ensure json_pp > "$EXPECTED".all
 
-echo "$no_all_visible_json" | strip_non_invalid > "$EXPECTED".invalid
+echo "$no_all_visible_json" | strip_non_invalid | \
+    ensure json_pp > "$EXPECTED".invalid
 
-strip_non_invalid < "$EXPECTED".applicable > "$EXPECTED".invalid-applicable
+echo "$no_all_visible_json" | strip_non_applicable | \
+    grep -v "\"applicable\" :" | strip_non_invalid | \
+    ensure json_pp > "$EXPECTED".invalid-applicable
 
 
 preview_pjson=$(example "$DOC_PREVIEW" 1 | testdoc_2_pjson)
@@ -228,7 +234,7 @@ echo "$preview_pjson" | remove_suites "invalid" "secret" | \
 echo "$preview_pjson" | remove_suites "invalid" "!secret" | \
     ensure json_pp > "$EXPECTED".preview-admin
 echo "$preview_pjson" | remove_suites "secret" "!invalid" | \
-    strip_non_invalid > "$EXPECTED".preview-invalid
+    strip_non_invalid | ensure json_pp > "$EXPECTED".preview-invalid
 
 example "$DOC_PREVIEW" 1 | testdoc_2_cfg | replace_user > "$ROOT_CFG"
 cnum=$(create_repo_change "$ALL" "$REMOTE_ALL" "$REF_ALL")
