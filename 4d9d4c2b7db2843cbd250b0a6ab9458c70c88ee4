@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f7f73655_eacafcdd",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-17T00:25:06Z",
+      "side": 1,
+      "message": "This is a breaking change. Should we add a fallback in TaskPluginConfiguration to look in `etc/gerrit.config` if there\u0027s no `etc/task.config`?",
+      "revId": "4d9d4c2b7db2843cbd250b0a6ab9458c70c88ee4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4c4ce97c_135452a1",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-17T00:25:06Z",
+      "side": 1,
+      "message": "You probably could make this a Singleton?",
+      "revId": "4d9d4c2b7db2843cbd250b0a6ab9458c70c88ee4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
