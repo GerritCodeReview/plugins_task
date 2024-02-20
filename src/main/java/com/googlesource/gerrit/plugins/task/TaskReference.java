@@ -48,6 +48,7 @@ public class TaskReference {
       AllUsersNameProvider allUsersNameProvider,
       AccountCache accountCache,
       GroupCache groupCache,
+      TaskPluginConfiguration config,
       @Assisted FileKey relativeTo,
       @Assisted String reference) {
     this(
@@ -56,7 +57,8 @@ public class TaskReference {
             allProjectsNameProvider.get(),
             allUsersNameProvider.get(),
             accountCache,
-            groupCache),
+            groupCache,
+            config),
         reference);
   }
 
@@ -133,8 +135,8 @@ public class TaskReference {
 
     @Override
     public void enterFile_path(TaskReferenceParser.File_pathContext ctx) {
-      if (ctx.ALL_PROJECTS_ROOT() != null || (ctx.FWD_SLASH() != null && ctx.absolute() != null)) {
-        builder.setReferringAllProjectsTask();
+      if (ctx.PROJECT_ROOT() != null || (ctx.FWD_SLASH() != null && ctx.absolute() != null)) {
+        builder.setReferringRootConfigBranchTask();
       }
 
       if (ctx.absolute() == null && ctx.relative() == null) {

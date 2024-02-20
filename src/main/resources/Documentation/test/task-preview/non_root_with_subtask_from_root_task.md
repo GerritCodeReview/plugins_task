@@ -1,6 +1,6 @@
 # --task-preview non-root file with subtask pointing root task
 
-file: `All-Projects.git:refs/meta/config:task.config`
+file: `root-cfg-prj:root-cfg-branch:task.config`
 ```
 [root "Points to subFile task with rootFile task preview"]
     applicable = is:open
@@ -12,7 +12,7 @@ file: `All-Projects.git:refs/meta/config:task.config`
     pass = True
 ```
 
-file: `All-Projects.git:refs/meta/config:task/foo/bar/baz.config`
+file: `root-cfg-prj:root-cfg-branch:task/foo/bar/baz.config`
 ```
  [task "Preview pointing to rootFile task"]
      applicable = is:open

@@ -56,14 +56,34 @@ build_images() {
 }
 
 run_task_plugin_tests() {
+    echo "Running test suite with default root_project and root_branch ..."
     docker-compose "${COMPOSE_ARGS[@]}" up --detach
     docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
         '/task/test/docker/run_tests/start.sh'
+    docker-compose "${COMPOSE_ARGS[@]}" down -v --rmi local 2>/dev/null
+
+    ROOT_CFG_PRJ=task-config
+    ROOT_CFG_BRANCH=refs/heads/master
+    echo "Re-running test suite with root_project=$ROOT_CFG_PRJ and root_branch=$ROOT_CFG_BRANCH ..."
+    docker-compose "${COMPOSE_ARGS[@]}" up --detach
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T gerrit-01 \
+        sh -c "git config -f \$GERRIT_SITE/etc/task.config rootConfig.project $ROOT_CFG_PRJ"
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T gerrit-01 \
+        sh -c "git config -f \$GERRIT_SITE/etc/task.config rootConfig.branch $ROOT_CFG_BRANCH"
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
+        sh -c "./task/test/docker/run_tests/wait-for-it.sh \$GERRIT_HOST:29418 -t -60" || \
+        die "Failed to start gerrit"
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
+        sh -c "ssh -p 29418 \$GERRIT_HOST gerrit plugin reload task"
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
+        sh -c "/task/test/docker/run_tests/start.sh \
+            --root-config-project $ROOT_CFG_PRJ \
+            --root-config-branch $ROOT_CFG_BRANCH"
 }
 
 retest() {
-    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin \
-        run_tests task/test/docker/run_tests/start.sh retest
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
+        sh -c "/task/test/docker/run_tests/start.sh --retest"
     RESULT=$?
     cleanup
 }
@@ -121,7 +141,8 @@ if [ ! -e "$ARTIFACTS/task.jar" ] ; then
     usage "$MISSING, did you forget --task-plugin-jar?"
 fi
 [ -n "$GERRIT_WAR" ] && cp -f "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
+
+progress "Building docker images" build_images
 ( trap cleanup EXIT SIGTERM
-    progress "Building docker images" build_images
     run_task_plugin_tests
 )
