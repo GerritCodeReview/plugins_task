@@ -1,6 +1,6 @@
 # --task-preview root file with subtasks-external pointing to a non-secret user ref with subtasks-external pointing to a secret user ref.
 
-file: `All-Projects.git:refs/meta/config:task.config`
+file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
 ```
  [root "Root Preview NON-SECRET external with SECRET external"]
      applicable = "is:open"

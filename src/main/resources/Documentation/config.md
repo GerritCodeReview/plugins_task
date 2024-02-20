@@ -23,3 +23,23 @@ Example:
 [cacheablePredicates "byBranch"]
         className = com.google.gerrit.server.query.change.BranchSetPredicate
 ```
+
+### Section "rootConfig"
+
+The rootConfig section can be used to configure the project and branch containing the root task.config.
+
+#### rootConfig.project
+
+The plugin will fetch the root task.config from the project set for this key. Defaults to `All-Projects`.
+
+#### rootConfig.branch
+
+The plugin will fetch the root task.config from the branch set for this key. Defaults to `refs/meta/config`.
+
+Example:
+
+```
+[rootConfig]
+        project = task/configuration
+        branch = refs/heads/master
+```

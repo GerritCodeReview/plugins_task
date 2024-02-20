@@ -221,6 +221,11 @@ replace_user() { # < text_with_testuser > text_with_$USER
     sed -e"s/testuser/$USER/"
 }
 
+replace_root_configs() { # < text_with_root_tokens > text_with_root_tokens_replaced
+ sed -e "s,{root-cfg-prj},$ROOT_CONFIG_PRJ," \
+     -e "s,{root-cfg-branch},$ROOT_CONFIG_BRANCH,"
+}
+
 get_user_ref() { # username > refs/users/<accountidshard>/<accountid>
     local user_account_id="$(curl --netrc --silent "http://$SERVER:$HTTP_PORT/a/accounts/$1" | \
     sed -e '1!b' -e "/^)]}'$/d" | jq ._account_id)"
@@ -236,7 +241,7 @@ replace_user_refs() { # < text_with_user_refs > test_with_expanded_user_refs
 }
 
 replace_tokens() { # < text > text with replacing all tokens(changes, user)
-    replace_default_changes | replace_user_refs | replace_user | replace_groups
+    replace_default_changes | replace_user_refs | replace_user | replace_groups | replace_root_configs
 }
 
 strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json

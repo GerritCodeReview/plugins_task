@@ -14,7 +14,14 @@
 
 package com.googlesource.gerrit.plugins.task;
 
+import static com.google.common.base.MoreObjects.firstNonNull;
+
+import com.google.gerrit.entities.BranchNameKey;
+import com.google.gerrit.entities.Project;
+import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.extensions.annotations.PluginName;
+import com.google.gerrit.server.config.AllProjectsName;
+import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.config.GerritServerConfig;
 import com.google.gerrit.server.config.PluginConfigFactory;
 import com.google.inject.Inject;
@@ -31,26 +38,37 @@ public class TaskPluginConfiguration {
   private static final String CACHEABLE_PREDICATES_KEY = "className";
   private static final String DEPRECATED_CACHEABLE_PREDICATES = "cacheable-predicates";
   private static final String DEPRECATED_CACHEABLE_PREDICATES_KEY = "byBranch-className";
-
-  private final Set<String> cacheableByBranchPredicateClassNames;
+  private static final String ROOT_CONFIG = "rootConfig";
+  private static final String ROOT_CONFIG_PROJECT_KEY = "project";
+  private static final String ROOT_CONFIG_BRANCH_KEY = "branch";
+  private final String plugin;
   private final Config gerritConfig;
   private final Config pluginConfig;
-  private final String plugin;
+  private final AllProjectsName allProjectsName;
+  private final Set<String> cacheableByBranchPredicateClassNames;
+  private final BranchNameKey rootConfigBranch;
 
   @Inject
   public TaskPluginConfiguration(
       @PluginName String plugin,
       @GerritServerConfig Config gerritConfig,
-      PluginConfigFactory pluginConfigFactory) {
+      PluginConfigFactory pluginConfigFactory,
+      AllProjectsNameProvider allProjectsNameProvider) {
     this.plugin = plugin;
     this.gerritConfig = gerritConfig;
     this.pluginConfig = pluginConfigFactory.getGlobalPluginConfig(plugin);
+    this.allProjectsName = allProjectsNameProvider.get();
     cacheableByBranchPredicateClassNames =
         new HashSet<>(Arrays.asList(readCacheableByBranchPredicateClassNames()));
+    rootConfigBranch = readRootConfigBranch();
   }
 
   public Set<String> getCacheableByBranchPredicateClassNames() {
     return cacheableByBranchPredicateClassNames;
+  }
+
+  public BranchNameKey getRootConfigBranch() {
+    return rootConfigBranch;
   }
 
   private String[] readCacheableByBranchPredicateClassNames() {
@@ -64,5 +82,13 @@ public class TaskPluginConfiguration {
     // have migrated to plugin config.
     return gerritConfig.getStringList(
         plugin, DEPRECATED_CACHEABLE_PREDICATES, DEPRECATED_CACHEABLE_PREDICATES_KEY);
+  }
+
+  private BranchNameKey readRootConfigBranch() {
+    String project = pluginConfig.getString(ROOT_CONFIG, null, ROOT_CONFIG_PROJECT_KEY);
+    String branch = pluginConfig.getString(ROOT_CONFIG, null, ROOT_CONFIG_BRANCH_KEY);
+    return BranchNameKey.create(
+        project != null ? Project.NameKey.parse(project) : allProjectsName,
+        firstNonNull(branch, RefNames.REFS_CONFIG));
   }
 }
