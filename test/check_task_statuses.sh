@@ -72,6 +72,8 @@ Usage:
 
     --help|-h                         help text
     --server|-s                       gerrit host
+    --root-config-project             project containing the root task config
+    --root-config-branch              branch containing the root task config
     --non-secret-user                 user who don't have permission
                                       to view other user refs.
     --untrusted-user                  user who doesn't have permission
@@ -94,23 +96,14 @@ source "$MYDIR/lib/lib_md.sh"
 DOCS=$MYDIR/.././src/main/resources/Documentation/test
 OUT=$MYDIR/../target/tests
 
-ALL=$OUT/All-Projects
-ALL_TASKS=$ALL/task
-
-USERS=$OUT/All-Users
-USER_TASKS=$USERS/task
-
-EXPECTED=$OUT/expected
-ACTUAL=$OUT/actual
-
-ROOT_CFG=$ALL/task.config
-
 # --- Args ----
 
 while (( "$#" )) ; do
     case "$1" in
         --help|-h)                        usage ;;
         --server|-s)                      shift ; SERVER=$1 ;;
+        --root-config-project)            shift ; ROOT_CONFIG_PRJ=$1 ;;
+        --root-config-branch)             shift ; ROOT_CONFIG_BRANCH=$1 ;;
         --non-secret-user)                shift ; NON_SECRET_USER=$1 ;;
         --untrusted-user)                 shift ; UNTRUSTED_USER=$1 ;;
         --non-secret-group-without-space) shift ; GROUP_NAME_WITHOUT_SPACE=$1 ;;
@@ -126,18 +119,30 @@ done
 [ -z "$GROUP_NAME_WITHOUT_SPACE" ] && usage "You must specify --non-secret-group-without-space"
 [ -z "$GROUP_NAME_WITH_SPACE" ] && usage "You must specify --non-secret-group-with-space"
 [ -z "$GERRIT_GIT_DIR" ] && usage "GERRIT_GIT_DIR environment variable not set"
+[ -z "$ROOT_CONFIG_PRJ" ] && ROOT_CONFIG_PRJ=All-Projects
+[ -z "$ROOT_CONFIG_BRANCH" ] && ROOT_CONFIG_BRANCH=refs/meta/config
 
 
 PORT=29418
 HTTP_PORT=8080
 PROJECT=test
 BRANCH=master
-REMOTE_ALL=ssh://$SERVER:$PORT/All-Projects
+REMOTE_ALL=ssh://$SERVER:$PORT/$ROOT_CONFIG_PRJ
 REMOTE_USERS=ssh://$SERVER:$PORT/All-Users
 REMOTE_TEST=ssh://$SERVER:$PORT/$PROJECT
-
-REF_ALL=refs/meta/config
+REF_ALL=$ROOT_CONFIG_BRANCH
 REF_USERS=refs/users/self
+
+ALL=$OUT/$ROOT_CONFIG_PRJ
+ALL_TASKS=$ALL/task
+
+USERS=$OUT/All-Users
+USER_TASKS=$USERS/task
+
+EXPECTED=$OUT/expected
+ACTUAL=$OUT/actual
+
+ROOT_CFG=$ALL/task.config
 
 CONFIG=$ROOT_CFG
 
