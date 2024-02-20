@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "7854131c_81d20280",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-20T18:17:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f7f73655_eacafcdd",
+      "revId": "4d9d4c2b7db2843cbd250b0a6ab9458c70c88ee4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4c4ce97c_135452a1",
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-17T00:25:06Z",
       "side": 1,
       "message": "You probably could make this a Singleton?",
+      "revId": "4d9d4c2b7db2843cbd250b0a6ab9458c70c88ee4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5993296_61862221",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginConfiguration.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-20T18:17:23Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4c4ce97c_135452a1",
       "revId": "4d9d4c2b7db2843cbd250b0a6ab9458c70c88ee4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
