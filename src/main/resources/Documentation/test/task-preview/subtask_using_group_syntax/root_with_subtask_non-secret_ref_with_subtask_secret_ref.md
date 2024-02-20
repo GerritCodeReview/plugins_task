@@ -1,6 +1,6 @@
 # --task-preview root file with subtask pointing to a non-secret group ref with subtask pointing to a secret group ref.
 
-file: `All-Projects.git:refs/meta/config:task.config`
+file: `root-cfg-prj:root-cfg-branch:task.config`
 ```
  [root "Root Preview NON-SECRET group subtask with SECRET group subtask"]
      applicable = "is:open"

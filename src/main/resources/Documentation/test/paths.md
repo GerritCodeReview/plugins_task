@@ -1,5 +1,7 @@
-`task.config` file in project `All-Projects` on ref `refs/meta/config`.
+The config below is expected to be in the `task.config` file in project
+`root-cfg-prj` on ref `root-cfg-branch`.
 
+file: `root-cfg-prj:root-cfg-branch:task.config`
 ```
 [root "Root Task PATHS"]
   subtask = subtask pass
@@ -13,10 +15,10 @@
    "hasPass" : false,
    "name" : "Root Task PATHS",
    "path" : {
-      "ref" : "refs/meta/config",
+      "ref" : "root-cfg-branch",
       "file" : "task.config",
       "name" : "Root Task PATHS",
-      "project" : "All-Projects",
+      "project" : "root-cfg-prj",
       "type" : "root"
    },
    "status" : "PASS",
@@ -26,10 +28,10 @@
          "hasPass" : true,
          "name" : "subtask pass",
          "path" : {
-            "ref" : "refs/meta/config",
+            "ref" : "root-cfg-branch",
             "file" : "task.config",
             "name" : "subtask pass",
-            "project" : "All-Projects",
+            "project" : "root-cfg-prj",
             "type" : "task"
          },
          "status" : "PASS"
@@ -46,10 +48,10 @@
    "hasPass" : false,
    "name" : "Root other FILE",
    "path" : {
-      "ref" : "refs/meta/config",
+      "ref" : "root-cfg-branch",
       "file" : "task.config",
       "name" : "Root other FILE",
-      "project" : "All-Projects",
+      "project" : "root-cfg-prj",
       "type" : "root"
    },
    "status" : "WAITING",
@@ -59,10 +61,10 @@
          "hasPass" : true,
          "name" : "file task/common.config PASS",
          "path" : {
-            "ref" : "refs/meta/config",
+            "ref" : "root-cfg-branch",
             "file" : "task/common.config",
             "name" : "file task/common.config PASS",
-            "project" : "All-Projects",
+            "project" : "root-cfg-prj",
             "type" : "task"
          },
          "status" : "PASS"
@@ -72,10 +74,10 @@
          "hasPass" : true,
          "name" : "file task/common.config FAIL",
          "path" : {
-            "ref" : "refs/meta/config",
+            "ref" : "root-cfg-branch",
             "file" : "task/common.config",
             "name" : "file task/common.config FAIL",
-            "project" : "All-Projects",
+            "project" : "root-cfg-prj",
             "type" : "task"
          },
          "status" : "FAIL"
@@ -99,10 +101,10 @@
    "hasPass" : false,
    "name" : "Root tasks-factory",
    "path" : {
-      "ref" : "refs/meta/config",
+      "ref" : "root-cfg-branch",
       "file" : "task.config",
       "name" : "Root tasks-factory",
-      "project" : "All-Projects",
+      "project" : "root-cfg-prj",
       "type" : "root"
    },
    "status" : "WAITING",
@@ -112,10 +114,10 @@
          "hasPass" : false,
          "name" : "my a task",
          "path" : {
-            "ref" : "refs/meta/config",
+            "ref" : "root-cfg-branch",
             "file" : "task.config",
             "name" : "my a task",
-            "project" : "All-Projects",
+            "project" : "root-cfg-prj",
             "tasksFactory" : "tasks-factory example",
             "type" : "tasks-factory"
          },
@@ -126,10 +128,10 @@
          "hasPass" : false,
          "name" : "my b task",
          "path" : {
-            "ref" : "refs/meta/config",
+            "ref" : "root-cfg-branch",
             "file" : "task.config",
             "name" : "my b task",
-            "project" : "All-Projects",
+            "project" : "root-cfg-prj",
             "tasksFactory" : "tasks-factory example",
             "type" : "tasks-factory"
          },
@@ -150,10 +152,10 @@
    "hasPass" : false,
    "name" : "Root other PROJECT",
    "path" : {
-      "ref" : "refs/meta/config",
+      "ref" : "root-cfg-branch",
       "file" : "task.config",
       "name" : "Root other PROJECT",
-      "project" : "All-Projects",
+      "project" : "root-cfg-prj",
       "type" : "root"
    },
    "status" : "WAITING",
@@ -189,8 +191,11 @@
    ]
 }
 ```
-`task.config` file in project `All-Projects` on ref `refs/meta/config`.
 
+The config below is expected to be in the `task.config` file in project
+`root-cfg-prj` on ref `root-cfg-branch`.
+
+file: `root-cfg-prj:root-cfg-branch:task.config`
 ```
 [root "Root Capability Error"]
     applicable = is:open

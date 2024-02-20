@@ -51,30 +51,59 @@ check_prerequisite() {
     docker-compose --version > /dev/null || die "docker-compose is not installed"
 }
 
-build_images() {
-    docker-compose "${COMPOSE_ARGS[@]}" build --quiet
+build_images() { # use_custom_root_cfg
+    local use_custom_root_cfg="${1:-false}"
+    if "$use_custom_root_cfg"; then
+        docker-compose "${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]}" build \
+            --build-arg ROOT_CFG_PRJ="$CUSTOM_ROOT_CFG_PRJ" \
+            --build-arg ROOT_CFG_BRANCH="$CUSTOM_ROOT_CFG_BRANCH" \
+            --quiet
+    else
+        docker-compose "${COMPOSE_ARGS[@]}" build --quiet
+    fi
 }
 
-run_task_plugin_tests() {
-    docker-compose "${COMPOSE_ARGS[@]}" up --detach
-    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
-        '/task/test/docker/run_tests/start.sh'
+run_task_plugin_tests() { # use_custom_root_cfg
+    local use_custom_root_cfg="${1:-false}"
+    if "$use_custom_root_cfg"; then
+        docker-compose "${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]}" up --detach
+        docker-compose "${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
+            sh -c "/task/test/docker/run_tests/start.sh \
+                --root-config-project $CUSTOM_ROOT_CFG_PRJ \
+                --root-config-branch $CUSTOM_ROOT_CFG_BRANCH"
+    else
+        docker-compose "${COMPOSE_ARGS[@]}" up --detach
+        docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
+            sh -c "/task/test/docker/run_tests/start.sh"
+    fi
 }
 
 retest() {
-    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin \
-        run_tests task/test/docker/run_tests/start.sh retest
-    RESULT=$?
+    docker-compose "${COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
+        sh -c "/task/test/docker/run_tests/start.sh --retest" || RESULT=1
+    docker-compose "${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]}" exec -T --user=admin run_tests \
+        sh -c "/task/test/docker/run_tests/start.sh \
+            --root-config-project $CUSTOM_ROOT_CFG_PRJ \
+            --root-config-branch $CUSTOM_ROOT_CFG_BRANCH \
+            --retest" || RESULT=1
     cleanup
 }
 
-get_run_test_container() {
-    docker-compose "${COMPOSE_ARGS[@]}" ps | grep run_tests | awk '{ print $1 }'
+get_run_test_container() { # use_custom_root_cfg
+    local use_custom_root_cfg="${1:-false}"
+    if "$use_custom_root_cfg"; then
+        docker-compose "${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]}" ps | grep run_tests | awk '{ print $1 }'
+    else
+        docker-compose "${COMPOSE_ARGS[@]}" ps | grep run_tests | awk '{ print $1 }'
+    fi
 }
 
 cleanup() {
     if [ "$PRESERVE" = "true" ] ; then
-        echo "Preserving the following docker setup"
+        echo -e "\n\nPreserving the following docker setups:"
+
+        echo -e "\n\nDefault root project configuration"
+        echo "----------------------------------"
         docker-compose "${COMPOSE_ARGS[@]}" ps
         echo ""
         echo "To exec into runtests container, use following command:"
@@ -83,11 +112,25 @@ cleanup() {
         echo "Run the following command to bring down the setup:"
         echo "docker-compose ${COMPOSE_ARGS[@]} down -v --rmi local"
         echo ""
+
+        echo -e "\n\nCustom root project configuration"
+        echo "---------------------------------"
+        docker-compose "${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]}" ps
+        echo ""
+        echo "To exec into runtests container, use following command:"
+        echo "docker exec -it $(get_run_test_container true) /bin/bash"
+        echo ""
+        echo "Run the following command to bring down the setup:"
+        echo "docker-compose ${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]} down -v --rmi local"
+        echo ""
+
+        echo -e "\n\nUse command below to re run tests after making changes to test scripts"
         options_prefix "COMPOSE_ARGS" "--compose-arg"
-        echo "Use command below to re run tests after making changes to test scripts"
-        echo " $MYDIR/$MYPROG --retest --preserve ${COMPOSE_ARGS[@]}"
+        options_prefix "CUSTOM_ROOT_CFG_COMPOSE_ARGS" "--custom-root-cfg-compose-arg"
+        echo "$MYDIR/$MYPROG --retest --preserve ${COMPOSE_ARGS[@]} ${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]}"
     else
         docker-compose "${COMPOSE_ARGS[@]}" down -v --rmi local 2>/dev/null
+        docker-compose "${CUSTOM_ROOT_CFG_COMPOSE_ARGS[@]}" down -v --rmi local 2>/dev/null
     fi
 }
 
@@ -96,22 +139,27 @@ RETEST="false"
 COMPOSE_ARGS=()
 while (( "$#" )) ; do
     case "$1" in
-        --help|-h)                usage ;;
-        --gerrit-war|-g)          shift ; GERRIT_WAR=$1 ;;
-        --task-plugin-jar|-t)     shift ; TASK_PLUGIN_JAR=$1 ;;
-        --preserve)               PRESERVE="true" ;;
-        --retest)                 RETEST="true" ;;
-        --compose-arg)            shift ; COMPOSE_ARGS+=("$1") ;;
-        *)                        usage "invalid argument $1" ;;
+        --help|-h)                     usage ;;
+        --gerrit-war|-g)               shift ; GERRIT_WAR=$1 ;;
+        --task-plugin-jar|-t)          shift ; TASK_PLUGIN_JAR=$1 ;;
+        --preserve)                    PRESERVE="true" ;;
+        --retest)                      RETEST="true" ;;
+        --compose-arg)                 shift ; COMPOSE_ARGS+=("$1") ;;
+        --custom-root-cfg-compose-arg) shift ; CUSTOM_ROOT_CFG_COMPOSE_ARGS+=("$1") ;;
+        *)                             usage "invalid argument $1" ;;
     esac
     shift
 done
 
+CUSTOM_ROOT_CFG_PRJ=task-config
+CUSTOM_ROOT_CFG_BRANCH=refs/heads/master
+
 [ "$RETEST" = "true" ] && { retest ; exit "$RESULT" ; }
 
-PROJECT_NAME="task_$$"
 COMPOSE_YAML="$MYDIR/docker-compose.yaml"
-COMPOSE_ARGS=(--project-name "$PROJECT_NAME" -f "$COMPOSE_YAML")
+COMPOSE_ARGS=(--project-name "task_$$" -f "$COMPOSE_YAML")
+CUSTOM_ROOT_CFG_COMPOSE_ARGS=(--project-name "task_custom_root_cfg_$$" -f "$COMPOSE_YAML")
+
 check_prerequisite
 mkdir -p -- "$ARTIFACTS"
 [ -n "$TASK_PLUGIN_JAR" ] && cp -f "$TASK_PLUGIN_JAR" "$ARTIFACTS/task.jar"
@@ -122,6 +170,11 @@ if [ ! -e "$ARTIFACTS/task.jar" ] ; then
 fi
 [ -n "$GERRIT_WAR" ] && cp -f "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
 ( trap cleanup EXIT SIGTERM
-    progress "Building docker images" build_images
-    run_task_plugin_tests
+    USE_CUSTOM_ROOT_CFG="false"
+    progress "Building docker images" build_images "$USE_CUSTOM_ROOT_CFG"
+    run_task_plugin_tests "$USE_CUSTOM_ROOT_CFG"
+
+    USE_CUSTOM_ROOT_CFG="true"
+    progress "Building docker images" build_images "$USE_CUSTOM_ROOT_CFG"
+    run_task_plugin_tests "$USE_CUSTOM_ROOT_CFG"
 )
