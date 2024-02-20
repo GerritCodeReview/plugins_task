@@ -1,0 +1,38 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "373318d8_98fdbfd9",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-02-20T23:00:02Z",
+      "side": 1,
+      "message": "To be honest, this approach feels weird. I think that a better approach would be to extend the TaskExpression format to allow referring to tasks in arbitrary projects. I believe I have given suggestions for formats for this in the past. Such an extension would feel more \"intuitive\" to me, would add a lot more configurability to tasks, and would allow configuration to happen without having access to the server\u0027s config files.",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4125ebc4_1d565c10",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-02-20T23:00:02Z",
+      "side": 1,
+      "message": "I don\u0027t quite understand how these last few things are really related to this change?",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
