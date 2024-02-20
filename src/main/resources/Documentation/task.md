@@ -72,12 +72,13 @@ invalid query.
 
 Tasks
 -----
-Tasks can either be root tasks, or subtasks. Tasks are defined in the
-`All-Projects` project, on the `refs/meta/config` branch, in a file named
-`task.config`. This file uses the gitconfig format to define tasks. The
-special "True" keyword may be used as any query definition to indicate
-an always matching query. The following keys may be defined in any
-task section:
+Tasks can either be root tasks, or subtasks. Tasks are expected to be
+defined in the `All-Projects` project, on the `refs/meta/config` branch
+(the root project and branch are [configurable](config.html#section-rootconfig)),
+in a file named `task.config`. This file uses the gitconfig format to define
+tasks. The special "True" keyword may be used as any query definition
+to indicate an always matching query. The following keys may be defined
+in any task section:
 
 `applicable`
 
