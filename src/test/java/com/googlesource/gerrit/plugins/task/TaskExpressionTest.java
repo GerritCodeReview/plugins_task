@@ -20,6 +20,7 @@ import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllUsersName;
+import com.google.inject.Inject;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import junit.framework.TestCase;
@@ -53,6 +54,8 @@ public class TaskExpressionTest extends TestCase {
   public static String WORLD_PEACE_CFG = "task/world/peace.config";
   public static String REL_WORLD_PEACE_CFG = "world/peace.config";
   public static String ABS_PEACE_CFG = "/peace.config";
+
+  @Inject private TaskPluginConfiguration config;
 
   public void testBlank() {
     TaskExpression exp = getTaskExpression("");
@@ -245,7 +248,8 @@ public class TaskExpressionTest extends TestCase {
                         new AllProjectsName("All-Projects"),
                         new AllUsersName("All-Users"),
                         accountCache,
-                        groupCache),
+                        groupCache,
+                        config),
                     (String) invocation.getArguments()[1]));
     return new TaskExpression(factory, file, expression);
   }

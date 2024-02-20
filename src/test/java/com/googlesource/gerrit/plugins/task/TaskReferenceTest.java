@@ -25,16 +25,20 @@ import com.google.gerrit.server.account.AccountCache;
 import com.google.gerrit.server.account.AccountState;
 import com.google.gerrit.server.account.GroupCache;
 import com.google.gerrit.server.config.AllProjectsName;
+import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.config.AllUsersName;
+import com.google.gerrit.server.config.PluginConfigFactory;
 import java.sql.Timestamp;
 import java.util.NoSuchElementException;
 import java.util.Optional;
 import junit.framework.TestCase;
 import org.eclipse.jgit.errors.ConfigInvalidException;
+import org.eclipse.jgit.lib.Config;
 import org.junit.Test;
 import org.mockito.Mockito;
 
 public class TaskReferenceTest extends TestCase {
+  private static final String PLUGIN = "task";
   private static final String ALL_USERS = "All-Users";
   private static final String ALL_PROJECTS = "All-Projects";
   public static String SIMPLE = "simple";
@@ -251,6 +255,8 @@ public class TaskReferenceTest extends TestCase {
   protected static TaskKey getTaskFromReference(FileKey file, String expression) {
     AccountCache accountCache = Mockito.mock(AccountCache.class);
     GroupCache groupCache = Mockito.mock(GroupCache.class);
+    PluginConfigFactory pluginConfigFactory = Mockito.mock(PluginConfigFactory.class);
+    AllProjectsNameProvider allProjectsNameProvider = Mockito.mock(AllProjectsNameProvider.class);
     Mockito.when(accountCache.getByUsername(TEST_USER))
         .thenReturn(Optional.of(AccountState.forAccount(TEST_USER_ACCOUNT)));
     Mockito.when(groupCache.get(TEST_GROUP1_NAME)).thenReturn(Optional.of(TEST_GROUP1));
@@ -259,7 +265,8 @@ public class TaskReferenceTest extends TestCase {
         .thenReturn(Optional.of(TEST_GROUP1));
     Mockito.when(groupCache.get(AccountGroup.uuid(TEST_GROUP2_UUID)))
         .thenReturn(Optional.of(TEST_GROUP2));
-
+    Mockito.when(allProjectsNameProvider.get()).thenReturn(new AllProjectsName(ALL_PROJECTS));
+    Mockito.when(pluginConfigFactory.getGlobalPluginConfig(PLUGIN)).thenReturn(new Config());
     try {
       return new TaskReference(
               new TaskKey.Builder(
@@ -267,7 +274,9 @@ public class TaskReferenceTest extends TestCase {
                   new AllProjectsName(ALL_PROJECTS),
                   new AllUsersName(ALL_USERS),
                   accountCache,
-                  groupCache),
+                  groupCache,
+                  new TaskPluginConfiguration(
+                      PLUGIN, new Config(), pluginConfigFactory, allProjectsNameProvider)),
               expression)
           .getTaskKey();
     } catch (ConfigInvalidException e) {

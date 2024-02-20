@@ -173,6 +173,8 @@ Usage:
 
     --help|-h                     help text
     --server|-s                   gerrit host
+    --root-config-project         project containing the root task config
+    --root-config-branch          branch containing the root task config
     --non-secret-user             user who doesn't have permission
                                   to view other user refs.
     --non-secret-group            non-secret group name
@@ -187,6 +189,8 @@ while (( "$#" )) ; do
     case "$1" in
         --help|-h)                usage ;;
         --server|-s)              shift ; SERVER=$1 ;;
+        --root-config-project)    shift ; ROOT_CONFIG_PRJ=$1 ;;
+        --root-config-branch)     shift ; ROOT_CONFIG_BRANCH=$1 ;;
         --non-secret-user)        shift ; NON_SECRET_USER=$1 ;;
         --non-secret-group)       shift ; NON_SECRET_GROUP_NAME=$1 ;;
         --secret-group)           shift ; SECRET_GROUP_NAME=$1 ;;
@@ -200,6 +204,8 @@ done
 [ -z "$NON_SECRET_GROUP_NAME" ] && usage "You must specify --non-secret-group"
 [ -z "$SECRET_GROUP_NAME" ] && usage "You must specify --secret-group"
 [ -z "$GERRIT_GIT_DIR" ] && usage "GERRIT_GIT_DIR environment variable not set"
+[ -z "$ROOT_CONFIG_PRJ" ] && ROOT_CONFIG_PRJ=All-Projects
+[ -z "$ROOT_CONFIG_BRANCH" ] && ROOT_CONFIG_BRANCH=refs/meta/config
 
 RESULT=0
 PORT=29418
@@ -240,7 +246,8 @@ TESTS=(
 )
 
 for test in "${TESTS[@]}" ; do
-    TEST_DOC="$(replace_user_refs < "$TEST_DOC_DIR/$test" | replace_users | replace_groups)"
+    TEST_DOC="$(replace_user_refs < "$TEST_DOC_DIR/$test" | replace_users | replace_groups | \
+        replace_root_configs)"
     init_configs
     test_change
 done

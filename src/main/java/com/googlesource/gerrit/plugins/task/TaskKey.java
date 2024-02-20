@@ -69,18 +69,21 @@ public abstract class TaskKey {
     protected String file;
     protected String task;
     protected GroupCache groupCache;
+    protected TaskPluginConfiguration config;
 
     Builder(
         FileKey relativeTo,
         AllProjectsName allProjectsName,
         AllUsersName allUsersName,
         AccountCache accountCache,
-        GroupCache groupCache) {
+        GroupCache groupCache,
+        TaskPluginConfiguration config) {
       this.relativeTo = relativeTo;
       this.allProjectsName = allProjectsName;
       this.allUsersName = allUsersName;
       this.accountCache = accountCache;
       this.groupCache = groupCache;
+      this.config = config;
     }
 
     public TaskKey buildTaskKey() {
@@ -167,8 +170,8 @@ public abstract class TaskKey {
                       .getGroupUUID()));
     }
 
-    public void setReferringAllProjectsTask() {
-      branch = BranchNameKey.create(allProjectsName, RefNames.REFS_CONFIG);
+    public void setReferringRootConfigBranchTask() {
+      branch = config.getRootConfigBranch();
     }
 
     protected void throwIfInvalidPath() throws ConfigInvalidException {
