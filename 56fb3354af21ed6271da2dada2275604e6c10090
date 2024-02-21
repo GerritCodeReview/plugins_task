@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "12e21679_0af1f3a0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-21T18:41:49Z",
+      "side": 1,
+      "message": "\u003e To be honest, this approach feels weird.\n\nCan you please explain why it feels weird?\n\n\u003e I think that a better approach would be to extend the TaskExpression format to allow referring to tasks in arbitrary projects.\n\nWith the approach you suggested, the roots will still be in All-Projects:refs/meta/config. See the comment below for why that still has limitations.\n\n\u003e I believe I have given suggestions for formats for this in the past. Such an extension would feel more \"intuitive\" to me, would add a lot more configurability to tasks, and would allow configuration to happen without having access to the server\u0027s config files.\n\nWe agree this extension will add a lot of configurability to tasks, however it does not address the self-service problem at the root level. Given how little additional code complexity this change adds, we don\u0027t think there\u0027s a good reason to not do it.",
+      "parentUuid": "373318d8_98fdbfd9",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4125ebc4_1d565c10",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -31,6 +49,24 @@
       "writtenOn": "2024-02-20T23:00:02Z",
       "side": 1,
       "message": "I don\u0027t quite understand how these last few things are really related to this change?",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b961024_28c10d0a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-21T18:41:49Z",
+      "side": 1,
+      "message": "I am trying to explain the problems solved by moving root task configs out from All-Projects. Even if organizations have a way to move non-root tasks to arbitrary projects, they likely still desire and benefit from a way to apply rules to how root task configs are updated. This paragraph in my commit-msg describes some potential ways to apply rules to task configs that are in-compatible with roots in All-Projects:refs/meta/config.\n\nIn summary, we\u0027d have more freedom in configuring the new project containing root (and any other) task configs as we see fit without running into the restrictions that come with All-Projects:refs/meta/config.",
+      "parentUuid": "4125ebc4_1d565c10",
       "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
