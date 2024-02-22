@@ -16,6 +16,24 @@
       "message": "Mention the backwards compatibility?",
       "revId": "fffa123f685980b37326ec16cebfbe2f6b707ac0",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "1e734b7f_1491c62f",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 14,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-22T23:45:12Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "37ff41f2_47ec9cf8",
+      "revId": "fffa123f685980b37326ec16cebfbe2f6b707ac0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
