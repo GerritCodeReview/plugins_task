@@ -34,13 +34,10 @@ result_out() { # test expected actual
     result "$name" "$(diff <(echo "$expected") <(echo "$actual"))"
 }
 
-result_root() { # group root expected_file actual
+result_root() { # group root
     local root=$(echo "$2" | sed -es'/Root //')
     local name="$1 - $root"
-    local expected_file=$3 actual=$4
-    local expected_root=$(json_val_by_key "$(cat "$expected_file")" "$root")
-    local actual_root=$(json_val_by_key "$actual" "$root")
-    result_out "$name" "$expected_root" "$actual_root"
+    result_out "$name" "${EXPECTED_ROOTS[$root]}" "${OUTPUT_ROOTS[$root]}"
 }
 
 # -------- Git Config
@@ -245,6 +242,23 @@ replace_tokens() { # < text > text with replacing all tokens(changes, user)
 strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json
 strip_non_invalid() { ensure "$MYDIR"/strip_non_invalid.py ; } # < json > json
 
+define_jsonByRoot() { # task_plugin_ouptut > jsonByRoot_array_definition
+    local record root=''
+    local -A jsonByRoot
+    while IFS= read -r -d '' record ; do
+        if [ -z "$root" ] ; then
+            root=$record
+        else
+            jsonByRoot[$root]=$record
+            root=''
+        fi
+    done < <(jq -r --indent 3 --sort-keys \
+        '.plugins[0].roots[] | "\(.name)\u0000\(.)\u0000"')
+
+    local def=$(declare -p jsonByRoot)
+    echo "${def#*=}" # declare -A jsonByRoot='(...)' > '(...)'
+}
+
 get_plugins() { # < change_json > plugins_json
     jq --indent 3 --sort-keys '{plugins: .plugins}'
 }
@@ -314,9 +328,12 @@ change_plugins() { awk "NR==$1" | get_plugins | json_pp ; }
 results_suite() { # name expected_file plugins_json
     local name=$1 expected_file=$2 actual=$3
 
+    local -A EXPECTED_ROOTS=$(define_jsonByRoot < "$expected_file")
+    local -A OUTPUT_ROOTS=$(echo "$actual" | define_jsonByRoot)
+
     local out root
     echo "$ROOTS" | while read root ; do
-        result_root "$name" "$root" "$expected_file" "$actual"
+        result_root "$name" "$root"
     done
     out=$(diff "$expected_file" <(echo "$actual") | head -15)
     [ -z "$out" ]
