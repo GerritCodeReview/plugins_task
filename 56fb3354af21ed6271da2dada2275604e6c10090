@@ -56,6 +56,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f87221cd_3f212742",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T19:23:32Z",
+      "side": 1,
+      "message": "\u003e It seems to me that this approach pushes the problem down to the next level, but it will still be there? In other words, how will you get teams to self service at the next level without giving them all the ability to write to that level (essentially giving them all the ability to overwrite each others roots)?\n\nThere\u0027s some ideas sketched out in https://gerrit-review.googlesource.com/c/plugins/task/+/407979/1/design-docs/task_config_references.md that I want to make clearer. I was planning to tie that change/doc and this change together better somehow, but I\u0027m not sure how. The high level idea is to dogfood the task plugin itself. Have a root that applies to wherever the task roots live and set up subtasks from there that have rules for changes to the root config file itself as well as for team-specific directories. The team-specific subtasks will be references to a task in their directory, so they can change their own review/verification tasks as needed.\n\n\u003e \n\u003e Are you seeking to get teams the ability to edit their roots, or to add new roots? The original philosophy and design was aimed at allowing server admins to control which teams got to have a root entry, but to then allow the teams to control what was in those roots, and I believe expanding TaskExpressions allows for that? If you additionally need the teams the ability to add there own roots, then perhaps it would make sense to add a keyword which points to another file and imports all the roots from that file. This would still give admins control of the players, but allow those players to add more than one root (and would not require expanding TaskExpressions).\n\nNo, we want to allow admins to either retain control of roots or very specifically delegate that responsibility (but not to all teams with a root).",
+      "parentUuid": "c2c9d131_b065e902",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4125ebc4_1d565c10",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -103,6 +121,24 @@
       "side": 1,
       "message": "How does this all relate to submit requirements and other plugin configs?",
       "parentUuid": "2b961024_28c10d0a",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e7e11553_5d66fa19",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T19:23:32Z",
+      "side": 1,
+      "message": "Oops, I read the commit message text a few times and never noticed it didn\u0027t directly state the problem. Submit requirements, label configs, and plugin configs (typically) are all inherited. Which means that if you set the config in All-Projects, every project is going to get that configuration. There usually isn\u0027t any way to stop that inheritance or to otherwise limit the scope such that it can be made specific to the task plugin config.",
+      "parentUuid": "416cf2be_b66abc91",
       "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
