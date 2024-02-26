@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2ca50afd_c71c177d",
+        "filename": "test/check_task_statuses.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T19:25:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "20d03ad9_755f7816",
+      "range": {
+        "startLine": 41,
+        "startChar": 23,
+        "endLine": 41,
+        "endChar": 31
+      },
+      "revId": "576971474ded198f812a36001dcc6d6bdb97da40",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "b49344bc_7c1cf1ec",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-26T19:16:55Z",
       "side": 1,
       "message": "dirname also?",
+      "range": {
+        "startLine": 277,
+        "startChar": 19,
+        "endLine": 277,
+        "endChar": 27
+      },
+      "revId": "576971474ded198f812a36001dcc6d6bdb97da40",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "46afb532_1fb787a8",
+        "filename": "test/lib/lib_helper.sh",
+        "patchSetId": 3
+      },
+      "lineNbr": 277,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T19:25:25Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b49344bc_7c1cf1ec",
       "range": {
         "startLine": 277,
         "startChar": 19,
