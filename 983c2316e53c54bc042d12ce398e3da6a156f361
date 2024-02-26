@@ -1,0 +1,302 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "232ca208_3f0e8c62",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "maybe reverse these? I think that better fits the wording used in the commit message as well as in places like the test script (`--root-config-project`).\n```suggestion\n : ROOT_PROJECT\n```",
+      "range": {
+        "startLine": 101,
+        "startChar": 3,
+        "endLine": 101,
+        "endChar": 15
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3a7f30a6_d7b9bec4",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "```suggestion\nROOT_PROJECT\n```",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 12
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96bb5e17_1a8a1e34",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskReference.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "unused?",
+      "range": {
+        "startLine": 61,
+        "startChar": 12,
+        "endLine": 61,
+        "endChar": 18
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a6415084_e4618ad3",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "nit: Add \"the root\" at the beginning\n```suggestion\n(the root project and branch are [configurable](config.html#section-rootconfig)),\n```",
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "14baaaef_7add5c7c",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "For follow up: I don\u0027t this is true after we added `names-factory`?",
+      "range": {
+        "startLine": 81,
+        "startChar": 3,
+        "endLine": 81,
+        "endChar": 19
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "04f6fea9_4b51eb94",
+        "filename": "src/main/resources/Documentation/task_expression.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "Can you line wrap this better? And add a couple missing \"the\"s.\n\n```suggestion\nTo reference a task from the root task.config on the root project and branch\n(defaults to `All-Projects` and `refs/meta/config` and is\n[configurable](config.html#section-rootconfig)), prefix the task name with\n`//^` and to reference a task from the task dir on the root project and branch,\nuse `//\u003crelative path from task dir\u003e^\u003ctask_name\u003e`. It doesn\u0027t matter which\nproject, ref and file one is referencing from while using this syntax.\n```",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 44
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9e5dc493_8c7a0e1f",
+        "filename": "src/main/resources/Documentation/test/paths.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "Can these use the template syntax with `{to_be_replaced}`? That\u0027s the same as `{testuser_user_ref}`, but I do see other template items that don\u0027t have that syntax, so it\u0027s a little confusing. I think it\u0027s clearer when reading the doc to always have the `{}` wrapping it, so I would prefer that.\n\n```suggestion\n`{root-cfg-prj}` on ref `{root-cfg-branch}`.\n```",
+      "range": {
+        "startLine": 2,
+        "startChar": 1,
+        "endLine": 2,
+        "endChar": 13
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "310cf647_7b718a63",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskReferenceTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "nit: Move this to the constants?",
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d8d7b78b_f20fdba3",
+        "filename": "test/check_task_statuses.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "I would keep these near the REMOTE_ lines above",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 25
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "05aca426_77ffd9dc",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "Do you have to bring down the containers here? I think you could get away with less, like resetting All-Projects to what it was before you started running the tests. Any requirements for \"resetting\" should also be noted in the test scripts\u0027 comment headers.",
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "94e304d9_fcf184c1",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "Why move this out of the block below?",
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "78dd2e23_c659ddb6",
+        "filename": "test/docker/run_tests/create-one-time-test-data.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "this should be `$ROOT_CONFIG_BRANCH`?\n```suggestion\n      q git fetch origin \"$ROOT_CONFIG_BRANCH\" ; q git checkout FETCH_HEAD\n```",
+      "range": {
+        "startLine": 43,
+        "startChar": 25,
+        "endLine": 43,
+        "endChar": 41
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6749ef3e_08f399b0",
+        "filename": "test/docker/run_tests/create-one-time-test-data.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "this should be `$ROOT_CONFIG_BRANCH`?\n```suggestion\n      q git push origin \"HEAD:$ROOT_CONFIG_BRANCH\"\n```",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 45
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "89c95503_5594d4a1",
+        "filename": "test/lib/lib_helper.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-26T17:23:46Z",
+      "side": 1,
+      "message": "Two things:\n1. You can combine these into a single `replace_root_configs`\n2. This lib is allowed to use globals from the test scripts, so you don\u0027t need to pass the root prj/br as args\n```suggestion\nreplace_root_configs() { # \u003c text_with_root_tokens \u003e text_with_root_tokens_replaced\n    sed -e \"s,root-cfg-prj,$ROOT_CONFIG_PRJ,\" \\\n        -e \"s,root-cfg-branch,$ROOT_CONFIG_BRANCH,\"\n}\n```",
+      "range": {
+        "startLine": 226,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 1
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
