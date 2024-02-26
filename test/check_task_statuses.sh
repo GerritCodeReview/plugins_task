@@ -38,7 +38,7 @@ create_configs_from_task_states() {
             q_setup setup_repo "$project_dir" "$REMOTE_USERS" "$ref"
         fi
 
-        mkdir -p "$(dirname "$project_dir/$file")"
+        mkdir -p -- "$(dirname -- "$project_dir/$file")"
         md_marker_content "$DOC_STATES" "$marker" | replace_user \
             | testdoc_2_cfg > "$project_dir/$file"
 
@@ -151,7 +151,7 @@ GROUP_EXPANDED_BY_PLACEHOLDER["{non_secret_group_uuid}"]="$(get_group_uuid "$GRO
 GROUP_EXPANDED_BY_PLACEHOLDER["{sharded_non_secret_group_uuid_without_space}"]="$(get_sharded_group_uuid "$GROUP_NAME_WITHOUT_SPACE")"
 GROUP_EXPANDED_BY_PLACEHOLDER["{sharded_non_secret_group_uuid_with_space}"]="$(get_sharded_group_uuid "$GROUP_NAME_WITH_SPACE")"
 
-mkdir -p "$OUT" "$ALL_TASKS" "$USER_TASKS"
+mkdir -p -- "$OUT" "$ALL_TASKS" "$USER_TASKS"
 
 q_setup setup_repo "$ALL" "$REMOTE_ALL" "$REF_ALL"
 q_setup setup_repo "$USERS" "$REMOTE_USERS" "$REF_USERS" --initial-commit

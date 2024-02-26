@@ -14,7 +14,7 @@ create_project() { # project
 
 install_changeid_hook() {
     local hook=$(git rev-parse --git-dir)/hooks/commit-msg
-    mkdir -p "$(dirname "$hook")"
+    mkdir -p "$(dirname -- "$hook")"
     curl -Lo "$hook" "http://$GERRIT_HOST:$HTTP_PORT/tools/hooks/commit-msg"
     chmod +x "$hook"
 }

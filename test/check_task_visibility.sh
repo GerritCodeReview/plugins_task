@@ -93,7 +93,7 @@ config_ensure() { # config_file_path
 }
 
 get_remote() { # project > remote_url
-    echo "ssh://$SERVER:$PORT/$(basename "$1")"
+    echo "ssh://$SERVER:$PORT/$(basename -- "$1")"
 }
 
 # Gets json from the preview doc and creates
@@ -129,7 +129,7 @@ init_configs() {
         local tip_content
 
         q_setup setup_repo "$project" "$(get_remote "$project")" "$ref"
-        mkdir -p "$(dirname "$project/$file")"
+        mkdir -p "$(dirname -- "$project/$file")"
 
         if diff_indicators_present "$content" ; then
             CHANGE_FILE_MARKER=$marker

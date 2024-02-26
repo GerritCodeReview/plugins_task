@@ -31,7 +31,7 @@ result_out() { # test expected actual
     local name=$1 expected=$2 actual=$3
 
     [ "$expected" = "$actual" ]
-    result "$name" "$(diff <(echo "$expected") <(echo "$actual"))"
+    result "$name" "$(diff -- <(echo "$expected") <(echo "$actual"))"
 }
 
 result_root() { # group root
@@ -274,16 +274,16 @@ get_change_num() { # < gerrit_push_response > changenum
 
 install_changeid_hook() {
     local hook=$(git rev-parse --git-dir)/hooks/commit-msg
-    mkdir -p "$(dirname "$hook")"
+    mkdir -p -- "$(dirname -- "$hook")"
     curl -Lo "$hook" "http://$SERVER:$HTTP_PORT/tools/hooks/commit-msg"
     chmod +x "$hook"
 }
 
 setup_repo() { # repo remote ref [--initial-commit]
     local repo=$1 remote=$2 ref=$3 init=$4
-    git init "$repo"
+    git init -- "$repo"
     (
-        cd "$repo"
+        cd -- "$repo"
         install_changeid_hook
         git fetch "$remote" "$ref"
         if ! git checkout FETCH_HEAD ; then
@@ -297,7 +297,7 @@ setup_repo() { # repo remote ref [--initial-commit]
 update_repo() { # repo remote ref
     local repo=$1 remote=$2 ref=$3
     (
-        cd "$repo"
+        cd -- "$repo"
         git add .
         git commit -m 'Testing task plugin'
         git push "$remote" HEAD:"$ref"
@@ -307,7 +307,7 @@ update_repo() { # repo remote ref
 create_repo_change() { # repo remote ref [change_id] > change_num
     local repo=$1 remote=$2 ref=$3 change_id=$4 msg="Test change"
     (
-        q cd "$repo"
+        q cd -- "$repo"
         uuidgen > file
         q git add .
         [ -n "$change_id" ] && msg=$(commit_message "$msg" "$change_id")
@@ -335,7 +335,7 @@ results_suite() { # name expected_file plugins_json
     echo "$ROOTS" | while read root ; do
         result_root "$name" "$root"
     done
-    out=$(diff "$expected_file" <(echo "$actual") | head -15)
+    out=$(diff -- "$expected_file" <(echo "$actual") | head -15)
     [ -z "$out" ]
     result "$name - Full Test Suite" "$out"
 }
