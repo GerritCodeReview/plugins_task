@@ -38,6 +38,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c2c9d131_b065e902",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-02-26T19:14:35Z",
+      "side": 1,
+      "message": "It seems to me that this approach pushes the problem down to the next level, but it will still be there? In other words, how will you get teams to self service at the next level without giving them all the ability to write to that level (essentially giving them all the ability to overwrite each others roots)?\n\nAre you seeking to get teams the ability to edit their roots, or to add new roots? The original philosophy and design was aimed at allowing server admins to control which teams got to have a root entry, but to then allow the teams to control what was in those roots, and I believe expanding TaskExpressions allows for that? If you additionally need the teams the ability to add there own roots, then perhaps it would make sense to add a keyword which points to another file and imports all the roots from that file. This would still give admins control of the players, but allow those players to add more than one root (and would not require expanding TaskExpressions).",
+      "parentUuid": "12e21679_0af1f3a0",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4125ebc4_1d565c10",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
@@ -67,6 +85,24 @@
       "side": 1,
       "message": "I am trying to explain the problems solved by moving root task configs out from All-Projects. Even if organizations have a way to move non-root tasks to arbitrary projects, they likely still desire and benefit from a way to apply rules to how root task configs are updated. This paragraph in my commit-msg describes some potential ways to apply rules to task configs that are in-compatible with roots in All-Projects:refs/meta/config.\n\nIn summary, we\u0027d have more freedom in configuring the new project containing root (and any other) task configs as we see fit without running into the restrictions that come with All-Projects:refs/meta/config.",
       "parentUuid": "4125ebc4_1d565c10",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "416cf2be_b66abc91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1010013
+      },
+      "writtenOn": "2024-02-26T19:14:35Z",
+      "side": 1,
+      "message": "How does this all relate to submit requirements and other plugin configs?",
+      "parentUuid": "2b961024_28c10d0a",
       "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
