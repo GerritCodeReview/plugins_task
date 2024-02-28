@@ -3,6 +3,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "db240071_6e61616b",
+        "filename": "BUILD",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:05:53Z",
+      "side": 1,
+      "message": "The task plugin doesn\u0027t depend on this, only the docker test does, so this shouldn\u0027t be here.",
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bb11d6ff_6ed4157a",
         "filename": "BUILD",
         "patchSetId": 2
@@ -20,6 +37,98 @@
         "endLine": 83,
         "endChar": 44
       },
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "618385ae_54903a79",
+        "filename": "BUILD",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:05:53Z",
+      "side": 1,
+      "message": "I think it\u0027s just this (using my suggestion from the other BUILD file):\n```suggestion\n    args \u003d [\"--task-plugin-jar\", \"$(location :task)\", \"--names-factory-provider-plugin-jar\", \"$(location :test_factory_provider_plugin_name)\"],\n    data \u003d [plugin_name, test_factory_provider_plugin_name] + glob([\"test/**\"]) + glob([\"src/main/resources/Documentation/*\"]),\n```",
+      "parentUuid": "bb11d6ff_6ed4157a",
+      "range": {
+        "startLine": 83,
+        "startChar": 36,
+        "endLine": 83,
+        "endChar": 44
+      },
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "19a2490c_cee16b10",
+        "filename": "names-factory-provider/.bazelrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:05:53Z",
+      "side": 1,
+      "message": "You shouldn\u0027t need this file",
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d05decfe_e4371099",
+        "filename": "names-factory-provider/BUILD",
+        "patchSetId": 2
+      },
+      "lineNbr": 5,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:05:53Z",
+      "side": 1,
+      "message": "You can put this rule into the overall BUILD file, rename `plugin_name` as something like `test_factory_provider_plugin_name`, and fix the srcs path to be specific to the factory provider test plugin.",
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ac69a6be_212bcb95",
+        "filename": "names-factory-provider/src/main/java/com/googlesource/gerrit/plugins/names_factory_provider/FooBarProvider.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:05:53Z",
+      "side": 1,
+      "message": "Needs copyright/license header\n\nAnd this file should go under `src/test/java/com/googlesoruce/gerrit/plugins/names_factory_provider/` (no `names-factory-provider/` prefix)",
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0b6cc821_e4952dfb",
+        "filename": "names-factory-provider/src/main/java/com/googlesource/gerrit/plugins/names_factory_provider/Module.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:05:53Z",
+      "side": 1,
+      "message": "Needs copyright/license header and should be moved the same as the other file in this dir",
       "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
