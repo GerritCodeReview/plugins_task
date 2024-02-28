@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "10a11edc_8b726e3e",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 5
+      },
+      "lineNbr": 101,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "232ca208_3f0e8c62",
+      "range": {
+        "startLine": 101,
+        "startChar": 3,
+        "endLine": 101,
+        "endChar": 15
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3a7f30a6_d7b9bec4",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-26T17:23:46Z",
       "side": 1,
       "message": "```suggestion\nROOT_PROJECT\n```",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 178,
+        "endChar": 12
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9fdb53ea_f8fbb3ff",
+        "filename": "src/main/antlr4/com/googlesource/gerrit/plugins/task/TaskReference.g4",
+        "patchSetId": 5
+      },
+      "lineNbr": 178,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3a7f30a6_d7b9bec4",
       "range": {
         "startLine": 178,
         "startChar": 0,
@@ -70,6 +118,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a0d0c401_affbd645",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskReference.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "It is used in `TaskKey.Builder` to get the root project and branch.",
+      "parentUuid": "96bb5e17_1a8a1e34",
+      "range": {
+        "startLine": 61,
+        "startChar": 12,
+        "endLine": 61,
+        "endChar": 18
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6415084_e4618ad3",
@@ -87,6 +159,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5c44405e_dd93b535",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a6415084_e4618ad3",
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "14baaaef_7add5c7c",
@@ -100,6 +190,30 @@
       "writtenOn": "2024-02-26T17:23:46Z",
       "side": 1,
       "message": "For follow up: I don\u0027t this is true after we added `names-factory`?",
+      "range": {
+        "startLine": 81,
+        "startChar": 3,
+        "endLine": 81,
+        "endChar": 19
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "62841eb7_b846bc97",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "`names-factory` is not really a `task` section, is it? But yeah, the documentation can probably be improved here.",
+      "parentUuid": "14baaaef_7add5c7c",
       "range": {
         "startLine": 81,
         "startChar": 3,
@@ -133,6 +247,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "162a8f66_b253033c",
+        "filename": "src/main/resources/Documentation/task_expression.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 161,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "04f6fea9_4b51eb94",
+      "range": {
+        "startLine": 157,
+        "startChar": 0,
+        "endLine": 161,
+        "endChar": 44
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "9e5dc493_8c7a0e1f",
@@ -146,6 +284,30 @@
       "writtenOn": "2024-02-26T17:23:46Z",
       "side": 1,
       "message": "Can these use the template syntax with `{to_be_replaced}`? That\u0027s the same as `{testuser_user_ref}`, but I do see other template items that don\u0027t have that syntax, so it\u0027s a little confusing. I think it\u0027s clearer when reading the doc to always have the `{}` wrapping it, so I would prefer that.\n\n```suggestion\n`{root-cfg-prj}` on ref `{root-cfg-branch}`.\n```",
+      "range": {
+        "startLine": 2,
+        "startChar": 1,
+        "endLine": 2,
+        "endChar": 13
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d60d0b21_12aad0c1",
+        "filename": "src/main/resources/Documentation/test/paths.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 2,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "9e5dc493_8c7a0e1f",
       "range": {
         "startLine": 2,
         "startChar": 1,
@@ -173,6 +335,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ccb29f0a_7b954b0d",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskReferenceTest.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 255,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "310cf647_7b718a63",
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d8d7b78b_f20fdba3",
@@ -186,6 +366,30 @@
       "writtenOn": "2024-02-26T17:23:46Z",
       "side": 1,
       "message": "I would keep these near the REMOTE_ lines above",
+      "range": {
+        "startLine": 145,
+        "startChar": 0,
+        "endLine": 146,
+        "endChar": 25
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5fc198a9_d156ce58",
+        "filename": "test/check_task_statuses.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 146,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d8d7b78b_f20fdba3",
       "range": {
         "startLine": 145,
         "startChar": 0,
@@ -213,6 +417,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "928fd078_f65786a7",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 63,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Yeah, the retest functionality is currently broken, so we cannot re-run tests using the same docker setup. I\u0027ll add a TODO for now.",
+      "parentUuid": "05aca426_77ffd9dc",
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "94e304d9_fcf184c1",
@@ -230,6 +452,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f25a26bd_3e6754c7",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 145,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Unintentional. Restored it now.",
+      "parentUuid": "94e304d9_fcf184c1",
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "78dd2e23_c659ddb6",
@@ -243,6 +483,30 @@
       "writtenOn": "2024-02-26T17:23:46Z",
       "side": 1,
       "message": "this should be `$ROOT_CONFIG_BRANCH`?\n```suggestion\n      q git fetch origin \"$ROOT_CONFIG_BRANCH\" ; q git checkout FETCH_HEAD\n```",
+      "range": {
+        "startLine": 43,
+        "startChar": 25,
+        "endLine": 43,
+        "endChar": 41
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e0e25e87_359ba769",
+        "filename": "test/docker/run_tests/create-one-time-test-data.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "`refs/meta/config` is the correct branch as we are updating the ACLs here.",
+      "parentUuid": "78dd2e23_c659ddb6",
       "range": {
         "startLine": 43,
         "startChar": 25,
@@ -276,6 +540,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3ae0fcc9_0e0af513",
+        "filename": "test/docker/run_tests/create-one-time-test-data.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 51,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "`refs/meta/config` is the correct branch as we are updating the ACLs here.",
+      "parentUuid": "6749ef3e_08f399b0",
+      "range": {
+        "startLine": 51,
+        "startChar": 29,
+        "endLine": 51,
+        "endChar": 45
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "89c95503_5594d4a1",
@@ -289,6 +577,30 @@
       "writtenOn": "2024-02-26T17:23:46Z",
       "side": 1,
       "message": "Two things:\n1. You can combine these into a single `replace_root_configs`\n2. This lib is allowed to use globals from the test scripts, so you don\u0027t need to pass the root prj/br as args\n```suggestion\nreplace_root_configs() { # \u003c text_with_root_tokens \u003e text_with_root_tokens_replaced\n    sed -e \"s,root-cfg-prj,$ROOT_CONFIG_PRJ,\" \\\n        -e \"s,root-cfg-branch,$ROOT_CONFIG_BRANCH,\"\n}\n```",
+      "range": {
+        "startLine": 226,
+        "startChar": 0,
+        "endLine": 233,
+        "endChar": 1
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa4b8f6_fe6add92",
+        "filename": "test/lib/lib_helper.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 233,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T01:52:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "89c95503_5594d4a1",
       "range": {
         "startLine": 226,
         "startChar": 0,
