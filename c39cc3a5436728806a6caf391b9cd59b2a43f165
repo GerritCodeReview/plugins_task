@@ -16,6 +16,24 @@
       "message": "I think I suggested putting this in `src/main/resources/Documentation/design-docs/`. But maybe `src/main/resources/Documentation/design/` is better (since docs and Documentation are redundant). Can you move it there?\n\nI\u0027ll review this more closely tomorrow, but I don\u0027t have any high level concerns.",
       "revId": "c39cc3a5436728806a6caf391b9cd59b2a43f165",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "a2c230d6_218f57f6",
+        "filename": "design-docs/task_plugin_config.md",
+        "patchSetId": 7
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-28T16:08:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cb17a211_6a52098b",
+      "revId": "c39cc3a5436728806a6caf391b9cd59b2a43f165",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
