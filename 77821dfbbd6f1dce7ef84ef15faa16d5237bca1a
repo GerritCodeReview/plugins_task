@@ -1,0 +1,335 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd7773a5_1e6cd75d",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "Do we mean the same thing when we say \"Teams\" and \"Task config devs\" or is there some distinction? I feel like when we were talking there was some difference, but I can\u0027t think of it now. If they\u0027re the same, we should pick one and use it consistently.",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 8
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "59e02375_fdecf8cf",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "@kaushik.lingarkar@linaro.org can you test this case so that we can specify here if this currently works or is a known \"broken\"/unmet case?",
+      "range": {
+        "startLine": 12,
+        "startChar": 109,
+        "endLine": 12,
+        "endChar": 122
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "24cbde12_bdab6161",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "I\u0027m not sure this fits in with the other requirements here (at least not worded like this). The other requirements are related to dev/test/deploy task config changes (which maybe should be in the page title), but this is about the CI systems. Maybe we should reword to be about the scope of testing and include it under #4 above?",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6db342d5_833b57a6",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "I feel like this is missing some text that leads from the requirements into the rest of the doc below.",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "cbde0540_d860e267",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "Mention this is the default?",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e72e2465_52804ca9",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "nit: If there\u0027s a way to make this an actual link without making the doc less readable, that would be nice.",
+      "range": {
+        "startLine": 27,
+        "startChar": 147,
+        "endLine": 27,
+        "endChar": 152
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6b0c7494_b9870242",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "It also relies on group refs for requirements 4 and 5.",
+      "range": {
+        "startLine": 31,
+        "startChar": 42,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5f2847ed_fcf47bc0",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "Unless we\u0027re talking about the roots, this isn\u0027t actually a gap since it can be done with group refs.",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "28bc7953_9ffc8cbb",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "This depends on the configuration, so maybe reword a little?\n```suggestion\n  4. Admins potentially have less oversight on task roots\n```",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "02151110_db3ae090",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "Maybe clarify what this means? (labels, code-owners, etc)",
+      "range": {
+        "startLine": 47,
+        "startChar": 17,
+        "endLine": 47,
+        "endChar": 39
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a0bed9d_b7bcfe83",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "Not true as of this change.",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c8dce7c8_808f2fab",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "Add that this means service accounts and collaborators would need to become group owners in order to do anything useful with the team\u0027s group-based task config.",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "16537384_adfa55b2",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "Is this actually a gap? I thought it would be doable on a group ref.",
+      "range": {
+        "startLine": 69,
+        "startChar": 5,
+        "endLine": 69,
+        "endChar": 10
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7d6e7895_79813a37",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "```suggestion\n  1. Plugin currently does not support task expressions referring to a refs/heads/group-owned/..\n```",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8a8643dd_cb7b2fe9",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "```suggestion\n  2. No support for automatically configuring permissions on refs/heads/group-owned/.. or otherwise tying the ref to the group\n```",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e8bf03fa_00aeb83a",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "```suggestion\n  1. Not consistent with other plugin configs (but might be similar if `refs/meta/config` is used as the branch)\n```",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8eb91b2c_cf1702f9",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "```suggestion\n  1. Plugin currently does not support task expressions referring to a custom project:branch\n```",
+      "range": {
+        "startLine": 96,
+        "startChar": 38,
+        "endLine": 96,
+        "endChar": 49
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}

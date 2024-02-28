@@ -92,6 +92,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "b94ac21a_635f4c17",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T19:32:52Z",
+      "side": 1,
+      "message": "I\u0027m glad it\u0027s clearer now, thanks for asking questions to help us explain it. I haven\u0027t come up with a generic mechanism that\u0027s as simple as this and solves the problems we care about too. If you have time, take a look at `src/main/resources/Documentation/design/task_plugin_config.md` and see if you notice something we\u0027ve missed there.",
+      "parentUuid": "d690bee6_36c825a7",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "4125ebc4_1d565c10",
         "filename": "/COMMIT_MSG",
         "patchSetId": 4
