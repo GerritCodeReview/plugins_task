@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bb11d6ff_6ed4157a",
+        "filename": "BUILD",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-02-28T17:18:28Z",
+      "side": 1,
+      "message": "need to figure out to way to pass the other names-factory plugin jar",
+      "range": {
+        "startLine": 83,
+        "startChar": 36,
+        "endLine": 83,
+        "endChar": 44
+      },
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
