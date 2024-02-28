@@ -142,6 +142,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "687f275e_861491e0",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskReference.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T05:27:22Z",
+      "side": 1,
+      "message": "Ack.",
+      "parentUuid": "a0d0c401_affbd645",
+      "range": {
+        "startLine": 61,
+        "startChar": 12,
+        "endLine": 61,
+        "endChar": 18
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a6415084_e4618ad3",
@@ -214,6 +238,30 @@
       "side": 1,
       "message": "`names-factory` is not really a `task` section, is it? But yeah, the documentation can probably be improved here.",
       "parentUuid": "14baaaef_7add5c7c",
+      "range": {
+        "startLine": 81,
+        "startChar": 3,
+        "endLine": 81,
+        "endChar": 19
+      },
+      "revId": "983c2316e53c54bc042d12ce398e3da6a156f361",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "98d86262_1b477a2a",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 81,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-02-28T05:27:22Z",
+      "side": 1,
+      "message": "Ok, I was interpreting \"task section\" to mean any section in the task config. I guess we could improve this to say which sections we mean. I think it would be `root`, `task`, and `tasks-factory`? But yeah, reading this doc, I see other things to improve as well, so probably worth some time spent on it.",
+      "parentUuid": "62841eb7_b846bc97",
       "range": {
         "startLine": 81,
         "startChar": 3,
