@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "b33c9a5d_17dc3730",
+        "filename": "BUILD",
+        "patchSetId": 2
+      },
+      "lineNbr": 61,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-02-29T07:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "db240071_6e61616b",
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bb11d6ff_6ed4157a",
@@ -65,6 +83,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2595d4c1_b68a8aa3",
+        "filename": "BUILD",
+        "patchSetId": 2
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-02-29T07:13:00Z",
+      "side": 1,
+      "message": "Thanks it makes sense to me now how bazel sh_test is actually working. It was not clear to me earlier",
+      "parentUuid": "618385ae_54903a79",
+      "range": {
+        "startLine": 83,
+        "startChar": 36,
+        "endLine": 83,
+        "endChar": 44
+      },
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "19a2490c_cee16b10",
@@ -78,6 +120,24 @@
       "writtenOn": "2024-02-28T19:05:53Z",
       "side": 1,
       "message": "You shouldn\u0027t need this file",
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "77c45bc7_e0f40a9f",
+        "filename": "names-factory-provider/.bazelrc",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-02-29T07:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "19a2490c_cee16b10",
       "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -112,6 +172,24 @@
       "writtenOn": "2024-02-28T19:05:53Z",
       "side": 1,
       "message": "Needs copyright/license header\n\nAnd this file should go under `src/test/java/com/googlesoruce/gerrit/plugins/names_factory_provider/` (no `names-factory-provider/` prefix)",
+      "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0aa88905_5a55d5b5",
+        "filename": "names-factory-provider/src/main/java/com/googlesource/gerrit/plugins/names_factory_provider/FooBarProvider.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-02-29T07:13:00Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ac69a6be_212bcb95",
       "revId": "99e9b8b20eba5f9eb2e7d99391ce9a6c8d77858f",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
