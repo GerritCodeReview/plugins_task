@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d9d6058e_72e8e592",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "I think we mean the same. Let me use \"Task config devs\"",
+      "parentUuid": "fd7773a5_1e6cd75d",
+      "range": {
+        "startLine": 11,
+        "startChar": 3,
+        "endLine": 11,
+        "endChar": 8
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "59e02375_fdecf8cf",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-28T19:32:52Z",
       "side": 1,
       "message": "@kaushik.lingarkar@linaro.org can you test this case so that we can specify here if this currently works or is a known \"broken\"/unmet case?",
+      "range": {
+        "startLine": 12,
+        "startChar": 109,
+        "endLine": 12,
+        "endChar": 122
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "395cab81_13c10a70",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "It works as expected, i.e invalid tasks are not seen.",
+      "parentUuid": "59e02375_fdecf8cf",
       "range": {
         "startLine": 12,
         "startChar": 109,
@@ -64,6 +112,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "45a44cef_f4ce7b54",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "24cbde12_bdab6161",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6db342d5_833b57a6",
@@ -77,6 +143,24 @@
       "writtenOn": "2024-02-28T19:32:52Z",
       "side": 1,
       "message": "I feel like this is missing some text that leads from the requirements into the rest of the doc below.",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "793bb646_f649c01e",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 23,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6db342d5_833b57a6",
       "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -98,6 +182,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "89159e58_96d674f9",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 24,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "cbde0540_d860e267",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e72e2465_52804ca9",
@@ -111,6 +213,30 @@
       "writtenOn": "2024-02-28T19:32:52Z",
       "side": 1,
       "message": "nit: If there\u0027s a way to make this an actual link without making the doc less readable, that would be nice.",
+      "range": {
+        "startLine": 27,
+        "startChar": 147,
+        "endLine": 27,
+        "endChar": 152
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b0602f17_81602b11",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "I don\u0027t see a way to reach the numbered bullets via links. But I have linked them to the \u0027Requirements\u0027 section.",
+      "parentUuid": "e72e2465_52804ca9",
       "range": {
         "startLine": 27,
         "startChar": 147,
@@ -144,6 +270,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f82e8c90_bee2ad17",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 31,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6b0c7494_b9870242",
+      "range": {
+        "startLine": 31,
+        "startChar": 42,
+        "endLine": 31,
+        "endChar": 45
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5f2847ed_fcf47bc0",
@@ -161,6 +311,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "817da11c_5d9f3f0b",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 37,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Agreed. Removed.",
+      "parentUuid": "5f2847ed_fcf47bc0",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "28bc7953_9ffc8cbb",
@@ -174,6 +342,24 @@
       "writtenOn": "2024-02-28T19:32:52Z",
       "side": 1,
       "message": "This depends on the configuration, so maybe reword a little?\n```suggestion\n  4. Admins potentially have less oversight on task roots\n```",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b2b6fcce_076ff445",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "28bc7953_9ffc8cbb",
       "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -201,6 +387,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "3f57bf8f_3eb60c51",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "02151110_db3ae090",
+      "range": {
+        "startLine": 47,
+        "startChar": 17,
+        "endLine": 47,
+        "endChar": 39
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8a0bed9d_b7bcfe83",
@@ -218,6 +428,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c5f07360_31fe2ed3",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 54,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Removed.",
+      "parentUuid": "8a0bed9d_b7bcfe83",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c8dce7c8_808f2fab",
@@ -231,6 +459,24 @@
       "writtenOn": "2024-02-28T19:32:52Z",
       "side": 1,
       "message": "Add that this means service accounts and collaborators would need to become group owners in order to do anything useful with the team\u0027s group-based task config.",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e697144_fd462393",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c8dce7c8_808f2fab",
       "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -258,6 +504,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "02038256_69805e9b",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 69,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Yeah, removed.",
+      "parentUuid": "16537384_adfa55b2",
+      "range": {
+        "startLine": 69,
+        "startChar": 5,
+        "endLine": 69,
+        "endChar": 10
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "7d6e7895_79813a37",
@@ -271,6 +541,24 @@
       "writtenOn": "2024-02-28T19:32:52Z",
       "side": 1,
       "message": "```suggestion\n  1. Plugin currently does not support task expressions referring to a refs/heads/group-owned/..\n```",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "24486cb2_129c7526",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 83,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "7d6e7895_79813a37",
       "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -292,6 +580,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cbb1e340_da1865bd",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 84,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8a8643dd_cb7b2fe9",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e8bf03fa_00aeb83a",
@@ -309,6 +615,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "d182b651_437cc8de",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 88,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e8bf03fa_00aeb83a",
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8eb91b2c_cf1702f9",
@@ -322,6 +646,30 @@
       "writtenOn": "2024-02-28T19:32:52Z",
       "side": 1,
       "message": "```suggestion\n  1. Plugin currently does not support task expressions referring to a custom project:branch\n```",
+      "range": {
+        "startLine": 96,
+        "startChar": 38,
+        "endLine": 96,
+        "endChar": 49
+      },
+      "revId": "77821dfbbd6f1dce7ef84ef15faa16d5237bca1a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "213adfac_4b0f636e",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 8
+      },
+      "lineNbr": 96,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T01:34:11Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8eb91b2c_cf1702f9",
       "range": {
         "startLine": 96,
         "startChar": 38,
