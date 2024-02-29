@@ -1,0 +1,50 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2403d677_aecf190e",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T18:54:30Z",
+      "side": 0,
+      "message": "Removed intentionally?",
+      "range": {
+        "startLine": 117,
+        "startChar": 35,
+        "endLine": 117,
+        "endChar": 37
+      },
+      "revId": "9c9614f4c37deb62a875474f6380fca6eb933948",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "57da82a9_84f76742",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-02-29T18:54:30Z",
+      "side": 0,
+      "message": "Removed intentionally?",
+      "range": {
+        "startLine": 123,
+        "startChar": 30,
+        "endLine": 123,
+        "endChar": 32
+      },
+      "revId": "9c9614f4c37deb62a875474f6380fca6eb933948",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
