@@ -14,115 +14,68 @@
 
 package com.googlesource.gerrit.plugins.task;
 
-import com.google.gerrit.index.FieldDef;
-import com.google.gerrit.index.query.AndPredicate;
-import com.google.gerrit.index.query.NotPredicate;
-import com.google.gerrit.index.query.OrPredicate;
+import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.index.query.Predicate;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.CurrentUser;
-import com.google.gerrit.server.index.change.ChangeField;
 import com.google.gerrit.server.query.change.ChangeData;
-import com.google.gerrit.server.query.change.ChangeIndexPredicate;
-import com.google.gerrit.server.query.change.DestinationPredicate;
-import com.google.gerrit.server.query.change.RegexProjectPredicate;
-import com.google.gerrit.server.query.change.RegexRefPredicate;
-import com.google.gerrit.server.query.change.SubmitRequirementChangeQueryBuilder;
+import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
-import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
-import com.googlesource.gerrit.plugins.task.util.ThrowingProvider;
+import java.util.HashMap;
+import java.util.Map;
 
 public class PredicateCache {
-  public static class Statistics {
-    protected Object predicatesByQueryCache;
-  }
-
-  protected final SubmitRequirementChangeQueryBuilder srcqb;
-  protected final TaskPluginConfiguration config;
+  protected final ChangeQueryBuilder cqb;
   protected final CurrentUser user;
-  protected final HitHashMap<String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
-      predicatesByQuery = new HitHashMap<>();
 
-  protected Statistics statistics;
+  protected final Map<String, ThrowingProvider<Predicate<ChangeData>, QueryParseException>>
+      predicatesByQuery = new HashMap<>();
 
   @Inject
-  public PredicateCache(
-      TaskPluginConfiguration config, CurrentUser user, SubmitRequirementChangeQueryBuilder srcqb) {
-    this.config = config;
+  public PredicateCache(CurrentUser user, ChangeQueryBuilder cqb) {
     this.user = user;
-    this.srcqb = srcqb;
+    this.cqb = cqb;
   }
 
-  public void initStatistics(int summaryCount) {
-    statistics = new Statistics();
-    predicatesByQuery.initStatistics(summaryCount);
-  }
-
-  public Object getStatistics() {
-    if (statistics != null) {
-      statistics.predicatesByQueryCache = predicatesByQuery.getStatistics();
+  public boolean match(ChangeData c, String query) throws StorageException, QueryParseException {
+    if (query == null) {
+      return true;
     }
-    return statistics;
+    return matchWithExceptions(c, query);
   }
 
-  @SuppressWarnings("try")
-  public Predicate<ChangeData> getPredicate(String query, boolean isVisible)
-      throws QueryParseException {
+  public Boolean matchOrNull(ChangeData c, String query) {
+    if (query != null) {
+      try {
+        return matchWithExceptions(c, query);
+      } catch (QueryParseException | RuntimeException e) {
+      }
+    }
+    return null;
+  }
+
+  protected boolean matchWithExceptions(ChangeData c, String query)
+      throws QueryParseException, StorageException {
+    if ("true".equalsIgnoreCase(query)) {
+      return true;
+    }
+    return getPredicate(query).asMatchable().match(c);
+  }
+
+  protected Predicate<ChangeData> getPredicate(String query) throws QueryParseException {
     ThrowingProvider<Predicate<ChangeData>, QueryParseException> predProvider =
         predicatesByQuery.get(query);
     if (predProvider != null) {
       return predProvider.get();
     }
     // never seen 'query' before
-    try (StopWatch stopWatch = predicatesByQuery.createLoadingStopWatch(query, isVisible)) {
-      Predicate<ChangeData> pred = srcqb.parse(query);
+    try {
+      Predicate<ChangeData> pred = cqb.parse(query);
       predicatesByQuery.put(query, new ThrowingProvider.Entry<>(pred));
       return pred;
     } catch (QueryParseException e) {
       predicatesByQuery.put(query, new ThrowingProvider.Thrown<>(e));
       throw e;
     }
-  }
-
-  /**
-   * Can this query's output be assumed to be constant given any Change destined for the same
-   * Branch.NameKey?
-   */
-  public boolean isCacheableByBranch(String query, boolean isVisible) throws QueryParseException {
-    if (query == null
-        || "".equals(query)
-        || "false".equalsIgnoreCase(query)
-        || "true".equalsIgnoreCase(query)) {
-      return true;
-    }
-    return isCacheableByBranch(getPredicate(query, isVisible));
-  }
-
-  protected boolean isCacheableByBranch(Predicate<ChangeData> predicate) {
-    if (predicate instanceof AndPredicate
-        || predicate instanceof NotPredicate
-        || predicate instanceof OrPredicate) {
-      for (Predicate<ChangeData> subPred : predicate.getChildren()) {
-        if (!isCacheableByBranch(subPred)) {
-          return false;
-        }
-      }
-      return true;
-    }
-    if (predicate instanceof DestinationPredicate
-        || predicate instanceof RegexProjectPredicate
-        || predicate instanceof RegexRefPredicate) {
-      return true;
-    }
-    if (predicate instanceof ChangeIndexPredicate) {
-      FieldDef<ChangeData, ?> field = ((ChangeIndexPredicate) predicate).getField();
-      if (field.equals(ChangeField.PROJECT) || field.equals(ChangeField.REF)) {
-        return true;
-      }
-    }
-    return config
-        .getCacheableByBranchPredicateClassNames()
-        .contains(predicate.getClass().getName());
   }
 }

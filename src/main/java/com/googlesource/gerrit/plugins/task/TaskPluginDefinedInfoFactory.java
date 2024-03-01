@@ -18,31 +18,22 @@ import com.google.gerrit.entities.Change;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.extensions.api.access.PluginPermission;
 import com.google.gerrit.extensions.common.PluginDefinedInfo;
-import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.DynamicOptions.BeanProvider;
 import com.google.gerrit.server.change.ChangePluginDefinedInfoFactory;
 import com.google.gerrit.server.permissions.PermissionBackend;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.inject.Inject;
-import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.TaskTree.Node;
 import com.googlesource.gerrit.plugins.task.cli.PatchSetArgument;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFactory {
-  public static final TaskPath MISSING_VIEW_PATH_CAPABILITY =
-      new TaskPath(
-          String.format(
-              "Can't perform operation, need %s capability", ViewPathsCapability.VIEW_PATHS));
 
   public enum Status {
     INVALID,
@@ -109,6 +100,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
   protected Modules.MyOptions options;
   protected TaskPluginAttribute lastTaskPluginAttribute;
   protected Statistics statistics;
+  protected final TaskAttributeFactory.Factory factory;
 
   @Inject
   public TaskPluginDefinedInfoFactory(
@@ -117,7 +109,8 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
       PredicateCache predicateCache,
       PermissionBackend permissionBackend,
       TaskPath.Factory taskPathFactory,
-      TaskConfigCache taskConfigCache) {
+      TaskConfigCache taskConfigCache,
+      TaskAttributeFactory.Factory factory) {
     this.pluginName = pluginName;
     this.definitions = taskTreeFactory.create(taskConfigCache);
     this.predicateCache = predicateCache;
@@ -127,6 +120,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
             .testOrFalse(new PluginPermission(this.pluginName, ViewPathsCapability.VIEW_PATHS));
     this.taskPathFactory = taskPathFactory;
     this.taskConfigCache = taskConfigCache;
+    this.factory = factory;
   }
 
   @Override
@@ -157,7 +151,19 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
           if (options.shouldFilterRoot(root.task.name())) {
             continue;
           }
-          new AttributeFactory(root).create().ifPresent(t -> a.roots.add(t));
+          factory
+              .create(
+                  root,
+                  statistics,
+                  TaskAttributeFactory.Options.builder()
+                      .setOnlyApplicable(options.onlyApplicable)
+                      .setOnlyInvalid(options.onlyInvalid)
+                      .setIncludePaths(options.includePaths)
+                      .setEvaluationTime(options.evaluationTime)
+                      .setIncludeStatistics(options.includeStatistics)
+                      .build())
+              .createTaskAttribute()
+              .ifPresent(t -> a.roots.add(t));
         }
       }
     } catch (ConfigInvalidException | IOException | StorageException e) {
@@ -169,220 +175,6 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     }
     lastTaskPluginAttribute = a;
     return a;
-  }
-
-  protected class AttributeFactory {
-    public Node node;
-    protected Task task;
-    protected TaskAttribute attribute;
-
-    protected AttributeFactory(Node node) {
-      this.node = node;
-      this.task = node.task;
-      attribute = new TaskAttribute(task.name());
-      if (options.includeStatistics) {
-        statistics.numberOfNodes++;
-        if (node.isChange()) {
-          statistics.numberOfChangeNodes++;
-        }
-        if (node.isDuplicate) {
-          statistics.numberOfDuplicates++;
-        }
-        attribute.statistics = new TaskAttribute.Statistics();
-        attribute.statistics.properties = node.propertiesStatistics;
-      }
-    }
-
-    public Optional<TaskAttribute> create() {
-      try {
-        if (options.evaluationTime) {
-          attribute.evaluationMilliSeconds = millis();
-        }
-
-        boolean applicable;
-        try {
-          applicable = node.match(task.applicable);
-        } catch (QueryParseException e) {
-          return Optional.of(invalid());
-        }
-        if (!task.isVisible) {
-          if (!node.isTrusted() || (!applicable && !options.onlyApplicable)) {
-            return Optional.of(unknown());
-          }
-        }
-
-        if (applicable || !options.onlyApplicable) {
-          if (node.isChange()) {
-            attribute.change = node.getChangeData().getId().get();
-          }
-          attribute.hasPass = !node.isDuplicate && (task.pass != null || task.fail != null);
-          if (!node.isDuplicate) {
-            attribute.subTasks = getSubTasks();
-          }
-          attribute.status = getStatus();
-          if (options.onlyInvalid && !isValidQueries()) {
-            attribute.status = Status.INVALID;
-          }
-          if (options.includePaths) {
-            if (hasViewPathsCapability) {
-              attribute.path = taskPathFactory.create(node.taskKey);
-            } else {
-              attribute.path = MISSING_VIEW_PATH_CAPABILITY;
-            }
-          }
-          boolean groupApplicable = attribute.status != null;
-
-          if (groupApplicable || !options.onlyApplicable) {
-            if (!options.onlyInvalid
-                || attribute.status == Status.INVALID
-                || attribute.subTasks != null) {
-              if (!options.onlyApplicable) {
-                attribute.applicable = applicable;
-              }
-              if (!node.isDuplicate) {
-                if (task.inProgress != null) {
-                  attribute.inProgress = node.matchOrNull(task.inProgress);
-                }
-                attribute.exported = task.exported.isEmpty() ? null : task.exported;
-              }
-              attribute.hint = getHint(attribute.status, task);
-
-              if (options.evaluationTime) {
-                attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
-              }
-              addStatistics(attribute.statistics);
-              return Optional.of(attribute);
-            }
-          }
-        }
-      } catch (IOException | RuntimeException | ConfigInvalidException e) {
-        return Optional.of(invalid()); // bad applicability query
-      }
-      return Optional.empty();
-    }
-
-    protected TaskAttribute invalid() {
-      TaskAttribute invalid = TaskPluginDefinedInfoFactory.invalid();
-      if (task.isVisible) {
-        invalid.name = task.name();
-      }
-      return invalid;
-    }
-
-    public void addStatistics(TaskAttribute.Statistics statistics) {
-      if (statistics != null) {
-        statistics.isApplicableRefreshRequired = node.properties.isApplicableRefreshRequired();
-        statistics.isSubNodeReloadRequired = node.properties.isSubNodeReloadRequired();
-        statistics.isTaskRefreshNeeded = node.properties.isTaskRefreshRequired();
-        if (!statistics.isSubNodeReloadRequired) {
-          statistics.hasUnfilterableSubNodes = node.hasUnfilterableSubNodes;
-        }
-        if (node.nodesByBranch != null) {
-          statistics.nodesByBranchCache = node.nodesByBranch.getStatistics();
-        }
-      }
-    }
-
-    protected Status getStatusWithExceptions() throws StorageException, QueryParseException {
-      if (node.isDuplicate) {
-        return Status.DUPLICATE;
-      }
-      if (isAllNull(task.pass, task.fail, attribute.subTasks)) {
-        // A leaf def has no defined subdefs.
-        boolean hasDefinedSubtasks =
-            !(task.subTasks.isEmpty()
-                && task.subTasksFiles.isEmpty()
-                && task.subTasksExternals.isEmpty()
-                && task.subTasksFactories.isEmpty());
-        if (hasDefinedSubtasks) {
-          // Remove 'Grouping" tasks (tasks with subtasks but no PASS
-          // or FAIL criteria) from the output if none of their subtasks
-          // are applicable.  i.e. grouping tasks only really apply if at
-          // least one of their subtasks apply.
-          return null;
-        }
-        // A leaf configuration without a PASS or FAIL criteria is a
-        // missconfiguration.  Either someone forgot to add subtasks, or
-        // they forgot to add a PASS or FAIL criteria.
-        return Status.INVALID;
-      }
-
-      if (task.fail != null) {
-        if (node.match(task.fail)) {
-          // A FAIL definition is meant to be a hard blocking criteria
-          // (like a CodeReview -2).  Thus, if hard blocked, it is
-          // irrelevant what the subtask states, or the PASS criteria are.
-          //
-          // It is also important that FAIL be useable to indicate that
-          // the task has actually executed.  Thus subtask status,
-          // including a subtask FAIL should not appear as a FAIL on the
-          // parent task.  This means that this is should be the only path
-          // to make a task have a FAIL status.
-          return Status.FAIL;
-        }
-      }
-
-      if (attribute.subTasks != null
-          && !isAll(attribute.subTasks, EnumSet.of(Status.PASS, Status.DUPLICATE))) {
-        // It is possible for a subtask's PASS criteria to change while
-        // a parent task is executing, or even after the parent task
-        // completes.  This can result in the parent PASS criteria being
-        // met while one or more of its subtasks no longer meets its PASS
-        // criteria (the subtask may now even meet a FAIL criteria).  We
-        // never want the parent task to reflect a PASS criteria in these
-        // cases, thus we can safely return here without ever evaluating
-        // the task's PASS criteria.
-        return Status.WAITING;
-      }
-
-      if (task.pass != null && !node.match(task.pass)) {
-        // Non-leaf tasks with no PASS criteria are supported in order
-        // to support "grouping tasks" (tasks with no function aside from
-        // organizing tasks).  A task without a PASS criteria, cannot ever
-        // be expected to execute (how would you know if it has?), thus a
-        // pass criteria is required to possibly even be considered for
-        // READY.
-        return Status.READY;
-      }
-
-      return Status.PASS;
-    }
-
-    protected Status getStatus() {
-      try {
-        return getStatusWithExceptions();
-      } catch (QueryParseException | RuntimeException e) {
-        return Status.INVALID;
-      }
-    }
-
-    protected List<TaskAttribute> getSubTasks()
-        throws IOException, StorageException, ConfigInvalidException {
-      List<TaskAttribute> subTasks = new ArrayList<>();
-      for (Node subNode :
-          options.onlyApplicable ? node.getApplicableSubNodes() : node.getSubNodes()) {
-        if (subNode instanceof Node.Invalid) {
-          subTasks.add(TaskPluginDefinedInfoFactory.invalid());
-        } else {
-          new AttributeFactory(subNode).create().ifPresent(t -> subTasks.add(t));
-        }
-      }
-      if (subTasks.isEmpty()) {
-        return null;
-      }
-      return subTasks;
-    }
-
-    protected boolean isValidQueries() {
-      try {
-        node.match(task.inProgress);
-        node.match(task.fail);
-        node.match(task.pass);
-        return true;
-      } catch (QueryParseException | RuntimeException e) {
-        return false;
-      }
-    }
   }
 
   protected long millis() {
@@ -424,38 +216,5 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     TaskAttribute a = new TaskAttribute("UNKNOWN");
     a.status = Status.UNKNOWN;
     return a;
-  }
-
-  protected static String getHint(Status status, Task def) {
-    if (status != null) {
-      switch (status) {
-        case READY:
-          return def.readyHint;
-        case FAIL:
-          return def.failHint;
-        case DUPLICATE:
-          return "Duplicate task is non blocking and empty to break the loop";
-        default:
-      }
-    }
-    return null;
-  }
-
-  public static boolean isAllNull(Object... vals) {
-    for (Object val : vals) {
-      if (val != null) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  protected static boolean isAll(Iterable<TaskAttribute> atts, Set<Status> states) {
-    for (TaskAttribute att : atts) {
-      if (!states.contains(att.status)) {
-        return false;
-      }
-    }
-    return true;
   }
 }
