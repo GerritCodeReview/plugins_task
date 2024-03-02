@@ -118,6 +118,46 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c9e0b26e_6e405717",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-02T01:03:38Z",
+      "side": 1,
+      "message": "We should just always add the changeData to this API:\n\n```suggestion\n            for (String name : providedTaskNamesFactory.getNames(getChangeData(), namesFactory.args)) {\n```",
+      "range": {
+        "startLine": 499,
+        "startChar": 56,
+        "endLine": 499,
+        "endChar": 83
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a9c9b95b_56eb6380",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/extensions/PluginProvidedTaskNamesFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-02T01:03:38Z",
+      "side": 1,
+      "message": "Add a ChangeData always since it\u0027s likely going to be used by most plugins implementing this.\n\n```suggestion\n  List\u003cString\u003e getNames(ChangeData change, List\u003cString\u003e args);\n```",
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "baa1b50c_e46da747",
         "filename": "src/main/resources/Documentation/task.md",
         "patchSetId": 5
