@@ -116,6 +116,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2267c124_de5f5500",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 180,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a2a24ac9_f0dfe1e9",
+      "range": {
+        "startLine": 178,
+        "startChar": 0,
+        "endLine": 180,
+        "endChar": 37
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c9e0b26e_6e405717",
@@ -129,6 +153,30 @@
       "writtenOn": "2024-03-02T01:03:38Z",
       "side": 1,
       "message": "We should just always add the changeData to this API:\n\n```suggestion\n            for (String name : providedTaskNamesFactory.getNames(getChangeData(), namesFactory.args)) {\n```",
+      "range": {
+        "startLine": 499,
+        "startChar": 56,
+        "endLine": 499,
+        "endChar": 83
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "72cae5bf_e34e3370",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 499,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c9e0b26e_6e405717",
       "range": {
         "startLine": 499,
         "startChar": 56,
@@ -156,6 +204,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "19f93089_a1f32485",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/extensions/PluginProvidedTaskNamesFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 46,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a9c9b95b_56eb6380",
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "baa1b50c_e46da747",
@@ -169,6 +235,30 @@
       "writtenOn": "2024-02-29T18:54:30Z",
       "side": 1,
       "message": "```suggestion\n: This key defines an argument to be passed to the provider method of a plugin.\nThis key may be used several times in order to define a list of arguments.\nIt can only be used along with names-factory of type `plugin`.\n```",
+      "range": {
+        "startLine": 371,
+        "startChar": 0,
+        "endLine": 373,
+        "endChar": 68
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "c9c663f8_2b19f1dd",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 373,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "baa1b50c_e46da747",
       "range": {
         "startLine": 371,
         "startChar": 0,
@@ -202,6 +292,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2e78504f_c1502046",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 429,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6c08a6fc_8782e1c5",
+      "range": {
+        "startLine": 428,
+        "startChar": 0,
+        "endLine": 429,
+        "endChar": 49
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "98b02b62_01f8d414",
@@ -219,6 +333,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "90265b8a_aed3f8a3",
+        "filename": "src/main/resources/Documentation/test/task_states.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 798,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "98b02b62_01f8d414",
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "aeea02ca_1d6338d6",
@@ -232,6 +364,30 @@
       "writtenOn": "2024-02-29T18:54:30Z",
       "side": 1,
       "message": "```suggestion\n         \"name\" : \"foo_myarg1_myarg2\",\n```",
+      "range": {
+        "startLine": 809,
+        "startChar": 19,
+        "endLine": 809,
+        "endChar": 22
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8bb4ea77_88005458",
+        "filename": "src/main/resources/Documentation/test/task_states.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 809,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "aeea02ca_1d6338d6",
       "range": {
         "startLine": 809,
         "startChar": 19,
@@ -261,6 +417,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "197bc1ff_fccd0c5b",
+        "filename": "src/main/resources/Documentation/test/task_states.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 815,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Just returning single name",
+      "parentUuid": "e8602d11_fe8033d5",
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "720514f8_afacfb23",
         "filename": "test/docker/run.sh",
         "patchSetId": 5
@@ -272,6 +446,30 @@
       "writtenOn": "2024-02-29T18:54:30Z",
       "side": 1,
       "message": "It is not obvious how to obtain this jar when running the suite using `run.sh` (i.e without using `bazel test docker-tests`). How about adding a hint here?\n\n```suggestion\n    --names-factory-provider-plugin-jar|-t    path to names-factory-provider plugin JAR file. It can be generated using \u0027bazel build names-factory-provider\u0027\n```",
+      "range": {
+        "startLine": 41,
+        "startChar": 4,
+        "endLine": 41,
+        "endChar": 92
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b8d424f0_6ae48d91",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 41,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "720514f8_afacfb23",
       "range": {
         "startLine": 41,
         "startChar": 4,
@@ -305,6 +503,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "387a77a6_2246c08b",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 125,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "88dedbcf_fe11b0e0",
+      "range": {
+        "startLine": 125,
+        "startChar": 47,
+        "endLine": 125,
+        "endChar": 53
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d4ccb116_b1c675a6",
@@ -328,6 +550,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9c8b58ff_0351b8fe",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 128,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d4ccb116_b1c675a6",
+      "range": {
+        "startLine": 128,
+        "startChar": 11,
+        "endLine": 128,
+        "endChar": 26
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "f6112e74_91bf9c0e",
@@ -341,6 +587,30 @@
       "writtenOn": "2024-02-29T18:54:30Z",
       "side": 1,
       "message": "```suggestion\nis_plugin_loaded \"names-factory-provider\" || die \"names-factory-provider plugin is not installed\"\n```",
+      "range": {
+        "startLine": 32,
+        "startChar": 50,
+        "endLine": 32,
+        "endChar": 70
+      },
+      "revId": "7db463e7c7382d5dacafe88141ae1375d7674333",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "67c68b1f_5f5a937b",
+        "filename": "test/docker/run_tests/start.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f6112e74_91bf9c0e",
       "range": {
         "startLine": 32,
         "startChar": 50,

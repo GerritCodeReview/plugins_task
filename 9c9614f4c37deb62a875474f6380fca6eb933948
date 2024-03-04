@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9f9078e5_5736a759",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 117,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 0,
+      "message": "It was unintentional, restored it.",
+      "parentUuid": "2403d677_aecf190e",
+      "range": {
+        "startLine": 117,
+        "startChar": 35,
+        "endLine": 117,
+        "endChar": 37
+      },
+      "revId": "9c9614f4c37deb62a875474f6380fca6eb933948",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "57da82a9_84f76742",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-02-29T18:54:30Z",
       "side": 0,
       "message": "Removed intentionally?",
+      "range": {
+        "startLine": 123,
+        "startChar": 30,
+        "endLine": 123,
+        "endChar": 32
+      },
+      "revId": "9c9614f4c37deb62a875474f6380fca6eb933948",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "309a03e6_c458fa9a",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 5
+      },
+      "lineNbr": 123,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-04T12:44:24Z",
+      "side": 0,
+      "message": "It was unintentional, restored it.",
+      "parentUuid": "57da82a9_84f76742",
       "range": {
         "startLine": 123,
         "startChar": 30,
