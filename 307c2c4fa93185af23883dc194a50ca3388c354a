@@ -33,6 +33,23 @@
       "message": "grasias",
       "revId": "307c2c4fa93185af23883dc194a50ca3388c354a",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7b15ac27_8fe513bd",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 14
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3314097
+      },
+      "writtenOn": "2024-03-04T21:56:00Z",
+      "side": 1,
+      "message": "392276: Fix subtasks-file lookup to not fail when preloaded from another file | https://gerrit-review.googlesource.com/c/plugins/task/+/392276",
+      "revId": "307c2c4fa93185af23883dc194a50ca3388c354a",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ],
   "submitRequirementResults": [
