@@ -53,6 +53,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6dc9762b_eb13316c",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/extensions/PluginProvidedTaskNamesFactory.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-05T20:37:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "eab1548f_2429bd03",
+      "revId": "a0eed9dae0f4baca4138175e1f88f5600f0627fd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a8da622b_dd2c086b",
@@ -84,6 +102,24 @@
       "side": 1,
       "message": "Also, we should return more than one name (at least for one test case).",
       "parentUuid": "a8da622b_dd2c086b",
+      "revId": "a0eed9dae0f4baca4138175e1f88f5600f0627fd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2292ab7e_34ea2154",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/names_factory_provider/FoobarProvider.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 29,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-05T20:37:22Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "192b09f9_5945bd04",
       "revId": "a0eed9dae0f4baca4138175e1f88f5600f0627fd",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
