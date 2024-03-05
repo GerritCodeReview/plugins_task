@@ -36,6 +36,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f6aeb351_f2d890bc",
+        "filename": "BUILD",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-05T20:44:03Z",
+      "side": 1,
+      "message": "Yeah ok. Looks like bazlets needs a fix if we want to do that. We can look at it later.",
+      "parentUuid": "93e05c97_fdeb483b",
+      "revId": "a0eed9dae0f4baca4138175e1f88f5600f0627fd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eab1548f_2429bd03",
