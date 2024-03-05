@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "93e05c97_fdeb483b",
+        "filename": "BUILD",
+        "patchSetId": 7
+      },
+      "lineNbr": 86,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-05T19:53:03Z",
+      "side": 1,
+      "message": "I run into an error if I do that.\n\n\n```\n└─ $ ▶ bazel test docker-tests\nINFO: Invocation ID: be30b0c1-8aa6-45bf-b420-2c6d5e7e34fd\nERROR: /Users/kaushikl/workspace/other_gt/task/BUILD:79:14: in java_binary rule //:names-factory-provider__non_stamped: non-test target \u0027//:names-factory-provider__non_stamped\u0027 depends on testonly target \u0027//:names-factory-provider__plugin\u0027 and doesn\u0027t have testonly attribute set\nERROR: /Users/kaushikl/workspace/other_gt/task/BUILD:79:14: Analysis of target \u0027//:names-factory-provider__non_stamped\u0027 failed\nERROR: Analysis of target \u0027//:docker-tests\u0027 failed; build aborted:\nINFO: Elapsed time: 0.342s\nINFO: 0 processes.\nFAILED: Build did NOT complete successfully (1 packages loaded, 96 targets configured)\nFAILED: Build did NOT complete successfully (1 packages loaded, 96 targets configured)\n```",
+      "parentUuid": "1100e26c_1b8ab890",
+      "revId": "a0eed9dae0f4baca4138175e1f88f5600f0627fd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "eab1548f_2429bd03",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/extensions/PluginProvidedTaskNamesFactory.java",
         "patchSetId": 7
