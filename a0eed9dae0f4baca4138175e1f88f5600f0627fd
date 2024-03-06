@@ -77,6 +77,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bcbf898a_8521b28a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 7
+      },
+      "lineNbr": 493,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-06T08:42:34Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "00399bb1_99c81470",
+      "range": {
+        "startLine": 493,
+        "startChar": 17,
+        "endLine": 493,
+        "endChar": 28
+      },
+      "revId": "a0eed9dae0f4baca4138175e1f88f5600f0627fd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "eab1548f_2429bd03",
