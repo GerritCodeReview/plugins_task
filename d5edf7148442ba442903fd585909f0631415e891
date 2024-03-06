@@ -1,0 +1,73 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "bce060d9_fd2549d6",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 27,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-03-06T04:58:14Z",
+      "side": 1,
+      "message": "Line wrap this ?",
+      "range": {
+        "startLine": 27,
+        "startChar": 4,
+        "endLine": 27,
+        "endChar": 129
+      },
+      "revId": "d5edf7148442ba442903fd585909f0631415e891",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5c3ad61c_6137a90c",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-03-06T04:58:14Z",
+      "side": 1,
+      "message": "Line wrap",
+      "range": {
+        "startLine": 42,
+        "startChar": 4,
+        "endLine": 42,
+        "endChar": 156
+      },
+      "revId": "d5edf7148442ba442903fd585909f0631415e891",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e84d496c_c700f988",
+        "filename": "test/docker/run.sh",
+        "patchSetId": 9
+      },
+      "lineNbr": 126,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-03-06T04:58:14Z",
+      "side": 1,
+      "message": "Line wrap",
+      "range": {
+        "startLine": 126,
+        "startChar": 0,
+        "endLine": 126,
+        "endChar": 132
+      },
+      "revId": "d5edf7148442ba442903fd585909f0631415e891",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
