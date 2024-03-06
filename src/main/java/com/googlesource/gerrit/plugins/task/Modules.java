@@ -46,7 +46,7 @@ public class Modules {
 
       bind(ChangePluginDefinedInfoFactory.class)
           .annotatedWith(Exports.named("task"))
-          .to(TaskAttributeFactory.class);
+          .to(TaskPluginDefinedInfoFactory.class);
 
       install(new IsTrueOperator.Module());
 

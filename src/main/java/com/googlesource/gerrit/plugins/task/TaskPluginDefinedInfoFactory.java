@@ -38,7 +38,7 @@ import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
-public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
+public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFactory {
   public static final TaskPath MISSING_VIEW_PATH_CAPABILITY =
       new TaskPath(
           String.format(
@@ -111,7 +111,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
   protected Statistics statistics;
 
   @Inject
-  public TaskAttributeFactory(
+  public TaskPluginDefinedInfoFactory(
       String pluginName,
       TaskTree.Factory taskTreeFactory,
       PredicateCache predicateCache,
@@ -262,7 +262,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
     }
 
     protected TaskAttribute invalid() {
-      TaskAttribute invalid = TaskAttributeFactory.invalid();
+      TaskAttribute invalid = TaskPluginDefinedInfoFactory.invalid();
       if (task.isVisible) {
         invalid.name = task.name();
       }
@@ -362,7 +362,7 @@ public class TaskAttributeFactory implements ChangePluginDefinedInfoFactory {
       for (Node subNode :
           options.onlyApplicable ? node.getApplicableSubNodes() : node.getSubNodes()) {
         if (subNode instanceof Node.Invalid) {
-          subTasks.add(TaskAttributeFactory.invalid());
+          subTasks.add(TaskPluginDefinedInfoFactory.invalid());
         } else {
           new AttributeFactory(subNode).create().ifPresent(t -> subTasks.add(t));
         }
