@@ -3,6 +3,52 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "c266bdb9_746cb6c5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/extensions/PluginProvidedTaskNamesFactory.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 47,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-06T05:05:17Z",
+      "side": 1,
+      "message": "May be use ExecutionException or ProviderException instead?",
+      "range": {
+        "startLine": 47,
+        "startChar": 69,
+        "endLine": 47,
+        "endChar": 78
+      },
+      "revId": "d5edf7148442ba442903fd585909f0631415e891",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b3edd001_ae16b39b",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/names_factory_provider/FoobarProvider.java",
+        "patchSetId": 9
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-03-06T05:05:17Z",
+      "side": 1,
+      "message": "may be we can simply do, unless count is being used for specific purpose:\n```\npublic static final String DELIMITER \u003d \"-\";\n\n\nString name \u003d String.join(DELIMITER, \"foobar\", changeData.project().get());\nif (args \u003d\u003d null || args.isEmpty()) {\n  return List.of(name);\n}\nreturn new ArrayList\u003c\u003e(args.stream().map(x -\u003e String.join(DELIMITER, name, x)).collect(Collectors.toList()));\n```",
+      "range": {
+        "startLine": 25,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 25
+      },
+      "revId": "d5edf7148442ba442903fd585909f0631415e891",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "bce060d9_fd2549d6",
         "filename": "test/docker/run.sh",
         "patchSetId": 9
