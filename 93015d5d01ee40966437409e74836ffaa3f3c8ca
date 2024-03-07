@@ -35,6 +35,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "53a6f79f_5becc87c",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 416,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-07T21:03:42Z",
+      "side": 1,
+      "message": "I have improved docs for `plugin` and `provider` keys and added a separate section for each type. The section for plugin type should have more details on what the plugin is expected to implement and export.\n\nI have also added a hint to refer to the plugin that was created for use in the test framework.",
+      "parentUuid": "eb1ab878_7340065e",
+      "revId": "93015d5d01ee40966437409e74836ffaa3f3c8ca",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5c39ab88_433f2cec",
@@ -58,6 +76,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9abd1241_df141d86",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 428,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-07T21:03:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "5c39ab88_433f2cec",
+      "range": {
+        "startLine": 428,
+        "startChar": 1,
+        "endLine": 428,
+        "endChar": 7
+      },
+      "revId": "93015d5d01ee40966437409e74836ffaa3f3c8ca",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2c85cc32_78989ac4",
@@ -71,6 +113,24 @@
       "writtenOn": "2024-03-06T16:51:52Z",
       "side": 1,
       "message": "These examples don\u0027t quite make sense, they aren\u0027t really examples.",
+      "revId": "93015d5d01ee40966437409e74836ffaa3f3c8ca",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7715639a_13c15209",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 10
+      },
+      "lineNbr": 435,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-07T21:03:42Z",
+      "side": 1,
+      "message": "Added better examples now.",
+      "parentUuid": "2c85cc32_78989ac4",
       "revId": "93015d5d01ee40966437409e74836ffaa3f3c8ca",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
