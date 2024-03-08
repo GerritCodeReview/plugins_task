@@ -45,12 +45,14 @@ public class Modules {
       factory(TaskExpression.Factory.class);
       factory(TaskTree.Factory.class);
       factory(Preloader.Factory.class);
+      factory(TaskAttributeFactory.Factory.class);
 
       bind(ChangePluginDefinedInfoFactory.class)
           .annotatedWith(Exports.named("task"))
           .to(TaskPluginDefinedInfoFactory.class);
 
       install(new IsTrueOperator.Module());
+      install(new RootOperator.Module());
 
       bind(DynamicBean.class).annotatedWith(Exports.named(GetChange.class)).to(MyOptions.class);
       bind(DynamicBean.class).annotatedWith(Exports.named(Query.class)).to(MyOptions.class);

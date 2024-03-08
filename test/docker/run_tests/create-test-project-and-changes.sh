@@ -28,3 +28,4 @@ create_change() { # subject project
 create_project 'test'
 create_change 'Change 1' 'test'
 create_change 'Change 2' 'test'
+create_project 'dev'

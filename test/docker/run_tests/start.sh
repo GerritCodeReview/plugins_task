@@ -71,4 +71,8 @@ RESULT=0
     --non-secret-user "$NON_SECRET_USER" --non-secret-group "$GROUP_NAME_WITHOUT_SPACE" \
     --secret-group "$SECRET_GROUP" || RESULT=1
 
+"$USER_RUN_TESTS_DIR"/../../test_task_operators.sh \
+    --server "$GERRIT_HOST" --non-secret-user "$NON_SECRET_USER" \
+    --root-config-project "$ROOT_CONFIG_PRJ" --root-config-branch "$ROOT_CONFIG_BRANCH" || RESULT=1
+
 exit $RESULT
