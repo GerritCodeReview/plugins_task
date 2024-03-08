@@ -1,0 +1,159 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "46d00869_a50451e6",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "I don\u0027t think you need this text now that you have the keys listed per-type. Same for the similar text below.",
+      "range": {
+        "startLine": 364,
+        "startChar": 42,
+        "endLine": 364,
+        "endChar": 81
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6d8d9c2_479292e5",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "tiny improvements\n\n```suggestion\nare optional. These keys are exclusive to `plugin` type. The provider class\nshould implement the `PluginProvidedTaskNamesFactory` interface. The collection\n```",
+      "range": {
+        "startLine": 411,
+        "startChar": 57,
+        "endLine": 412,
+        "endChar": 60
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea0b3dc6_3ec24081",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "Should we call these \"keys\"? It\u0027s a little confusing in the context of the key/value configs we\u0027re referring to in the rest of this text.\n\nAlso, use `()` after the method name to be consistent with core docs.\n\n```suggestion\nof name strings returned by the `getNames()` method will be used to generate the\n```",
+      "range": {
+        "startLine": 413,
+        "startChar": 8,
+        "endLine": 413,
+        "endChar": 12
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a88fd621_26bddc90",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "Add `()`\n```suggestion\n`getNames()`. This key may be used several times in order to define a list of\n```",
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3007ecf0_b22770c3",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "Do we want to use \"item\" or \"object\" or \"class\"? Looking at dev-plugins, I think this same idea is expressed more like:\n\n```suggestion\n: This key defines the name of a plugin. The plugin is expected to register\n(bind) a class which implements the `PluginProvidedTaskNamesFactory` interface.\n```",
+      "range": {
+        "startLine": 429,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 58
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "35ef5c7f_d15892af",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "```suggestion\n: This key defines the exported name used to bind the class which implements the\n`PluginProvidedTaskNamesFactory` interface provided by the plugin.\n```",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 34
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "df357655_bf67d169",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "nit: extra space\n```suggestion\nHere is an example which defines a names-factory of `plugin` type.\n```",
+      "range": {
+        "startLine": 447,
+        "startChar": 49,
+        "endLine": 447,
+        "endChar": 50
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}

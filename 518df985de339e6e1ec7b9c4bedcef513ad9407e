@@ -3,6 +3,29 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "615190c4_c8f8b14d",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "Just checking on this, it\u0027s fine if `getNames()` returns an empty list, correct? We just don\u0027t add any tasks.",
+      "range": {
+        "startLine": 501,
+        "startChar": 16,
+        "endLine": 501,
+        "endChar": 49
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "66ae9193_bda5b419",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 13
@@ -32,6 +55,24 @@
       "side": 1,
       "message": "Yea, we should probably just add an invalid node, which is what I did in patchset 8 (see below). However, Prakash changed it in later patchsets as he felt it should bubble up the IOException, to be consistent with `addStaticTypeTasks` and `addChangeTypeTasks`.\n\nhttps://gerrit-review.googlesource.com/c/plugins/task/+/410977/8/src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
       "parentUuid": "66ae9193_bda5b419",
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ddc51212_ea1efb30",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T18:17:47Z",
+      "side": 1,
+      "message": "Ok, it looks like those do it because `preloader.preload()` can throw an IOException and then we bubble that up in order to make the root invalid. I can\u0027t think off the top of my head why we do that, but I don\u0027t think we should do the same for an IOException thrown by the provided `getNames()`.\n\nWhat if you split into 2 try blocks? One to get the names (that\u0027s like what you had in PS8) and then another that\u0027s like what\u0027s in the other `add*TypeTasks` methods.",
+      "parentUuid": "f362401e_b82b68c8",
       "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
