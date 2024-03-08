@@ -53,6 +53,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ae027c6_577dcf75",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T01:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e65d9513_d530209e",
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "8284529e_43f8cfb7",
@@ -66,6 +84,30 @@
       "writtenOn": "2024-03-08T00:31:13Z",
       "side": 1,
       "message": "nit: extra space and probably don\u0027t need plugin in backticks.\n```suggestion\ninterface) provided by the plugin. This key can only be used along with names-factory of\n```",
+      "range": {
+        "startLine": 408,
+        "startChar": 73,
+        "endLine": 408,
+        "endChar": 74
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "946d8ee3_b061e676",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T01:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "8284529e_43f8cfb7",
       "range": {
         "startLine": 408,
         "startChar": 73,
@@ -99,6 +141,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "1a7174e1_f70707ee",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T01:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "70f09d4f_a1e27a3d",
+      "range": {
+        "startLine": 418,
+        "startChar": 75,
+        "endLine": 419,
+        "endChar": 51
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ad72a834_956e5dd3",
@@ -112,6 +178,30 @@
       "writtenOn": "2024-03-08T00:31:13Z",
       "side": 1,
       "message": "nit: line wrap a little earlier, and add \"a\" and \"one or more\"\n\n```suggestion\n: For a names-factory of type `static`, one or more `name` key(s) are required.\nHere is an example which defines a names-factory of `static` type.\n```",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 47
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6752dbc4_51c5ae5e",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T01:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ad72a834_956e5dd3",
       "range": {
         "startLine": 423,
         "startChar": 0,
@@ -145,6 +235,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ad3d980a_d17ae3c3",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T01:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d1615a09_877f82ca",
+      "range": {
+        "startLine": 435,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 47
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "6e8825fa_8b2075c2",
@@ -168,6 +282,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "e3ab1b8f_9306fcef",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T01:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "6e8825fa_8b2075c2",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 451,
+        "endChar": 67
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "227dbb86_2605ecdc",
@@ -181,6 +319,30 @@
       "writtenOn": "2024-03-08T00:31:13Z",
       "side": 1,
       "message": "line wrap\n\n```suggestion\nA plugin `names_factory_provider` created exclusively for use in the test\nframework can also be viewed as a reference.\n```",
+      "range": {
+        "startLine": 462,
+        "startChar": 0,
+        "endLine": 463,
+        "endChar": 34
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "409513bc_cd846ca4",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T01:07:37Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "227dbb86_2605ecdc",
       "range": {
         "startLine": 462,
         "startChar": 0,
