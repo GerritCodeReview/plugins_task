@@ -20,6 +20,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "f362401e_b82b68c8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T00:51:07Z",
+      "side": 1,
+      "message": "Yea, we should probably just add an invalid node, which is what I did in patchset 8 (see below). However, Prakash changed it in later patchsets as he felt it should bubble up the IOException, to be consistent with `addStaticTypeTasks` and `addChangeTypeTasks`.\n\nhttps://gerrit-review.googlesource.com/c/plugins/task/+/410977/8/src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+      "parentUuid": "66ae9193_bda5b419",
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "e65d9513_d530209e",
         "filename": "src/main/resources/Documentation/task.md",
         "patchSetId": 13
