@@ -22,6 +22,30 @@
       },
       "revId": "0855ae37a6a6549d9f22940c7b2a2812bb0ecf38",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc69fd15_5f6ea957",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T21:05:07Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "ff78ae48_678d1c51",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 512,
+        "endChar": 11
+      },
+      "revId": "0855ae37a6a6549d9f22940c7b2a2812bb0ecf38",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
