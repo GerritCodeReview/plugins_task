@@ -108,6 +108,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2a999a44_6d270ed8",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T20:57:10Z",
+      "side": 1,
+      "message": "So I think if core had mechanisms to make certain configuration values non inheritable, that would help with several of the cons in the current design, but it also would bring its own complexity. Since that won\u0027t be a feature on any stable branch and might even be too complex to ever get into core, I think this is a good solution that balances pros/cons without any technical debt.",
+      "parentUuid": "b94ac21a_635f4c17",
+      "revId": "56fb3354af21ed6271da2dada2275604e6c10090",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4125ebc4_1d565c10",
