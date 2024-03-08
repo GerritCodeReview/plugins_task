@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0ee2ddb0_725c9985",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "46d00869_a50451e6",
+      "range": {
+        "startLine": 364,
+        "startChar": 42,
+        "endLine": 364,
+        "endChar": 81
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6d8d9c2_479292e5",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-03-08T18:17:47Z",
       "side": 1,
       "message": "tiny improvements\n\n```suggestion\nare optional. These keys are exclusive to `plugin` type. The provider class\nshould implement the `PluginProvidedTaskNamesFactory` interface. The collection\n```",
+      "range": {
+        "startLine": 411,
+        "startChar": 57,
+        "endLine": 412,
+        "endChar": 60
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "8e17c2a6_aeb5ef9c",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 412,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6d8d9c2_479292e5",
       "range": {
         "startLine": 411,
         "startChar": 57,
@@ -70,6 +118,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "9e2d834c_cbda4fe9",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 413,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ea0b3dc6_3ec24081",
+      "range": {
+        "startLine": 413,
+        "startChar": 8,
+        "endLine": 413,
+        "endChar": 12
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a88fd621_26bddc90",
@@ -87,6 +159,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "cc610454_b2b07a63",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a88fd621_26bddc90",
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3007ecf0_b22770c3",
@@ -100,6 +190,30 @@
       "writtenOn": "2024-03-08T18:17:47Z",
       "side": 1,
       "message": "Do we want to use \"item\" or \"object\" or \"class\"? Looking at dev-plugins, I think this same idea is expressed more like:\n\n```suggestion\n: This key defines the name of a plugin. The plugin is expected to register\n(bind) a class which implements the `PluginProvidedTaskNamesFactory` interface.\n```",
+      "range": {
+        "startLine": 429,
+        "startChar": 0,
+        "endLine": 430,
+        "endChar": 58
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "4d1b846e_b2c4d75d",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 430,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3007ecf0_b22770c3",
       "range": {
         "startLine": 429,
         "startChar": 0,
@@ -133,6 +247,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "996eec98_a216965c",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 440,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "35ef5c7f_d15892af",
+      "range": {
+        "startLine": 439,
+        "startChar": 0,
+        "endLine": 440,
+        "endChar": 34
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "df357655_bf67d169",
@@ -146,6 +284,30 @@
       "writtenOn": "2024-03-08T18:17:47Z",
       "side": 1,
       "message": "nit: extra space\n```suggestion\nHere is an example which defines a names-factory of `plugin` type.\n```",
+      "range": {
+        "startLine": 447,
+        "startChar": 49,
+        "endLine": 447,
+        "endChar": 50
+      },
+      "revId": "b76b69bfc81fb6724dbb18509fb0a7a4b8ba36cb",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "0c53386c_3f87cb4f",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 15
+      },
+      "lineNbr": 447,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "df357655_bf67d169",
       "range": {
         "startLine": 447,
         "startChar": 49,

@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "0d18375f_f137bd6b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 501,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Yes. Tested by updating FooBarProvider to return an empty list.",
+      "parentUuid": "615190c4_c8f8b14d",
+      "range": {
+        "startLine": 501,
+        "startChar": 16,
+        "endLine": 501,
+        "endChar": 49
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "66ae9193_bda5b419",
@@ -73,6 +97,24 @@
       "side": 1,
       "message": "Ok, it looks like those do it because `preloader.preload()` can throw an IOException and then we bubble that up in order to make the root invalid. I can\u0027t think off the top of my head why we do that, but I don\u0027t think we should do the same for an IOException thrown by the provided `getNames()`.\n\nWhat if you split into 2 try blocks? One to get the names (that\u0027s like what you had in PS8) and then another that\u0027s like what\u0027s in the other `add*TypeTasks` methods.",
       "parentUuid": "f362401e_b82b68c8",
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e4bf8d2e_6f646753",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:09:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ddc51212_ea1efb30",
       "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
