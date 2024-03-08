@@ -1,0 +1,176 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66ae9193_bda5b419",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 13
+      },
+      "lineNbr": 507,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T00:31:13Z",
+      "side": 1,
+      "message": "Why are IOExceptions handled differently? Shouldn\u0027t these just create an invalid node like any other exception?",
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e65d9513_d530209e",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 359,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T00:31:13Z",
+      "side": 1,
+      "message": "The only key used in more than one kind of names-factory is the `type`. Maybe keep that here and then put the other keys under each type?",
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8284529e_43f8cfb7",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 408,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T00:31:13Z",
+      "side": 1,
+      "message": "nit: extra space and probably don\u0027t need plugin in backticks.\n```suggestion\ninterface) provided by the plugin. This key can only be used along with names-factory of\n```",
+      "range": {
+        "startLine": 408,
+        "startChar": 73,
+        "endLine": 408,
+        "endChar": 74
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "70f09d4f_a1e27a3d",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 419,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T00:31:13Z",
+      "side": 1,
+      "message": "nit: use \"or\" once in a list and reword slightly to emphasize the mandatory part\n\n```suggestion\n: This key is mandatory and defines the type of the names-factory section. The\ntype must be one of: `static`, `change`, or `plugin`.\n```",
+      "range": {
+        "startLine": 418,
+        "startChar": 75,
+        "endLine": 419,
+        "endChar": 51
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ad72a834_956e5dd3",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 424,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T00:31:13Z",
+      "side": 1,
+      "message": "nit: line wrap a little earlier, and add \"a\" and \"one or more\"\n\n```suggestion\n: For a names-factory of type `static`, one or more `name` key(s) are required.\nHere is an example which defines a names-factory of `static` type.\n```",
+      "range": {
+        "startLine": 423,
+        "startChar": 0,
+        "endLine": 424,
+        "endChar": 47
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d1615a09_877f82ca",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 436,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T00:31:13Z",
+      "side": 1,
+      "message": "nit: line wrap a little earlier, and add \"a\" and \"the\"\n```suggestion\n: For a names-factory of type `change`, the `changes` key is required. Here is\nan example which defines a names-factory of `change` type.\n```",
+      "range": {
+        "startLine": 435,
+        "startChar": 0,
+        "endLine": 436,
+        "endChar": 47
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "6e8825fa_8b2075c2",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 451,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T00:31:13Z",
+      "side": 1,
+      "message": "nit: line wrap a little earlier, add \"a\" and \"the\", and remove and extra space\n\n```suggestion\n: For a names-factory of type `plugin`, the `plugin` and `provider` keys are\nrequired, whereas any `arg` key(s) are optional. The provider should implement\nthe `PluginProvidedTaskNamesFactory` interface. The collection of name keys\nreturned by the `getNames` method will be used to generate the names for task\ndefinitions.\n\nHere is an example which defines a names-factory of `plugin` type.\n```",
+      "range": {
+        "startLine": 446,
+        "startChar": 0,
+        "endLine": 451,
+        "endChar": 67
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "227dbb86_2605ecdc",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 13
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T00:31:13Z",
+      "side": 1,
+      "message": "line wrap\n\n```suggestion\nA plugin `names_factory_provider` created exclusively for use in the test\nframework can also be viewed as a reference.\n```",
+      "range": {
+        "startLine": 462,
+        "startChar": 0,
+        "endLine": 463,
+        "endChar": 34
+      },
+      "revId": "518df985de339e6e1ec7b9c4bedcef513ad9407e",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
