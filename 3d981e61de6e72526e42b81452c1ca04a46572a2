@@ -41,6 +41,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ea76965d_a7ffca07",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:12:55Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "7b979b90_80cf9e25",
+      "range": {
+        "startLine": 9,
+        "startChar": 69,
+        "endLine": 9,
+        "endChar": 72
+      },
+      "revId": "3d981e61de6e72526e42b81452c1ca04a46572a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "2216c178_86f2ea1d",
@@ -54,6 +78,30 @@
       "writtenOn": "2024-03-08T18:36:13Z",
       "side": 1,
       "message": "No . between \"task\" and \"config\".\n```suggestion\n    1.  Gating criteria for task configs can be defined using task config (nice to have)\n```",
+      "range": {
+        "startLine": 21,
+        "startChar": 62,
+        "endLine": 21,
+        "endChar": 73
+      },
+      "revId": "3d981e61de6e72526e42b81452c1ca04a46572a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "03a297c0_392bd03d",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:12:55Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "2216c178_86f2ea1d",
       "range": {
         "startLine": 21,
         "startChar": 62,
@@ -81,6 +129,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "bf0bf8b1_5458b616",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 26,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:12:55Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "b7607313_3eadb9e8",
+      "revId": "3d981e61de6e72526e42b81452c1ca04a46572a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3aca5735_c29b7472",
@@ -94,6 +160,30 @@
       "writtenOn": "2024-03-08T18:36:13Z",
       "side": 1,
       "message": "No `.` between \"task\" and \"config\".\n\n```suggestion\n  2. Permissions on refs/meta/config have to be relaxed so that task config devs can read/push on that ref which may expose other configs on that ref\n```",
+      "range": {
+        "startLine": 32,
+        "startChar": 64,
+        "endLine": 32,
+        "endChar": 80
+      },
+      "revId": "3d981e61de6e72526e42b81452c1ca04a46572a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "73ed17a9_edf4a4d6",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 32,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:12:55Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "3aca5735_c29b7472",
       "range": {
         "startLine": 32,
         "startChar": 64,
@@ -127,6 +217,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "c21b4685_d1702a0e",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 38,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:12:55Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "f31e136c_9112b4a7",
+      "range": {
+        "startLine": 38,
+        "startChar": 25,
+        "endLine": 38,
+        "endChar": 42
+      },
+      "revId": "3d981e61de6e72526e42b81452c1ca04a46572a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "21e6ec97_bd7fd875",
@@ -140,6 +254,30 @@
       "writtenOn": "2024-03-08T18:36:13Z",
       "side": 1,
       "message": "No `.` between \"task\" and \"config\".\n\n```suggestion\n**Task config root in a custom project:branch**\n```",
+      "range": {
+        "startLine": 42,
+        "startChar": 2,
+        "endLine": 42,
+        "endChar": 13
+      },
+      "revId": "3d981e61de6e72526e42b81452c1ca04a46572a2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "5ce4a470_642ce5e4",
+        "filename": "src/main/resources/Documentation/design/task_plugin_config.md",
+        "patchSetId": 9
+      },
+      "lineNbr": 42,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-03-08T19:12:55Z",
+      "side": 1,
+      "message": "Fix applied.",
+      "parentUuid": "21e6ec97_bd7fd875",
       "range": {
         "startLine": 42,
         "startChar": 2,
