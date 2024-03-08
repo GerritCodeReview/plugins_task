@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ff78ae48_678d1c51",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 16
+      },
+      "lineNbr": 512,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-03-08T20:41:54Z",
+      "side": 1,
+      "message": "`addStaticTypeTasks()` has the loop outside the try so that it continues onto the next name even when one is invalid (and can potentially call `addInvalidNode()` multiple times). Is that what we want here too?\n\n```suggestion\n          for (String name : names) {\n            try {\n              addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));\n            } catch (ConfigInvalidException e) {\n              addInvalidNode();\n            }\n          }\n          return;\n```",
+      "range": {
+        "startLine": 506,
+        "startChar": 0,
+        "endLine": 512,
+        "endChar": 11
+      },
+      "revId": "0855ae37a6a6549d9f22940c7b2a2812bb0ecf38",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
