@@ -50,6 +50,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
+import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.LinkedList;
@@ -357,6 +358,86 @@ public class TaskTree {
       return matchCache.matchOrNull(getChangeData(), query, task.isVisible);
     }
 
+    protected TaskPluginDefinedInfoFactory.Status getStatusWithExceptions(
+        TaskPluginDefinedInfoFactory.TaskAttribute attribute)
+        throws StorageException, QueryParseException {
+      if (this.isDuplicate) {
+        return TaskPluginDefinedInfoFactory.Status.DUPLICATE;
+      }
+      if (isAllNull(task.pass, task.fail, attribute.subTasks)) {
+        // A leaf def has no defined subdefs.
+        boolean hasDefinedSubtasks =
+            !(task.subTasks.isEmpty()
+                && task.subTasksFiles.isEmpty()
+                && task.subTasksExternals.isEmpty()
+                && task.subTasksFactories.isEmpty());
+        if (hasDefinedSubtasks) {
+          // Remove 'Grouping" tasks (tasks with subtasks but no PASS
+          // or FAIL criteria) from the output if none of their subtasks
+          // are applicable.  i.e. grouping tasks only really apply if at
+          // least one of their subtasks apply.
+          return null;
+        }
+        // A leaf configuration without a PASS or FAIL criteria is a
+        // missconfiguration.  Either someone forgot to add subtasks, or
+        // they forgot to add a PASS or FAIL criteria.
+        return TaskPluginDefinedInfoFactory.Status.INVALID;
+      }
+
+      if (task.fail != null) {
+        if (this.match(task.fail)) {
+          // A FAIL definition is meant to be a hard blocking criteria
+          // (like a CodeReview -2).  Thus, if hard blocked, it is
+          // irrelevant what the subtask states, or the PASS criteria are.
+          //
+          // It is also important that FAIL be useable to indicate that
+          // the task has actually executed.  Thus subtask status,
+          // including a subtask FAIL should not appear as a FAIL on the
+          // parent task.  This means that this is should be the only path
+          // to make a task have a FAIL status.
+          return TaskPluginDefinedInfoFactory.Status.FAIL;
+        }
+      }
+
+      if (attribute.subTasks != null
+          && !isAll(
+              attribute.subTasks,
+              EnumSet.of(
+                  TaskPluginDefinedInfoFactory.Status.PASS,
+                  TaskPluginDefinedInfoFactory.Status.DUPLICATE))) {
+        // It is possible for a subtask's PASS criteria to change while
+        // a parent task is executing, or even after the parent task
+        // completes.  This can result in the parent PASS criteria being
+        // met while one or more of its subtasks no longer meets its PASS
+        // criteria (the subtask may now even meet a FAIL criteria).  We
+        // never want the parent task to reflect a PASS criteria in these
+        // cases, thus we can safely return here without ever evaluating
+        // the task's PASS criteria.
+        return TaskPluginDefinedInfoFactory.Status.WAITING;
+      }
+
+      if (task.pass != null && !this.match(task.pass)) {
+        // Non-leaf tasks with no PASS criteria are supported in order
+        // to support "grouping tasks" (tasks with no function aside from
+        // organizing tasks).  A task without a PASS criteria, cannot ever
+        // be expected to execute (how would you know if it has?), thus a
+        // pass criteria is required to possibly even be considered for
+        // READY.
+        return TaskPluginDefinedInfoFactory.Status.READY;
+      }
+
+      return TaskPluginDefinedInfoFactory.Status.PASS;
+    }
+
+    protected TaskPluginDefinedInfoFactory.Status getStatus(
+        TaskPluginDefinedInfoFactory.TaskAttribute attribute) {
+      try {
+        return getStatusWithExceptions(attribute);
+      } catch (QueryParseException | RuntimeException e) {
+        return TaskPluginDefinedInfoFactory.Status.INVALID;
+      }
+    }
+
     protected class SubNodeAdder {
       protected List<Node> nodes = new ArrayList<>();
       protected SubNodeFactory factory = new SubNodeFactory();
@@ -473,7 +554,8 @@ public class TaskTree {
             return;
           }
         } catch (StorageException e) {
-          log.atSevere().withCause(e).log("Running changes query '%s' failed", namesFactory.changes);
+          log.atSevere().withCause(e).log(
+              "Running changes query '%s' failed", namesFactory.changes);
         } catch (QueryParseException | ConfigInvalidException e) {
         }
         addInvalidNode();
@@ -672,5 +754,25 @@ public class TaskTree {
       node.refreshTask();
     }
     return nodes;
+  }
+
+  public static boolean isAllNull(Object... vals) {
+    for (Object val : vals) {
+      if (val != null) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  protected static boolean isAll(
+      Iterable<TaskPluginDefinedInfoFactory.TaskAttribute> atts,
+      Set<TaskPluginDefinedInfoFactory.Status> states) {
+    for (TaskPluginDefinedInfoFactory.TaskAttribute att : atts) {
+      if (!states.contains(att.status)) {
+        return false;
+      }
+    }
+    return true;
   }
 }
