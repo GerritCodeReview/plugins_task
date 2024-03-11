@@ -16,7 +16,7 @@ package com.googlesource.gerrit.plugins.task;
 
 import com.google.gerrit.common.Container;
 import com.google.gerrit.entities.BranchNameKey;
-import com.google.gerrit.server.git.meta.AbstractVersionedMetaData;
+import com.google.gerrit.server.git.meta.VersionedConfigFile;
 import com.googlesource.gerrit.plugins.task.util.Copier;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -30,7 +30,7 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 /** Task Configuration file living in git */
-public class TaskConfig extends AbstractVersionedMetaData {
+public class TaskConfig extends VersionedConfigFile {
   public enum NamesFactoryType {
     CHANGE,
     STATIC,
@@ -235,7 +235,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   public TaskConfig(
       BranchNameKey masqueraded, FileKey file, boolean isVisible, boolean isMasqueraded) {
-    super(masqueraded, file.file());
+    super(masqueraded.branch(), file.file());
     this.file = file;
     this.isVisible = isVisible;
     this.isMasqueraded = isMasqueraded;
