@@ -351,37 +351,23 @@ like this:
 Names-Factory
 -------------
 A names-factory section defines a collection of name keys which are used to
-generate the names for task definitions.  The section should contain a "type"
-key that specifies the type.
+generate the names for task definitions. A names-factory section is referenced
+by a names-factory key in a "tasks-factory" section. This section should contain
+a `type` key that specifies the type.
 
-A names-factory section is referenced by a names-factory key in a "tasks-factory"
-section.  A sample task.config which defines a names-factory section might look like
-this:
+`type`
 
-```
-[names-factory "static names factory list"]
-    name = my a task
-    name = my b task
-    type = static
-```
+: This key is mandatory and defines the type of the names-factory section. The
+type must be one of: `static`, `change`, or `plugin`.
 
-The following keys may be defined in any names-factory section:
+**static type**
 
-`changes`
-
-: This key defines a query that is used to fetch change numbers which will be used
-as the names of the task(s).
-
-Example:
-```
-    changes = change:1 OR change:2
-```
+: One or more `name` key(s) are required.
 
 `name`
 
-: This key defines the name of the tasks.  This key may be used several times
-in order to define more than one task. The name key can only be used along with
-names-factory of type `static`.
+: This key defines the name of the tasks. It can be used several times in order
+to define more than one task.
 
 Example:
 ```
@@ -389,18 +375,88 @@ Example:
     name = 12345
 ```
 
-`type`
+Here is an example which defines a names-factory of `static` type.
 
-: This key defines the type of the names-factory section.  The type
-can be either `static` or `change`. For names-factory of type `static`,
-`name` key(s) should be defined where as names-factory of type `change`
-needs a `change` key to be defined.
+```
+[names-factory "static names factory"]
+    type = static
+    name = task A
+    name = task B
+```
+
+**change type**
+
+: The `changes` key is required.
+
+`changes`
+
+: This key defines a query that is used to fetch change numbers which will be
+used as the names of the task(s).
 
 Example:
 ```
-    type = static
-    type = change
+    changes = change:1 OR change:2
 ```
+
+Here is an example which defines a names-factory of `change` type.
+
+```
+[names-factory "changes names factory"]
+    type = change
+    changes = topic:sample AND status:open
+```
+
+**plugin type**
+
+: The `plugin` and `provider` keys are required, whereas any `arg` key(s)
+are optional. The provider class should implement the `PluginProvidedTaskNamesFactory`
+interface. The collection of name strings returned by the `getNames()` method will
+be used to generate the names for task definitions.
+
+`arg`
+
+: This key defines an argument that will be passed down to the provider method
+`getNames()`. This key may be used several times in order to define a list of
+arguments.
+
+Example:
+```
+    arg = foo
+```
+
+`plugin`
+
+: This key defines the name of a plugin. The plugin is expected to register
+(bind) a class which implements the `PluginProvidedTaskNamesFactory` interface.
+
+Example:
+```
+    plugin = foobar
+```
+
+`provider`
+
+: This key defines the exported name used to bind the class which implements the
+`PluginProvidedTaskNamesFactory` interface provided by the plugin.
+
+Example:
+```
+    provider = foobar_provider
+```
+
+Here is an example which defines a names-factory of `plugin` type.
+
+```
+[names-factory "plugin names factory"]
+    type = plugin
+    plugin = names_factory_provider
+    provider = foobar_provider
+    arg = myarg1
+    arg = myarg2
+```
+
+A plugin `names_factory_provider` created exclusively for use in the test framework
+can also be viewed as a reference.
 
 External Entries
 ----------------

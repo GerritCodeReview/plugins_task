@@ -24,21 +24,26 @@ progress() { # message cmd [args]...
 usage() { # [error_message]
     cat <<-EOF
 Usage:
-    $MYPROG [--task-plugin-jar|-t <FILE_PATH>] [--gerrit-war|-g <FILE_PATH>]
+    $MYPROG [--task-plugin-jar|-t <FILE_PATH>]
+            [--names-factory-provider-plugin-jar|-f <FILE_PATH>]
+            [--gerrit-war|-g <FILE_PATH>]
 
     This tool runs the plugin functional tests in a Docker environment built
     from the gerritcodereview/gerrit base Docker image.
 
-    The task plugin JAR and optionally a Gerrit WAR are expected to be in the
-    $ARTIFACTS dir;
-    however, the --task-plugin-jar and --gerrit-war switches may be used as
-    helpers to specify which files to copy there.
+    The task plugin JAR, names-factory-provider plugin JAR and optionally a
+    Gerrit WAR are expected to be in the $ARTIFACTS dir;
+    however, the --task-plugin-jar, --names-factory-provider-plugin-jar and
+    --gerrit-war switches may be used as helpers to specify which files to
+    copy there.
 
     Options:
     --help|-h
-    --gerrit-war|-g            path to Gerrit WAR file
-    --task-plugin-jar|-t       path to task plugin JAR file
-    --preserve                 To preserve the docker setup for debugging
+    --gerrit-war|-g                           path to Gerrit WAR file
+    --task-plugin-jar|-t                      path to task plugin JAR file
+    --names-factory-provider-plugin-jar|-f    path to names-factory-provider plugin JAR file.
+                                              It can be generated using 'bazel build names-factory-provider'
+    --preserve                                To preserve the docker setup for debugging
 
 EOF
 
@@ -126,13 +131,14 @@ RETEST="false"
 COMPOSE_ARGS=()
 while (( "$#" )) ; do
     case "$1" in
-        --help|-h)                usage ;;
-        --gerrit-war|-g)          shift ; GERRIT_WAR=$1 ;;
-        --task-plugin-jar|-t)     shift ; TASK_PLUGIN_JAR=$1 ;;
-        --preserve)               PRESERVE="true" ;;
-        --retest)                 RETEST="true" ;;
-        --compose-arg)            shift ; COMPOSE_ARGS+=("$1") ;;
-        *)                        usage "invalid argument $1" ;;
+        --help|-h)                                usage ;;
+        --gerrit-war|-g)                          shift ; GERRIT_WAR=$1 ;;
+        --task-plugin-jar|-t)                     shift ; TASK_PLUGIN_JAR=$1 ;;
+        --names-factory-provider-plugin-jar|-f)   shift ; NAMES_FACTORY_PROVIDER_PLUGIN_JAR=$1 ;;
+        --preserve)                               PRESERVE="true" ;;
+        --retest)                                 RETEST="true" ;;
+        --compose-arg)                            shift ; COMPOSE_ARGS+=("$1") ;;
+        *)                                        usage "invalid argument $1" ;;
     esac
     shift
 done
@@ -149,6 +155,13 @@ if [ ! -e "$ARTIFACTS/task.jar" ] ; then
     MISSING="Missing $ARTIFACTS/task.jar"
     [ -n "$TASK_PLUGIN_JAR" ] && die "$MISSING, check for copy failure?"
     usage "$MISSING, did you forget --task-plugin-jar?"
+fi
+[ -n "$NAMES_FACTORY_PROVIDER_PLUGIN_JAR" ] && cp -f -- "$NAMES_FACTORY_PROVIDER_PLUGIN_JAR" \
+    "$ARTIFACTS/names-factory-provider.jar"
+if [ ! -e "$ARTIFACTS/names-factory-provider.jar" ] ; then
+    MISSING="Missing $ARTIFACTS/names-factory-provider.jar"
+    [ -n "$NAMES_FACTORY_PROVIDER_PLUGIN_JAR" ] && die "$MISSING, check for copy failure?"
+    usage "$MISSING, did you forget --names-factory-provider-plugin-jar?"
 fi
 [ -n "$GERRIT_WAR" ] && cp -f -- "$GERRIT_WAR" "$ARTIFACTS/gerrit.war"
 ( trap cleanup EXIT SIGTERM
