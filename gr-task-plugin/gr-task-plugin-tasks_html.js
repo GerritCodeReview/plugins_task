@@ -35,24 +35,39 @@ export const htmlTemplate = Polymer.html`
           cursor: pointer;
           text-decoration: underline;
         }
+        gr-icon.close {
+          color: var(--error-foreground);
+        }
+        gr-icon.block {
+          color: var(--error-foreground);
+        }
+        gr-icon.pause {
+          color: var(--warning-foreground);
+        }
+        gr-icon.play_arrow {
+          color: var(--success-foreground);
+        }
+        gr-icon.check_circle {
+          color: var(--success-foreground);
+        }
+        li {
+          margin: 3px 0;
+        }
       </style>
       <template is="dom-if" if="[[task.icon.id]]">
         <gr-tooltip-content
             has-tooltip
-            title="In Progress">
-            <iron-icon
-              icon="gr-icons:hourglass"
-              class="green"
-              hidden$="[[!task.in_progress]]">
-            </iron-icon>
+            title="In Progress"
+            hidden="[[!task.in_progress]]">
+            <gr-icon
+              icon="hourglass_empty"
+              class="hourglass_empty">
+            </gr-icon>
         </gr-tooltip-content>
         <gr-tooltip-content
             has-tooltip
             title$="[[task.icon.tooltip]]">
-            <iron-icon
-              icon="[[task.icon.id]]"
-              class$="[[task.icon.color]]">
-            </iron-icon>
+            <gr-icon class$="[[task.icon.id]]" filled icon="[[task.icon.id]]"></gr-icon>
         </gr-tooltip-content>
       </template>
       <template is="dom-if" if="[[task.change]]">
@@ -64,11 +79,11 @@ export const htmlTemplate = Polymer.html`
         </template>
       </template>
       <template is="dom-if" if="[[task.hint]]">
-        <gr-linked-text style="display: -webkit-inline-box;"
+        <gr-formatted-text style="display: -webkit-inline-box;"
           pre=""
           content="[[task.hint]]"
           config="[[config]]">
-        </gr-linked-text>
+        </gr-formatted-text>
       </template>
     </li>
   </template>

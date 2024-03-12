@@ -43,7 +43,7 @@ export class GrTaskChip extends Polymer.Element {
         .shadowRoot.querySelector('main')
         .querySelector('gr-change-view')
         .shadowRoot.querySelector('#mainContent')
-        .querySelector('#primaryTabs');
+        .querySelector('#tabs');
   }
 
   _setTasksTabActive() {

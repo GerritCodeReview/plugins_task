@@ -64,10 +64,10 @@ export const htmlTemplate = Polymer.html`
       cursor: pointer;
       text-decoration: underline;
     }
-    .show-all-button iron-icon {
+    .show-all-button gr-icon {
       color: inherit;
-      --iron-icon-height: 18px;
-      --iron-icon-width: 18px;
+      --gr-icon-height: 18px;
+      --gr-icon-width: 18px;
     }
     .no-margins { margin: 0 0 0 0; }
     .task-list-item {
@@ -96,16 +96,10 @@ export const htmlTemplate = Polymer.html`
             on-click="_show_all_tap">All ([[_all_count]])</span>
         &nbsp;| Needed + Blocked ([[_ready_count]], [[_fail_count]])</p>
     </template>
-    <gr-button link="" class="show-all-button" on-click="_switch_expand"
-    >[[_computeShowAllLabelText(_expand_all)]]
-    <iron-icon
-      icon="gr-icons:expand-more"
-      hidden$="[[_expand_all]]"
-    ></iron-icon
-    ><iron-icon
-      icon="gr-icons:expand-less"
-      hidden$="[[!_expand_all]]"
-    ></iron-icon>
+    <gr-button link="" class="show-all-button" on-click="_switch_expand">
+      [[_computeShowAllLabelText(_expand_all)]]
+      <gr-icon icon="expand_more" hidden$="[[_expand_all]]"></gr-icon>
+      <gr-icon icon="expand_less" hidden$="[[!_expand_all]]"></gr-icon>
     </gr-button>
   </div>
   <div hidden$="[[!_expand_all]]" style="padding-bottom: 12px">

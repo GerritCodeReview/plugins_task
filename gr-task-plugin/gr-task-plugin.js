@@ -135,33 +135,27 @@ class GrTaskPlugin extends Polymer.Element {
     const icon = {};
     switch (task.status) {
       case 'FAIL':
-        icon.id = 'gr-icons:close';
-        icon.color = 'red';
+        icon.id = 'close';
         icon.tooltip = 'Failed';
         break;
       case 'READY':
-        icon.id = 'gr-icons:playArrow';
-        icon.color = 'green';
+        icon.id = 'play_arrow';
         icon.tooltip = 'Ready';
         break;
       case 'INVALID':
-        icon.id = 'gr-icons:abandon';
-        icon.color = 'red';
+        icon.id = 'block';
         icon.tooltip = 'Invalid';
         break;
       case 'WAITING':
-        icon.id = 'gr-icons:pause';
-        icon.color = 'orange';
+        icon.id = 'pause';
         icon.tooltip = 'Waiting';
         break;
       case 'DUPLICATE':
-        icon.id = 'gr-icons:check';
-        icon.color = 'green';
+        icon.id = 'check_circle';
         icon.tooltip = 'Duplicate';
         break;
       case 'PASS':
-        icon.id = 'gr-icons:check-circle';
-        icon.color = 'green';
+        icon.id = 'check_circle';
         icon.tooltip = 'Passed';
         break;
     }
