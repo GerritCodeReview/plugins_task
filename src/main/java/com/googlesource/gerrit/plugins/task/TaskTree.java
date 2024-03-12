@@ -21,10 +21,12 @@ import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.exceptions.StorageException;
+import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.restapi.UnprocessableEntityException;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.AnonymousUser;
 import com.google.gerrit.server.CurrentUser;
+import com.google.gerrit.server.DynamicOptions;
 import com.google.gerrit.server.account.AccountResolver;
 import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.gerrit.server.query.change.ChangeData;
@@ -38,6 +40,7 @@ import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactory;
 import com.googlesource.gerrit.plugins.task.TaskConfig.NamesFactoryType;
 import com.googlesource.gerrit.plugins.task.TaskConfig.Task;
 import com.googlesource.gerrit.plugins.task.TaskConfig.TasksFactory;
+import com.googlesource.gerrit.plugins.task.extensions.PluginProvidedTaskNamesFactory;
 import com.googlesource.gerrit.plugins.task.properties.Properties;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMap;
 import com.googlesource.gerrit.plugins.task.statistics.HitHashMapOfCollection;
@@ -96,6 +99,7 @@ public class TaskTree {
   protected final Preloader preloader;
   protected final TaskConfigCache taskConfigCache;
   protected final TaskExpression.Factory taskExpressionFactory;
+  protected final DynamicMap<DynamicOptions.DynamicBean> dynamicBeans;
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
@@ -120,7 +124,8 @@ public class TaskTree {
       PredicateCache predicateCache,
       TaskExpression.Factory taskExpressionFactory,
       Preloader.Factory preloaderFactory,
-      @Assisted TaskConfigCache taskConfigCache) {
+      @Assisted TaskConfigCache taskConfigCache,
+      DynamicMap<DynamicOptions.DynamicBean> dynamicBeans) {
     this.accountResolver = accountResolver;
     this.allUsers = allUsers;
     this.user = user != null ? user : anonymousUser;
@@ -131,6 +136,7 @@ public class TaskTree {
     this.taskConfigCache = taskConfigCache;
     this.taskExpressionFactory = taskExpressionFactory;
     this.preloader = preloaderFactory.create(taskConfigCache);
+    this.dynamicBeans = dynamicBeans;
   }
 
   public List<Node> getRootNodes(ChangeData changeData)
@@ -438,6 +444,9 @@ public class TaskTree {
                 case CHANGE:
                   addChangeTypeTasks(tasksFactory, namesFactory);
                   continue;
+                case PLUGIN:
+                  addPluginTypeTasks(tasksFactory, namesFactory);
+                  continue;
               }
             }
           }
@@ -476,6 +485,32 @@ public class TaskTree {
           log.atSevere().withCause(e).log(
               "Running changes query '%s' failed", namesFactory.changes);
         } catch (QueryParseException | ConfigInvalidException e) {
+        }
+        addInvalidNode();
+      }
+
+      protected void addPluginTypeTasks(TasksFactory tasksFactory, NamesFactory namesFactory)
+          throws IOException {
+        if (namesFactory.plugin != null && namesFactory.provider != null) {
+          List<String> names;
+          try {
+            PluginProvidedTaskNamesFactory providedTaskNamesFactory =
+                PluginProvidedTaskNamesFactory.getProxyInstance(
+                    dynamicBeans, namesFactory.plugin, namesFactory.provider);
+            names = providedTaskNamesFactory.getNames(getChangeData(), namesFactory.args);
+          } catch (Exception e) {
+            log.atSevere().withCause(e).log("Failed to get plugin provided task names");
+            addInvalidNode();
+            return;
+          }
+          for (String name : names) {
+            try {
+              addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
+            } catch (ConfigInvalidException e) {
+              addInvalidNode();
+            }
+          }
+          return;
         }
         addInvalidNode();
       }

@@ -31,12 +31,13 @@ result_out() { # test expected actual
     local name=$1 expected=$2 actual=$3
 
     [ "$expected" = "$actual" ]
-    result "$name" "$(diff <(echo "$expected") <(echo "$actual"))"
+    result "$name" "$(diff -- <(echo "$expected") <(echo "$actual"))"
 }
 
 result_root() { # group root
-    local name="$1 - $(echo "$2" | sed -es'/Root //')"
-    result_out "$name" "${EXPECTED_ROOTS[$2]}" "${OUTPUT_ROOTS[$2]}"
+    local root=$(echo "$2" | sed -es'/Root //')
+    local name="$1 - $root"
+    result_out "$name" "${EXPECTED_ROOTS[$root]}" "${OUTPUT_ROOTS[$root]}"
 }
 
 # -------- Git Config
@@ -112,7 +113,8 @@ remove_not_suite() { remove_suites !"$1" ; } # suite < pre_json > json
 #
 testdoc_2_cfg() { awk '/^\{/,/^$/ { next } ; 1' ; } # testdoc_format > task_config
 
-# Strip the git config from Test Doc formatted text. For the sample above, the output would be:
+# Strip the git config from Test Doc formatted text and wrap in a Gerrit-like
+# 'plugins' JSON section. For the sample above, the output would be:
 #
 # { "plugins" : [
 #     { "name" : "task",
@@ -140,16 +142,12 @@ testdoc_2_pjson() { # < testdoc_format > pjson_task_roots
 # ---- JSON PARSING ----
 
 json_pp() { # < json > json
-    python -c "import sys, json; \
-            print json.dumps(json.loads(sys.stdin.read()), indent=3, \
-            separators=(',', ' : '), sort_keys=True)"
+    jq --indent 3 --sort-keys
 }
 
-json_val_by() { # json index|'key' > value
-    echo "$1" | python -c "import json,sys;print json.load(sys.stdin)[$2]"
+json_val_by_key() {  # json key > value
+    echo "$1" | jq -r --arg key "$2" '.[$key] // empty'
 }
-json_val_by_key() { json_val_by "$1" "'$2'" ; }  # json key > value
-
 # --------
 
 gssh() {  # [-l user] cmd [args]...
@@ -223,6 +221,11 @@ replace_user() { # < text_with_testuser > text_with_$USER
     sed -e"s/testuser/$USER/"
 }
 
+replace_root_configs() { # < text_with_root_tokens > text_with_root_tokens_replaced
+ sed -e "s,{root-cfg-prj},$ROOT_CONFIG_PRJ," \
+     -e "s,{root-cfg-branch},$ROOT_CONFIG_BRANCH,"
+}
+
 get_user_ref() { # username > refs/users/<accountidshard>/<accountid>
     local user_account_id="$(curl --netrc --silent "http://$SERVER:$HTTP_PORT/a/accounts/$1" | \
     sed -e '1!b' -e "/^)]}'$/d" | jq ._account_id)"
@@ -238,7 +241,8 @@ replace_user_refs() { # < text_with_user_refs > test_with_expanded_user_refs
 }
 
 replace_tokens() { # < text > text with replacing all tokens(changes, user)
-    replace_default_changes | replace_user_refs | replace_user | replace_groups
+    replace_default_changes | replace_user_refs | replace_user | replace_groups | \
+        replace_root_configs
 }
 
 strip_non_applicable() { ensure "$MYDIR"/strip_non_applicable.py ; } # < json > json
@@ -254,23 +258,15 @@ define_jsonByRoot() { # task_plugin_ouptut > jsonByRoot_array_definition
             jsonByRoot[$root]=$record
             root=''
         fi
-    done < <(python -c "if True: # NOP to start indent
-        import sys, json
-
-        roots=json.loads(sys.stdin.read())['plugins'][0]['roots']
-        for root in roots:
-            root_json = json.dumps(root, indent=3, separators=(',', ' : '), sort_keys=True)
-            sys.stdout.write(root['name'] + '\x00' + root_json + '\x00')"
-    )
+    done < <(jq -r --indent 3 --sort-keys \
+        '.plugins[0].roots[] | "\(.name)\u0000\(.)\u0000"')
 
     local def=$(declare -p jsonByRoot)
     echo "${def#*=}" # declare -A jsonByRoot='(...)' > '(...)'
 }
 
 get_plugins() { # < change_json > plugins_json
-    python -c "import sys, json; \
-        plugins={}; plugins['plugins']=json.loads(sys.stdin.read())['plugins']; \
-        print json.dumps(plugins, indent=3, separators=(',', ' : '), sort_keys=True)"
+    jq --indent 3 --sort-keys '{plugins: .plugins}'
 }
 
 example() { # doc example_num > text_for_example_num
@@ -282,18 +278,19 @@ get_change_num() { # < gerrit_push_response > changenum
     echo "${url##*\/}" | tr -d -c '[:digit:]'
 }
 
-install_changeid_hook() { # repo
+install_changeid_hook() {
     local hook=$(git rev-parse --git-dir)/hooks/commit-msg
-    scp -p -P "$PORT" "$SERVER":hooks/commit-msg "$hook"
+    mkdir -p -- "$(dirname -- "$hook")"
+    curl -Lo "$hook" "http://$SERVER:$HTTP_PORT/tools/hooks/commit-msg"
     chmod +x "$hook"
 }
 
 setup_repo() { # repo remote ref [--initial-commit]
     local repo=$1 remote=$2 ref=$3 init=$4
-    git init "$repo"
+    git init -- "$repo"
     (
-        cd "$repo"
-        install_changeid_hook "$repo"
+        cd -- "$repo"
+        install_changeid_hook
         git fetch "$remote" "$ref"
         if ! git checkout FETCH_HEAD ; then
             if [ "$init" = "--initial-commit" ] ; then
@@ -306,7 +303,7 @@ setup_repo() { # repo remote ref [--initial-commit]
 update_repo() { # repo remote ref
     local repo=$1 remote=$2 ref=$3
     (
-        cd "$repo"
+        cd -- "$repo"
         git add .
         git commit -m 'Testing task plugin'
         git push "$remote" HEAD:"$ref"
@@ -316,7 +313,7 @@ update_repo() { # repo remote ref
 create_repo_change() { # repo remote ref [change_id] > change_num
     local repo=$1 remote=$2 ref=$3 change_id=$4 msg="Test change"
     (
-        q cd "$repo"
+        q cd -- "$repo"
         uuidgen > file
         q git add .
         [ -n "$change_id" ] && msg=$(commit_message "$msg" "$change_id")
@@ -335,16 +332,16 @@ query() {  # [-l user] query > json lines
 change_plugins() { awk "NR==$1" | get_plugins | json_pp ; }
 
 results_suite() { # name expected_file plugins_json
-    local name=$1 expected=$2 actual=$3
+    local name=$1 expected_file=$2 actual=$3
 
-    local -A EXPECTED_ROOTS=$(define_jsonByRoot < "$expected")
+    local -A EXPECTED_ROOTS=$(define_jsonByRoot < "$expected_file")
     local -A OUTPUT_ROOTS=$(echo "$actual" | define_jsonByRoot)
 
     local out root
     echo "$ROOTS" | while read root ; do
         result_root "$name" "$root"
     done
-    out=$(diff "$expected" <(echo "$actual") | head -15)
+    out=$(diff -- "$expected_file" <(echo "$actual") | head -15)
     [ -z "$out" ]
     result "$name - Full Test Suite" "$out"
 }

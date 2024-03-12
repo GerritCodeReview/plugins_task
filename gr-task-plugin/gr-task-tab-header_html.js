@@ -1,6 +1,6 @@
 /**
  * @license
- * Copyright (C) 2021 The Android Open Source Project
+ * Copyright (C) 2024 The Android Open Source Project
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,20 +15,6 @@
  * limitations under the License.
  */
 
-import './gr-task-plugin.js';
-import './gr-task-summary.js';
-import './gr-task-tab-header.js';
-
-Gerrit.install(plugin => {
-  plugin.registerDynamicCustomComponent(
-      'change-view-tab-header',
-      'gr-task-tab-header'
-  );
-  plugin.registerDynamicCustomComponent(
-      'change-view-tab-content',
-      'gr-task-plugin'
-  );
-  plugin.registerCustomComponent(
-      'commit-container',
-      'gr-task-summary');
-});
+export const htmlTemplate = Polymer.html`
+  <div class="gr-task-tab-header">Tasks</div>
+`;

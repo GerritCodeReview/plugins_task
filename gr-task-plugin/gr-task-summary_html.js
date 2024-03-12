@@ -79,8 +79,8 @@ export const htmlTemplate = Polymer.html`
             <gr-task-chip chip_style="ready" hidden$="[[!ready_count]]">[[ready_count]] needed</gr-task-chip>
             <gr-task-chip chip_style="success" hidden$="[[!pass_count]]">[[pass_count]] passed</gr-task-chip>
             <gr-task-chip chip_style="duplicate" hidden$="[[!duplicate_count]]">[[duplicate_count]] duplicate</gr-task-chip>
+          </td>
         </template>
-        </td>
       </tr>
     </table>
   </div>

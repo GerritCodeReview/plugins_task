@@ -154,10 +154,12 @@ All-Projects:refs/meta/config:/task.config
     ...
 ```
 
-To reference a task from root task.config on the All-Projects.git, prefix the task name with `//^`
-and to reference a task from task dir on the All-Projects.git, use
-`//<relative path from task dir>^<task_name>`. It doesn't matter which project, ref and file one
-is referencing from while using this syntax.
+To reference a task from the root task.config on the root project and branch
+(defaults to `All-Projects` and `refs/meta/config` and is
+[configurable](config.html#section-rootconfig)), prefix the task name with
+`//^` and to reference a task from the task dir on the root project and branch,
+use `//<relative path from task dir>^<task_name>`. It doesn't matter which
+project, ref and file one is referencing from while using this syntax.
 
 Example:
 

@@ -9,5 +9,6 @@ RUN touch "$GERRIT_SITE"/.firstTimeRedirect
 
 COPY artifacts /tmp/
 RUN cp /tmp/task.jar "$GERRIT_SITE/plugins/task.jar"
+RUN cp /tmp/names-factory-provider.jar "$GERRIT_SITE/plugins/names-factory-provider.jar"
 RUN { [ -e /tmp/gerrit.war ] && cp /tmp/gerrit.war "$GERRIT_SITE/bin/gerrit.war" ; } || true
 RUN chmod 777 "$GERRIT_SITE/git"

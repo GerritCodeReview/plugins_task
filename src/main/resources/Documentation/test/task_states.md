@@ -15,9 +15,9 @@ output for task config when running the following:
 ```
 
 The config below is expected to be in the `task.config` file in project
-`All-Projects` on ref `refs/meta/config`.
+`{root-cfg-prj}` on ref `{root-cfg-branch}`.
 
-file: `All-Projects:refs/meta/config:task.config`
+file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
 ```
 [root "Root N/A"]
   applicable = is:closed # Assumes test query is "is:open"
@@ -784,6 +784,42 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
+[root "Root tasks-factory PLUGIN"]
+  applicable = status:new
+  subtasks-factory = tasks-factory plugin
+
+[tasks-factory "tasks-factory plugin"]
+  names-factory = names-factory plugin list
+  fail = True
+
+[names-factory "names-factory plugin list"]
+  type = plugin
+  plugin = names-factory-provider
+  provider = foobar_provider
+  arg = baz
+  arg = qux
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory PLUGIN",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "foobar-test-baz",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "foobar-test-qux",
+         "status" : "FAIL"
+      }
+   ]
+}
+
 [root "Root tasks-factory static (empty name)"]
   subtasks-factory = tasks-factory static (empty name)
   # Grouping task since it has no pass criteria, not output since it has no subtasks
@@ -1369,6 +1405,36 @@ file: `All-Projects:refs/meta/config:task.config`
          "hasPass" : true,
          "name" : "_change2_number",
          "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root Properties tasks-factory PLUGIN"]
+  subtasks-factory = tasks-factory PLUGIN Properties
+
+[tasks-factory "tasks-factory PLUGIN Properties"]
+  set-welcome-message = Welcome to the party
+  names-factory = names-factory plugin provided list
+  fail-hint = ${welcome-message} Name(${_name}) Change Number(${_change_number}) Change Id(${_change_id}) Change Project(${_change_project}) Change Branch(${_change_branch}) Change Status(${_change_status}) Change Topic(${_change_topic})
+  fail = True
+
+[names-factory "names-factory plugin provided list"]
+  type = plugin
+  plugin = names-factory-provider
+  provider = foobar_provider
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root Properties tasks-factory PLUGIN",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "hint" : "Welcome to the party Name(foobar-test) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
+         "name" : "foobar-test",
+         "status" : "FAIL"
       }
    ]
 }
@@ -2372,18 +2438,18 @@ file: `All-Projects:refs/meta/config:task.config`
    ]
 }
 
-[root "Root Reference tasks from All-Projects"]
+[root "Root Reference tasks from {root-cfg-prj}"]
   applicable = is:open
   subtask = //^Subtask PASS
-  subtask = @testuser/dir/relative.config^Import All-Projects root task
-  subtask = @testuser/dir/relative.config^Import All-Projects non-root task
-  subtask = %{non_secret_group_name_without_space}/dir/relative.config^Import All-Projects root task - groups
-  subtask = %{non_secret_group_name_without_space}/dir/relative.config^Import All-Projects non-root task - groups
+  subtask = @testuser/dir/relative.config^Import {root-cfg-prj} root task
+  subtask = @testuser/dir/relative.config^Import {root-cfg-prj} non-root task
+  subtask = %{non_secret_group_name_without_space}/dir/relative.config^Import {root-cfg-prj} root task - groups
+  subtask = %{non_secret_group_name_without_space}/dir/relative.config^Import {root-cfg-prj} non-root task - groups
 
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root Reference tasks from All-Projects",
+   "name" : "Root Reference tasks from {root-cfg-prj}",
    "status" : "PASS",
    "subTasks" : [
       {
@@ -2395,7 +2461,7 @@ file: `All-Projects:refs/meta/config:task.config`
       {
          "applicable" : true,
          "hasPass" : false,
-         "name" : "Import All-Projects root task",
+         "name" : "Import {root-cfg-prj} root task",
          "status" : "PASS",
          "subTasks" : [
             {
@@ -2409,7 +2475,7 @@ file: `All-Projects:refs/meta/config:task.config`
       {
          "applicable" : true,
          "hasPass" : false,
-         "name" : "Import All-Projects non-root task",
+         "name" : "Import {root-cfg-prj} non-root task",
          "status" : "PASS",
          "subTasks" : [
             {
@@ -2423,7 +2489,7 @@ file: `All-Projects:refs/meta/config:task.config`
       {
          "applicable" : true,
          "hasPass" : false,
-         "name" : "Import All-Projects root task - groups",
+         "name" : "Import {root-cfg-prj} root task - groups",
          "status" : "PASS",
          "subTasks" : [
             {
@@ -2437,7 +2503,7 @@ file: `All-Projects:refs/meta/config:task.config`
       {
          "applicable" : true,
          "hasPass" : false,
-         "name" : "Import All-Projects non-root task - groups",
+         "name" : "Import {root-cfg-prj} non-root task - groups",
          "status" : "PASS",
          "subTasks" : [
             {
@@ -2674,7 +2740,7 @@ file: `All-Projects:refs/meta/config:task.config`
 }
 
 [root "Root Preload from user ref which has subtask in different file"]
-  preload-task = @testuser/dir/relative.config^Import All-Projects root task
+  preload-task = @testuser/dir/relative.config^Import {root-cfg-prj} root task
 
 {
    "applicable" : true,
@@ -3334,7 +3400,7 @@ file: `All-Projects:refs/meta/config:task.config`
 
 ```
 
-file: `All-Projects:refs/meta/config:task/common.config`
+file: `{root-cfg-prj}:{root-cfg-branch}:task/common.config`
 ```
 [task "file task/common.config PASS"]
   applicable = is:open
@@ -3345,7 +3411,7 @@ file: `All-Projects:refs/meta/config:task/common.config`
   fail = is:open
 ```
 
-file: `All-Projects:refs/meta/config:task/relative.config`
+file: `{root-cfg-prj}:{root-cfg-branch}:task/relative.config`
 ```
 [task "Root Import task from subdir using relative syntax"]
     subtask = dir/common.config^Sample relative task in sub dir
@@ -3355,7 +3421,7 @@ file: `All-Projects:refs/meta/config:task/relative.config`
     pass = True
 ```
 
-file: `All-Projects:refs/meta/config:task/dir/common.config`
+file: `{root-cfg-prj}:{root-cfg-branch}:task/dir/common.config`
 ```
 [task "Sample relative task in sub dir"]
     applicable = is:open
@@ -3422,7 +3488,7 @@ file: `All-Projects:refs/meta/config:task/dir/common.config`
     preload-task = %{non_secret_group_name_without_space}/foo/bar.config^Absolute Task 1
 ```
 
-file: `All-Projects:refs/meta/config:task/invalids.config`
+file: `{root-cfg-prj}:{root-cfg-branch}:task/invalids.config`
 ```
 [task "No PASS criteria"]
   fail-hint = Invalid without Pass criteria and without subtasks
@@ -3641,11 +3707,11 @@ file: `All-Users:refs/users/self:task/dir/relative.config`
   applicable = is:open
   pass = True
 
-[task "Import All-Projects root task"]
+[task "Import {root-cfg-prj} root task"]
   applicable = is:open
   subtask = //^Subtask PASS
 
-[task "Import All-Projects non-root task"]
+[task "Import {root-cfg-prj} non-root task"]
   applicable = is:open
   subtask = //dir/common.config^Sample relative task in sub dir
 ```
@@ -3666,11 +3732,11 @@ file: `All-Users:refs/users/self:task/foo/bar.config`
 
 file: `All-Users:refs/groups/{sharded_non_secret_group_uuid_without_space}:task/dir/relative.config`
 ```
-[task "Import All-Projects root task - groups"]
+[task "Import {root-cfg-prj} root task - groups"]
   applicable = is:open
   subtask = //^Subtask PASS
 
-[task "Import All-Projects non-root task - groups"]
+[task "Import {root-cfg-prj} non-root task - groups"]
   applicable = is:open
   subtask = //dir/common.config^Sample relative task in sub dir
 ```
