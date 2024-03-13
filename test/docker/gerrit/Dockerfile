@@ -1,6 +1,7 @@
 FROM gerritcodereview/gerrit:3.9.1-ubuntu22
 
 ENV GERRIT_SITE /var/gerrit
+RUN rm -rf "$GERRIT_SITE/plugins" && mkdir "$GERRIT_SITE/plugins"
 RUN git config -f "$GERRIT_SITE/etc/gerrit.config" auth.type \
     DEVELOPMENT_BECOME_ANY_ACCOUNT
 RUN git config -f "$GERRIT_SITE/etc/gerrit.config" --add container.javaOptions \
