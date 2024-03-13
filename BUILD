@@ -91,8 +91,8 @@ sh_test(
     name = "docker-tests",
     size = "medium",
     srcs = ["test/docker/run.sh"],
-    args = ["--task-plugin-jar", "$(location :task)", "--names-factory-provider-plugin-jar", "$(location :names-factory-provider)"],
-    data = [plugin_name, test_factory_provider_plugin_name] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
+    args = ["--gerrit-war", "$(location //:gerrit.war)", "--task-plugin-jar", "$(location :task)", "--names-factory-provider-plugin-jar", "$(location :names-factory-provider)"],
+    data = ["//:gerrit.war", plugin_name, test_factory_provider_plugin_name] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
     local = True,
     tags = ["docker"],
 )
