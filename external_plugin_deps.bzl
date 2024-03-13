@@ -1,4 +1,4 @@
-load("@bazel_tools//tools/build_defs/repo:maven_rules.bzl", "maven_jar")
+load("//tools/bzl:maven_jar.bzl", "maven_jar")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 
 def external_plugin_deps():
