@@ -5,6 +5,8 @@
         - tools/playbooks/install_maven.yaml
         - tools/playbooks/install_docker.yaml
         - tools/playbooks/install_python3-distutils.yaml
+    required-projects:
+      - polymer-bridges
     vars:
         bazelisk_test_targets: "plugins/task/lint_test plugins/task/..."
 
