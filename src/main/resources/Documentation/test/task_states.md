@@ -808,13 +808,13 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
       {
          "applicable" : true,
          "hasPass" : true,
-         "name" : "foobar-test-baz",
+         "name" : "foobar-_change_number-baz",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
          "hasPass" : true,
-         "name" : "foobar-test-qux",
+         "name" : "foobar-_change_number-qux",
          "status" : "FAIL"
       }
    ]
@@ -1432,8 +1432,8 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
       {
          "applicable" : true,
          "hasPass" : true,
-         "hint" : "Welcome to the party Name(foobar-test) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
-         "name" : "foobar-test",
+         "hint" : "Welcome to the party Name(foobar-_change_number) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
+         "name" : "foobar-_change_number",
          "status" : "FAIL"
       }
    ]

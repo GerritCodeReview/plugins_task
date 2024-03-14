@@ -25,7 +25,8 @@ public class FoobarProvider implements PluginProvidedTaskNamesFactory {
 
   @Override
   public List<String> getNames(ChangeData changeData, List<String> args) throws Exception {
-    String name = String.join(DELIMITER, "foobar", changeData.project().get());
+    String name =
+        String.join(DELIMITER, "foobar", Integer.toString(changeData.change().getChangeId()));
     if (args == null || args.isEmpty()) {
       return List.of(name);
     }
