@@ -46,20 +46,26 @@ export const htmlTemplate = Polymer.html`
     .taskSummaryChip.loading:focus-within {
       background: var(--gray-background-focus);
     }
-    .taskSummaryChip.success {
+    .taskSummaryChip.pass {
       border-color: var(--success-foreground);
       background: var(--success-background);
     }
-    .taskSummaryChip.success:hover {
+    .taskSummaryChip.pass iron-icon {
+      color: var(--success-foreground);
+    }
+    .taskSummaryChip.pass:hover {
       background: var(--success-background-hover);
       box-shadow: var(--elevation-level-1);
     }
-    .taskSummaryChip.success:focus-within {
+    .taskSummaryChip.pass:focus-within {
       background: var(--success-background-focus);
     }
     .taskSummaryChip.waiting {
       border-color: var(--warning-foreground);
       background: var(--warning-background);
+    }
+    .taskSummaryChip.waiting iron-icon {
+      color: var(--warning-foreground);
     }
     .taskSummaryChip.waiting:hover {
       background: var(--warning-background-hover);
@@ -71,6 +77,9 @@ export const htmlTemplate = Polymer.html`
     .taskSummaryChip.ready {
       border-color: var(--success-foreground);
       background: var(--success-background);
+    }
+    .taskSummaryChip.ready iron-icon {
+      color: var(--success-foreground);
     }
     .taskSummaryChip.ready:hover {
       background: var(--success-background-hover);
@@ -84,6 +93,9 @@ export const htmlTemplate = Polymer.html`
       border-color: var(--error-foreground);
       background: var(--error-background);
     }
+    .taskSummaryChip.invalid iron-icon {
+      color: var(--error-foreground);
+    }
     .taskSummaryChip.invalid:hover {
       background: var(--error-background-hover);
       box-shadow: var(--elevation-level-1);
@@ -95,6 +107,9 @@ export const htmlTemplate = Polymer.html`
       color: var(--success-foreground);
       border-color: var(--success-foreground);
       background: var(--success-background);
+    }
+    .taskSummaryChip.duplicate iron-icon {
+      color: var(--success-foreground);
     }
     .taskSummaryChip.duplicate:hover {
       background: var(--success-background-hover);
@@ -108,6 +123,9 @@ export const htmlTemplate = Polymer.html`
       border-color: var(--error-foreground);
       background: var(--error-background);
     }
+    .taskSummaryChip.fail iron-icon {
+      color: var(--error-foreground);
+    }
     .taskSummaryChip.fail:hover {
       background: var(--error-background-hover);
       box-shadow: var(--elevation-level-1);
@@ -120,10 +138,22 @@ export const htmlTemplate = Polymer.html`
       font-weight: var(--font-weight-normal);
       line-height: var(--line-height-small);
     }
+    div {
+      display: flex;
+      justify-content: space-between;
+    }
+    iron-icon {
+      margin-right: 2px;
+      --iron-icon-height: 16px;
+      --iron-icon-width: 16px;
+    }
   </style>
   <button
     class$="taskSummaryChip font-small [[chip_style]]"
     on-click="_onChipClick">
-    <slot></slot>
+    <div tabindex="0">
+      <iron-icon icon="[[_computeIconId()]]"></iron-icon>
+      <div class="text">[[text]]</div>
+    </div>
   </button>
 `;
