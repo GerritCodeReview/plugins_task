@@ -1,5 +1,5 @@
-load("//tools/bzl:maven_jar.bzl", "maven_jar")
 load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
+load("//tools/bzl:maven_jar.bzl", "maven_jar")
 
 def external_plugin_deps():
     AUTO_VALUE_VERSION = "1.7.4"
