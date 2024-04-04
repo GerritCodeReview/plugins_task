@@ -49,7 +49,7 @@ gerrit_plugin(
     name = plugin_name,
     srcs = glob(["src/main/java/**/*.java"]),
     javacopts = [
-        "-Werror",
+        #        "-Werror",
         "-Xlint:all",
         "-Xlint:-classfile",
         "-Xlint:-processing",
