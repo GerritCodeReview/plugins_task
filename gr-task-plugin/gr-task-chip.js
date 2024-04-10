@@ -16,6 +16,7 @@
  */
 
 import './gr-task-plugin.js';
+import {GrTaskPlugin} from './gr-task-plugin.js';
 import {htmlTemplate} from './gr-task-chip_html.js';
 
 export class GrTaskChip extends Polymer.Element {
@@ -33,6 +34,10 @@ export class GrTaskChip extends Polymer.Element {
         type: String,
         notify: true,
         value: 'ready',
+      },
+      text: {
+        type: String,
+        notify: true,
       },
     };
   }
@@ -61,6 +66,10 @@ export class GrTaskChip extends Polymer.Element {
 
   _onChipClick() {
     this._setTasksTabActive();
+  }
+
+  _computeIconId() {
+    return GrTaskPlugin._computeIcon(this.chip_style).id;
   }
 }
 
