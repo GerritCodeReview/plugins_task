@@ -497,7 +497,7 @@ public class TaskTree {
             PluginProvidedTaskNamesFactory providedTaskNamesFactory =
                 PluginProvidedTaskNamesFactory.getProxyInstance(
                     dynamicBeans, namesFactory.plugin, namesFactory.provider);
-            names = providedTaskNamesFactory.getNames(getChangeData(), namesFactory.args);
+            names = providedTaskNamesFactory.getNames(namesFactory.args);
           } catch (Exception e) {
             log.atSevere().withCause(e).log("Failed to get plugin provided task names");
             addInvalidNode();
