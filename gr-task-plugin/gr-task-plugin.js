@@ -31,7 +31,7 @@ const Defs = {};
  */
 Defs.Task;
 
-class GrTaskPlugin extends Polymer.Element {
+export class GrTaskPlugin extends Polymer.Element {
   static get is() {
     return 'gr-task-plugin';
   }
@@ -131,9 +131,9 @@ class GrTaskPlugin extends Polymer.Element {
     }
   }
 
-  _computeIcon(task) {
+  static _computeIcon(taskStatus) {
     const icon = {};
-    switch (task.status) {
+    switch (taskStatus.toUpperCase()) {
       case 'FAIL':
         icon.id = 'close';
         icon.tooltip = 'Failed';
@@ -193,7 +193,7 @@ class GrTaskPlugin extends Polymer.Element {
   _addTasks(tasks) { // rename to process, remove DOM bits
     if (!tasks) return [];
     tasks.forEach(task => {
-      task.icon = this._computeIcon(task);
+      task.icon = GrTaskPlugin._computeIcon(task.status.toString());
       task.showOnFilter = this._computeShowOnNeededAndBlockedFilter(task);
       this._compute_counts(task);
       this._addTasks(task.sub_tasks);
