@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "62b76528_b964e353",
+        "filename": "gr-task-plugin/gr-task-plugin_html.js",
+        "patchSetId": 1
+      },
+      "lineNbr": 100,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-04-12T23:27:39Z",
+      "side": 0,
+      "message": "The methods, style class, etc,. that will become un-used after this button is removed should be deleted as well?",
+      "range": {
+        "startLine": 100,
+        "startChar": 7,
+        "endLine": 100,
+        "endChar": 31
+      },
+      "revId": "742a2eec1d8ddf9c5ece61e7e38d10859c58a1b0",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
