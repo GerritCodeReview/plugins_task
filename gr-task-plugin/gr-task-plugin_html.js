@@ -96,17 +96,6 @@ export const htmlTemplate = Polymer.html`
             on-click="_show_all_tap">All ([[_all_count]])</span>
         &nbsp;| Needed + Blocked ([[_ready_count]], [[_fail_count]])</p>
     </template>
-    <gr-button link="" class="show-all-button" on-click="_switch_expand"
-    >[[_computeShowAllLabelText(_expand_all)]]
-    <iron-icon
-      icon="gr-icons:expand-more"
-      hidden$="[[_expand_all]]"
-    ></iron-icon
-    ><iron-icon
-      icon="gr-icons:expand-less"
-      hidden$="[[!_expand_all]]"
-    ></iron-icon>
-    </gr-button>
   </div>
   <div hidden$="[[!_expand_all]]" style="padding-bottom: 12px">
     <ul style="list-style-type:none;">
