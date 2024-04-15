@@ -78,6 +78,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "e9e36644_562b855f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-04-15T17:36:42Z",
+      "side": 1,
+      "message": "Do we really need to use nodeKey here ? Can\u0027t we simply use TaskKey here, since we are anyway checking if this NodeSet is referencing the correct change ?",
+      "parentUuid": "6c400382_4b17fc64",
+      "range": {
+        "startLine": 87,
+        "startChar": 26,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0fe49061_0eb529aa",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 1
@@ -89,6 +113,30 @@
       "writtenOn": "2023-12-19T20:23:14Z",
       "side": 1,
       "message": "Copied from internal review:\n\nNasser:\n\u003e Can you rename this so that \"needed\" is defined? I think it means whenever the\n\u003e enclosing TaskTree is for a different change than the one this NodeSet was\n\u003e created for?\n\nMartin:\n\u003e That feels wrong, because the caller shouldn\u0027t have to know the policy, this\n\u003e naming encapsulates it.\n\nNasser:\n\u003e Fair. But the problem I pointed out still exists. Can you add another method that\n\u003e clearIfNeeded() calls that has the policy-based name?",
+      "range": {
+        "startLine": 103,
+        "startChar": 19,
+        "endLine": 103,
+        "endChar": 32
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "66c7c817_5531b4ba",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-04-15T17:36:42Z",
+      "side": 1,
+      "message": "Would renaming the method to \u0027clearIfOutdated\u0027 help resolve this ?",
+      "parentUuid": "0fe49061_0eb529aa",
       "range": {
         "startLine": 103,
         "startChar": 19,
