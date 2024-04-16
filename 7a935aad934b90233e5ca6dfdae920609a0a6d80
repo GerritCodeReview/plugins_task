@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "dccaece3_32545e10",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 5
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-04-16T05:51:39Z",
+      "side": 1,
+      "message": "Yes we can remove the methods/style class which were used. Those methods and style were being only used in this section.",
+      "revId": "7a935aad934b90233e5ca6dfdae920609a0a6d80",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}

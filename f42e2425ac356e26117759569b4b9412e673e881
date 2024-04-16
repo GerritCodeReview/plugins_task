@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6e3c74e3_6692b0a2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-04-16T05:51:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f968f11c_292d322c",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 31
+      },
+      "revId": "f42e2425ac356e26117759569b4b9412e673e881",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "3429231e_1a583516",
@@ -37,6 +61,24 @@
       "writtenOn": "2024-04-12T23:27:39Z",
       "side": 1,
       "message": "Needs screenshots. See https://gerrit-review.googlesource.com/c/plugins/task/+/414717 for reference.",
+      "revId": "f42e2425ac356e26117759569b4b9412e673e881",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2693a811_7f692072",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-04-16T05:51:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "3429231e_1a583516",
       "revId": "f42e2425ac356e26117759569b4b9412e673e881",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
