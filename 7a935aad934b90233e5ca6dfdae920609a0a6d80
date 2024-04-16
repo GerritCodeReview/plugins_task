@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "67693ab5_59787fb0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-04-16T09:35:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d3e3ba27_468af848",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 40
+      },
+      "revId": "7a935aad934b90233e5ca6dfdae920609a0a6d80",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "fe99ebf6_9bb3ad8f",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-04-16T06:25:18Z",
       "side": 1,
       "message": "nit: Maybe rephrase it like below\n\nSince the task UI is now moved to a tab, the \u0027show/hide\u0027 button does not add any value.",
+      "range": {
+        "startLine": 10,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 58
+      },
+      "revId": "7a935aad934b90233e5ca6dfdae920609a0a6d80",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "47c0da67_6b69dc09",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 5
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-04-16T09:35:07Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "fe99ebf6_9bb3ad8f",
       "range": {
         "startLine": 10,
         "startChar": 0,
