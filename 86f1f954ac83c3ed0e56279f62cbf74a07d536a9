@@ -102,6 +102,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "dd6670dd_0f368581",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-04-16T16:13:35Z",
+      "side": 1,
+      "message": "\u003e Do we really need to use nodeKey here ? Can\u0027t we simply use TaskKey here, since we are anyway checking if this NodeSet is referencing the correct change ?\n\nYes, it\u0027s needed to distinguish between tasks evaluated for different changes in change task factories.\n\nIf changing to use a TaskKey doesn\u0027t make tests fail, we should add more tests that would fail in that case.",
+      "parentUuid": "e9e36644_562b855f",
+      "range": {
+        "startLine": 87,
+        "startChar": 26,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0fe49061_0eb529aa",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 1
@@ -147,6 +171,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "77c33520_64700ac3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 103,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-04-16T16:13:35Z",
+      "side": 1,
+      "message": "\u003e Would renaming the method to \u0027clearIfOutdated\u0027 help resolve this ?\n\nWe can keep it as `clearIfNeeded()`.",
+      "parentUuid": "66c7c817_5531b4ba",
+      "range": {
+        "startLine": 103,
+        "startChar": 19,
+        "endLine": 103,
+        "endChar": 32
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "95387001_f86a4ad2",
@@ -170,6 +218,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "33470a22_2fffbbe5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 104,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-04-16T16:13:35Z",
+      "side": 1,
+      "message": "Never mind on this. The reference check is probably the best way to do it.",
+      "parentUuid": "95387001_f86a4ad2",
+      "range": {
+        "startLine": 104,
+        "startChar": 21,
+        "endLine": 104,
+        "endChar": 23
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "a1e3695d_4b15666e",
@@ -183,6 +255,30 @@
       "writtenOn": "2023-12-19T20:23:14Z",
       "side": 1,
       "message": "Copied from internal review.\n\nNasser:\n\u003e s/getChangeTaskByBaseTasksFactory/getChangeTasksByBaseTasksFactory/\n\nMartin:\n\u003e Maybe it should now be getNodeSet...()?\n\nNasser:\n\u003e maybe? Depends a bit on what we decide with the naming above. I was just pointing\n\u003e out the missing plural, but NodeSet!\u003dChangeTasks to me. However, above we\u0027re\n\u003e saying NodeSet is just a set of node keys. So maybe this should be getNodeKeys...\n\u003e or getNodes...?",
+      "range": {
+        "startLine": 374,
+        "startChar": 42,
+        "endLine": 374,
+        "endChar": 73
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "96b62baa_6f2cd170",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-04-16T16:13:35Z",
+      "side": 1,
+      "message": "Rename this to `getNodeSetByBaseTasksFactory()`",
+      "parentUuid": "a1e3695d_4b15666e",
       "range": {
         "startLine": 374,
         "startChar": 42,
