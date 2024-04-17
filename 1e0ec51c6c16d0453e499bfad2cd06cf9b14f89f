@@ -24,6 +24,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a487b04a_a1eb3b3a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 7,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-04-17T04:02:51Z",
+      "side": 1,
+      "message": "sure",
+      "parentUuid": "501c33f2_0bb01152",
+      "range": {
+        "startLine": 7,
+        "startChar": 0,
+        "endLine": 7,
+        "endChar": 49
+      },
+      "revId": "1e0ec51c6c16d0453e499bfad2cd06cf9b14f89f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "07409354_d3f23763",
@@ -37,6 +61,30 @@
       "writtenOn": "2024-04-16T23:52:20Z",
       "side": 1,
       "message": "The task UI was in a tab earlier as well. It was rendered in a secondary tab though. Maybe reword as:\n\n```\nThe \u0027show all\u0027/\u0027hide all\u0027 button does not add any value as tasks\nare now rendered in a primary tab which is hidden by default.\n```",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 10,
+        "endChar": 23
+      },
+      "revId": "1e0ec51c6c16d0453e499bfad2cd06cf9b14f89f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be8ef6b4_60f72e2e",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 8
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-04-17T04:02:51Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "07409354_d3f23763",
       "range": {
         "startLine": 9,
         "startChar": 0,
