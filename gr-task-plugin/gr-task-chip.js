@@ -62,6 +62,15 @@ export class GrTaskChip extends Polymer.Element {
         break;
       }
     }
+    setTimeout(() => {
+      document.dispatchEvent(
+        new CustomEvent('show-all', {
+          detail: {
+            chip_style: this.chip_style,
+          },
+          composed: true, bubbles: true,
+        }));
+    },0);
   }
 
   _onChipClick() {
