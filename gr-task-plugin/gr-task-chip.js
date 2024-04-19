@@ -62,6 +62,19 @@ export class GrTaskChip extends Polymer.Element {
         break;
       }
     }
+    this._dispatchNavEvent();
+  }
+
+  async _dispatchNavEvent() {
+    while (!GrTaskPlugin._is_registered) {
+      await new Promise(r => setTimeout(r, 0));
+    }
+    document.dispatchEvent(
+      new CustomEvent('chip-nav', {
+        detail: {
+          chip_style: this.chip_style,
+        },
+      }));
   }
 
   _onChipClick() {

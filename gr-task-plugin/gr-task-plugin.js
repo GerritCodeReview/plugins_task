@@ -32,6 +32,9 @@ const Defs = {};
 Defs.Task;
 
 export class GrTaskPlugin extends Polymer.Element {
+
+  static _is_registered = false;
+
   static get is() {
     return 'gr-task-plugin';
   }
@@ -104,11 +107,21 @@ export class GrTaskPlugin extends Polymer.Element {
     if (!this.change) {
       return;
     }
+
+    document.addEventListener('chip-nav', e => {
+      if(e.detail.chip_style=='pass' || e.detail.chip_style=='duplicate'){
+        this._show_all = 'true';
+      }else{
+        this._show_all = 'false';
+      }
+    });
+
     document.addEventListener(`response-tasks-${this.change._number}`, e => {
       this._tasks_info = e.detail.tasks_info;
       this._isPending = e.detail.is_loading;
     });
     this._getTasks();
+    GrTaskPlugin._is_registered = true;
   }
 
   _tasksInfoChanged(newValue, oldValue) {
