@@ -51,7 +51,7 @@ export class GrTaskChip extends Polymer.Element {
         .querySelector('#primaryTabs');
   }
 
-  _setTasksTabActive() {
+  _setTasksTabActive(callback) {
     // TODO: Identify a better way as current implementation is fragile
     const paperTabs = GrTaskChip.getPrimaryTabs();
     const tabs = paperTabs.querySelectorAll('paper-tab');
@@ -62,10 +62,26 @@ export class GrTaskChip extends Polymer.Element {
         break;
       }
     }
+    setTimeout(callback, 1);
   }
 
   _onChipClick() {
-    this._setTasksTabActive();
+
+    const callback = () => {
+      const target = document.querySelector('gr-app')
+      .shadowRoot.querySelector('gr-app-element')
+      .shadowRoot.querySelector('main')
+      .querySelector('gr-change-view')
+      .shadowRoot.querySelector('#mainContent').querySelector('.patchInfo').querySelector('gr-endpoint-decorator').shadowRoot.querySelector('gr-task-plugin');
+
+      if(this.chip_style == 'pass'|| this.chip_style == 'duplicate' ){
+        target._show_all = 'true';
+      }else{
+        target._show_all = 'false';
+      }
+    }
+
+    this._setTasksTabActive(callback);
   }
 
   _computeIconId() {
