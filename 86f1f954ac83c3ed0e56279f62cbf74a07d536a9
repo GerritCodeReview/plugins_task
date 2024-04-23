@@ -402,6 +402,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "6770fad4_9cd004cf",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 62,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-04-23T16:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "2cd2faa5_656bc9b8",
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "bf203c05_986e00db",
@@ -415,6 +433,24 @@
       "writtenOn": "2023-12-19T20:23:14Z",
       "side": 1,
       "message": "for follow up: This is missing a reference to `duplicate-key` below.",
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "49896cc0_b802a736",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 1
+      },
+      "lineNbr": 65,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-04-23T16:32:39Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "bf203c05_986e00db",
       "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
