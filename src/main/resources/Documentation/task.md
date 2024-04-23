@@ -57,10 +57,17 @@ state.
 A task with a `READY` status is ready to be executed. All of its subtasks are
 in the `PASS` state.
 
-A task with a `DUPLICATE` status has the same task key as one of its ancestors.
+A task can have `DUPLICATE` status in one of the following scenarios:
+
+- It has the same task key as one of its ancestors
+- If the task is generated using a task-factory with change type names-factory,
+  and it has the same task key as another change task descendant of the same
+  ancestor task-factory
+
 Task keys are generally made up of the canonical task name and the change to
-which it applies. To avoid infinite loops, subtasks are ignored on duplicate
-tasks.
+which it applies. To avoid infinite loops, and to potentially reduce needless
+duplication, subtasks are ignored on duplicate tasks.
+Also see [duplicate-key](#duplicate-key).
 
 A task with a `PASS` status meets all the criteria for `READY`, and has
 executed and was successful.
@@ -237,6 +244,8 @@ Example:
 ```
     subtasks-file = common.config  # references the file named task/common.config
 ```
+
+<a id="duplicate-key"></a>
 
 `duplicate-key`
 
