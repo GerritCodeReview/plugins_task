@@ -126,6 +126,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "8028abd4_6579ae10",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-04-23T03:26:33Z",
+      "side": 1,
+      "message": "\u003e\u003e Do we really need to use nodeKey here ? Can\u0027t we simply use TaskKey here, since we are anyway checking if this NodeSet is referencing the correct change ?\n\n\u003e Yes, it\u0027s needed to distinguish between tasks evaluated for different changes in change task factories.\n\nACK\n\n\u003e If changing to use a TaskKey doesn\u0027t make tests fail, we should add more tests that would fail in that case.\n\nACK",
+      "parentUuid": "dd6670dd_0f368581",
+      "range": {
+        "startLine": 87,
+        "startChar": 26,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0fe49061_0eb529aa",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 1
