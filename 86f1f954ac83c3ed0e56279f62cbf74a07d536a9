@@ -150,6 +150,30 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "655034a0_2cf201f8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-04-23T06:11:28Z",
+      "side": 1,
+      "message": "IMO it should be ok to use \u0027nodeKeys\u0027 since we\u0027re already using the name \u0027duplicateKeys\u0027 for collection in a similar use-case.",
+      "parentUuid": "8028abd4_6579ae10",
+      "range": {
+        "startLine": 87,
+        "startChar": 26,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "0fe49061_0eb529aa",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 1
