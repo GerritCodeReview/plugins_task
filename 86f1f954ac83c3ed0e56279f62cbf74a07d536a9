@@ -172,6 +172,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "ac403c1d_21cfd5f7",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 87,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-04-23T06:28:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "655034a0_2cf201f8",
+      "range": {
+        "startLine": 87,
+        "startChar": 26,
+        "endLine": 87,
+        "endChar": 31
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0fe49061_0eb529aa",
@@ -327,6 +351,30 @@
       "side": 1,
       "message": "Rename this to `getNodeSetByBaseTasksFactory()`",
       "parentUuid": "a1e3695d_4b15666e",
+      "range": {
+        "startLine": 374,
+        "startChar": 42,
+        "endLine": 374,
+        "endChar": 73
+      },
+      "revId": "86f1f954ac83c3ed0e56279f62cbf74a07d536a9",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "be1f7d7e_d4859a3b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 374,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-04-23T06:28:42Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "96b62baa_6f2cd170",
       "range": {
         "startLine": 374,
         "startChar": 42,
