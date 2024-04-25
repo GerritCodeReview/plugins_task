@@ -16,6 +16,40 @@
       "message": "@nasser Should we try to get this change merged ?",
       "revId": "cf88d051966bf3b6126db5845badb8db9f341c12",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "7eb4eacb_2ba1bd6e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 188,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-04-25T18:59:00Z",
+      "side": 1,
+      "message": "Did you run google-java-format on this?",
+      "revId": "cf88d051966bf3b6126db5845badb8db9f341c12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c56e645e_460c7503",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 5
+      },
+      "lineNbr": 70,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-04-25T18:59:00Z",
+      "side": 1,
+      "message": "nit: end with a \u0027.\u0027\n```suggestion\nAlso see [duplicate-key](#duplicate-key).\n```",
+      "revId": "cf88d051966bf3b6126db5845badb8db9f341c12",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
