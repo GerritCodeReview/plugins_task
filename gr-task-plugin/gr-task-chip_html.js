@@ -50,7 +50,7 @@ export const htmlTemplate = Polymer.html`
       border-color: var(--success-foreground);
       background: var(--success-background);
     }
-    .taskSummaryChip.pass iron-icon {
+    .taskSummaryChip.pass gr-icon {
       color: var(--success-foreground);
     }
     .taskSummaryChip.pass:hover {
@@ -64,7 +64,7 @@ export const htmlTemplate = Polymer.html`
       border-color: var(--warning-foreground);
       background: var(--warning-background);
     }
-    .taskSummaryChip.waiting iron-icon {
+    .taskSummaryChip.waiting gr-icon {
       color: var(--warning-foreground);
     }
     .taskSummaryChip.waiting:hover {
@@ -78,7 +78,7 @@ export const htmlTemplate = Polymer.html`
       border-color: var(--success-foreground);
       background: var(--success-background);
     }
-    .taskSummaryChip.ready iron-icon {
+    .taskSummaryChip.ready gr-icon {
       color: var(--success-foreground);
     }
     .taskSummaryChip.ready:hover {
@@ -93,7 +93,7 @@ export const htmlTemplate = Polymer.html`
       border-color: var(--error-foreground);
       background: var(--error-background);
     }
-    .taskSummaryChip.invalid iron-icon {
+    .taskSummaryChip.invalid gr-icon {
       color: var(--error-foreground);
     }
     .taskSummaryChip.invalid:hover {
@@ -108,7 +108,7 @@ export const htmlTemplate = Polymer.html`
       border-color: var(--success-foreground);
       background: var(--success-background);
     }
-    .taskSummaryChip.duplicate iron-icon {
+    .taskSummaryChip.duplicate gr-icon {
       color: var(--success-foreground);
     }
     .taskSummaryChip.duplicate:hover {
@@ -123,7 +123,7 @@ export const htmlTemplate = Polymer.html`
       border-color: var(--error-foreground);
       background: var(--error-background);
     }
-    .taskSummaryChip.fail iron-icon {
+    .taskSummaryChip.fail gr-icon {
       color: var(--error-foreground);
     }
     .taskSummaryChip.fail:hover {
@@ -142,17 +142,15 @@ export const htmlTemplate = Polymer.html`
       display: flex;
       justify-content: space-between;
     }
-    iron-icon {
-      margin-right: 2px;
-      --iron-icon-height: 16px;
-      --iron-icon-width: 16px;
+    gr-icon {
+      font-size: var(--line-height-small);
     }
   </style>
   <button
     class$="taskSummaryChip font-small [[chip_style]]"
     on-click="_onChipClick">
     <div tabindex="0">
-      <iron-icon icon="[[_computeIconId()]]"></iron-icon>
+      <gr-icon icon="[[_computeIconId()]]" filled></gr-icon>
       <div class="text">[[text]]</div>
     </div>
   </button>
