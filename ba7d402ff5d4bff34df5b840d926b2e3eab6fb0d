@@ -34,6 +34,24 @@
       "parentUuid": "5e99da7c_e4174f88",
       "revId": "ba7d402ff5d4bff34df5b840d926b2e3eab6fb0d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "e735bcd5_17fe6012",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 1
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-04-26T09:28:32Z",
+      "side": 1,
+      "message": "@kaushik.lingarkar@linaro.org I have uploaded the patchset for the fix.",
+      "parentUuid": "d0056587_da1c0238",
+      "revId": "ba7d402ff5d4bff34df5b840d926b2e3eab6fb0d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
