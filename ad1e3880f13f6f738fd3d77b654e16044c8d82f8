@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "92ff37b7_a15cd4ef",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-04-26T15:38:35Z",
+      "side": 1,
+      "message": "The current patch-set is not a \u0027merge\u0027 from stable-3.5. It looks like the updated files have been copied over to stable-3.9.",
+      "revId": "ad1e3880f13f6f738fd3d77b654e16044c8d82f8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
