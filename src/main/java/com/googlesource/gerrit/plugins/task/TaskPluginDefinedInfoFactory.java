@@ -175,17 +175,24 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     public Node node;
     protected Task task;
     protected TaskAttribute attribute;
+    protected boolean isDuplicate;
 
     protected AttributeFactory(Node node) {
       this.node = node;
       this.task = node.task;
       attribute = new TaskAttribute(task.name());
+
+      isDuplicate =
+          node.isDuplicate
+              || (node.isChange()
+                  && node.getNodeSetByBaseTasksFactory().get(task.subSection).contains(node.key()));
+
       if (options.includeStatistics) {
         statistics.numberOfNodes++;
         if (node.isChange()) {
           statistics.numberOfChangeNodes++;
         }
-        if (node.isDuplicate) {
+        if (isDuplicate) {
           statistics.numberOfDuplicates++;
         }
         attribute.statistics = new TaskAttribute.Statistics();
@@ -215,8 +222,8 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
           if (node.isChange()) {
             attribute.change = node.getChangeData().getId().get();
           }
-          attribute.hasPass = !node.isDuplicate && (task.pass != null || task.fail != null);
-          if (!node.isDuplicate) {
+          attribute.hasPass = !(isDuplicate || isAllNull(task.pass, task.fail));
+          if (!isDuplicate) {
             attribute.subTasks = getSubTasks();
           }
           attribute.status = getStatus();
@@ -239,7 +246,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
               if (!options.onlyApplicable) {
                 attribute.applicable = applicable;
               }
-              if (!node.isDuplicate) {
+              if (!isDuplicate) {
                 if (task.inProgress != null) {
                   attribute.inProgress = node.matchOrNull(task.inProgress);
                 }
@@ -251,6 +258,9 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
                 attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
               }
               addStatistics(attribute.statistics);
+              if (node.isChange()) {
+                node.getNodeSetByBaseTasksFactory().get(task.subSection).add(node.key());
+              }
               return Optional.of(attribute);
             }
           }
@@ -284,7 +294,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     }
 
     protected Status getStatusWithExceptions() throws StorageException, QueryParseException {
-      if (node.isDuplicate) {
+      if (isDuplicate) {
         return Status.DUPLICATE;
       }
       if (isAllNull(task.pass, task.fail, attribute.subTasks)) {
