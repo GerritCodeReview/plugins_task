@@ -784,15 +784,43 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
    ]
 }
 
-[root "Root tasks-factory PLUGIN"]
+[root "Root tasks-factory PLUGIN no args"]
   applicable = status:new
-  subtasks-factory = tasks-factory plugin
+  subtasks-factory = tasks-factory plugin no args
 
-[tasks-factory "tasks-factory plugin"]
-  names-factory = names-factory plugin list
+[tasks-factory "tasks-factory plugin no args"]
+  names-factory = names-factory plugin no args names
   fail = True
 
-[names-factory "names-factory plugin list"]
+[names-factory "names-factory plugin no args names"]
+  type = plugin
+  plugin = names-factory-provider
+  provider = foobar_provider
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory PLUGIN no args",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "foobar",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root tasks-factory PLUGIN no properties"]
+  applicable = status:new
+  subtasks-factory = tasks-factory plugin no properties
+
+[tasks-factory "tasks-factory plugin no properties"]
+  names-factory = names-factory plugin no properties names
+  fail = True
+
+[names-factory "names-factory plugin no properties names"]
   type = plugin
   plugin = names-factory-provider
   provider = foobar_provider
@@ -802,19 +830,93 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
 {
    "applicable" : true,
    "hasPass" : false,
-   "name" : "Root tasks-factory PLUGIN",
+   "name" : "Root tasks-factory PLUGIN no properties",
    "status" : "WAITING",
    "subTasks" : [
       {
          "applicable" : true,
          "hasPass" : true,
-         "name" : "foobar-test-baz",
+         "name" : "foobar-baz",
          "status" : "FAIL"
       },
       {
          "applicable" : true,
          "hasPass" : true,
-         "name" : "foobar-test-qux",
+         "name" : "foobar-qux",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root tasks-factory PLUGIN non-change properties"]
+  applicable = status:new
+  set-first-non-change-property = non-change-value
+  set-second-non-change-property = another-${first-non-change-property}
+  subtasks-factory = tasks-factory plugin non-change properties
+
+[tasks-factory "tasks-factory plugin non-change properties"]
+  names-factory = names-factory plugin non-change properties names
+  fail = True
+
+[names-factory "names-factory plugin non-change properties names"]
+  type = plugin
+  plugin = names-factory-provider
+  provider = foobar_provider
+  arg = ${first-non-change-property}-baz
+  arg = ${second-non-change-property}-qux
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory PLUGIN non-change properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "foobar-non-change-value-baz",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "foobar-another-non-change-value-qux",
+         "status" : "FAIL"
+      }
+   ]
+}
+
+[root "Root tasks-factory PLUGIN change properties"]
+  applicable = status:new
+  subtasks-factory = tasks-factory plugin change properties
+
+[tasks-factory "tasks-factory plugin change properties"]
+  names-factory = names-factory plugin change properties names
+  fail = True
+
+[names-factory "names-factory plugin change properties names"]
+  type = plugin
+  plugin = names-factory-provider
+  provider = foobar_provider
+  arg = ${_change_number}-baz
+  arg = ${_change_branch}-qux
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory PLUGIN change properties",
+   "status" : "WAITING",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "foobar-_change_number-baz",
+         "status" : "FAIL"
+      },
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "foobar-_change_branch-qux",
          "status" : "FAIL"
       }
    ]
@@ -1422,6 +1524,7 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
   type = plugin
   plugin = names-factory-provider
   provider = foobar_provider
+  arg = ${_change_number}
 
 {
    "applicable" : true,
@@ -1432,8 +1535,8 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
       {
          "applicable" : true,
          "hasPass" : true,
-         "hint" : "Welcome to the party Name(foobar-test) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
-         "name" : "foobar-test",
+         "hint" : "Welcome to the party Name(foobar-_change_number) Change Number(_change_number) Change Id(_change_id) Change Project(_change_project) Change Branch(_change_branch) Change Status(_change_status) Change Topic(_change_topic)",
+         "name" : "foobar-_change_number",
          "status" : "FAIL"
       }
    ]
@@ -2181,60 +2284,10 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
             {
                "applicable" : true,
                "change" : _change2_number,
-               "hasPass" : true,
+               "hasPass" : false,
+               "hint" : "Duplicate task is non blocking and empty to break the loop",
                "name" : "_change2_number",
-               "status" : "FAIL",
-               "subTasks" : [
-                  {
-                     "applicable" : true,
-                     "hasPass" : false,
-                     "name" : "task (tasks-factory changes loop)",
-                     "status" : "WAITING",
-                     "subTasks" : [
-                        {
-                           "applicable" : true,
-                           "change" : _change1_number,
-                           "hasPass" : true,
-                           "name" : "_change1_number",
-                           "status" : "FAIL",
-                           "subTasks" : [
-                              {
-                                 "applicable" : true,
-                                 "hasPass" : false,
-                                 "name" : "task (tasks-factory changes loop)",
-                                 "status" : "PASS",
-                                 "subTasks" : [
-                                    {
-                                       "applicable" : true,
-                                       "change" : _change1_number,
-                                       "hasPass" : false,
-                                       "hint" : "Duplicate task is non blocking and empty to break the loop",
-                                       "name" : "_change1_number",
-                                       "status" : "DUPLICATE"
-                                    },
-                                    {
-                                       "applicable" : true,
-                                       "change" : _change2_number,
-                                       "hasPass" : false,
-                                       "hint" : "Duplicate task is non blocking and empty to break the loop",
-                                       "name" : "_change2_number",
-                                       "status" : "DUPLICATE"
-                                    }
-                                 ]
-                              }
-                           ]
-                        },
-                        {
-                           "applicable" : true,
-                           "change" : _change2_number,
-                           "hasPass" : false,
-                           "hint" : "Duplicate task is non blocking and empty to break the loop",
-                           "name" : "_change2_number",
-                           "status" : "DUPLICATE"
-                        }
-                     ]
-                  }
-               ]
+               "status" : "DUPLICATE"
             }
          ]
       }
