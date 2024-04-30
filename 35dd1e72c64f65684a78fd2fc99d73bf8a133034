@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "3dd43911_902fe423",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 6
+      },
+      "lineNbr": 16,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-04-30T08:26:04Z",
+      "side": 1,
+      "message": "Remove this line as its already covered in next sentence at L18",
+      "range": {
+        "startLine": 16,
+        "startChar": 0,
+        "endLine": 16,
+        "endChar": 68
+      },
+      "revId": "35dd1e72c64f65684a78fd2fc99d73bf8a133034",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
