@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "00a97583_51435c37",
+        "filename": "gr-task-plugin/gr-task-chip.js",
+        "patchSetId": 5
+      },
+      "lineNbr": 73,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-05-02T04:43:01Z",
+      "side": 1,
+      "message": "@yash.chaturvedi@linaro.org setting the timeout 0 will schedules the dispatchEvent function to run after a minimal delay.",
+      "range": {
+        "startLine": 65,
+        "startChar": 4,
+        "endLine": 73,
+        "endChar": 9
+      },
+      "revId": "d1fd923eeb955ca747da3952dc8e63fb2b5a4c2f",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
