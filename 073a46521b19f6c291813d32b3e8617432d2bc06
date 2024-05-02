@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "558db2fc_105eadbe",
+        "filename": "gr-task-plugin/gr-task-chip.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-05-02T08:34:48Z",
+      "side": 1,
+      "message": "This is another way to solve the issue using promise concept.",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "073a46521b19f6c291813d32b3e8617432d2bc06",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
