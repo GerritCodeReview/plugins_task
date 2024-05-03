@@ -22,6 +22,30 @@
       },
       "revId": "073a46521b19f6c291813d32b3e8617432d2bc06",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "2fa08ab8_a4e186f6",
+        "filename": "gr-task-plugin/gr-task-chip.js",
+        "patchSetId": 6
+      },
+      "lineNbr": 77,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-05-03T04:35:32Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "558db2fc_105eadbe",
+      "range": {
+        "startLine": 68,
+        "startChar": 2,
+        "endLine": 77,
+        "endChar": 10
+      },
+      "revId": "073a46521b19f6c291813d32b3e8617432d2bc06",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
