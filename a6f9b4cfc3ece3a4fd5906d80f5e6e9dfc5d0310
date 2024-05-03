@@ -41,6 +41,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "dc40459d_04a34a95",
+        "filename": "gr-task-plugin/gr-task-chip.js",
+        "patchSetId": 8
+      },
+      "lineNbr": 67,
+      "author": {
+        "id": 3380830
+      },
+      "writtenOn": "2024-05-03T04:41:31Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "43aec6f9_8e713de8",
+      "range": {
+        "startLine": 67,
+        "startChar": 25,
+        "endLine": 67,
+        "endChar": 35
+      },
+      "revId": "a6f9b4cfc3ece3a4fd5906d80f5e6e9dfc5d0310",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "680e5247_256ff5c7",
