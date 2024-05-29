@@ -151,6 +151,7 @@ public class TaskTree {
       PredicateCache predicateCache,
       TaskExpression.Factory taskExpressionFactory,
       Preloader.Factory preloaderFactory,
+      MatchCache.Factory matchCacheFactory,
       @Assisted TaskConfigCache taskConfigCache,
       DynamicMap<DynamicOptions.DynamicBean> dynamicBeans) {
     this.accountResolver = accountResolver;
@@ -159,7 +160,7 @@ public class TaskTree {
     this.changeQueryProcessorProvider = changeQueryProcessorProvider;
     this.changeQueryBuilderProvider = changeQueryBuilderProvider;
     this.predicateCache = predicateCache;
-    this.matchCache = new MatchCache(predicateCache);
+    this.matchCache = matchCacheFactory.create(predicateCache);
     this.taskConfigCache = taskConfigCache;
     this.taskExpressionFactory = taskExpressionFactory;
     this.preloader = preloaderFactory.create(taskConfigCache);

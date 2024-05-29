@@ -45,6 +45,7 @@ public class Modules {
       factory(TaskExpression.Factory.class);
       factory(TaskTree.Factory.class);
       factory(Preloader.Factory.class);
+      factory(MatchCache.Factory.class);
 
       bind(ChangePluginDefinedInfoFactory.class)
           .annotatedWith(Exports.named("task"))
