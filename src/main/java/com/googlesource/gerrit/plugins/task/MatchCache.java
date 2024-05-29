@@ -18,6 +18,9 @@ import com.google.gerrit.entities.Change;
 import com.google.gerrit.exceptions.StorageException;
 import com.google.gerrit.index.query.Matchable;
 import com.google.gerrit.index.query.QueryParseException;
+import com.google.gerrit.server.logging.Metadata;
+import com.google.gerrit.server.logging.TraceContext;
+import com.google.gerrit.server.logging.TraceContext.TraceTimer;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.googlesource.gerrit.plugins.task.statistics.HitBooleanTable;
 import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
@@ -49,7 +52,10 @@ public class MatchCache {
     if (isMatched == null) {
       Matchable<ChangeData> matchable = predicateCache.getPredicate(query, isVisible).asMatchable();
       try (StopWatch stopWatch =
-          resultByChangeByQuery.createLoadingStopWatch(query, changeData.getId(), isVisible)) {
+          resultByChangeByQuery.createLoadingStopWatch(query, changeData.getId(), isVisible);
+          TraceTimer traceTimer = TraceContext.newTimer(
+              query, Metadata.builder().pluginName("task").changeId(changeData.getId().get()).className(
+                  getClass().getSimpleName()).methodName("match").build())) {
         isMatched = matchable.match(changeData);
         resultByChangeByQuery.put(query, changeData.getId(), isMatched);
       }
