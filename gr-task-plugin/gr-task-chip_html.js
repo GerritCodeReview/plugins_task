@@ -143,6 +143,7 @@ export const htmlTemplate = Polymer.html`
       justify-content: space-between;
     }
     gr-icon {
+      margin-right: 2px;
       font-size: var(--line-height-small);
     }
   </style>
