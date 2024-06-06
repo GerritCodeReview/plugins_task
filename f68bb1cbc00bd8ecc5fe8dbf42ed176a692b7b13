@@ -93,6 +93,30 @@
       },
       "revId": "f68bb1cbc00bd8ecc5fe8dbf42ed176a692b7b13",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "17923638_2920eea2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/PredicateCache.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 120,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-06-06T01:36:26Z",
+      "side": 1,
+      "message": "In fact, the test can actually go as a separate change on stable-3.5. Let me do that.",
+      "parentUuid": "0c4937cc_72449e6c",
+      "range": {
+        "startLine": 120,
+        "startChar": 10,
+        "endLine": 120,
+        "endChar": 86
+      },
+      "revId": "f68bb1cbc00bd8ecc5fe8dbf42ed176a692b7b13",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
