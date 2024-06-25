@@ -48,6 +48,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     INVALID,
     UNKNOWN,
     DUPLICATE,
+    SKIPPED,
     WAITING,
     READY,
     PASS,
@@ -59,6 +60,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     public long numberOfChangeNodes;
     public long numberOfDuplicates;
     public long numberOfNodes;
+    public long numberOfSkippedTasks;
     public long numberOfTaskPluginAttributes;
     public Object predicateCache;
     public Object matchCache;
@@ -109,6 +111,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
   protected Modules.MyOptions options;
   protected TaskPluginAttribute lastTaskPluginAttribute;
   protected Statistics statistics;
+  protected int numberOfChanges;
 
   @Inject
   public TaskPluginDefinedInfoFactory(
@@ -132,6 +135,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
   @Override
   public Map<Change.Id, PluginDefinedInfo> createPluginDefinedInfos(
       Collection<ChangeData> cds, BeanProvider beanProvider, String plugin) {
+    numberOfChanges = cds.size();
     Map<Change.Id, PluginDefinedInfo> pluginInfosByChange = new HashMap<>();
     options = (Modules.MyOptions) beanProvider.getDynamicBean(plugin);
     if (options.all || options.onlyApplicable || options.onlyInvalid) {
@@ -176,16 +180,15 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     protected Task task;
     protected TaskAttribute attribute;
     protected boolean isDuplicate;
+    protected boolean isExpensive;
 
     protected AttributeFactory(Node node) {
       this.node = node;
       this.task = node.task;
       attribute = new TaskAttribute(task.name());
 
-      isDuplicate =
-          node.isDuplicate
-              || (node.isChange()
-                  && node.getNodeSetByBaseTasksFactory().get(task.subSection).contains(node.key()));
+      isExpensive = numberOfChanges > node.task.evaluationThreshold;
+      isDuplicate = !isExpensive && isDuplicate();
 
       if (options.includeStatistics) {
         statistics.numberOfNodes++;
@@ -194,6 +197,9 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
         }
         if (isDuplicate) {
           statistics.numberOfDuplicates++;
+        }
+        if (isExpensive) {
+          statistics.numberOfSkippedTasks++;
         }
         attribute.statistics = new TaskAttribute.Statistics();
         attribute.statistics.properties = node.propertiesStatistics;
@@ -222,8 +228,8 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
           if (node.isChange()) {
             attribute.change = node.getChangeData().getId().get();
           }
-          attribute.hasPass = !(isDuplicate || isAllNull(task.pass, task.fail));
-          if (!isDuplicate) {
+          attribute.hasPass = !(isDuplicate || isExpensive || isAllNull(task.pass, task.fail));
+          if (!(isDuplicate || isExpensive)) {
             attribute.subTasks = getSubTasks();
           }
           attribute.status = getStatus();
@@ -246,7 +252,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
               if (!options.onlyApplicable) {
                 attribute.applicable = applicable;
               }
-              if (!isDuplicate) {
+              if (!(isDuplicate || isExpensive)) {
                 if (task.inProgress != null) {
                   attribute.inProgress = node.matchOrNull(task.inProgress);
                 }
@@ -297,6 +303,9 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
       if (isDuplicate) {
         return Status.DUPLICATE;
       }
+      if (isExpensive) {
+        return Status.SKIPPED;
+      }
       if (isAllNull(task.pass, task.fail, attribute.subTasks)) {
         // A leaf def has no defined subdefs.
         boolean hasDefinedSubtasks =
@@ -333,7 +342,8 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
       }
 
       if (attribute.subTasks != null
-          && !isAll(attribute.subTasks, EnumSet.of(Status.PASS, Status.DUPLICATE))) {
+          && !isAll(
+              attribute.subTasks, EnumSet.of(Status.PASS, Status.DUPLICATE, Status.SKIPPED))) {
         // It is possible for a subtask's PASS criteria to change while
         // a parent task is executing, or even after the parent task
         // completes.  This can result in the parent PASS criteria being
@@ -393,6 +403,12 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
         return false;
       }
     }
+
+    protected boolean isDuplicate() {
+      return node.isDuplicate
+          || (node.isChange()
+              && node.getNodeSetByBaseTasksFactory().get(task.subSection).contains(node.key()));
+    }
   }
 
   protected long millis() {
@@ -445,6 +461,8 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
           return def.failHint;
         case DUPLICATE:
           return "Duplicate task is non blocking and empty to break the loop";
+        case SKIPPED:
+          return "Expensive task evaluation-threshold breached, skipped evaluation";
         default:
       }
     }

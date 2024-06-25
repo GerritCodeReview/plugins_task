@@ -2137,6 +2137,115 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
    ]
 }
 
+[root "Root (subtask SKIPPED)"]
+  subtask = Subtask SKIPPED
+
+[task "Subtask SKIPPED"]
+  evaluation-threshold = 1
+  pass = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root (subtask SKIPPED)",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "hint" : "Expensive task evaluation-threshold breached, skipped evaluation",
+         "name" : "Subtask SKIPPED",
+         "status" : "SKIPPED"
+      }
+   ]
+}
+
+[root "Root (subtask NOT SKIPPED)"]
+  subtask = Subtask NOT SKIPPED
+
+[task "Subtask NOT SKIPPED"]
+  evaluation-threshold = 2
+  pass = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root (subtask NOT SKIPPED)",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask NOT SKIPPED",
+         "status" : "PASS"
+      }
+   ]
+}
+
+[root "Root tasks-factory CHANGE SKIPPED"]
+  subtasks-factory = tasks-factory change SKIPPED
+
+[tasks-factory "tasks-factory change SKIPPED"]
+  names-factory = names-factory change list
+  evaluation-threshold = 1
+  preload-task = Subtask APPLICABLE
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory CHANGE SKIPPED",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "change" : _change1_number,
+         "hasPass" : false,
+         "hint": "Expensive task evaluation-threshold breached, skipped evaluation",
+         "name" : "_change1_number",
+         "status" : "SKIPPED"
+      },
+      {
+         "applicable" : true,
+         "change" : _change2_number,
+         "hasPass" : false,
+         "hint": "Expensive task evaluation-threshold breached, skipped evaluation",
+         "name" : "_change2_number",
+         "status" : "SKIPPED"
+      }
+   ]
+}
+
+[root "Root tasks-factory CHANGE NOT SKIPPED"]
+  subtasks-factory = tasks-factory change NOT SKIPPED
+
+[tasks-factory "tasks-factory change NOT SKIPPED"]
+  names-factory = names-factory change list
+  evaluation-threshold = 2
+  preload-task = Subtask APPLICABLE
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root tasks-factory CHANGE NOT SKIPPED",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "change" : _change1_number,
+         "hasPass" : true,
+         "name" : "_change1_number",
+         "status" : "PASS"
+      },
+      {
+         "applicable" : true,
+         "change" : _change2_number,
+         "hasPass" : true,
+         "name" : "_change2_number",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root Looping"]
   subtask = Looping
 
