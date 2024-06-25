@@ -57,6 +57,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public class TaskBase extends SubSection {
     public String applicable;
     public String duplicateKey;
+    public int evaluationThreshold;
     public Map<String, String> exported;
     public String fail;
     public String failHint;
@@ -79,6 +80,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
       this.isMasqueraded = isMasqueraded;
       applicable = getString(s, KEY_APPLICABLE, null);
       duplicateKey = getString(s, KEY_DUPLICATE_KEY, null);
+      evaluationThreshold = getInt(s, KEY_EVALUATION_THRESHOLD, DEFAULT_EVALUATION_THRESHOLD);
       exported = getProperties(s, KEY_EXPORT_PREFIX);
       fail = getString(s, KEY_FAIL, null);
       failHint = getString(s, KEY_FAIL_HINT, null);
@@ -205,6 +207,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public static final String KEY_ARG = "arg";
   public static final String KEY_CHANGES = "changes";
   public static final String KEY_DUPLICATE_KEY = "duplicate-key";
+  public static final String KEY_EVALUATION_THRESHOLD = "evaluation-threshold";
   public static final String KEY_EXPORT_PREFIX = "export-";
   public static final String KEY_FAIL = "fail";
   public static final String KEY_FAIL_HINT = "fail-hint";
@@ -224,6 +227,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public static final String KEY_SUBTASKS_FILE = "subtasks-file";
   public static final String KEY_TYPE = "type";
   public static final String KEY_USER = "user";
+  public static final int DEFAULT_EVALUATION_THRESHOLD = Integer.MAX_VALUE;
 
   protected final FileKey file;
   public boolean isVisible;
@@ -321,6 +325,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   protected String getString(SubSectionKey s, String key) {
     return cfg.getString(s.section(), s.subSection(), key);
+  }
+
+  protected int getInt(SubSectionKey s, String key, int def) {
+    return cfg.getInt(s.section(), s.subSection(), key, def);
   }
 
   protected List<String> getStringList(SubSectionKey s, String key) {
