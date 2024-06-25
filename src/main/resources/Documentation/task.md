@@ -77,6 +77,9 @@ A task with a `FAIL` status has executed and was unsuccessful.
 A task with a `INVALID` status has an invalid/missing definition or an
 invalid query.
 
+A task with a `SKIPPED` status has been skipped while evaluating the task tree
+based on the [evaluation-threshold](#evaluation-threshold) defined for it.
+
 Tasks
 -----
 Tasks can either be root tasks, or subtasks. Tasks are expected to be
@@ -287,6 +290,27 @@ Example:
 [names-factory "git dependencies"]
     type = change
     changes = -status:merged parentof:${_change_number} project:${_change_project} branch:${_change_branch}
+```
+
+<a id="evaluation-threshold"></a>
+
+`evaluation-threshold`
+
+: This key defines a threshold based on which a task can be determined to
+be expensive for evaluation and consequently, should be skipped. If the number
+of changes in a single `createPluginDefinedInfos()` invocation (such as from a
+`gerrit query` command) are more than the `evaluation-threshold` of the task,
+it will be skipped.
+
+Example:
+
+```
+[root "Root with expensive task"]
+  subtask = expensive task
+
+[task "expensive task"]
+  evaluation-threshold = 1
+  pass = True
 ```
 
 Root Tasks
