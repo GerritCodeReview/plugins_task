@@ -2137,6 +2137,51 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
    ]
 }
 
+[root "Root (subtask SKIPPED)"]
+  subtask = Subtask SKIPPED
+
+[task "Subtask SKIPPED"]
+  evaluation-threshold = 1
+  pass = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root (subtask SKIPPED)",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : false,
+         "hint" : "evaluation-threshold breached, skipped expensive task evaluation",
+         "name" : "Subtask SKIPPED",
+         "status" : "SKIPPED"
+      }
+   ]
+}
+
+[root "Root (subtask NOT SKIPPED)"]
+  subtask = Subtask NOT SKIPPED
+
+[task "Subtask NOT SKIPPED"]
+  evaluation-threshold = 2
+  pass = True
+
+{
+   "applicable" : true,
+   "hasPass" : false,
+   "name" : "Root (subtask NOT SKIPPED)",
+   "status" : "PASS",
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask NOT SKIPPED",
+         "status" : "PASS"
+      }
+   ]
+}
+
 [root "Root Looping"]
   subtask = Looping
 
