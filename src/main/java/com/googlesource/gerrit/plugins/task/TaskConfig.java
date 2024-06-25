@@ -117,20 +117,24 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   public class Task extends TaskBase implements Cloneable {
     public final TaskKey key;
+    public final int evaluationThreshold;
 
     public Task(SubSectionKey s, boolean isVisible, boolean isMasqueraded) {
       super(s, isVisible, isMasqueraded);
       key = TaskKey.create(s);
+      evaluationThreshold = getInt(s, KEY_EVALUATION_THRESHOLD);
     }
 
     public Task(TasksFactory tasks, String name) {
       super(tasks);
       key = TaskKey.create(tasks.subSection, name);
+      evaluationThreshold = getInt(tasks.subSection, KEY_EVALUATION_THRESHOLD);
     }
 
     public Task(SubSectionKey s) {
       super(s);
       key = TaskKey.create(s);
+      evaluationThreshold = getInt(s, KEY_EVALUATION_THRESHOLD);
     }
 
     protected Map<String, String> getAllProperties() {
@@ -224,6 +228,7 @@ public class TaskConfig extends AbstractVersionedMetaData {
   public static final String KEY_SUBTASKS_FILE = "subtasks-file";
   public static final String KEY_TYPE = "type";
   public static final String KEY_USER = "user";
+  public static final String KEY_EVALUATION_THRESHOLD = "evaluation-threshold";
 
   protected final FileKey file;
   public boolean isVisible;
@@ -321,6 +326,10 @@ public class TaskConfig extends AbstractVersionedMetaData {
 
   protected String getString(SubSectionKey s, String key) {
     return cfg.getString(s.section(), s.subSection(), key);
+  }
+
+  protected int getInt(SubSectionKey s, String key) {
+    return cfg.getInt(s.section(), s.subSection(), key, -1);
   }
 
   protected List<String> getStringList(SubSectionKey s, String key) {
