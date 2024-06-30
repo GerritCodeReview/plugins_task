@@ -24,7 +24,7 @@ build_bazel_rules_nodejs_dependencies()
 load("@build_bazel_rules_nodejs//:index.bzl", "node_repositories", "yarn_install")
 
 node_repositories(
-    node_version = "17.9.1",
+    node_version = "20.14.0",
     yarn_version = "1.22.19",
 )
 
