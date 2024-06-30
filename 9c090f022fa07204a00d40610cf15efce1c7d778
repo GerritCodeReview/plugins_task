@@ -16,6 +16,23 @@
       "message": "This depends on this series in `bazlets`: [1].\n\n[1]: https://gerrit-review.googlesource.com/c/bazlets/+/431958",
       "revId": "9c090f022fa07204a00d40610cf15efce1c7d778",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f5813112_f4200e8f",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2024-06-30T07:49:13Z",
+      "side": 1,
+      "message": "This SHA1 must be updated, after the `rules_nodes` version bump to 5.8.5 in `bazlets` is merged.",
+      "revId": "9c090f022fa07204a00d40610cf15efce1c7d778",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
