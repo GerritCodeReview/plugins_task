@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "338165a5_e5d7652f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-01T17:56:19Z",
+      "side": 1,
+      "message": "The Zuul V-1 looks real and is showing a failure with the docker tests:\n\n```\n//plugins/task:docker-tests      FAILED in 3 out of 3 in 123.8s\n```",
+      "revId": "38b761ba8476f17148faf02ad0a598d9ec42b67d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
