@@ -14,6 +14,9 @@
 
 package com.googlesource.gerrit.plugins.task.util;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  * A TopKeyMap is a lightweight limited size (default 5) map with 'long' keys designed to store only
  * the elements with the top five largest keys.
@@ -55,17 +58,16 @@ public class TopKeyMap<V> {
     }
   }
 
-  protected Entry[] entries;
+  protected List<Entry> entries;
 
   public TopKeyMap() {
     this(5);
   }
 
-  @SuppressWarnings("unchecked")
   public TopKeyMap(int length) {
-    entries = (Entry[]) new Object[length];
-    for (int i = 0; i < entries.length; i++) {
-      entries[i] = new Entry();
+    entries = new ArrayList<>(length);
+    for (int i = 0; i < length; i++) {
+      entries.add(new Entry());
     }
   }
 
@@ -74,9 +76,9 @@ public class TopKeyMap<V> {
   }
 
   protected void addIfTop(int i, long key, V value) {
-    if (entries[entries.length - 1].key < key) {
-      for (; i < entries.length; i++) {
-        Entry e = entries[i];
+    if (entries.get(entries.size() - 1).key < key) {
+      for (; i < entries.size(); i++) {
+        Entry e = entries.get(i);
         if (e.key < key) {
           long eKValue = e.key;
           V eValue = e.value;
@@ -89,6 +91,6 @@ public class TopKeyMap<V> {
   }
 
   public int size() {
-    return entries.length;
+    return entries.size();
   }
 }
