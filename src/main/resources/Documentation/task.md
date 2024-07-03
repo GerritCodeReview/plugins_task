@@ -636,6 +636,24 @@ This switch is meant as a debug switch to evaluate task performance. This
 switch outputs an elapsed time value on every task indicating how much time
 it took to evaluate a task and its subtasks.
 
+**\-\-@PLUGIN@\-\-include-statistics**
+
+A debug switch to include statistics about internal task plugin properties.
+This is intended to help task configurators and system administrators profile
+task queries to help improve their performance. This option adds some task
+plugin statistics to each of the tasks and the overall query statistics to
+the last change in the query.
+
+**\-\-@PLUGIN@\-\-only**
+
+This switch can be used to only evaluate tasks under a certain root when tasks
+from other roots are unwanted. For example, a CI system may not be interested
+in evaluating tasks for another CI system. The switch can be provided multiple
+times.
+
+Examples
+--------
+
 When tasks are appended to changes, they will have a "task" section under
 the plugins section like below:
 
@@ -654,15 +672,6 @@ the plugins section like below:
         status: PASS
 ```
 
-**\-\-@PLUGIN@\-\-only**
-
-This switch can be used to only evaluate tasks under a certain root when tasks
-from other roots are unwanted. For example, a CI system may not be interested
-in evaluating tasks for another CI system. The switch can be provided multiple
-times.
-
-Examples
---------
 See [task_states](test/task_states.html) for a comprehensive list of examples
 of task configs and their states.
 
