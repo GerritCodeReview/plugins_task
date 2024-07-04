@@ -51,6 +51,24 @@
       "message": "Superseded by https://gerrit-review.googlesource.com/c/gerrit/+/431558/2",
       "revId": "38b761ba8476f17148faf02ad0a598d9ec42b67d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "6ebc068f_6de48110",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2024-07-04T13:23:32Z",
+      "side": 1,
+      "message": "Not really. Note, that `task` plugin implements standalone build mode and hence maintains its own .bazelversion file.",
+      "parentUuid": "000be2d7_7ccb1bda",
+      "revId": "38b761ba8476f17148faf02ad0a598d9ec42b67d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
