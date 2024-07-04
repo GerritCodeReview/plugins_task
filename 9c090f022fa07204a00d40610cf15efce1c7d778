@@ -33,6 +33,24 @@
       "message": "This SHA1 must be updated, after the `rules_nodes` version bump to 5.8.5 in `bazlets` is merged.",
       "revId": "9c090f022fa07204a00d40610cf15efce1c7d778",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "291d70c0_bad8d259",
+        "filename": "WORKSPACE",
+        "patchSetId": 1
+      },
+      "lineNbr": 8,
+      "author": {
+        "id": 1011323
+      },
+      "writtenOn": "2024-07-04T05:36:04Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "f5813112_f4200e8f",
+      "revId": "9c090f022fa07204a00d40610cf15efce1c7d778",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
