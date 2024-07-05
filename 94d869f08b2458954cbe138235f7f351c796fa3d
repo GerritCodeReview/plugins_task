@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "9bd37c71_dea6b829",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskIncludeStatisticsTest.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 49,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2024-07-05T10:04:11Z",
+      "side": 1,
+      "message": "Do not do string match, but check for the expected keys or values in the query output in json format?",
+      "range": {
+        "startLine": 48,
+        "startChar": 6,
+        "endLine": 49,
+        "endChar": 83
+      },
+      "revId": "94d869f08b2458954cbe138235f7f351c796fa3d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
