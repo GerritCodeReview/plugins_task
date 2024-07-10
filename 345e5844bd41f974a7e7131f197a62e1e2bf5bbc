@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "f6afc818_7cd17735",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/util/TopKeyMap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2024-07-10T01:20:10Z",
+      "side": 1,
+      "message": "It is unclear to me why this fixes the error. Did this break when we moved to Java 11?",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "345e5844bd41f974a7e7131f197a62e1e2bf5bbc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
