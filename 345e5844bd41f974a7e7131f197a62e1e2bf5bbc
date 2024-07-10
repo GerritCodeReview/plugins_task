@@ -22,6 +22,30 @@
       },
       "revId": "345e5844bd41f974a7e7131f197a62e1e2bf5bbc",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fd094127_b2e79d92",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/util/TopKeyMap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-10T09:25:45Z",
+      "side": 1,
+      "message": "Earlier we were trying to cast an `Object` array to `Entry` array resulting in \u0027ClassCastException\u0027. I suspect if this piece of code was ever working.\n\nTherefore, we want to initialize `entries` with an array of concrete Entry class. However, `Entry` is a non-static inner class, which means it is within the scope of the outer class\u0027s generic parameters, and which also means that it is implicitly parameterized with the outer class\u0027s generic parameters. Java does not allow creation of arrays of parameterized types. So, below code doesn\u0027t work.\n\n```\nentries \u003d new Entry[length];\n```\n\nThe above restriction applies only to generic arrays, and not generic collections, therefore I used List instead.",
+      "parentUuid": "f6afc818_7cd17735",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "345e5844bd41f974a7e7131f197a62e1e2bf5bbc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
