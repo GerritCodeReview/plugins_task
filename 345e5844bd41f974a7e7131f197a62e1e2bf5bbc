@@ -93,6 +93,30 @@
       },
       "revId": "345e5844bd41f974a7e7131f197a62e1e2bf5bbc",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "fa47d1db_a37673fc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/util/TopKeyMap.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-11T03:46:15Z",
+      "side": 1,
+      "message": "\u003e\u003e Java does not allow creation of arrays of parameterized types. So, below code doesn\u0027t work.\n`entries \u003d new Entry[length];`\n\n\u003e That doesn\u0027t work, but given the @SuppressWarnings(\"unchecked\") annotation, I wonder if this was supposed to be:\n `entries \u003d new TopKeyMap.Entry[length];`\nwhich according to https://stackoverflow.com/a/8766959 will create an unchecked warning, but do what we want.\n\nI tried this approach earlier, but the task plugin fails to build with below error, probably because `TopKeyMap` expects a concrete class for type parameter. Since, passing around the class instance would require changing the method signature and the code outside `TopKeyMap.java`, I abandoned the approach.\n```\n  entries \u003d new TopKeyMap.Entry[length];\n                         ^\n  missing type arguments for generic class TopKeyMap\u003cV\u003e.Entry\n  where V is a type-variable:\n    V extends Object declared in class TopKeyMap\nerror: warnings found and -Werror specified\nTarget //:task failed to build\n```\n\n\u003e\u003e The above restriction applies only to generic arrays, and not generic collections, therefore I used List instead.\n\n\u003e I\u0027m fine with moving to a List if we can check the claims above about runtime/space performance and agree that any differences are acceptable.\n\nACK",
+      "parentUuid": "0d507117_57ed1bd3",
+      "range": {
+        "startLine": 68,
+        "startChar": 14,
+        "endLine": 68,
+        "endChar": 37
+      },
+      "revId": "345e5844bd41f974a7e7131f197a62e1e2bf5bbc",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
