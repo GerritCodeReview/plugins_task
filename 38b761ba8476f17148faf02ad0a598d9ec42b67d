@@ -69,6 +69,24 @@
       "parentUuid": "000be2d7_7ccb1bda",
       "revId": "38b761ba8476f17148faf02ad0a598d9ec42b67d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e3bc9a53_0f96e39a",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 3
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-12T19:45:44Z",
+      "side": 1,
+      "message": "\u003e This should be unrelated to this change, because this change only changing the standalone build mode.\n\u003e \n\u003e Note, that Zuul is running the tests in Gerrit tree mode, or am I missing something?\n\nNo, you\u0027re correct, sorry. I retriggered Zuul since perhaps this was a temporary issue?\n\n\u003e \n\u003e Can you reproduce the problem locally? In both build modes?\n\nI can try later, sorry I haven\u0027t had more time to look at these.",
+      "parentUuid": "83919829_02438058",
+      "revId": "38b761ba8476f17148faf02ad0a598d9ec42b67d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
