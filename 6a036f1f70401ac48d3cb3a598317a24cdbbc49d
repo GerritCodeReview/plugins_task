@@ -1,0 +1,118 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "81e6529b_de4a2ee2",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-15T19:59:39Z",
+      "side": 1,
+      "message": "nit: technical an API like `GetChange` isn\u0027t a gerrit query, so maybe modify this slightly to be:\n\n```\nchanges in the gerrit query output (or createPluginDefinedInfos() input)\nis more than the value defined for\n```",
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "e6f2b117_097a8de7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-15T19:59:39Z",
+      "side": 1,
+      "message": "Mention that the plugin UI only supports passing a single change to `createPluginDefinedInfos()` so it will never produce SKIPPED tasks and thus doesn\u0027t need to be updated.",
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "63f948c3_62e273e0",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-15T19:59:39Z",
+      "side": 1,
+      "message": "nit: put this in alpha order with the other `numberOf*` fields.",
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "0643f5eb_435cb564",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-15T19:59:39Z",
+      "side": 1,
+      "message": "You can skip the if and put it all in the boolean evaluation.\n\n```suggestion\n      isExpensive \u003d\n          node.task.evaluationThreshold !\u003d -1 \u0026\u0026 numberOfChanges \u003e node.task.evaluationThreshold;\n```\n\nOr initialize `evaluationThreshold` to `Integer.MAX_VALUE`? Then you can do:\n```suggestion\n      isExpensive \u003d numberOfChanges \u003e node.task.evaluationThreshold;\n```",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 7
+      },
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d7ec671e_c2037641",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-15T19:59:39Z",
+      "side": 1,
+      "message": "nit: minor reword\n\n```suggestion\n          return \"Expensive task evaluation-threshold breached, skipped evaluation\";\n```",
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "4feab46c_64bbf7fc",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-15T19:59:39Z",
+      "side": 1,
+      "message": "Let\u0027s use the more specific definition here.\n\n```suggestion\nof changes in a single `createPluginDefinedInfos()` invocation (such as from a\n`gerrit query` command) are more than the `evaluation-threshold`\n```",
+      "range": {
+        "startLine": 301,
+        "startChar": 3,
+        "endLine": 301,
+        "endChar": 46
+      },
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
