@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2d493816_f771e570",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 11,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-16T04:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "81e6529b_de4a2ee2",
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "e6f2b117_097a8de7",
@@ -35,6 +53,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f63961dd_00ddb46c",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 3
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-16T04:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "e6f2b117_097a8de7",
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "63f948c3_62e273e0",
@@ -48,6 +84,24 @@
       "writtenOn": "2024-07-15T19:59:39Z",
       "side": 1,
       "message": "nit: put this in alpha order with the other `numberOf*` fields.",
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "d78e938b_aba327b8",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 68,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-16T04:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "63f948c3_62e273e0",
       "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -75,6 +129,30 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "5b7ddb1d_fed12489",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 196,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-16T04:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "0643f5eb_435cb564",
+      "range": {
+        "startLine": 194,
+        "startChar": 0,
+        "endLine": 196,
+        "endChar": 7
+      },
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "d7ec671e_c2037641",
@@ -92,6 +170,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "61a011b5_9c1d74a3",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 3
+      },
+      "lineNbr": 463,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-16T04:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "d7ec671e_c2037641",
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "4feab46c_64bbf7fc",
@@ -105,6 +201,30 @@
       "writtenOn": "2024-07-15T19:59:39Z",
       "side": 1,
       "message": "Let\u0027s use the more specific definition here.\n\n```suggestion\nof changes in a single `createPluginDefinedInfos()` invocation (such as from a\n`gerrit query` command) are more than the `evaluation-threshold`\n```",
+      "range": {
+        "startLine": 301,
+        "startChar": 3,
+        "endLine": 301,
+        "endChar": 46
+      },
+      "revId": "6a036f1f70401ac48d3cb3a598317a24cdbbc49d",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "267667e7_6b5f7360",
+        "filename": "src/main/resources/Documentation/task.md",
+        "patchSetId": 3
+      },
+      "lineNbr": 301,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-16T04:55:36Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "4feab46c_64bbf7fc",
       "range": {
         "startLine": 301,
         "startChar": 3,
