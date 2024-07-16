@@ -1,0 +1,44 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "dd2518ed_98fcabeb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskConfig.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 332,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-16T18:33:26Z",
+      "side": 1,
+      "message": "I should have noticed in my first review, but we shouldn\u0027t have a hardcoded default value here and it should be passed instead.\n```suggestion\n  protected int getInt(SubSectionKey s, String key, int default) {\n    return cfg.getInt(s.section(), s.subSection(), key, default);\n```\n\nAnd then the caller is responsible for passing `Integer.MAX_VALUE`, but likely using its own named constant, like `DEFAULT_EVALUATION_THRESHOLD`.",
+      "range": {
+        "startLine": 331,
+        "startChar": 0,
+        "endLine": 332,
+        "endChar": 75
+      },
+      "revId": "8668d3932002e12c46219352b7bbcf26d51220c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a34a2571_25be7347",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-16T18:33:26Z",
+      "side": 1,
+      "message": "Maybe we need to be more specific in our definition of \"skipped\". What all are we skipping when a task is expensive? From the code below, it seems we only skip subtask and in-progress evaluation.\n\nShould we also be skipping applicability? Validity? Duplicity (i.e. no point in having a task that\u0027s both skipped and duplicate, and skipped is less costly to check)? Applicability in particular might be what\u0027s expensive in a task, so it seems odd to still compute that. I\u0027m ok we decide it makes sense to keep that behavior, but we need to document it.",
+      "revId": "8668d3932002e12c46219352b7bbcf26d51220c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
