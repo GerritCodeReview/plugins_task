@@ -81,6 +81,47 @@
       "parentUuid": "a34a2571_25be7347",
       "revId": "8668d3932002e12c46219352b7bbcf26d51220c4",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "8f3f2837_5b8e972a",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-17T18:11:16Z",
+      "side": 1,
+      "message": "\u003e \u003e What all are we skipping when a task is expensive? From the code below, it seems we only skip subtask and in-progress evaluation.\n\u003e \n\u003e We\u0027re skipping evaluation of subtasks, in-progress evaluation and also the evaluation of status (pass or fail keys).\n\nAck.\n\n\u003e \n\u003e \u003e Should we also be skipping applicability?\n\u003e \n\u003e The reason behind not skipping applicability was to avoid including the skipped task in the output if it\u0027s not applicable (same idea as duplicate tasks)\n\nOk. I can see the motivation for doing that, but it still seems counter-intuitive. Is it more \"expensive\" to include the skipped tasks in the output or to do their applicability checks?\n\n\u003e \n\u003e \u003e Duplicity (i.e. no point in having a task that\u0027s both skipped and duplicate, and skipped is less costly to check)? \n\u003e \n\u003e Yes, we can make these checks mutually exclusive\n\nSounds good, thanks.",
+      "parentUuid": "f1983509_2f11ebc6",
+      "revId": "8668d3932002e12c46219352b7bbcf26d51220c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "83802707_9c60e41f",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 236,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-17T18:11:16Z",
+      "side": 1,
+      "message": "nit: Can you use the same style used by `hasPass` above for this and the inProgress if below?\n```suggestion\n          if (!(isDuplicate || isExpensive)) {\n```",
+      "range": {
+        "startLine": 236,
+        "startChar": 14,
+        "endLine": 236,
+        "endChar": 42
+      },
+      "revId": "8668d3932002e12c46219352b7bbcf26d51220c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
