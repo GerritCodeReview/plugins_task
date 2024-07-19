@@ -103,6 +103,24 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "652a9f51_3082cf9e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2024-07-19T15:50:56Z",
+      "side": 1,
+      "message": "\u003e \u003e \u003e Should we also be skipping applicability?\n\u003e \u003e \n\u003e \u003e The reason behind not skipping applicability was to avoid including the skipped task in the output if it\u0027s not applicable (same idea as duplicate tasks)\n\u003e \n\u003e Ok. I can see the motivation for doing that, but it still seems counter-intuitive. Is it more \"expensive\" to include the skipped tasks in the output or to do their applicability checks?\n\nYash made the point in a side chat that skipping applicability would mean that the output with `--task--applicable` could be very messy with many non-applicable subtasks showing up on each change.\n\nLet\u0027s keep the applicability check, but please update the docs to explicitly note which keys will not be evaluated for expensive tasks (`in-progress`, `pass`, `fail`, `subtask`, `subtasks-factory`?).",
+      "parentUuid": "8f3f2837_5b8e972a",
+      "revId": "8668d3932002e12c46219352b7bbcf26d51220c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "83802707_9c60e41f",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
         "patchSetId": 5
