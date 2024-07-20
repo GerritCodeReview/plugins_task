@@ -119,6 +119,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "217edf5f_73c93958",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskPluginDefinedInfoFactory.java",
+        "patchSetId": 5
+      },
+      "lineNbr": 221,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2024-07-20T13:28:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "652a9f51_3082cf9e",
+      "revId": "8668d3932002e12c46219352b7bbcf26d51220c4",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "83802707_9c60e41f",
