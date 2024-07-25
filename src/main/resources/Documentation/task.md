@@ -77,6 +77,9 @@ A task with a `FAIL` status has executed and was unsuccessful.
 A task with a `INVALID` status has an invalid/missing definition or an
 invalid query.
 
+A task with a `SKIPPED` status has been skipped while evaluating the task tree
+based on the [evaluation-threshold](#evaluation-threshold) defined for it.
+
 Tasks
 -----
 Tasks can either be root tasks, or subtasks. Tasks are expected to be
@@ -287,6 +290,37 @@ Example:
 [names-factory "git dependencies"]
     type = change
     changes = -status:merged parentof:${_change_number} project:${_change_project} branch:${_change_branch}
+```
+
+<a id="evaluation-threshold"></a>
+
+`evaluation-threshold`
+
+: This key defines a threshold based on which a task can be determined to
+be expensive for evaluation and consequently, should be skipped. If the number
+of changes in a single `createPluginDefinedInfos()` invocation (such as from a
+`gerrit query` command) are more than the `evaluation-threshold` of the task,
+it will be skipped i.e. the keys below are not evaluated for the task.
+
+- pass
+- fail
+- in-progress
+- subtask
+- subtasks-factory
+- subtasks-external
+- subtasks-file
+- preload-task
+- duplicate-key
+
+Example:
+
+```
+[root "Root with expensive task"]
+  subtask = expensive task
+
+[task "expensive task"]
+  evaluation-threshold = 1
+  pass = True
 ```
 
 Root Tasks
@@ -636,6 +670,24 @@ This switch is meant as a debug switch to evaluate task performance. This
 switch outputs an elapsed time value on every task indicating how much time
 it took to evaluate a task and its subtasks.
 
+**\-\-@PLUGIN@\-\-include-statistics**
+
+A debug switch to include statistics about internal task plugin properties.
+This is intended to help task configurators and system administrators profile
+task queries to help improve their performance. This option adds some task
+plugin statistics to each of the tasks and the overall query statistics to
+the last change in the query.
+
+**\-\-@PLUGIN@\-\-only**
+
+This switch can be used to only evaluate tasks under a certain root when tasks
+from other roots are unwanted. For example, a CI system may not be interested
+in evaluating tasks for another CI system. The switch can be provided multiple
+times.
+
+Examples
+--------
+
 When tasks are appended to changes, they will have a "task" section under
 the plugins section like below:
 
@@ -654,15 +706,6 @@ the plugins section like below:
         status: PASS
 ```
 
-**\-\-@PLUGIN@\-\-only**
-
-This switch can be used to only evaluate tasks under a certain root when tasks
-from other roots are unwanted. For example, a CI system may not be interested
-in evaluating tasks for another CI system. The switch can be provided multiple
-times.
-
-Examples
---------
 See [task_states](test/task_states.html) for a comprehensive list of examples
 of task configs and their states.
 
