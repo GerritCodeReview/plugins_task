@@ -14,7 +14,6 @@
 
 package com.googlesource.gerrit.plugins.names_factory_provider;
 
-import com.google.gerrit.server.query.change.ChangeData;
 import com.googlesource.gerrit.plugins.task.extensions.PluginProvidedTaskNamesFactory;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,8 +23,8 @@ public class FoobarProvider implements PluginProvidedTaskNamesFactory {
   public static final String DELIMITER = "-";
 
   @Override
-  public List<String> getNames(ChangeData changeData, List<String> args) throws Exception {
-    String name = String.join(DELIMITER, "foobar", changeData.project().get());
+  public List<String> getNames(List<String> args) throws Exception {
+    String name = String.join(DELIMITER, "foobar");
     if (args == null || args.isEmpty()) {
       return List.of(name);
     }

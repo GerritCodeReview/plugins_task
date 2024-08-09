@@ -17,10 +17,7 @@ test_factory_provider_plugin_name = "names-factory-provider"
 java_plugin(
     name = "auto-value-plugin",
     processor_class = "com.google.auto.value.processor.AutoValueProcessor",
-    deps = [
-        "@auto-value-annotations//jar",
-        "@auto-value//jar",
-    ],
+    deps = PLUGIN_DEPS,
 )
 
 java_library(
@@ -28,8 +25,9 @@ java_library(
     exported_plugins = [
         ":auto-value-plugin",
     ],
+    neverlink = True,
     visibility = ["//visibility:public"],
-    exports = ["@auto-value//jar"],
+    exports = PLUGIN_DEPS,
 )
 
 antlr(

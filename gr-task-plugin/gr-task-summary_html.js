@@ -72,13 +72,13 @@ export const htmlTemplate = Polymer.html`
         <template is="dom-if" if="[[_can_show_summary(is_loading, ready_count, fail_count, invalid_count, waiting_count, duplicate_count, pass_count)]]">
           <td class="key">Tasks</td>
           <td class="value">
-            <gr-task-chip chip_style="loading" hidden$="[[!is_loading]]">loading...</gr-task-chip>
-            <gr-task-chip chip_style="fail" hidden$="[[!fail_count]]">[[fail_count]] blocked</gr-task-chip>
-            <gr-task-chip chip_style="invalid" hidden$="[[!invalid_count]]">[[invalid_count]] invalid</gr-task-chip>
-            <gr-task-chip chip_style="waiting" hidden$="[[!waiting_count]]">[[waiting_count]] waiting</gr-task-chip>
-            <gr-task-chip chip_style="ready" hidden$="[[!ready_count]]">[[ready_count]] needed</gr-task-chip>
-            <gr-task-chip chip_style="success" hidden$="[[!pass_count]]">[[pass_count]] passed</gr-task-chip>
-            <gr-task-chip chip_style="duplicate" hidden$="[[!duplicate_count]]">[[duplicate_count]] duplicate</gr-task-chip>
+            <gr-task-chip chip_style="loading" text="loading..." hidden$="[[!is_loading]]"></gr-task-chip>
+            <gr-task-chip chip_style="fail" text="[[fail_count]] blocked" hidden$="[[!fail_count]]"></gr-task-chip>
+            <gr-task-chip chip_style="invalid" text="[[invalid_count]] invalid" hidden$="[[!invalid_count]]"></gr-task-chip>
+            <gr-task-chip chip_style="waiting" text="[[waiting_count]] waiting" hidden$="[[!waiting_count]]"></gr-task-chip>
+            <gr-task-chip chip_style="ready" text="[[ready_count]] needed" hidden$="[[!ready_count]]"></gr-task-chip>
+            <gr-task-chip chip_style="pass" text="[[pass_count]] passed" hidden$="[[!pass_count]]"></gr-task-chip>
+            <gr-task-chip chip_style="duplicate" text="[[duplicate_count]] duplicate" hidden$="[[!duplicate_count]]"></gr-task-chip>
           </td>
         </template>
       </tr>

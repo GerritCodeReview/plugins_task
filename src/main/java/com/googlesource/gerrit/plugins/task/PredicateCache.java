@@ -117,7 +117,7 @@ public class PredicateCache {
     }
     if (predicate instanceof ChangeIndexPredicate) {
       SchemaField<ChangeData, ?> field = ((ChangeIndexPredicate) predicate).getField();
-      if (field.equals(ChangeField.PROJECT_FIELD) || field.equals(ChangeField.REF_FIELD)) {
+      if (field.equals(ChangeField.PROJECT_SPEC) || field.equals(ChangeField.REF_SPEC)) {
         return true;
       }
     }
