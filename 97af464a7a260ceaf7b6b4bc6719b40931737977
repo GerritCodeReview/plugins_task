@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "7176578d_8b6bc8ea",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1012457
+      },
+      "writtenOn": "2025-01-16T00:20:14Z",
+      "side": 1,
+      "message": "Tested in-tree and standalone build and ran tests: `./run.sh --gerrit-war gerrit.war --task-plugin-jar task.jar --names-factory-provider-plugin-jar names-factory-provider.jar`",
+      "revId": "97af464a7a260ceaf7b6b4bc6719b40931737977",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
