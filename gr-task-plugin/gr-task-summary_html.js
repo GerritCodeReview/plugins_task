@@ -52,7 +52,7 @@ export const htmlTemplate = Polymer.html`
       white-space: nowrap;
     }
     td.key {
-      padding-right: var(--spacing-l);
+      padding-right: calc(var(--spacing-xxl) + var(--spacing-xl) + var(--spacing-s));
       padding-bottom: var(--spacing-s);
       line-height: calc(var(--line-height-normal) + var(--spacing-s));
     }
