@@ -2,18 +2,18 @@ load("@bazel_tools//tools/build_defs/repo:http.bzl", "http_archive")
 load("//tools/bzl:maven_jar.bzl", "maven_jar")
 
 def external_plugin_deps():
-    AUTO_VALUE_VERSION = "1.7.4"
+    AUTO_VALUE_VERSION = "1.10.4"
 
     maven_jar(
         name = "auto-value",
         artifact = "com.google.auto.value:auto-value:" + AUTO_VALUE_VERSION,
-        sha1 = "6b126cb218af768339e4d6e95a9b0ae41f74e73d",
+        sha1 = "90f9629eaa123f88551cc26a64bc386967ee24cc",
     )
 
     maven_jar(
         name = "auto-value-annotations",
         artifact = "com.google.auto.value:auto-value-annotations:" + AUTO_VALUE_VERSION,
-        sha1 = "eff48ed53995db2dadf0456426cc1f8700136f86",
+        sha1 = "9679de8286eb0a151db6538ba297a8951c4a1224",
     )
 
     http_archive(
