@@ -17,6 +17,8 @@ package com.googlesource.gerrit.plugins.task.statistics;
 import static java.util.stream.Collectors.toList;
 
 import com.googlesource.gerrit.plugins.task.util.TopKeyMap;
+
+import java.io.Serializable;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,7 +26,8 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, V> {
-  public static class Statistics<K> {
+  public static class Statistics<K> implements Serializable {
+    private static final long serialVersionUID = 1L;
     public long hits;
     public int size;
     public Long sumNanosecondsLoading;

@@ -23,6 +23,7 @@ import java.util.List;
 
 public class HitHashMapOfCollection<K, V extends Collection<?>> extends HitHashMap<K, V> {
   public static class Statistics<K> extends HitHashMap.Statistics<K> {
+    private static final long serialVersionUID = 1L;
     public List<Integer> top5CollectionSizes;
     public List<Integer> bottom5CollectionSizes;
   }
