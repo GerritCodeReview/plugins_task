@@ -1,4 +1,4 @@
-FROM gerritcodereview/gerrit:3.9.1-ubuntu22
+FROM gerritcodereview/gerrit:3.10.0-ubuntu22
 
 ENV GERRIT_SITE /var/gerrit
 RUN rm -rf "$GERRIT_SITE/plugins" && mkdir "$GERRIT_SITE/plugins"

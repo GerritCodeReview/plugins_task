@@ -49,7 +49,8 @@ gerrit_plugin(
     name = plugin_name,
     srcs = glob(["src/main/java/**/*.java"]),
     javacopts = [
-        "-Werror",
+        #TODO(nasser): Re-enable after 3.9 is merged into 3.10
+        #"-Werror",
         "-Xlint:all",
         "-Xlint:-classfile",
         "-Xlint:-processing",
@@ -98,15 +99,12 @@ sh_test(
     size = "medium",
     srcs = ["test/docker/run.sh"],
     args = [
-        "--gerrit-war",
-        "$(location //:gerrit.war)",
         "--task-plugin-jar",
         "$(location :task)",
         "--names-factory-provider-plugin-jar",
         "$(location :names-factory-provider)",
     ],
     data = [
-        "//:gerrit.war",
         plugin_name,
         test_factory_provider_plugin_name,
     ] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
