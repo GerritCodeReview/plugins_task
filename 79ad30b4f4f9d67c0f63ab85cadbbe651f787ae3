@@ -16,6 +16,24 @@
       "message": "You either need to make this non-private or also add it to https://gerrit.googlesource.com/plugins/task/+/79ad30b4f4f9d67c0f63ab85cadbbe651f787ae3/src/main/java/com/googlesource/gerrit/plugins/task/statistics/HitHashMapOfCollection.java#25",
       "revId": "79ad30b4f4f9d67c0f63ab85cadbbe651f787ae3",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ca574c4a_52f2c5e5",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/statistics/HitHashMap.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 30,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2025-01-31T14:26:16Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c09efc51_9e271640",
+      "revId": "79ad30b4f4f9d67c0f63ab85cadbbe651f787ae3",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
