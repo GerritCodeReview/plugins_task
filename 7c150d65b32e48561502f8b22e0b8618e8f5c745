@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "75e064d2_3133aaaf",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2025-01-31T14:33:30Z",
+      "side": 1,
+      "message": "@nasser.grainawi@oss.qualcomm.com Standalone build is broken with PS2 due to compile time warnings. Do you think it should be fixed in this change or can it be fixed in a successor change ?",
+      "revId": "7c150d65b32e48561502f8b22e0b8618e8f5c745",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
