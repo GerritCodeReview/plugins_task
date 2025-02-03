@@ -60,7 +60,7 @@ public class Properties {
       };
 
   public final Task origTask;
-  protected final TaskTree.Node node;
+  protected final Properties parentProperties;
   protected final CopyOnWrite<Task> task;
   protected Statistics statistics;
   protected Consumer<Statistics> statisticsConsumer;
@@ -77,8 +77,9 @@ public class Properties {
     expander = new Expander(n -> "");
   }
 
-  public Properties(TaskTree.Node node, Task origTask) {
-    this.node = node;
+  public Properties(TaskTree.NodeList parent, Task origTask) {
+    this.parentProperties =
+        (parent instanceof TaskTree.Node) ? ((TaskTree.Node) parent).properties : Properties.EMPTY;
     this.origTask = origTask;
     task = new CopyOnWrite.CloneOnWrite<>(origTask);
   }
@@ -165,6 +166,6 @@ public class Properties {
   }
 
   protected Function<String, String> getParentMapper() {
-    return n -> node.getParentProperties().expander.getValueForName(n);
+    return n -> parentProperties.expander.getValueForName(n);
   }
 }
