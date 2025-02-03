@@ -21,6 +21,7 @@ import java.util.Collection;
 import java.util.Comparator;
 import java.util.List;
 
+@SuppressWarnings("serial")
 public class HitHashMapOfCollection<K, V extends Collection<?>> extends HitHashMap<K, V> {
   public static class Statistics<K> extends HitHashMap.Statistics<K> {
     private static final long serialVersionUID = 1L;
