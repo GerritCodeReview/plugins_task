@@ -16,6 +16,29 @@
       "message": "@nasser.grainawi@oss.qualcomm.com Standalone build is broken with PS2 due to compile time warnings. Do you think it should be fixed in this change or can it be fixed in a successor change ?",
       "revId": "7c150d65b32e48561502f8b22e0b8618e8f5c745",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5cce6873_effc6c72",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/statistics/HitHashMap.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2025-02-03T18:19:16Z",
+      "side": 1,
+      "message": "I don\u0027t think these fields should be transient. Can you confirm that these fields are visible in the output when `--task--include-statistics` flag is passed.",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 43
+      },
+      "revId": "7c150d65b32e48561502f8b22e0b8618e8f5c745",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
