@@ -46,10 +46,6 @@ public abstract class AbstractExpander {
 
   protected final Map<Class<?>, Function<?, ?>> expanderByClass = new HashMap<>();
 
-  protected AbstractExpander() {
-    registerClassExpander(String.class, this::expandText);
-  }
-
   public <T> void registerClassExpander(Class<? extends T> classType, Function<T, T> expander) {
     expanderByClass.put(classType, expander);
   }
@@ -150,6 +146,7 @@ public abstract class AbstractExpander {
     if (value == null) {
       return null;
     }
+    registerClassExpander(String.class, this::expandText);
     @SuppressWarnings("unchecked")
     Function<T, T> expander =
         (Function<T, T>) expanderByClass.getOrDefault(value.getClass(), Function.identity());
