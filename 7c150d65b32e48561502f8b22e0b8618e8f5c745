@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "2f8b2efd_d530543f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2025-02-04T08:34:26Z",
+      "side": 1,
+      "message": "Uploaded a series of fixes for standalone build",
+      "parentUuid": "75e064d2_3133aaaf",
+      "revId": "7c150d65b32e48561502f8b22e0b8618e8f5c745",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "5cce6873_effc6c72",
@@ -31,6 +49,30 @@
       "writtenOn": "2025-02-03T18:19:16Z",
       "side": 1,
       "message": "I don\u0027t think these fields should be transient. Can you confirm that these fields are visible in the output when `--task--include-statistics` flag is passed.",
+      "range": {
+        "startLine": 34,
+        "startChar": 4,
+        "endLine": 35,
+        "endChar": 43
+      },
+      "revId": "7c150d65b32e48561502f8b22e0b8618e8f5c745",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "008405da_182af974",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/statistics/HitHashMap.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 35,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2025-02-04T08:34:26Z",
+      "side": 1,
+      "message": "Removed transient keyword since it results in omission of the fields from json output.",
+      "parentUuid": "5cce6873_effc6c72",
       "range": {
         "startLine": 34,
         "startChar": 4,
