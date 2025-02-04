@@ -16,6 +16,24 @@
       "message": "Needs to be updated to 8.57.0",
       "revId": "bed05487742c9c558f462a6730910b721ae56026",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "aa5db0dd_75ae2101",
+        "filename": "package.json",
+        "patchSetId": 3
+      },
+      "lineNbr": 10,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2025-02-04T23:23:53Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "1fadbb27_e3375cf0",
+      "revId": "bed05487742c9c558f462a6730910b721ae56026",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }

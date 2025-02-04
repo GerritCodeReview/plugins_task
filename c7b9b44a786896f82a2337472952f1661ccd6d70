@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "95d064ee_05f243d7",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 13,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2025-02-04T23:23:53Z",
+      "side": 1,
+      "message": "I did this instead of fixing those warnings in this change.",
+      "revId": "c7b9b44a786896f82a2337472952f1661ccd6d70",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
