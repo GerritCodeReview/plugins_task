@@ -16,6 +16,7 @@
  */
 
 import './gr-task-plugin.js';
+import {GrTaskPlugin} from './gr-task-plugin.js';
 import {htmlTemplate} from './gr-task-chip_html.js';
 
 export class GrTaskChip extends Polymer.Element {
@@ -33,6 +34,10 @@ export class GrTaskChip extends Polymer.Element {
         type: String,
         notify: true,
         value: 'ready',
+      },
+      text: {
+        type: String,
+        notify: true,
       },
     };
   }
@@ -57,10 +62,23 @@ export class GrTaskChip extends Polymer.Element {
         break;
       }
     }
+    setTimeout(() => {
+      document.dispatchEvent(
+          new CustomEvent('tasks-chip-click', {
+            detail: {
+              chip_style: this.chip_style,
+            },
+            composed: true, bubbles: true,
+          }));
+    }, 0);
   }
 
   _onChipClick() {
     this._setTasksTabActive();
+  }
+
+  _computeIconId() {
+    return GrTaskPlugin._computeIcon(this.chip_style).id;
   }
 }
 

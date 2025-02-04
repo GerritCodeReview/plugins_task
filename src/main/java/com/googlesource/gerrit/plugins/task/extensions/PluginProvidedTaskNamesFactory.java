@@ -17,7 +17,6 @@ package com.googlesource.gerrit.plugins.task.extensions;
 import com.google.common.reflect.Reflection;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.server.DynamicOptions.DynamicBean;
-import com.google.gerrit.server.query.change.ChangeData;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -44,5 +43,5 @@ public interface PluginProvidedTaskNamesFactory extends DynamicBean {
                 .invoke(bean, args));
   }
 
-  List<String> getNames(ChangeData change, List<String> args) throws Exception;
+  List<String> getNames(List<String> args) throws Exception;
 }
