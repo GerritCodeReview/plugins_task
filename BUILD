@@ -47,8 +47,7 @@ gerrit_plugin(
     name = plugin_name,
     srcs = glob(["src/main/java/**/*.java"]),
     javacopts = [
-        #TODO(nasser): Re-enable after 3.9 is merged into 3.10
-        #"-Werror",
+        "-Werror",
         "-Xlint:all",
         "-Xlint:-classfile",
         "-Xlint:-processing",
