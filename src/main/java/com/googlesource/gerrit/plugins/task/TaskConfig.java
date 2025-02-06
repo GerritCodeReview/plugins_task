@@ -17,7 +17,6 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.gerrit.common.Container;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.server.git.meta.VersionedConfigFile;
-import com.googlesource.gerrit.plugins.task.util.Copier;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -107,11 +106,6 @@ public class TaskConfig extends VersionedConfigFile {
               .collect(Collectors.toList());
     }
 
-    protected TaskBase(TaskBase base) {
-      this(base.subSection);
-      Copier.shallowCopyDeclaredFields(TaskBase.class, base, this, false);
-    }
-
     protected TaskBase(SubSectionKey s) {
       super(s);
     }
@@ -126,7 +120,7 @@ public class TaskConfig extends VersionedConfigFile {
     }
 
     public Task(TasksFactory tasks, String name) {
-      super(tasks);
+      super(tasks.subSection);
       key = TaskKey.create(tasks.subSection, name);
     }
 

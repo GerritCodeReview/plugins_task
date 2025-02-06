@@ -47,6 +47,7 @@ import com.googlesource.gerrit.plugins.task.statistics.HitHashMapOfCollection;
 import com.googlesource.gerrit.plugins.task.statistics.StatisticsMap;
 import com.googlesource.gerrit.plugins.task.statistics.StopWatch;
 import com.googlesource.gerrit.plugins.task.statistics.TracksStatistics;
+import com.googlesource.gerrit.plugins.task.util.Copier;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -514,7 +515,10 @@ public class TaskTree {
             addInvalidNode();
           } else {
             try {
-              addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
+              Task staticTask = task.config.new Task(tasksFactory, name);
+              Copier.shallowCopyDeclaredFields(
+                  TaskConfig.TaskBase.class, tasksFactory, staticTask, false);
+              addPreloaded(preloader.preload(staticTask));
             } catch (ConfigInvalidException e) {
               addInvalidNode();
             }
@@ -529,11 +533,10 @@ public class TaskTree {
             Map<SubSectionKey, NodeSet> nodeSetByBaseTasksFactory =
                 getNodeSetByBaseTasksFactory(tasksFactory.subSection);
             for (ChangeData changeData : query(namesFactory.changes, task.isVisible)) {
-              addPreloaded(
-                  preloader.preload(
-                      task.config.new Task(tasksFactory, changeData.getId().toString())),
-                  changeData,
-                  nodeSetByBaseTasksFactory);
+              Task changeTask = task.config.new Task(tasksFactory, changeData.getId().toString());
+              Copier.shallowCopyDeclaredFields(
+                  TaskConfig.TaskBase.class, tasksFactory, changeTask, false);
+              addPreloaded(preloader.preload(changeTask), changeData, nodeSetByBaseTasksFactory);
             }
             return;
           }
@@ -561,7 +564,10 @@ public class TaskTree {
           }
           for (String name : names) {
             try {
-              addPreloaded(preloader.preload(task.config.new Task(tasksFactory, name)));
+              Task pluginTask = task.config.new Task(tasksFactory, name);
+              Copier.shallowCopyDeclaredFields(
+                  TaskConfig.TaskBase.class, tasksFactory, pluginTask, false);
+              addPreloaded(preloader.preload(pluginTask));
             } catch (ConfigInvalidException e) {
               addInvalidNode();
             }
