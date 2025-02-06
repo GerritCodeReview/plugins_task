@@ -29,6 +29,7 @@ public class HitHashMapOfCollection<K, V extends Collection<?>> extends HitHashM
 
   public static final long serialVersionUID = 1;
 
+  @SuppressWarnings("serial")
   protected Statistics<K> statistics;
 
   public HitHashMapOfCollection() {}
