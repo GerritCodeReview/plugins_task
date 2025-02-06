@@ -177,7 +177,7 @@ public class TaskTree {
     return root.getSubNodes();
   }
 
-  protected class NodeList {
+  public class NodeList {
     protected NodeList parent = null;
     protected Collection<String> path;
     protected Collection<String> duplicateKeys;
@@ -221,30 +221,35 @@ public class TaskTree {
       }
 
       public Node createFromPreloaded(Task def) {
-        return createFromPreloaded(def, (parent, definition) -> new Node(parent, definition));
+        return createFromPreloaded(
+            def,
+            (parent, definition) -> {
+              Node node = new Node(parent, definition);
+              node.refreshTask();
+              return node;
+            });
       }
 
       public Node createFromPreloaded(
           Task def, ChangeData changeData, Map<SubSectionKey, NodeSet> nodeSetByBaseTasksFactory) {
         return createFromPreloaded(
             def,
-            (parent, definition) ->
-                new Node(parent, definition) {
-                  @Override
-                  public ChangeData getChangeData() {
-                    return changeData;
-                  }
+            (parent, definition) -> {
+              Node node =
+                  new Node(parent, definition) {
+                    @Override
+                    public ChangeData getChangeData() {
+                      return changeData;
+                    }
 
-                  @Override
-                  public boolean isChange() {
-                    return true;
-                  }
-
-                  @Override
-                  protected Map<SubSectionKey, NodeSet> getNodeSetByBaseTasksFactory() {
-                    return nodeSetByBaseTasksFactory;
-                  }
-                });
+                    @Override
+                    public boolean isChange() {
+                      return true;
+                    }
+                  };
+              node.refreshTask();
+              return node;
+            });
       }
 
       protected Node createFromPreloaded(Task def, NodeFactory nodeFactory) {
@@ -289,8 +294,8 @@ public class TaskTree {
     public Task task;
     public boolean isDuplicate;
 
+    public final Properties properties;
     protected Properties.Statistics propertiesStatistics;
-    protected final Properties properties;
     protected final TaskKey taskKey;
     protected StatisticsMap<BranchNameKey, List<Node>> nodesByBranch;
     protected boolean hasUnfilterableSubNodes = false;
@@ -303,8 +308,7 @@ public class TaskTree {
     public Node(NodeList parent, Task task) {
       this.parent = parent;
       taskKey = task.key();
-      properties = new Properties(this, task);
-      refreshTask();
+      properties = new Properties(parent, task);
     }
 
     public String key() {
@@ -371,10 +375,6 @@ public class TaskTree {
         isDuplicate |= duplicateKeys.contains(task.duplicateKey);
         duplicateKeys.add(task.duplicateKey);
       }
-    }
-
-    public Properties getParentProperties() {
-      return (parent instanceof Node) ? ((Node) parent).properties : Properties.EMPTY;
     }
 
     @Override
