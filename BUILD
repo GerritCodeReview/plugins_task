@@ -12,6 +12,7 @@ load("@rules_antlr//antlr:antlr4.bzl", "antlr")
 load(":paths.bzl", "join")
 
 plugin_name = "task"
+
 test_factory_provider_plugin_name = "names-factory-provider"
 
 java_plugin(
@@ -46,6 +47,12 @@ java_library(
 gerrit_plugin(
     name = plugin_name,
     srcs = glob(["src/main/java/**/*.java"]),
+    javacopts = [
+        "-Werror",
+        "-Xlint:all",
+        "-Xlint:-classfile",
+        "-Xlint:-processing",
+    ],
     manifest_entries = [
         "Gerrit-PluginName: " + plugin_name,
         "Implementation-Title: Task Plugin",
@@ -63,7 +70,6 @@ gerrit_plugin(
             "src/main/java/com/googlesource/gerrit/plugins/task/extensions",
         ),
     ],
-    javacopts = [ "-Werror", "-Xlint:all", "-Xlint:-classfile", "-Xlint:-processing"],
 )
 
 gerrit_js_bundle(
@@ -81,8 +87,8 @@ junit_tests(
 
 gerrit_plugin(
     name = test_factory_provider_plugin_name,
-    dir_name = plugin_name,
     srcs = glob(["src/test/java/**/names_factory_provider/*.java"]),
+    dir_name = plugin_name,
     manifest_entries = [
         "Gerrit-PluginName: " + test_factory_provider_plugin_name,
         "Gerrit-Module: com.googlesource.gerrit.plugins.names_factory_provider.Module",
@@ -93,15 +99,23 @@ gerrit_plugin(
             package_name(),
             "src/main/java/com/googlesource/gerrit/plugins/task/extensions",
         ),
-    ]
+    ],
 )
 
 sh_test(
     name = "docker-tests",
     size = "medium",
     srcs = ["test/docker/run.sh"],
-    args = ["--task-plugin-jar", "$(location :task)", "--names-factory-provider-plugin-jar", "$(location :names-factory-provider)"],
-    data = [plugin_name, test_factory_provider_plugin_name] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
+    args = [
+        "--task-plugin-jar",
+        "$(location :task)",
+        "--names-factory-provider-plugin-jar",
+        "$(location :names-factory-provider)",
+    ],
+    data = [
+        plugin_name,
+        test_factory_provider_plugin_name,
+    ] + glob(["test/**"]) + glob(["src/main/resources/Documentation/*"]),
     local = True,
     tags = ["docker"],
 )
