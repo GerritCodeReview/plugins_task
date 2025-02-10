@@ -9,6 +9,10 @@ load(
     "gerrit_plugin",
 )
 load("//tools/js:eslint.bzl", "eslint")
+load("//tools/bzl:junit.bzl", "junit_tests")
+load("@rules_java//java:defs.bzl", "java_library", "java_plugin")
+load("@rules_antlr//antlr:antlr4.bzl", "antlr")
+load(":paths.bzl", "join")
 
 plugin_name = "task"
 
@@ -64,6 +68,10 @@ gerrit_plugin(
         ":auto-value",
         ":task_reference_parser",
         "@antlr4_runtime//jar",
+        "//" + join(
+            package_name(),
+            "src/main/java/com/googlesource/gerrit/plugins/task/extensions",
+        ),
     ],
 )
 
@@ -82,12 +90,18 @@ junit_tests(
 
 gerrit_plugin(
     name = test_factory_provider_plugin_name,
-    srcs = ["src/main/java/com/googlesource/gerrit/plugins/task/extensions/PluginProvidedTaskNamesFactory.java"] + glob(["src/test/java/**/names_factory_provider/*.java"]),
+    srcs = glob(["src/test/java/**/names_factory_provider/*.java"]),
     dir_name = plugin_name,
     manifest_entries = [
         "Gerrit-PluginName: " + test_factory_provider_plugin_name,
         "Gerrit-Module: com.googlesource.gerrit.plugins.names_factory_provider.Module",
         "Implementation-Title: Names Factory Provider",
+    ],
+    deps = [
+        "//" + join(
+            package_name(),
+            "src/main/java/com/googlesource/gerrit/plugins/task/extensions",
+        ),
     ],
 )
 
