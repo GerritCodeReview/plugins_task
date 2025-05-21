@@ -1,6 +1,6 @@
 FROM gerritcodereview/gerrit:3.10.0-ubuntu22
 
-ENV GERRIT_SITE /var/gerrit
+ENV GERRIT_SITE=/var/gerrit
 RUN rm -rf "$GERRIT_SITE/plugins" && mkdir "$GERRIT_SITE/plugins"
 RUN git config -f "$GERRIT_SITE/etc/gerrit.config" auth.type \
     DEVELOPMENT_BECOME_ANY_ACCOUNT
