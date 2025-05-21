@@ -46,6 +46,8 @@ ssh -p 29418 "$GERRIT_HOST" gerrit set-account --http-password "$PASSWORD" "$USE
 is_plugin_loaded "task" || die "Task plugin is not installed"
 is_plugin_loaded "names-factory-provider" || die "names-factory-provider plugin is not installed"
 
+"$USER_RUN_TESTS_DIR"/add_gerrit_access_permissions.sh
+
 NON_SECRET_USER="non_secret_user"
 UNTRUSTED_USER="untrusted_user"
 GROUP_NAME_WITHOUT_SPACE="test.group"
