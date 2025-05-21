@@ -1,7 +1,7 @@
 FROM alpine:3.16
 
-ARG UID=1000
-ARG GID=1000
+ARG UID=1001
+ARG GID=1001
 ENV USER admin
 ENV USER_HOME /home/$USER
 ENV RUN_TESTS_DIR task/test/docker/run_tests
