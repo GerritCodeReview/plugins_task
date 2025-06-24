@@ -46,12 +46,15 @@ public class Container {
   @Override
   public int hashCode() {
     List<Object> values = new ArrayList<>();
-    try {
-      for (Field field : getClass().getDeclaredFields()) {
-        field.setAccessible(true);
-        values.add(field.get(this));
+    for (Field field : getClass().getDeclaredFields()) {
+      boolean accessible = field.trySetAccessible();
+      if (accessible) {
+        try {
+          values.add(field.get(this));
+        } catch (IllegalAccessException ignored) {
+          // we only call field.get() when accessible
+        }
       }
-    } catch (IllegalArgumentException | IllegalAccessException e) {
     }
     return Objects.hash(values);
   }
@@ -59,12 +62,15 @@ public class Container {
   @Override
   public String toString() {
     List<String> fieldStrings = new ArrayList<>();
-    try {
-      for (Field field : getClass().getDeclaredFields()) {
-        field.setAccessible(true);
-        fieldStrings.add(field.getName() + ": " + Objects.toString(field.get(this)));
+    for (Field field : getClass().getDeclaredFields()) {
+      boolean accessible = field.trySetAccessible();
+      if (accessible) {
+        try {
+          fieldStrings.add(field.getName() + ": " + Objects.toString(field.get(this)));
+        } catch (IllegalAccessException ignored) {
+          // we only call field.get() when accessible
+        }
       }
-    } catch (IllegalArgumentException | IllegalAccessException e) {
     }
     String fields = String.join(", ", fieldStrings);
     if (!"".equals(fields)) {
