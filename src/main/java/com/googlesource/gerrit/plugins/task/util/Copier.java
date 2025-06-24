@@ -23,6 +23,10 @@ public class Copier {
       try {
         if (includeInaccessible) {
           field.setAccessible(true);
+        } else {
+          if (!field.canAccess(from)) {
+            continue;
+          }
         }
         Object val = field.get(from);
         if (!field.getName().equals("this$0")) { // Can't copy internal final field
