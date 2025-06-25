@@ -26,7 +26,7 @@ import java.util.function.LongConsumer;
  * <p>The Stopwatch class from google commons is used by placing start() and stop() calls around
  * code sections which need to be timed. This approach can be problematic since the code being timed
  * could throw an exception and if the stop() is not in a finally clause, then it will likely never
- * get called, potentially causing bad timings, or worse programatic issues elsewhere due to double
+ * get called, potentially causing bad timings, or worse programmatic issues elsewhere due to double
  * calls to start(). The need for a finally clause to make things safe is an obvious hint that using
  * an AutoCloseable approach is likely going to be safer. With that in mind, the two API approaches
  * provided by these StopWatch classes are:
@@ -43,7 +43,7 @@ import java.util.function.LongConsumer;
  */
 public interface StopWatch extends AutoCloseable {
   /** Designed for the greatest simplicity to time SAM executions. */
-  public abstract static class Runner extends SamTryWrapper<AutoCloseable> {
+  abstract class Runner extends SamTryWrapper<AutoCloseable> {
     public static class Enabled extends Runner {
       protected LongConsumer nanosConsumer = EMPTY_LONG_CONSUMER;
 
@@ -74,7 +74,7 @@ public interface StopWatch extends AutoCloseable {
   }
 
   /** Should be created and used only within a try-with-resource */
-  public static class Enabled implements StopWatch {
+  class Enabled implements StopWatch {
     protected LongConsumer nanosConsumer = EMPTY_LONG_CONSUMER;
     protected Stopwatch stopwatch = Stopwatch.createStarted();
 
@@ -92,7 +92,7 @@ public interface StopWatch extends AutoCloseable {
   }
 
   /**
-   * A easy way to build a timer which needes to be enabled/disabled based on a runtime boolean.
+   * An easy way to build a timer which needs to be enabled/disabled based on a runtime boolean.
    *
    * <p>Example Usage:
    *
@@ -103,7 +103,7 @@ public interface StopWatch extends AutoCloseable {
    * }
    * </code>
    */
-  public static class Builder {
+  class Builder {
     protected static class Enabled extends Builder {
       @Override
       public StopWatch build() {
@@ -124,11 +124,11 @@ public interface StopWatch extends AutoCloseable {
   }
 
   /** May be used anywhere that Enabled can be used */
-  public static final StopWatch DISABLED = new StopWatch() {};
+  StopWatch DISABLED = new StopWatch() {};
 
-  public static final LongConsumer EMPTY_LONG_CONSUMER = l -> {};
+  LongConsumer EMPTY_LONG_CONSUMER = l -> {};
 
-  public static Builder builder() {
+  static Builder builder() {
     return Builder.DISABLED;
   }
 

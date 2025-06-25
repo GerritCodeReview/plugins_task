@@ -21,7 +21,7 @@ import java.util.function.Function;
 import java.util.function.Supplier;
 
 /**
- * Class designed to make SAM calls wrapped by an AutoCloseable. This is usefull with AutoCloseables
+ * Class designed to make SAM calls wrapped by an AutoCloseable. This is useful with AutoCloseables
  * which do not provide resources which are directly needed during the SAM call, but rather with
  * AutoCloseables which likely manage external resources or state such as a locks or timers.
  */
@@ -30,7 +30,7 @@ public abstract class SamTryWrapper<A extends AutoCloseable> {
 
   @SuppressWarnings("try")
   public void run(Runnable runnable) {
-    try (A autoCloseable = getAutoCloseable()) {
+    try (A ignored = getAutoCloseable()) {
       runnable.run();
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -39,7 +39,7 @@ public abstract class SamTryWrapper<A extends AutoCloseable> {
 
   @SuppressWarnings("try")
   public <T> T get(Supplier<T> supplier) {
-    try (A autoCloseable = getAutoCloseable()) {
+    try (A ignored = getAutoCloseable()) {
       return supplier.get();
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -48,7 +48,7 @@ public abstract class SamTryWrapper<A extends AutoCloseable> {
 
   @SuppressWarnings("try")
   public <T> void accept(Consumer<T> consumer, T t) {
-    try (A autoCloseable = getAutoCloseable()) {
+    try (A ignored = getAutoCloseable()) {
       consumer.accept(t);
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -57,7 +57,7 @@ public abstract class SamTryWrapper<A extends AutoCloseable> {
 
   @SuppressWarnings("try")
   public <T, U> void accept(BiConsumer<T, U> consumer, T t, U u) {
-    try (A autoCloseable = getAutoCloseable()) {
+    try (A ignored = getAutoCloseable()) {
       consumer.accept(t, u);
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -66,7 +66,7 @@ public abstract class SamTryWrapper<A extends AutoCloseable> {
 
   @SuppressWarnings("try")
   public <T, R> R apply(Function<T, R> func, T t) {
-    try (A autoCloseable = getAutoCloseable()) {
+    try (A ignored = getAutoCloseable()) {
       return func.apply(t);
     } catch (Exception e) {
       throw new RuntimeException(e);
@@ -75,7 +75,7 @@ public abstract class SamTryWrapper<A extends AutoCloseable> {
 
   @SuppressWarnings("try")
   public <T, U, R> R apply(BiFunction<T, U, R> func, T t, U u) {
-    try (A autoCloseable = getAutoCloseable()) {
+    try (A ignored = getAutoCloseable()) {
       return func.apply(t, u);
     } catch (Exception e) {
       throw new RuntimeException(e);

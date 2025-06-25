@@ -15,9 +15,9 @@
 package com.googlesource.gerrit.plugins.task.util;
 
 public interface ThrowingProvider<V, E extends Exception> {
-  public V get() throws E;
+  V get() throws E;
 
-  public static class Entry<V, E extends Exception> implements ThrowingProvider<V, E> {
+  class Entry<V, E extends Exception> implements ThrowingProvider<V, E> {
     protected V entry;
 
     public Entry(V entry) {
@@ -30,7 +30,7 @@ public interface ThrowingProvider<V, E extends Exception> {
     }
   }
 
-  public static class Thrown<V, E extends Exception> implements ThrowingProvider<V, E> {
+  class Thrown<V, E extends Exception> implements ThrowingProvider<V, E> {
     protected E exception;
 
     public Thrown(E exception) {

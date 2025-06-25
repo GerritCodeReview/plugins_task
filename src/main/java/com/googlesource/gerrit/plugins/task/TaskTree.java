@@ -273,7 +273,7 @@ public class TaskTree {
               }
               return node;
             }
-          } catch (Exception e) {
+          } catch (Exception ignored) {
           }
         }
         return createInvalid();
@@ -317,7 +317,7 @@ public class TaskTree {
     }
 
     public String key() {
-      return String.valueOf(getChangeData().getId().get()) + TaskConfig.SEP + taskKey;
+      return getChangeData().getId().get() + TaskConfig.SEP + taskKey;
     }
 
     public List<Node> getSubNodes() throws IOException, StorageException, ConfigInvalidException {
@@ -331,7 +331,7 @@ public class TaskTree {
         }
         definitionsBySubSection.computeIfAbsentTimed(
             task.key().subSection(),
-            k -> nodes.stream().map(n -> n.getDefinition()).collect(toList()),
+            k -> nodes.stream().map(Node::getDefinition).collect(toList()),
             task.isVisible);
       } else {
         hasUnfilterableSubNodes = true;
@@ -441,9 +441,7 @@ public class TaskTree {
                 preloader.getOptionalTask(
                     taskExpressionFactory.create(
                         configSourcedValue.sourceFile(), configSourcedValue.value()));
-            if (def.isPresent()) {
-              addPreloaded(def.get());
-            }
+            def.ifPresent(this::addPreloaded);
           } catch (ConfigInvalidException e) {
             addInvalidNode();
           }
@@ -506,6 +504,8 @@ public class TaskTree {
                 case PLUGIN:
                   addPluginTypeTasks(tasksFactory, namesFactory);
                   continue;
+                case INVALID:
+                  log.atWarning().log("Unrecognized names factory type: %s", namesFactory.type);
               }
             }
           }
@@ -548,7 +548,7 @@ public class TaskTree {
         } catch (StorageException e) {
           log.atSevere().withCause(e).log(
               "Running changes query '%s' failed", namesFactory.changes);
-        } catch (QueryParseException | ConfigInvalidException e) {
+        } catch (QueryParseException | ConfigInvalidException ignored) {
         }
         addInvalidNode();
       }
@@ -648,8 +648,7 @@ public class TaskTree {
                 definitionsByBranchBySubSection.put(subSection, definitionsByBranch);
               }
               definitionsByBranch.put(
-                  branch,
-                  filterable.get().stream().map(node -> node.getDefinition()).collect(toList()));
+                  branch, filterable.get().stream().map(Node::getDefinition).collect(toList()));
             }
             return filterable.get();
           }
@@ -679,7 +678,7 @@ public class TaskTree {
                 // altered.
                 continue;
               }
-            } catch (QueryParseException e) {
+            } catch (QueryParseException ignored) {
             }
           }
           applicableNodes.add(node);
@@ -733,7 +732,7 @@ public class TaskTree {
       throws StorageException, QueryParseException {
     List<ChangeData> changeDataList = changesByNamesFactoryQuery.get(query);
     if (changeDataList == null) {
-      try (StopWatch stopWatch =
+      try (StopWatch ignored =
           changesByNamesFactoryQuery.createLoadingStopWatch(query, isVisible)) {
         changeDataList =
             changeQueryProcessorProvider

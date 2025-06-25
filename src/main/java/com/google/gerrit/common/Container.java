@@ -66,16 +66,16 @@ public class Container {
       boolean accessible = field.trySetAccessible();
       if (accessible) {
         try {
-          fieldStrings.add(field.getName() + ": " + Objects.toString(field.get(this)));
+          fieldStrings.add(field.getName() + ": " + field.get(this));
         } catch (IllegalAccessException ignored) {
           // we only call field.get() when accessible
         }
       }
     }
     String fields = String.join(", ", fieldStrings);
-    if (!"".equals(fields)) {
+    if (!fields.isEmpty()) {
       fields = "{" + fields + "}";
     }
-    return getClass().toString() + fields;
+    return getClass() + fields;
   }
 }

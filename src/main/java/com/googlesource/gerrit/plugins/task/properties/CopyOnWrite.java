@@ -25,12 +25,12 @@ import java.util.function.LongConsumer;
 public class CopyOnWrite<T> {
   public static class CloneOnWrite<C extends Cloneable> extends CopyOnWrite<C> {
     public CloneOnWrite(C cloneable) {
-      super(cloneable, copier(cloneable));
+      super(cloneable, copier());
     }
   }
 
-  public static <C extends Cloneable> Function<C, C> copier(C cloneable) {
-    return c -> clone(c);
+  public static <C extends Cloneable> Function<C, C> copier() {
+    return CopyOnWrite::clone;
   }
 
   @SuppressWarnings("unchecked")

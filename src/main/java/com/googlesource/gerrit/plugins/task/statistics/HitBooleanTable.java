@@ -54,6 +54,7 @@ public class HitBooleanTable<R, C> extends BooleanTable<R, C> implements TracksS
     if (statistics.sumNanosecondsLoading == null) {
       statistics.sumNanosecondsLoading = 0L;
     }
+
     return new StopWatch.Enabled()
         .setNanosConsumer(
             ns ->
@@ -63,7 +64,7 @@ public class HitBooleanTable<R, C> extends BooleanTable<R, C> implements TracksS
 
   public long updateTopLoadingTimes(long nanos, R row, C column, boolean isVisible) {
     statistics.topNanosecondsLoadingKeys.addIfTop(
-        nanos, isVisible ? new TopKeyMap.TableKeyValue<R, C>(row, column) : null);
+        nanos, isVisible ? new TopKeyMap.TableKeyValue<>(row, column) : null);
     return nanos;
   }
 

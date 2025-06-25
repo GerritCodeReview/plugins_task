@@ -22,7 +22,6 @@ import com.google.gerrit.index.query.Predicate;
 import com.google.gerrit.index.query.QueryParseException;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.index.change.ChangeField;
-import com.google.gerrit.server.query.change.BranchSetIndexPredicate;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeIndexPredicate;
 import com.google.gerrit.server.query.change.RegexProjectPredicate;
@@ -75,7 +74,7 @@ public class PredicateCache {
       return predProvider.get();
     }
     // never seen 'query' before
-    try (StopWatch stopWatch = predicatesByQuery.createLoadingStopWatch(query, isVisible)) {
+    try (StopWatch ignored = predicatesByQuery.createLoadingStopWatch(query, isVisible)) {
       Predicate<ChangeData> pred = srcqb.parse(query);
       predicatesByQuery.put(query, new ThrowingProvider.Entry<>(pred));
       return pred;
@@ -91,7 +90,7 @@ public class PredicateCache {
    */
   public boolean isCacheableByBranch(String query, boolean isVisible) throws QueryParseException {
     if (query == null
-        || "".equals(query)
+        || query.isEmpty()
         || "false".equalsIgnoreCase(query)
         || "true".equalsIgnoreCase(query)) {
       return true;
@@ -110,9 +109,7 @@ public class PredicateCache {
       }
       return true;
     }
-    if (predicate instanceof BranchSetIndexPredicate
-        || predicate instanceof RegexProjectPredicate
-        || predicate instanceof RegexRefPredicate) {
+    if (predicate instanceof RegexProjectPredicate || predicate instanceof RegexRefPredicate) {
       return true;
     }
     if (predicate instanceof ChangeIndexPredicate) {

@@ -37,7 +37,7 @@ public class IsTrueOperator implements ChangeQueryBuilder.ChangeIsOperandFactory
     }
   }
 
-  public class TruePredicate extends SubmitRequirementPredicate {
+  public static class TruePredicate extends SubmitRequirementPredicate {
 
     public TruePredicate() {
       super("is", TRUE);

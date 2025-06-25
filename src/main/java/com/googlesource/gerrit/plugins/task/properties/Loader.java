@@ -59,29 +59,22 @@ public class Loader {
       return task.name();
     }
     String changeProp = name.replace("_change_", "");
-    if (changeProp != name) {
+    if (!changeProp.equals(name)) {
       return change(changeProp);
     }
     return "";
   }
 
   protected String change(String changeProp) throws StorageException {
-    switch (changeProp) {
-      case "number":
-        return String.valueOf(change().getId().get());
-      case "id":
-        return change().getKey().get();
-      case "project":
-        return change().getProject().get();
-      case "branch":
-        return change().getDest().branch();
-      case "status":
-        return change().getStatus().toString();
-      case "topic":
-        return change().getTopic();
-      default:
-        return "";
-    }
+    return switch (changeProp) {
+      case "number" -> String.valueOf(change().getId().get());
+      case "id" -> change().getKey().get();
+      case "project" -> change().getProject().get();
+      case "branch" -> change().getDest().branch();
+      case "status" -> change().getStatus().toString();
+      case "topic" -> change().getTopic();
+      default -> "";
+    };
   }
 
   protected Change change() {

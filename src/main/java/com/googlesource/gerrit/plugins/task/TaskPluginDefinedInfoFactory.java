@@ -34,6 +34,7 @@ import java.util.EnumSet;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
 import org.eclipse.jgit.errors.ConfigInvalidException;
@@ -52,7 +53,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     WAITING,
     READY,
     PASS,
-    FAIL;
+    FAIL
   }
 
   public static class Statistics {
@@ -314,14 +315,14 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
                 && task.subTasksExternals.isEmpty()
                 && task.subTasksFactories.isEmpty());
         if (hasDefinedSubtasks) {
-          // Remove 'Grouping" tasks (tasks with subtasks but no PASS
+          // Remove "Grouping" tasks (tasks with subtasks but no PASS
           // or FAIL criteria) from the output if none of their subtasks
           // are applicable.  i.e. grouping tasks only really apply if at
           // least one of their subtasks apply.
           return null;
         }
         // A leaf configuration without a PASS or FAIL criteria is a
-        // missconfiguration.  Either someone forgot to add subtasks, or
+        // misconfiguration.  Either someone forgot to add subtasks, or
         // they forgot to add a PASS or FAIL criteria.
         return Status.INVALID;
       }
@@ -332,9 +333,9 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
           // (like a CodeReview -2).  Thus, if hard blocked, it is
           // irrelevant what the subtask states, or the PASS criteria are.
           //
-          // It is also important that FAIL be useable to indicate that
-          // the task has actually executed.  Thus subtask status,
-          // including a subtask FAIL should not appear as a FAIL on the
+          // It is also important that FAIL be usable to indicate that
+          // the task has actually executed.  Thus, subtask status,
+          // including a subtask FAIL, should not appear as a FAIL on the
           // parent task.  This means that this is should be the only path
           // to make a task have a FAIL status.
           return Status.FAIL;
@@ -384,7 +385,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
         if (subNode instanceof Node.Invalid) {
           subTasks.add(TaskPluginDefinedInfoFactory.invalid());
         } else {
-          new AttributeFactory(subNode).create().ifPresent(t -> subTasks.add(t));
+          new AttributeFactory(subNode).create().ifPresent(subTasks::add);
         }
       }
       if (subTasks.isEmpty()) {
@@ -429,7 +430,7 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
     if (statistics != null) {
       statistics.numberOfChanges = pluginInfosByChange.size();
       statistics.numberOfTaskPluginAttributes =
-          pluginInfosByChange.values().stream().filter(tpa -> tpa != null).count();
+          pluginInfosByChange.values().stream().filter(Objects::nonNull).count();
       statistics.predicateCache = definitions.predicateCache.getStatistics();
       statistics.matchCache = definitions.matchCache.getStatistics();
       statistics.preloader = definitions.preloader.getStatistics();

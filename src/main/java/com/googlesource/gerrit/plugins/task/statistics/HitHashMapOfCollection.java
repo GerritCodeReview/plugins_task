@@ -14,8 +14,6 @@
 
 package com.googlesource.gerrit.plugins.task.statistics;
 
-import static java.util.stream.Collectors.toList;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
@@ -27,9 +25,8 @@ public class HitHashMapOfCollection<K, V extends Collection<?>> extends HitHashM
     public List<Integer> bottom5CollectionSizes;
   }
 
-  public static final long serialVersionUID = 1;
+  private static final long serialVersionUID = 1;
 
-  @SuppressWarnings("serial")
   protected Statistics<K> statistics;
 
   public HitHashMapOfCollection() {}
@@ -47,7 +44,7 @@ public class HitHashMapOfCollection<K, V extends Collection<?>> extends HitHashM
     statistics.size = super.statistics.size;
 
     List<Integer> collectionSizes =
-        values().stream().map(l -> l.size()).sorted(Comparator.reverseOrder()).collect(toList());
+        values().stream().map(l -> l.size()).sorted(Comparator.reverseOrder()).toList();
     statistics.top5CollectionSizes = new ArrayList<>(5);
     statistics.bottom5CollectionSizes = new ArrayList<>(5);
     for (int i = 0; i < 5 && i < collectionSizes.size(); i++) {

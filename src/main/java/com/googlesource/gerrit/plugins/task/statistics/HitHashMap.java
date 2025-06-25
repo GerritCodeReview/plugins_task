@@ -32,7 +32,7 @@ public class HitHashMap<K, V> extends HashMap<K, V> implements StatisticsMap<K, 
     public List<Object> elements;
   }
 
-  public static final long serialVersionUID = 1;
+  private static final long serialVersionUID = 1;
 
   @SuppressWarnings("serial")
   protected Statistics<K> statistics;
