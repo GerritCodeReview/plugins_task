@@ -21,10 +21,10 @@ package com.googlesource.gerrit.plugins.task.util;
  * <p>A TopKeyMap is array based and has O(n) insertion time. Despite not having O(1) insertion
  * times, it should likely be much faster than a hash based map for small n sizes. It also is more
  * memory efficient than a hash based map, although both are likely O(n) in space usage. The
- * TopKeyMap allocates all of its entries up front so it does not change its memory utilization at
- * all, and it does not have to create or free any Objects during its post constructor lifespan.
+ * TopKeyMap allocates all of its entries up front so that it does not change its memory utilization
+ * at all, and it does not have to create or free any Objects during its post constructor lifespan.
  *
- * <p>While a TopKeyMap currently only uses 'long's as keys, it is possible to easiy upgrade this
+ * <p>While a TopKeyMap currently only uses 'long's as keys, it is possible to easily upgrade this
  * collection to use any type of Comparable key.
  *
  * <p>Although not currently thread safe, due to the simplicity of the data structures used, and the
@@ -32,8 +32,8 @@ package com.googlesource.gerrit.plugins.task.util;
  */
 public class TopKeyMap<V> {
   /**
-   * A TableKeyValue is a helper class for TopKeyMap use cases, such as a table with with row and
-   * column keys, which involve two values.
+   * A TableKeyValue is a helper class for TopKeyMap use cases, such as a table with row and column
+   * keys, which involve two values.
    */
   public static class TableKeyValue<R, C> {
     public final R row;

@@ -48,7 +48,7 @@ public class MatchCache {
   public Boolean matchOrNull(ChangeData changeData, String query, boolean isVisible) {
     try {
       return match(changeData, query, isVisible);
-    } catch (StorageException | QueryParseException e) {
+    } catch (StorageException | QueryParseException ignored) {
     }
     return null;
   }

@@ -51,7 +51,7 @@ public class Container {
         field.setAccessible(true);
         values.add(field.get(this));
       }
-    } catch (IllegalArgumentException | IllegalAccessException e) {
+    } catch (IllegalArgumentException | IllegalAccessException ignored) {
     }
     return Objects.hash(values);
   }
@@ -62,14 +62,14 @@ public class Container {
     try {
       for (Field field : getClass().getDeclaredFields()) {
         field.setAccessible(true);
-        fieldStrings.add(field.getName() + ": " + Objects.toString(field.get(this)));
+        fieldStrings.add(field.getName() + ": " + field.get(this));
       }
-    } catch (IllegalArgumentException | IllegalAccessException e) {
+    } catch (IllegalArgumentException | IllegalAccessException ignored) {
     }
     String fields = String.join(", ", fieldStrings);
-    if (!"".equals(fields)) {
+    if (!fields.isEmpty()) {
       fields = "{" + fields + "}";
     }
-    return getClass().toString() + fields;
+    return getClass() + fields;
   }
 }

@@ -60,7 +60,7 @@ public class Matcher {
   }
 
   public boolean find() {
-    return findNanoseconds.get(() -> findUntimed());
+    return findNanoseconds.get(this::findUntimed);
   }
 
   protected boolean findUntimed() {
@@ -70,8 +70,7 @@ public class Matcher {
       return false;
     }
     end = text.indexOf('}', nameStart);
-    boolean found = end >= 0;
-    return found;
+    return end >= 0;
   }
 
   public String getName() {
@@ -79,19 +78,19 @@ public class Matcher {
   }
 
   public void appendValue(StringBuffer buffer, String value) {
-    appendNanoseconds.accept((b, v) -> appendValueUntimed(b, v), buffer, value);
+    appendNanoseconds.accept(this::appendValueUntimed, buffer, value);
   }
 
   protected void appendValueUntimed(StringBuffer buffer, String value) {
     if (start > cursor) {
-      buffer.append(text.substring(cursor, start));
+      buffer.append(text, cursor, start);
     }
     buffer.append(value);
     cursor = end + 1;
   }
 
   public void appendTail(StringBuffer buffer) {
-    appendNanoseconds.accept(b -> appendTailUntimed(b), buffer);
+    appendNanoseconds.accept(this::appendTailUntimed, buffer);
   }
 
   protected void appendTailUntimed(StringBuffer buffer) {

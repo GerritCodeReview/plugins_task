@@ -17,7 +17,7 @@ package com.googlesource.gerrit.plugins.task;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
 public class RuntimeConfigInvalidException extends RuntimeException {
-  protected static final long serialVersionUID = 1L;
+  private static final long serialVersionUID = 1L;
   protected ConfigInvalidException checkedException;
 
   public RuntimeConfigInvalidException(ConfigInvalidException e) {

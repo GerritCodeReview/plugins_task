@@ -24,8 +24,8 @@ import org.eclipse.jgit.errors.ConfigInvalidException;
 
 /**
  * A TaskExpression represents a config string pointing to an expression which includes zero or more
- * task references separated by a '|', and potentially termintated by a '|'. If the expression is
- * not terminated by a '|' it indicates that task resolution of at least one task is required. Task
+ * task references separated by a '|', and potentially terminated by a '|'. If the expression is not
+ * terminated by a '|' it indicates that task resolution of at least one task is required. Task
  * selection priority is from left to right. This can be expressed as:
  *
  * <pre>
@@ -68,7 +68,7 @@ public class TaskExpression implements Iterable<TaskKey> {
 
   @Override
   public Iterator<TaskKey> iterator() {
-    return new Iterator<TaskKey>() {
+    return new Iterator<>() {
       Matcher m = EXPRESSION_PATTERN.matcher(key.expression());
       Boolean hasNext;
       boolean optional;

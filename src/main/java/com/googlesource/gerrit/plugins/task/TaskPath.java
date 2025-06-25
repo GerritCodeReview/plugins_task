@@ -69,7 +69,7 @@ public class TaskPath {
           }
         }
       }
-    } catch (ConfigInvalidException | IOException e) {
+    } catch (ConfigInvalidException | IOException ignored) {
     }
     return null;
   }

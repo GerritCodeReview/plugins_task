@@ -33,17 +33,17 @@ public abstract class TaskKey {
   protected static final String CONFIG_SECTION = "task";
   protected static final String CONFIG_TASKS_FACTORY = "tasks-factory";
 
-  /** Creates a TaskKey with task name as the name of sub section. */
+  /** Creates a TaskKey with task name as the name of subsection. */
   public static TaskKey create(SubSectionKey section) {
     return create(section, section.subSection());
   }
 
-  /** Creates a TaskKey with given FileKey and task name and sub section's name as 'task'. */
+  /** Creates a TaskKey with given FileKey and task name and subsection's name as 'task'. */
   public static TaskKey create(FileKey file, String task) {
     return create(SubSectionKey.create(file, CONFIG_SECTION, task));
   }
 
-  /** Creates a TaskKey from a sub section and task name, generally used by TasksFactory. */
+  /** Creates a TaskKey from a subsection and task name, generally used by TasksFactory. */
   public static TaskKey create(SubSectionKey section, String task) {
     return new AutoValue_TaskKey(section, task);
   }
