@@ -38,7 +38,7 @@ import java.util.function.Function;
  * <p>a String like: <code>"The brown ${animal} jumped over the ${obstacle}."</code>
  *
  * <p>will expand to: <code>"The brown fox jumped over the fence."</code> This class is meant to be
- * used as a building block for other full featured expanders and thus must be overriden to provide
+ * used as a building block for other full-featured expanders and thus must be overridden to provide
  * the name/value associations via the getValueForName() method.
  */
 public abstract class AbstractExpander {
@@ -178,9 +178,9 @@ public abstract class AbstractExpander {
    * Get the replacement value for the property identified by name
    *
    * @param name of the property to get the replacement value for
-   * @return the replacement value. Since the expandText() method alwyas needs a String to replace
-   *     '${property-name}' reference with, even when the property does not exist, this will never
-   *     return null, instead it will returns the empty string if the property is not found.
+   * @return the replacement value. Since the expandText() method always needs a String to replace
+   *     the '${property-name}' reference with, even when the property does not exist, this will
+   *     never return null, instead it will return an empty string if the property is not found.
    */
   protected abstract String getValueForName(String name);
 }

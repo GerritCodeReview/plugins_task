@@ -21,6 +21,7 @@ import com.google.gerrit.server.config.AllProjectsNameProvider;
 import com.google.gerrit.server.config.AllUsersNameProvider;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.NoSuchElementException;
 import org.antlr.v4.runtime.BaseErrorListener;
@@ -38,7 +39,7 @@ public class TaskReference {
   protected final String reference;
   protected final TaskKey.Builder taskKeyBuilder;
 
-  interface Factory {
+  public interface Factory {
     TaskReference create(FileKey relativeTo, String reference);
   }
 
@@ -103,7 +104,7 @@ public class TaskReference {
     }
   }
 
-  protected class TaskReferenceListener extends TaskReferenceBaseListener {
+  protected static class TaskReferenceListener extends TaskReferenceBaseListener {
     TaskKey.Builder builder;
 
     TaskReferenceListener(TaskKey.Builder builder) {
@@ -121,7 +122,7 @@ public class TaskReference {
         builder.setPath(
             ctx.dir().stream()
                 .map(dir -> Paths.get(dir.NAME().getText()))
-                .reduce(Paths.get(""), (a, b) -> a.resolve(b))
+                .reduce(Paths.get(""), Path::resolve)
                 .resolve(ctx.NAME().getText()));
       } catch (ConfigInvalidException e) {
         throw new RuntimeConfigInvalidException(e);

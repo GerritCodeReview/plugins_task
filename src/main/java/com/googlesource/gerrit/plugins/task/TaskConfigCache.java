@@ -17,7 +17,6 @@ package com.googlesource.gerrit.plugins.task;
 import com.google.common.flogger.FluentLogger;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.Project;
-import com.google.gerrit.extensions.restapi.AuthException;
 import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.config.AllProjectsName;
 import com.google.gerrit.server.config.AllProjectsNameProvider;
@@ -99,8 +98,6 @@ public class TaskConfigCache {
     } catch (IOException e) {
       log.atWarning().withCause(e).log("Failed to load %s for %s", file.file(), project);
       throw e;
-    } catch (ConfigInvalidException e) {
-      throw e;
     }
     return cfg;
   }
@@ -109,9 +106,8 @@ public class TaskConfigCache {
     try {
       PermissionBackend.ForProject permissions =
           permissionBackend.user(user).project(branch.project());
-      permissions.ref(branch.branch()).check(RefPermission.READ);
-      return true;
-    } catch (AuthException | PermissionBackendException e) {
+      return permissions.ref(branch.branch()).test(RefPermission.READ);
+    } catch (PermissionBackendException e) {
       return false;
     }
   }

@@ -52,7 +52,7 @@ public class PatchSetArgument {
         permissionBackend.user(user).change(changeNotes).check(ChangePermission.READ);
         return new PatchSetArgument(changeNotes.getChange(), psUtil.get(changeNotes, patchSetId));
       } catch (PermissionBackendException | AuthException e) {
-        throw new IllegalArgumentException("database error", e);
+        throw new IllegalArgumentException(noSuchPatchSet(token), e);
       } catch (UnloggedFailure e) {
         throw new IllegalArgumentException(e.getMessage(), e);
       } catch (StorageException e) {
@@ -87,11 +87,5 @@ public class PatchSetArgument {
   public PatchSetArgument(Change change, PatchSet patchSet) {
     this.patchSet = patchSet;
     this.change = change;
-  }
-
-  public void ensureLatest() {
-    if (!change.currentPatchSetId().equals(patchSet.id())) {
-      throw new IllegalArgumentException(patchSet + " is not the latest patch set");
-    }
   }
 }

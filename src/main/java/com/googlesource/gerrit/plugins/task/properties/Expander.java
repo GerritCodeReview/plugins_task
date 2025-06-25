@@ -27,7 +27,7 @@ import java.util.function.Function;
  * <p>Using a recursive expansion approach makes order of evaluation unimportant as long as there
  * are no looping definitions.
  *
- * <p>Given some property name/value asssociations defined like this:
+ * <p>Given some property name/value associations defined like this:
  *
  * <p><code>
  * valueByName.put("obstacle", "fence");

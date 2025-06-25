@@ -29,7 +29,7 @@ import java.util.NoSuchElementException;
 import java.util.Optional;
 import org.eclipse.jgit.errors.ConfigInvalidException;
 
-/** Use to pre-load a task definition with values from its preload-task definition. */
+/** Use to preload a task definition with values from its preload-task definition. */
 public class Preloader {
   public interface Factory {
     Preloader create(@Assisted TaskConfigCache taskConfigCache);
@@ -139,7 +139,7 @@ public class Preloader {
     } catch (RuntimeConfigInvalidException e) {
       throw e.checkedException;
     } catch (NoSuchElementException e) {
-      // expression was not optional but we ran out of names to try
+      // expression was not optional, but we ran out of names to try
       throw new ConfigInvalidException("task not defined");
     }
     return Optional.empty();

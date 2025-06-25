@@ -33,13 +33,14 @@ public class TaskConfig extends VersionedConfigFile {
   public enum NamesFactoryType {
     CHANGE,
     STATIC,
-    PLUGIN;
+    PLUGIN,
+    INVALID;
 
     public static NamesFactoryType getNamesFactoryType(String str) {
       for (NamesFactoryType type : NamesFactoryType.values()) {
         if (type.name().equalsIgnoreCase(str)) return type;
       }
-      return null;
+      return INVALID;
     }
   }
 
