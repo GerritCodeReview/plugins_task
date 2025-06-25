@@ -53,6 +53,7 @@ public class PredicateCacheTest extends LightweightPluginDaemonTest {
   @Test
   public void isCacheableByBranchTest() throws Exception {
     assertThat(predicateCache.isCacheableByBranch("project:foo", true)).isTrue();
+    assertThat(predicateCache.isCacheableByBranch("projects:foo", true)).isTrue();
     assertThat(predicateCache.isCacheableByBranch("branch:bar", true)).isTrue();
 
     assertThat(predicateCache.isCacheableByBranch("project:^foo", true)).isTrue();
