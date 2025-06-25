@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "67cbc85d_ae2e757a",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2025-06-25T08:53:07Z",
+      "side": 1,
+      "message": "Why do you think we\u0027re suppressing the exception ? If `setAccessible(true)` fails either an `InaccessibleObjectException` or a `SecurityException` is thrown, neither of which is being caught in the code.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "6e6ab1939d84b920d0c42a3484716ba67fb6a5e1",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
