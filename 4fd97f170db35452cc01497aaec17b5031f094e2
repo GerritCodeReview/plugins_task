@@ -22,6 +22,30 @@
       },
       "revId": "4fd97f170db35452cc01497aaec17b5031f094e2",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "5b66cb79_fc4a5bd2",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/PredicateCache.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2025-06-26T05:19:21Z",
+      "side": 0,
+      "message": "Correct. This can never be true once it reaches this line.",
+      "parentUuid": "8c9df079_efb49474",
+      "range": {
+        "startLine": 113,
+        "startChar": 29,
+        "endLine": 113,
+        "endChar": 52
+      },
+      "revId": "4fd97f170db35452cc01497aaec17b5031f094e2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
