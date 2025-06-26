@@ -70,6 +70,30 @@
       },
       "revId": "6e6ab1939d84b920d0c42a3484716ba67fb6a5e1",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ea5c65b2_0a866800",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2025-06-26T23:05:06Z",
+      "side": 1,
+      "message": "I\u0027m not sure what I read that made me think this would help, but I agree that I\u0027m not seeing anything now that seems to indicate it will. Thanks for the careful review.",
+      "parentUuid": "18a91c09_7bb28b91",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "6e6ab1939d84b920d0c42a3484716ba67fb6a5e1",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
