@@ -46,6 +46,30 @@
       },
       "revId": "6e6ab1939d84b920d0c42a3484716ba67fb6a5e1",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "18a91c09_7bb28b91",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 9,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2025-06-26T09:40:02Z",
+      "side": 1,
+      "message": "How does `Field.trySetAccessible()` help avoid exceptions from `Field.get()` ? If `Field.setAccessible(true)` fails, then `Field.get()` wouldn\u0027t be executed anyway. And if `Field.get()` throws an exception even after `Field.setAccessible(true)` succeeds, it would still throw an exception when using `Field.trySetAccessible()`, since it would return true in that case.",
+      "parentUuid": "3808d820_44b95bdb",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 9,
+        "endChar": 47
+      },
+      "revId": "6e6ab1939d84b920d0c42a3484716ba67fb6a5e1",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
