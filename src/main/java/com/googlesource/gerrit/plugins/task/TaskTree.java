@@ -21,6 +21,7 @@ import com.google.gerrit.entities.Account;
 import com.google.gerrit.entities.BranchNameKey;
 import com.google.gerrit.entities.RefNames;
 import com.google.gerrit.exceptions.StorageException;
+import com.google.gerrit.extensions.annotations.PluginName;
 import com.google.gerrit.extensions.registration.DynamicMap;
 import com.google.gerrit.extensions.restapi.UnprocessableEntityException;
 import com.google.gerrit.index.query.QueryParseException;
@@ -29,6 +30,9 @@ import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.DynamicOptions;
 import com.google.gerrit.server.account.AccountResolver;
 import com.google.gerrit.server.config.AllUsersNameProvider;
+import com.google.gerrit.server.logging.Metadata;
+import com.google.gerrit.server.logging.PluginMetadata;
+import com.google.gerrit.server.logging.TraceContext;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor;
@@ -127,6 +131,7 @@ public class TaskTree {
   protected final TaskConfigCache taskConfigCache;
   protected final TaskExpression.Factory taskExpressionFactory;
   protected final DynamicMap<DynamicOptions.DynamicBean> dynamicBeans;
+  protected final String pluginName;
   protected final NodeList root = new NodeList();
   protected final Provider<ChangeQueryBuilder> changeQueryBuilderProvider;
   protected final Provider<ChangeQueryProcessor> changeQueryProcessorProvider;
@@ -154,7 +159,8 @@ public class TaskTree {
       Preloader.Factory preloaderFactory,
       MatchCache.Factory matchCacheFactory,
       @Assisted TaskConfigCache taskConfigCache,
-      DynamicMap<DynamicOptions.DynamicBean> dynamicBeans) {
+      DynamicMap<DynamicOptions.DynamicBean> dynamicBeans,
+      @PluginName String pluginName) {
     this.accountResolver = accountResolver;
     this.allUsers = allUsers;
     this.user = user != null ? user : anonymousUser;
@@ -166,6 +172,7 @@ public class TaskTree {
     this.taskExpressionFactory = taskExpressionFactory;
     this.preloader = preloaderFactory.create(taskConfigCache);
     this.dynamicBeans = dynamicBeans;
+    this.pluginName = pluginName;
   }
 
   public List<Node> getRootNodes(ChangeData changeData)
@@ -349,13 +356,24 @@ public class TaskTree {
     }
 
     @Override
+    @SuppressWarnings("try")
     protected List<Node> loadSubNodes()
         throws IOException, StorageException, ConfigInvalidException {
       List<Task> cachedDefinitions = definitionsBySubSection.get(task.key().subSection());
       if (cachedDefinitions != null) {
         return new SubNodeFactory().createFromPreloaded(cachedDefinitions);
       }
-      List<Node> nodes = new SubNodeAdder().getSubNodes();
+      List<Node> nodes;
+      try (TraceContext.TraceTimer traceTimer =
+          TraceContext.newTimer(
+              "Executing SubNodeAdder::getSubNodes",
+              Metadata.builder()
+                  .pluginName(pluginName)
+                  .changeId(getChangeData().getId().get())
+                  .addPluginMetadata(PluginMetadata.create("taskKey", taskKey.toString()))
+                  .build())) {
+        nodes = new SubNodeAdder().getSubNodes();
+      }
       properties.expansionComplete();
       return nodes;
     }
