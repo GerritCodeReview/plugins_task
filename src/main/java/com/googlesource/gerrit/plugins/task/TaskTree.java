@@ -29,6 +29,8 @@ import com.google.gerrit.server.CurrentUser;
 import com.google.gerrit.server.DynamicOptions;
 import com.google.gerrit.server.account.AccountResolver;
 import com.google.gerrit.server.config.AllUsersNameProvider;
+import com.google.gerrit.server.logging.Metadata;
+import com.google.gerrit.server.logging.TraceContext;
 import com.google.gerrit.server.query.change.ChangeData;
 import com.google.gerrit.server.query.change.ChangeQueryBuilder;
 import com.google.gerrit.server.query.change.ChangeQueryProcessor;
@@ -349,13 +351,20 @@ public class TaskTree {
     }
 
     @Override
+    @SuppressWarnings("try")
     protected List<Node> loadSubNodes()
         throws IOException, StorageException, ConfigInvalidException {
       List<Task> cachedDefinitions = definitionsBySubSection.get(task.key().subSection());
       if (cachedDefinitions != null) {
         return new SubNodeFactory().createFromPreloaded(cachedDefinitions);
       }
-      List<Node> nodes = new SubNodeAdder().getSubNodes();
+      List<Node> nodes;
+      try (TraceContext.TraceTimer traceTimer =
+          TraceContext.newTimer(
+              "Executing SubNodeAdder::getSubNodes for task: " + taskKey,
+              Metadata.builder().changeId(getChangeData().getId().get()).build())) {
+        nodes = new SubNodeAdder().getSubNodes();
+      }
       properties.expansionComplete();
       return nodes;
     }
