@@ -33,6 +33,41 @@
       "message": "Marked as unresolved.",
       "revId": "00320479a454852812c83e66d7546a5038bc6e56",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "ae3c6b6b_02758ee6",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4185352
+      },
+      "writtenOn": "2025-06-27T13:03:44Z",
+      "side": 1,
+      "message": "https://gerrit-review.googlesource.com/c/plugins/task/+/487261/comments/fb7e427d_b4e5355c",
+      "revId": "00320479a454852812c83e66d7546a5038bc6e56",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "bb30d390_d58c620f",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 2
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 4185352
+      },
+      "writtenOn": "2025-06-27T13:03:44Z",
+      "side": 1,
+      "message": "Acknowledged",
+      "parentUuid": "e6948afc_91b497bc",
+      "revId": "00320479a454852812c83e66d7546a5038bc6e56",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
