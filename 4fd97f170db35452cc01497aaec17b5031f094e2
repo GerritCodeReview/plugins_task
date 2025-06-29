@@ -70,6 +70,30 @@
       },
       "revId": "4fd97f170db35452cc01497aaec17b5031f094e2",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "97dd7438_688ca65b",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/PredicateCache.java",
+        "patchSetId": 2
+      },
+      "lineNbr": 113,
+      "author": {
+        "id": 4111584
+      },
+      "writtenOn": "2025-06-29T17:40:20Z",
+      "side": 0,
+      "message": "yess",
+      "parentUuid": "7b0c3aa0_3e47ca45",
+      "range": {
+        "startLine": 113,
+        "startChar": 29,
+        "endLine": 113,
+        "endChar": 52
+      },
+      "revId": "4fd97f170db35452cc01497aaec17b5031f094e2",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
