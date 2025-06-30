@@ -244,6 +244,10 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
               attribute.path = MISSING_VIEW_PATH_CAPABILITY;
             }
           }
+          if (node.isChange()) {
+            node.getNodeSetByBaseTasksFactory().get(task.subSection).add(node.key());
+          }
+
           boolean groupApplicable = attribute.status != null;
 
           if (groupApplicable || !options.onlyApplicable) {
@@ -265,9 +269,6 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
                 attribute.evaluationMilliSeconds = millis() - attribute.evaluationMilliSeconds;
               }
               addStatistics(attribute.statistics);
-              if (node.isChange()) {
-                node.getNodeSetByBaseTasksFactory().get(task.subSection).add(node.key());
-              }
               return Optional.of(attribute);
             }
           }
