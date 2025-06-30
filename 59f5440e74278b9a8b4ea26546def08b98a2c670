@@ -1,0 +1,21 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "d3717c78_48a5e906",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2025-06-30T06:11:10Z",
+      "side": 1,
+      "message": "Add a test in `PredicateCacheTest` as well ?",
+      "revId": "59f5440e74278b9a8b4ea26546def08b98a2c670",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
