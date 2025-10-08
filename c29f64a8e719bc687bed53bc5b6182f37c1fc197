@@ -22,6 +22,30 @@
       },
       "revId": "c29f64a8e719bc687bed53bc5b6182f37c1fc197",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "fac9c65a_0de94948",
+        "filename": "test/docker/run_tests/Dockerfile",
+        "patchSetId": 3
+      },
+      "lineNbr": 4,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2025-10-08T00:31:49Z",
+      "side": 1,
+      "message": "I think it\u0027s a change in the gerrit image and we need to match because of how we use the server ssh key (see https://gerrit.googlesource.com/plugins/task/+/refs/changes/21/488421/3/test/docker/docker-compose.yaml#22 and https://gerrit.googlesource.com/plugins/task/+/refs/changes/21/488421/3/test/docker/run_tests/start.sh#38)\n\nI\u0027ll update the commit message.",
+      "parentUuid": "d0cd69bd_9e8fbcd0",
+      "range": {
+        "startLine": 3,
+        "startChar": 0,
+        "endLine": 4,
+        "endChar": 12
+      },
+      "revId": "c29f64a8e719bc687bed53bc5b6182f37c1fc197",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
