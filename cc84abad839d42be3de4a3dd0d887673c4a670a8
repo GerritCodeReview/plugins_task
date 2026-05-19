@@ -20,6 +20,23 @@
     {
       "unresolved": true,
       "key": {
+        "uuid": "0e9350f5_64b80b83",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 3604707
+      },
+      "writtenOn": "2026-05-19T16:34:43Z",
+      "side": 1,
+      "message": "Is there actually a benefit to this? i.e. speed or memory utilization? If speed, is it potentially due to avoiding the line below when the clause above returns?",
+      "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
         "uuid": "b1d5fc8b_336bad8e",
         "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
         "patchSetId": 1
