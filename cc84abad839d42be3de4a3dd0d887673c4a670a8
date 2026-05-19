@@ -1,0 +1,55 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "a58859d5_8cc9ca92",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-05-19T16:09:35Z",
+      "side": 1,
+      "message": "Line wrapping is off",
+      "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "b1d5fc8b_336bad8e",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-05-19T16:09:35Z",
+      "side": 1,
+      "message": "This copies the code from `ApplicableNodeFilter().getSubNodes()`, which works, but it would be nice to not duplicate it.",
+      "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "ce3b37e6_3e9d8489",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskIncludeStatisticsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-05-19T16:09:35Z",
+      "side": 1,
+      "message": "This test doesn\u0027t belong in this class.",
+      "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
