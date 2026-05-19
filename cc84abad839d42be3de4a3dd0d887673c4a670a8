@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "f0000610_5314c81b",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 1
+      },
+      "lineNbr": 12,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-05-19T18:05:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "a58859d5_8cc9ca92",
+      "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "0e9350f5_64b80b83",
@@ -31,6 +49,24 @@
       "writtenOn": "2026-05-19T16:34:43Z",
       "side": 1,
       "message": "Is there actually a benefit to this? i.e. speed or memory utilization? If speed, is it potentially due to avoiding the line below when the clause above returns?",
+      "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "2b516e38_e2efeddc",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 364,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-05-19T18:05:35Z",
+      "side": 1,
+      "message": "It avoids creating the `ApplicableNodeFilter` when we already have the cached result, which should result in both speed and memory improvements. I want to test and confirm that though.\n\nPS2 makes it more obvious by moving the code instead of duplicating it.",
+      "parentUuid": "0e9350f5_64b80b83",
       "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
@@ -52,6 +88,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "a1f44e1d_024674fb",
+        "filename": "src/main/java/com/googlesource/gerrit/plugins/task/TaskTree.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 372,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-05-19T18:05:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "b1d5fc8b_336bad8e",
+      "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "ce3b37e6_3e9d8489",
@@ -65,6 +119,24 @@
       "writtenOn": "2026-05-19T16:09:35Z",
       "side": 1,
       "message": "This test doesn\u0027t belong in this class.",
+      "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "38453054_044501f0",
+        "filename": "src/test/java/com/googlesource/gerrit/plugins/task/TaskIncludeStatisticsTest.java",
+        "patchSetId": 1
+      },
+      "lineNbr": 45,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-05-19T18:05:35Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "ce3b37e6_3e9d8489",
       "revId": "cc84abad839d42be3de4a3dd0d887673c4a670a8",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
