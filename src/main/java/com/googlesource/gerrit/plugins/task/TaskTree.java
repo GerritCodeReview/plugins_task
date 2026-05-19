@@ -352,7 +352,25 @@ public class TaskTree {
 
     public List<Node> getApplicableSubNodes()
         throws IOException, StorageException, ConfigInvalidException {
-      return hasUnfilterableSubNodes ? getSubNodes() : new ApplicableNodeFilter().getSubNodes();
+      if (hasUnfilterableSubNodes) {
+        return getSubNodes();
+      }
+      BranchNameKey branch = getChangeData().change().getDest();
+      if (nodesByBranch != null) {
+        List<Node> nodes = nodesByBranch.get(branch);
+        if (nodes != null) {
+          return refresh(nodes);
+        }
+      }
+      Map<BranchNameKey, List<Task>> definitionsByBranch =
+          definitionsByBranchBySubSection.get(task.key.subSection());
+      if (definitionsByBranch != null) {
+        List<Task> branchDefinitions = definitionsByBranch.get(branch);
+        if (branchDefinitions != null) {
+          return new SubNodeFactory().createFromPreloaded(branchDefinitions);
+        }
+      }
+      return new ApplicableNodeFilter().getSubNodes();
     }
 
     @Override
@@ -633,18 +651,6 @@ public class TaskTree {
       public ApplicableNodeFilter() throws StorageException {}
 
       public List<Node> getSubNodes() throws IOException, StorageException, ConfigInvalidException {
-        if (nodesByBranch != null) {
-          List<Node> nodes = nodesByBranch.get(branch);
-          if (nodes != null) {
-            return refresh(nodes);
-          }
-        }
-        if (definitionsByBranch != null) {
-          List<Task> branchDefinitions = definitionsByBranch.get(branch);
-          if (branchDefinitions != null) {
-            return new SubNodeFactory().createFromPreloaded(branchDefinitions);
-          }
-        }
         List<Node> nodes = Node.this.getSubNodes();
         if (isChange()
             && definitionsByBranch == null
