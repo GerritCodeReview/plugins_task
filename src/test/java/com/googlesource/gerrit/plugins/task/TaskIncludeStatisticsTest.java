@@ -42,6 +42,37 @@ public class TaskIncludeStatisticsTest extends AbstractDaemonTest {
   private static final Gson GSON = new Gson();
 
   @Test
+  public void applicableSubNodesAreCorrectForTwoChangesOnSameBranch() throws Exception {
+    try (AutoCloseable task = installPlugin("task", Modules.Module.class)) {
+      TestRepository<InMemoryRepository> repo = cloneProject(allProjects);
+      fetch(repo, RefNames.REFS_CONFIG + ":meta-config");
+      repo.reset("meta-config");
+      createCommitAndPush(
+          repo, RefNames.REFS_CONFIG, "Update task config", TASK_CFG, getConfigWithSubTask());
+
+      PushOneCommit.Result change1 = createChange();
+      PushOneCommit.Result change2 = createChange();
+      String sshOutput =
+          adminSshSession.exec(
+              String.format(
+                  "gerrit query change:%d OR change:%d --task--applicable --format json",
+                  change1.getChange().getId().get(), change2.getChange().getId().get()));
+      adminSshSession.assertSuccess();
+
+      Map<Change.Id, TaskPluginAttribute> taskAttrByChange = getTaskAttributes(sshOutput);
+      for (Change.Id id :
+          List.of(change1.getChange().getId(), change2.getChange().getId())) {
+        TaskPluginAttribute attr = taskAttrByChange.get(id);
+        assertThat(attr).isNotNull();
+        assertThat(attr.roots).hasSize(1);
+        assertThat(attr.roots.get(0).name).isEqualTo("test root");
+        assertThat(attr.roots.get(0).subTasks).hasSize(1);
+        assertThat(attr.roots.get(0).subTasks.get(0).name).isEqualTo("sub task 1");
+      }
+    }
+  }
+
+  @Test
   public void testIncludeStatisticsDoesNotResultInError() throws Exception {
     try (AutoCloseable task = installPlugin("task", Modules.Module.class)) {
       TestRepository<InMemoryRepository> repo = cloneProject(allProjects);
@@ -67,6 +98,17 @@ public class TaskIncludeStatisticsTest extends AbstractDaemonTest {
 
   private String getConfig() {
     return "[root \"test root\"]\n" + "  applicable = is:open\n" + "  pass = True";
+  }
+
+  private String getConfigWithSubTask() {
+    return "[root \"test root\"]\n"
+        + "  applicable = is:open\n"
+        + "  subtask = sub task 1\n"
+        + "  pass = True\n"
+        + "\n"
+        + "[task \"sub task 1\"]\n"
+        + "  applicable = project:" + project.get() + "\n"
+        + "  pass = True";
   }
 
   private Map<Change.Id, TaskPluginAttribute> getTaskAttributes(String sshOutput) throws Exception {
