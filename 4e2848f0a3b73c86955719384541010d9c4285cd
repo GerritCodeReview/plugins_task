@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "044da26e_890385d0",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 20,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2026-07-09T08:41:42Z",
+      "side": 1,
+      "message": "You could be more specific about issue. On chrome browser(Version 150.0.7871.101 (Official Build) (x86_64)) page fail to display when there task with large dependency chains. On Safari webpage displays but large dependency chains make reading tasks hard and UX ugly.",
+      "range": {
+        "startLine": 9,
+        "startChar": 0,
+        "endLine": 20,
+        "endChar": 69
+      },
+      "revId": "4e2848f0a3b73c86955719384541010d9c4285cd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
