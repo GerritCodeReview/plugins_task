@@ -50,6 +50,26 @@ class GrTaskPluginTasks extends Polymer.Element {
     return show === 'true' || task.showOnFilter;
   }
 
+  _hasChildren(task) {
+    return !!(task.sub_tasks && task.sub_tasks.length);
+  }
+
+  _isExpanded(task, expanded) {
+    return this._hasChildren(task) && !!expanded;
+  }
+
+  _showCaret(task) {
+    return this._hasChildren(task);
+  }
+
+  _caret(expanded) {
+    return expanded ? 'expand_more' : 'chevron_right';
+  }
+
+  _toggle(e) {
+    e.model.set('task.expanded', !e.model.task.expanded);
+  }
+
   _getChangeUrl(change) {
     return '/c/' + change.toString();
   }
