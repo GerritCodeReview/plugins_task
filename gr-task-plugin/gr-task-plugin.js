@@ -36,6 +36,13 @@ export class GrTaskPlugin extends Polymer.Element {
     return 'gr-task-plugin';
   }
 
+  // Depth (0-based) up to which subtasks are auto-expanded in the "All" view.
+  // Deeper nodes render their children lazily on click to avoid materializing
+  // very large/deep trees as DOM up front.
+  static get AUTO_EXPAND_DEPTH() {
+    return 3;
+  }
+
   static get template() {
     return htmlTemplate;
   }
@@ -199,13 +206,19 @@ export class GrTaskPlugin extends Polymer.Element {
     }
   }
 
-  _addTasks(tasks) { // rename to process, remove DOM bits
+  _addTasks(tasks, depth = 0) {
     if (!tasks) return [];
     tasks.forEach(task => {
       task.icon = GrTaskPlugin._computeIcon(task.status.toString());
       task.showOnFilter = this._computeShowOnNeededAndBlockedFilter(task);
+      // Auto-expand only the top AUTO_EXPAND_DEPTH levels; deeper nodes stay
+      // collapsed so their DOM isn't materialized up front (this gates the
+      // recursive child render in both views). A collapsed ancestor keeps its
+      // own row, so a needed/blocked descendant is never hidden -- it stays
+      // reachable by expanding, and the summary counts still reflect it.
+      task.expanded = depth < GrTaskPlugin.AUTO_EXPAND_DEPTH;
       this._compute_counts(task);
-      this._addTasks(task.sub_tasks);
+      this._addTasks(task.sub_tasks, depth + 1);
     });
     return tasks;
   }
