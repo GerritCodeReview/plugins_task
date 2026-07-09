@@ -53,7 +53,15 @@ export const htmlTemplate = Polymer.html`
         li {
           margin: 3px 0;
         }
+        gr-icon.caret {
+          cursor: pointer;
+          vertical-align: middle;
+          color: var(--deemphasized-text-color);
+        }
       </style>
+      <template is="dom-if" if="[[_showCaret(task)]]">
+        <gr-icon class="caret" small icon="[[_caret(task.expanded)]]" on-click="_toggle"></gr-icon>
+      </template>
       <template is="dom-if" if="[[task.icon.id]]">
         <gr-tooltip-content
             has-tooltip
@@ -87,9 +95,11 @@ export const htmlTemplate = Polymer.html`
       </template>
     </li>
   </template>
-  <ul style="list-style-type:none; margin: 0 0 0 0; padding: 0 0 0 2em;">
-    <gr-task-plugin-tasks
-        tasks="[[task.sub_tasks]]"
-        show_all$="[[show_all]]"> </gr-task-plugin-tasks>
-  </ul>
+  <template is="dom-if" if="[[_isExpanded(task, task.expanded)]]">
+    <ul style="list-style-type:none; margin: 0 0 0 0; padding: 0 0 0 2em;">
+      <gr-task-plugin-tasks
+          tasks="[[task.sub_tasks]]"
+          show_all$="[[show_all]]"> </gr-task-plugin-tasks>
+    </ul>
+  </template>
 </template>`;
