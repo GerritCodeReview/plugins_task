@@ -63,6 +63,24 @@
       "message": "Before/After screenshots?",
       "revId": "4e2848f0a3b73c86955719384541010d9c4285cd",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "01735162_4f6c2171",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 2
+      },
+      "lineNbr": 21,
+      "author": {
+        "id": 1152670
+      },
+      "writtenOn": "2026-07-13T04:04:27Z",
+      "side": 1,
+      "message": "Done",
+      "parentUuid": "c1fe5609_1494b54c",
+      "revId": "4e2848f0a3b73c86955719384541010d9c4285cd",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
