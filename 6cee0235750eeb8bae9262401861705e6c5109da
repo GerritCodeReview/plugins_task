@@ -1,0 +1,27 @@
+{
+  "comments": [
+    {
+      "unresolved": true,
+      "key": {
+        "uuid": "c7d467be_4b4d4f62",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1096249
+      },
+      "writtenOn": "2026-07-23T05:56:06Z",
+      "side": 1,
+      "message": "Can this be made configurable? and enable/disable lazy render based on if this value is set ot not.\n@nasser.grainawi@oss.qualcomm.com any thoughts?",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 10
+      },
+      "revId": "6cee0235750eeb8bae9262401861705e6c5109da",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    }
+  ]
+}
