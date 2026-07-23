@@ -18,6 +18,24 @@
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     },
     {
+      "unresolved": false,
+      "key": {
+        "uuid": "80656a05_5ffb6cb8",
+        "filename": "/PATCHSET_LEVEL",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-07-23T18:19:02Z",
+      "side": 1,
+      "message": "spam.",
+      "parentUuid": "f57564e7_15e61518",
+      "revId": "6cee0235750eeb8bae9262401861705e6c5109da",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
       "unresolved": true,
       "key": {
         "uuid": "c7d467be_4b4d4f62",
@@ -31,6 +49,30 @@
       "writtenOn": "2026-07-23T05:56:06Z",
       "side": 1,
       "message": "Can this be made configurable? and enable/disable lazy render based on if this value is set ot not.\n@nasser.grainawi@oss.qualcomm.com any thoughts?",
+      "range": {
+        "startLine": 43,
+        "startChar": 4,
+        "endLine": 43,
+        "endChar": 10
+      },
+      "revId": "6cee0235750eeb8bae9262401861705e6c5109da",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "b40a34c0_b14107c3",
+        "filename": "gr-task-plugin/gr-task-plugin.js",
+        "patchSetId": 4
+      },
+      "lineNbr": 43,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-07-23T18:19:02Z",
+      "side": 1,
+      "message": "I think it\u0027s ok to have this hardcoded. It doesn\u0027t seem worth it to add a user preference or server config to control it.",
+      "parentUuid": "c7d467be_4b4d4f62",
       "range": {
         "startLine": 43,
         "startChar": 4,
