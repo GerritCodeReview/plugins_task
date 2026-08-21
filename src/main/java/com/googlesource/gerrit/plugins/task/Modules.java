@@ -82,6 +82,11 @@ public class Modules {
         usage = "Include only invalid tasks and the tasks referencing them in the output")
     public boolean onlyInvalid = false;
 
+    @Option(
+        name = "--skip-fail-subtasks",
+        usage = "Skip evaluating subtasks when a parent task's fail rule already matches")
+    public boolean skipFailSubtasks = false;
+
     @Option(name = "--include-paths", usage = "Include absolute path to each task")
     public boolean includePaths = false;
 

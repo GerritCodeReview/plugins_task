@@ -230,7 +230,8 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
             attribute.change = node.getChangeData().getId().get();
           }
           attribute.hasPass = !(isDuplicate || isExpensive || isAllNull(task.pass, task.fail));
-          if (!(isDuplicate || isExpensive)) {
+          if (!(isDuplicate || isExpensive)
+              && !(options.skipFailSubtasks && isFailNow())) {
             attribute.subTasks = getSubTasks();
           }
           attribute.status = getStatus();
@@ -410,6 +411,14 @@ public class TaskPluginDefinedInfoFactory implements ChangePluginDefinedInfoFact
       return node.isDuplicate
           || (node.isChange()
               && node.getNodeSetByBaseTasksFactory().get(task.subSection).contains(node.key()));
+    }
+
+    protected boolean isFailNow() {
+      try {
+        return task.fail != null && node.match(task.fail);
+      } catch (QueryParseException | RuntimeException e) {
+        return false;
+      }
     }
   }
 

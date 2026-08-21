@@ -232,6 +232,8 @@ echo "$no_all_visible_json" | strip_non_applicable | \
     grep -v "\"applicable\" :" | strip_non_invalid | \
     ensure json_pp > "$EXPECTED".invalid-applicable
 
+example "$DOC_STATES" 2 | keep_suites "skip_fail_subtasks" | testdoc_2_pjson | \
+    ensure json_pp > "$EXPECTED".skip-fail-subtasks
 
 preview_pjson=$(example "$DOC_PREVIEW" 1 | testdoc_2_pjson)
 echo "$preview_pjson" | remove_suites "invalid" "secret" | \
@@ -251,6 +253,7 @@ query="(change:$change3_number OR change:$change4_number) status:open"
 test_2generated applicable --task--applicable "$query"
 test_2generated applicable-visibility -l "$UNTRUSTED_USER" --task--applicable "$query"
 test_generated all --task--all "$query"
+test_generated skip-fail-subtasks --task--all --task--skip-fail-subtasks --task--only "Root\ pass-waiting-FAIL\ \(skip-fail-subtasks\)" "$query"
 
 test_generated invalid --task--invalid "$query"
 test_generated invalid-applicable --task--applicable --task--invalid "$query"

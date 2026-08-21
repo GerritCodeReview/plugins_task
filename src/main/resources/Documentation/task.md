@@ -638,6 +638,13 @@ running normally. If all tasks are properly configured, this switch should
 not output anything. This switch is particularly useful in combination
 with the **\-\-@PLUGIN@\-\-preview** switch.
 
+**\-\-@PLUGIN@\-\-skip-fail-subtasks**
+
+This switch skips evaluating subtasks when a parent task's `fail` query already
+matches. When this switch is set, a task whose `fail` query matches will have no
+`subTasks` in the output rather than the populated list that would otherwise
+appear.
+
 **\-\-@PLUGIN@\-\-include-paths**
 
 This switch will show the absolute path of each task. This is meant for

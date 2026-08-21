@@ -207,6 +207,26 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
    ]
 }
 
+[root "Root pass-waiting-FAIL (skip-fail-subtasks)"]
+  applicable = is:open
+  fail = is:open
+  subtask = Subtask PASS
+
+{                                                      # Test Suite: skip_fail_subtasks
+   "applicable" : true,                               # Test Suite: skip_fail_subtasks
+   "hasPass" : true,                                  # Test Suite: skip_fail_subtasks
+   "name" : "Root pass-waiting-FAIL (skip-fail-subtasks)",   # Test Suite: skip_fail_subtasks
+   "subTasks" : [
+      {
+         "applicable" : true,
+         "hasPass" : true,
+         "name" : "Subtask PASS",
+         "status" : "PASS"
+      }
+   ],
+   "status" : "FAIL"                                  # Test Suite: skip_fail_subtasks
+}                                                      # Test Suite: skip_fail_subtasks
+
 [root "Root grouping PASS (subtask PASS)"]
   subtask = Subtask PASS
 
@@ -2986,10 +3006,10 @@ file: `{root-cfg-prj}:{root-cfg-branch}:task.config`
 [root "Root INVALID Preload"]
   preload-task = missing
 
-{                         # Test Suite: task_only
-   "name" : "UNKNOWN",    # Test Suite: task_only
-   "status" : "INVALID"   # Test Suite: task_only
-}                         # Test Suite: task_only
+{                         # Test Suite: task_only, skip_fail_subtasks
+   "name" : "UNKNOWN",    # Test Suite: task_only, skip_fail_subtasks
+   "status" : "INVALID"   # Test Suite: task_only, skip_fail_subtasks
+}                         # Test Suite: task_only, skip_fail_subtasks
 
 [root "INVALIDS"]
   subtasks-file = invalids.config
