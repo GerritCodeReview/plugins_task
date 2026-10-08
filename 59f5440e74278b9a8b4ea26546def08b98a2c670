@@ -16,6 +16,24 @@
       "message": "Add a test in `PredicateCacheTest` as well ?",
       "revId": "59f5440e74278b9a8b4ea26546def08b98a2c670",
       "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
+    },
+    {
+      "unresolved": false,
+      "key": {
+        "uuid": "9dcc4136_25876e05",
+        "filename": "/COMMIT_MSG",
+        "patchSetId": 4
+      },
+      "lineNbr": 0,
+      "author": {
+        "id": 1002666
+      },
+      "writtenOn": "2026-10-08T16:13:37Z",
+      "side": 1,
+      "message": "Addressed in change 641185 that I created for stable-3.11.",
+      "parentUuid": "d3717c78_48a5e906",
+      "revId": "59f5440e74278b9a8b4ea26546def08b98a2c670",
+      "serverId": "173816e5-2b9a-37c3-8a2e-48639d4f1153"
     }
   ]
 }
